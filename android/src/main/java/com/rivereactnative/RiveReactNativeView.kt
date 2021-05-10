@@ -27,7 +27,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setResourceName(resourceName: String) {
-    riveAnimationView?.setRiveResource(resources.getIdentifier(resourceName, "raw", context.packageName))
+    val propsFit = riveAnimationView?.fit
+    val resId = resources.getIdentifier(resourceName, "raw", context.packageName)
+    propsFit?.let {
+      riveAnimationView?.setRiveResource(resId, fit = it) // we want to keep the old value because JS is our source of truth
+    } ?: run {
+      riveAnimationView?.setRiveResource(resId)
+    }
+
   }
 
   fun setFit(rnFit: RNFit) {
