@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
+  Platform,
   StyleSheet,
-  View,
   Text,
   TouchableOpacity,
-  Platform,
+  View,
 } from 'react-native';
 import Rive, { RiveRef } from 'rive-react-native';
 

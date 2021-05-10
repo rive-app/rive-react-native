@@ -49,4 +49,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   fun setFit(view: RiveReactNativeView, fit: String) {
     view.setFit(RNFit.mapToRNFit(fit))
   }
+
+  @ReactProp(name = "alignment")
+  fun setAlignment(view: RiveReactNativeView, alignment: String) {
+    view.setAlignment(RNAlignment.mapToRNAlignment(alignment))
+  }
 }

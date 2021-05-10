@@ -6,7 +6,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import type { RiveRef } from './types';
-import { Fit } from './types';
+import { Alignment, Fit } from './types';
 
 type RiveProps = {
   fit: Fit;
@@ -15,6 +15,7 @@ type RiveProps = {
   style?: ViewStyle;
   ref: any;
   testID?: string;
+  alignment: Alignment;
 };
 
 const VIEW_NAME = 'RiveReactNativeView';
@@ -25,12 +26,22 @@ type Props = {
   url?: string;
   style?: ViewStyle;
   testID?: string;
+  alignment?: Alignment;
 };
 
 export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
 
 const RiveContainer = React.forwardRef<RiveRef, Props>(
-  ({ style, resourceName, url, fit = Fit.Contain }, ref) => {
+  (
+    {
+      style,
+      resourceName,
+      url,
+      alignment = Alignment.Center,
+      fit = Fit.Contain,
+    },
+    ref
+  ) => {
     const riveRef = useRef(null);
     const play = useCallback(() => {
       UIManager.dispatchViewManagerCommand(
@@ -73,6 +84,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         resourceName={resourceName}
         fit={fit}
         url={url}
+        alignment={alignment}
       />
     );
   }

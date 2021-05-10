@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.ThemedReactContext
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
   private var riveAnimationView: RiveAnimationView? = null
+
   init {
     context.addLifecycleEventListener(this)
     riveAnimationView = RiveAnimationView(context)
@@ -27,19 +28,32 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setResourceName(resourceName: String) {
-    val propsFit = riveAnimationView?.fit
+    val (propsFit, propsAlignment) = Pair(riveAnimationView?.fit, riveAnimationView?.alignment)
     val resId = resources.getIdentifier(resourceName, "raw", context.packageName)
-    propsFit?.let {
-      riveAnimationView?.setRiveResource(resId, fit = it) // we want to keep the old value because JS is our source of truth
-    } ?: run {
-      riveAnimationView?.setRiveResource(resId)
-    }
 
+    if (propsFit != null) {
+      if (propsAlignment != null) {
+        riveAnimationView?.setRiveResource(resId, fit = propsFit, alignment = propsAlignment)
+      } else {
+        riveAnimationView?.setRiveResource(resId, fit = propsFit)
+      }
+    } else {
+      if(propsAlignment != null) {
+        riveAnimationView?.setRiveResource(resId, alignment = propsAlignment)
+      } else {
+        riveAnimationView?.setRiveResource(resId)
+      }
+    }
   }
 
   fun setFit(rnFit: RNFit) {
     val riveFit = RNFit.mapToRiveFit(rnFit)
     riveAnimationView?.fit = riveFit
+  }
+
+  fun setAlignment(rnAlignment: RNAlignment) {
+    val riveAlignment = RNAlignment.mapToRiveAlignment(rnAlignment)
+    riveAnimationView?.alignment = riveAlignment
   }
 
   override fun onHostResume() {

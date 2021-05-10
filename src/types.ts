@@ -13,3 +13,15 @@ export enum Fit {
   None = 'none',
   ScaleDown = 'scaleDown',
 }
+
+export enum Alignment {
+  TopLeft = 'topLeft',
+  TopCenter = 'topCenter',
+  TopRight = 'topRight',
+  CenterLeft = 'centerLeft',
+  Center = 'center',
+  CenterRight = 'centerRight',
+  BottomLeft = 'bottomLeft',
+  BottomCenter = 'bottomCenter',
+  BottomRight = 'bottomRight',
+}
