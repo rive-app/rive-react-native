@@ -13,6 +13,15 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     STOP
   }
 
+
+  override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Map<String, String>>? {
+    val builder: MapBuilder.Builder<String, Map<String, String>> = MapBuilder.builder<String, Map<String, String>>()
+    for (event in RiveReactNativeView.Events.values()) {
+      builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()))
+    }
+    return builder.build()
+  }
+
   override fun getName() = "RiveReactNativeView"
 
   override fun getCommandsMap(): Map<String, Int>? {
@@ -47,7 +56,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   @ReactProp(name = "fit")
   fun setFit(view: RiveReactNativeView, fit: String) {
-    view.setFit(RNFit.mapToRNFit(fit))
+      view.setFit(RNFit.mapToRNFit(fit))
   }
 
   @ReactProp(name = "alignment")
