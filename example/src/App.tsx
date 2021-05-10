@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Rive, { Alignment, RiveRef } from 'rive-react-native';
+import Rive, { RiveRef } from 'rive-react-native';
 
 export default function App() {
   const [isPlaying, setPlaying] = React.useState(true);
@@ -29,7 +29,6 @@ export default function App() {
         ref={riveRef}
         style={styles.box}
         resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
-        alignment={Alignment.Center}
       />
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={toggleAnimation}>
