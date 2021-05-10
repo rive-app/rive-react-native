@@ -1,9 +1,21 @@
-//
-//  MyRiveView.swift
-//  RiveReactNative
-//
-//  Created by Tomasz Krzyżowski on 10/05/2021.
-//  Copyright © 2021 Facebook. All rights reserved.
-//
+import UIKit
+import RiveRuntime
 
-import Foundation
+class MyRiveView: UIView {
+    var artboard: RiveArtboard?;
+
+    func updateArtboard(_ artboard: RiveArtboard) {
+        self.artboard = artboard;
+    }
+
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext(), let artboard = self.artboard else {
+            return
+        }
+        let renderer = RiveRenderer(context: context);
+        renderer.align(with: rect, withContentRect: artboard.bounds(), with: Alignment.Center, with: Fit.Contain)
+        artboard.draw(renderer)
+    }
+
+}
+

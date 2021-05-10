@@ -1,12 +1,4 @@
-import { requireNativeComponent, ViewStyle } from 'react-native';
+export * from './types';
+import Rive from './Rive';
 
-type RiveReactNativeProps = {
-  color: string;
-  style: ViewStyle;
-};
-
-export const RiveReactNativeViewManager = requireNativeComponent<RiveReactNativeProps>(
-'RiveReactNativeView'
-);
-
-export default RiveReactNativeViewManager;
+export default Rive;

@@ -1,12 +1,41 @@
 import * as React from 'react';
-
-import { StyleSheet, View } from 'react-native';
-import RiveReactNativeViewManager from 'rive-react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
+import Rive, { RiveRef } from 'rive-react-native';
 
 export default function App() {
+  const [isPlaying, setPlaying] = React.useState(true);
+
+  const riveRef = React.useRef<RiveRef>(null);
+
+  const toggleAnimation = () => {
+    isPlaying ? riveRef.current?.pause() : riveRef.current?.play();
+    setPlaying((prev) => !prev);
+  };
+
+  const stopAnimation = () => {
+    riveRef.current?.stop();
+    setPlaying(false);
+  };
+
   return (
     <View style={styles.container}>
-      <RiveReactNativeViewManager color="#32a852" style={styles.box} />
+      <Rive ref={riveRef} style={styles.box} resourceName="bird" />
+      <View style={styles.wrapper}>
+        <TouchableOpacity onPress={toggleAnimation}>
+          <Text style={styles.button}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>
+        </TouchableOpacity>
+        {Platform.OS === 'android' ? (
+          <TouchableOpacity onPress={stopAnimation}>
+            <Text style={styles.button}>{'STOP'}</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   );
 }
@@ -17,9 +46,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  wrapper: {
+    flex: 1,
+  },
   box: {
-    width: 60,
-    height: 60,
+    width: '100%',
+    height: 500,
     marginVertical: 20,
+  },
+  button: {
+    color: 'black',
+    margin: 10,
+    borderColor: 'black',
+    borderWidth: 1,
+    textAlign: 'center',
+    padding: 5,
   },
 });
