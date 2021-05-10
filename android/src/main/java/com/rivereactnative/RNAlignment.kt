@@ -1,3 +1,5 @@
+package com.rivereactnative
+
 import app.rive.runtime.kotlin.core.Alignment
 
 enum class RNAlignment(private val mValue: String) {

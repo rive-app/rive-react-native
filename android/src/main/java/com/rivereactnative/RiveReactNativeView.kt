@@ -1,6 +1,5 @@
 package com.rivereactnative
 
-import RNAlignment
 import android.widget.FrameLayout
 import app.rive.runtime.kotlin.RiveAnimationView
 import com.facebook.react.bridge.LifecycleEventListener
