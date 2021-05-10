@@ -1,4 +1,4 @@
-package com.reactnativerive
+package com.rivereactnative
 
 import android.widget.FrameLayout
 import app.rive.runtime.kotlin.RiveAnimationView
@@ -28,6 +28,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setResourceName(resourceName: String) {
     riveAnimationView?.setRiveResource(resources.getIdentifier(resourceName, "raw", context.packageName))
+  }
+
+  fun setFit(fit: String) {
+    val riveFit = RNFit.mapToRiveFit(fit)
+    riveAnimationView?.fit = riveFit
   }
 
   override fun onHostResume() {
