@@ -25,7 +25,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Rive ref={riveRef} style={styles.box} resourceName="bird" />
+      <Rive
+        ref={riveRef}
+        style={styles.box}
+        resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
+      />
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={toggleAnimation}>
           <Text style={styles.button}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>

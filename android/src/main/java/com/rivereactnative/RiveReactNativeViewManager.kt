@@ -1,20 +1,48 @@
 package com.rivereactnative
 
-import android.graphics.Color
-import android.view.View
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.reactnativerive.RiveReactNativeView
 
-class RiveReactNativeViewManager : SimpleViewManager<View>() {
-  override fun getName() = "RiveReactNativeView"
-
-  override fun createViewInstance(reactContext: ThemedReactContext): View {
-    return View(reactContext)
+class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
+  private enum class Commands {
+    PLAY,
+    PAUSE,
+    STOP
   }
 
-  @ReactProp(name = "color")
-  fun setColor(view: View, color: String) {
-    view.setBackgroundColor(Color.parseColor(color))
+  override fun getName() = "RiveReactNativeView"
+
+  override fun getCommandsMap(): Map<String, Int>? {
+    return MapBuilder.of(
+      "play",
+      Commands.PLAY.ordinal,
+      "pause",
+      Commands.PAUSE.ordinal,
+      "stop",
+      Commands.STOP.ordinal
+    )
+  }
+
+  override fun receiveCommand(view: RiveReactNativeView, commandType: Int, args: ReadableArray?) {
+    when (commandType) {
+      Commands.PLAY.ordinal -> view.play()
+      Commands.PAUSE.ordinal -> view.pause()
+      Commands.STOP.ordinal -> view.stop()
+      else -> {
+      }
+    }
+  }
+
+  override fun createViewInstance(reactContext: ThemedReactContext): RiveReactNativeView {
+    return RiveReactNativeView(reactContext)
+  }
+
+  @ReactProp(name = "resourceName")
+  fun setResourceName(view: RiveReactNativeView, resourceName: String) {
+    view.setResourceName(resourceName)
   }
 }

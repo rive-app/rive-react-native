@@ -33,9 +33,9 @@ android {
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
     versionName "1.0"
-    
+
   }
-  
+
   buildTypes {
     release {
       minifyEnabled false
@@ -51,6 +51,7 @@ android {
 }
 
 repositories {
+  mavenLocal()
   mavenCentral()
   jcenter()
   google()
@@ -127,4 +128,5 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation 'app.rive:rive-android:0.0.9'
 }
