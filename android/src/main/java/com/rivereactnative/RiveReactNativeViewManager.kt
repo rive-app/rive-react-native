@@ -5,7 +5,6 @@ import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.reactnativerive.RiveReactNativeView
 
 class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   private enum class Commands {
@@ -44,5 +43,10 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   @ReactProp(name = "resourceName")
   fun setResourceName(view: RiveReactNativeView, resourceName: String) {
     view.setResourceName(resourceName)
+  }
+
+  @ReactProp(name = "fit")
+  fun setFit(view: RiveReactNativeView, fit: String) {
+    view.setFit(RNFit.mapToRNFit(fit))
   }
 }

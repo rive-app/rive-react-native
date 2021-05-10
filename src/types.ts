@@ -3,3 +3,13 @@ export type RiveRef = {
   pause: () => void;
   stop: () => void;
 };
+
+export enum Fit {
+  Cover = 'cover',
+  Contain = 'contain',
+  Fill = 'fill',
+  FitWidth = 'fitWidth',
+  FitHeight = 'fitHeight',
+  None = 'none',
+  ScaleDown = 'scaleDown',
+}
