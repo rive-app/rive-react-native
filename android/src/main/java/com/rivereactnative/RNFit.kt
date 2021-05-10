@@ -26,7 +26,7 @@ enum class RNFit(private val mValue: String) {
         Cover -> Fit.COVER
         Contain  -> Fit.CONTAIN
         Fill -> Fit.FILL
-        FitWidth-> Fit.FIT_WIDTH
+        FitWidth -> Fit.FIT_WIDTH
         FitHeight -> Fit.FIT_HEIGHT
         None -> Fit.NONE
         ScaleDown -> Fit.SCALE_DOWN
