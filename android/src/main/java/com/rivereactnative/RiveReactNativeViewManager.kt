@@ -45,4 +45,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   fun setResourceName(view: RiveReactNativeView, resourceName: String) {
     view.setResourceName(resourceName)
   }
+
+  @ReactProp(name = "alignment")
+  fun setAlignment(view: RiveReactNativeView, alignment: String) {
+    view.setAlignment(alignment)
+  }
 }

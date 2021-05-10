@@ -1,5 +1,6 @@
-package com.reactnativerive
+package com.rivereactnative
 
+import RNAlignment.Companion.mapToRiveAlignment
 import android.widget.FrameLayout
 import app.rive.runtime.kotlin.RiveAnimationView
 import com.facebook.react.bridge.LifecycleEventListener
@@ -28,6 +29,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setResourceName(resourceName: String) {
     riveAnimationView?.setRiveResource(resources.getIdentifier(resourceName, "raw", context.packageName))
+  }
+
+  fun setAlignment(alignment: String) {
+    val riveAlignment = mapToRiveAlignment(alignment)
+    riveAnimationView?.alignment = riveAlignment
   }
 
   override fun onHostResume() {
