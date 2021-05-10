@@ -30,8 +30,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView?.setRiveResource(resources.getIdentifier(resourceName, "raw", context.packageName))
   }
 
-  fun setFit(fit: String) {
-    val riveFit = RNFit.mapToRiveFit(fit)
+  fun setFit(rnFit: RNFit) {
+    val riveFit = RNFit.mapToRiveFit(rnFit)
     riveAnimationView?.fit = riveFit
   }
 

@@ -16,16 +16,20 @@ enum class RNFit(private val mValue: String) {
   }
 
   companion object {
-    fun mapToRiveFit(v: String): Fit {
-      return when (v) {
-        "cover" -> Fit.COVER
-        "contain" -> Fit.CONTAIN
-        "fill" -> Fit.FILL
-        "fitWidth" -> Fit.FIT_WIDTH
-        "fitHeight" -> Fit.FIT_HEIGHT
-        "none" -> Fit.NONE
-        "scaleDown" -> Fit.SCALE_DOWN
-        else -> throw IllegalStateException("Unsupported Fit type")
+
+    fun mapToRNFit(fit: String): RNFit {
+      return valueOf(values().first() {it.toString() == fit }.name)
+    }
+
+    fun mapToRiveFit(rnFit : RNFit): Fit {
+      return when (rnFit) {
+        Cover -> Fit.COVER
+        Contain  -> Fit.CONTAIN
+        Fill -> Fit.FILL
+        FitWidth-> Fit.FIT_WIDTH
+        FitHeight -> Fit.FIT_HEIGHT
+        None -> Fit.NONE
+        ScaleDown -> Fit.SCALE_DOWN
       }
     }
   }
