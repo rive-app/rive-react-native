@@ -31,6 +31,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView?.setRiveResource(resources.getIdentifier(resourceName, "raw", context.packageName))
   }
 
+  fun setFit(rnFit: RNFit) {
+    val riveFit = RNFit.mapToRiveFit(rnFit)
+    riveAnimationView?.fit = riveFit
+  }
+
   fun setAlignment(rnAlignment: RNAlignment) {
     val riveAlignment = RNAlignment.mapToRiveAlignment(rnAlignment)
     riveAnimationView?.alignment = riveAlignment

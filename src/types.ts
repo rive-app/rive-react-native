@@ -4,6 +4,16 @@ export type RiveRef = {
   stop: () => void;
 };
 
+export enum Fit {
+  Cover = 'cover',
+  Contain = 'contain',
+  Fill = 'fill',
+  FitWidth = 'fitWidth',
+  FitHeight = 'fitHeight',
+  None = 'none',
+  ScaleDown = 'scaleDown',
+}
+
 export enum Alignment {
   TopLeft = 'topLeft',
   TopCenter = 'topCenter',
