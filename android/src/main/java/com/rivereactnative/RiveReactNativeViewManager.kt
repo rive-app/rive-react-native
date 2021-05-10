@@ -5,7 +5,6 @@ import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.reactnativerive.RiveReactNativeView
 
 class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   private enum class Commands {
@@ -48,6 +47,6 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   @ReactProp(name = "alignment")
   fun setAlignment(view: RiveReactNativeView, alignment: String) {
-    view.setAlignment(alignment)
+    view.setAlignment(RNAlignment.mapToRNAlignment(alignment))
   }
 }

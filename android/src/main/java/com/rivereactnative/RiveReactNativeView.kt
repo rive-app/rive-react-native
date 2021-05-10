@@ -1,6 +1,6 @@
 package com.rivereactnative
 
-import RNAlignment.Companion.mapToRiveAlignment
+import RNAlignment
 import android.widget.FrameLayout
 import app.rive.runtime.kotlin.RiveAnimationView
 import com.facebook.react.bridge.LifecycleEventListener
@@ -31,8 +31,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView?.setRiveResource(resources.getIdentifier(resourceName, "raw", context.packageName))
   }
 
-  fun setAlignment(alignment: String) {
-    val riveAlignment = mapToRiveAlignment(alignment)
+  fun setAlignment(rnAlignment: RNAlignment) {
+    val riveAlignment = RNAlignment.mapToRiveAlignment(rnAlignment)
     riveAnimationView?.alignment = riveAlignment
   }
 

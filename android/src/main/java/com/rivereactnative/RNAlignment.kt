@@ -16,17 +16,22 @@ enum class RNAlignment(private val mValue: String) {
   }
 
   companion object {
-    fun mapToRiveAlignment(v: String): Alignment {
+
+    fun mapToRNAlignment(alignment: String): RNAlignment {
+      return valueOf(values().first() {it.toString() == alignment }.name)
+    }
+
+    fun mapToRiveAlignment(v: RNAlignment): Alignment {
       return when (v) {
-        "topLeft" -> Alignment.TOP_LEFT
-        "topCenter" -> Alignment.TOP_CENTER
-        "topRight" -> Alignment.TOP_RIGHT
-        "centerLeft" -> Alignment.CENTER_LEFT
-        "center" -> Alignment.CENTER
-        "centerRight" -> Alignment.CENTER_RIGHT
-        "bottomLeft" -> Alignment.BOTTOM_LEFT
-        "bottomCenter" -> Alignment.BOTTOM_CENTER
-        "bottomRight" -> Alignment.BOTTOM_RIGHT
+        TopLeft -> Alignment.TOP_LEFT
+        TopCenter -> Alignment.TOP_CENTER
+        TopRight -> Alignment.TOP_RIGHT
+        CenterLeft -> Alignment.CENTER_LEFT
+        Center -> Alignment.CENTER
+        CenterRight -> Alignment.CENTER_RIGHT
+        BottomLeft -> Alignment.BOTTOM_LEFT
+        BottomCenter -> Alignment.BOTTOM_CENTER
+        BottomRight -> Alignment.BOTTOM_RIGHT
         else -> throw IllegalStateException("Unsupported Alignment type")
       }
     }
