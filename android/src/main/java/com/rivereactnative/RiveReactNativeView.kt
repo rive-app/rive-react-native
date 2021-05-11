@@ -29,24 +29,25 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   init {
     context.addLifecycleEventListener(this)
     riveAnimationView = RiveAnimationView(context)
-    val listener = object: RiveDrawable.Listener {
+    val listener = object : RiveDrawable.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
         //TODO("Not yet implemented")
       }
 
       override fun notifyPause(animation: PlayableInstance) {
-        if(animation is LinearAnimationInstance) {
+        if (animation is LinearAnimationInstance) {
           onPause(animation.animation.name)
         }
-        if(animation is StateMachineInstance) {
+        if (animation is StateMachineInstance) {
           onPause(animation.stateMachine.name, true)
-        }      }
+        }
+      }
 
       override fun notifyPlay(animation: PlayableInstance) {
-        if(animation is LinearAnimationInstance) {
+        if (animation is LinearAnimationInstance) {
           onPlay(animation.animation.name)
         }
-        if(animation is StateMachineInstance) {
+        if (animation is StateMachineInstance) {
           onPlay(animation.stateMachine.name, true)
         }
       }
@@ -115,11 +116,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   override fun onHostResume() {
-    riveAnimationView.play()
   }
 
   override fun onHostPause() {
-    riveAnimationView.pause()
   }
 
   override fun onHostDestroy() {
