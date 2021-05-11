@@ -49,6 +49,11 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     return RiveReactNativeView(reactContext)
   }
 
+  override fun onAfterUpdateTransaction(view: RiveReactNativeView) {
+    super.onAfterUpdateTransaction(view)
+    view.update()
+  }
+
   @ReactProp(name = "resourceName")
   fun setResourceName(view: RiveReactNativeView, resourceName: String) {
     view.setResourceName(resourceName)
@@ -67,5 +72,10 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   @ReactProp(name = "url")
   fun setUrl(view: RiveReactNativeView, url: String) {
     view.setUrl(url)
+  }
+
+  @ReactProp(name = "autoplay")
+  fun setAutoplay(view: RiveReactNativeView, autoplay: Boolean) {
+    view.setAutoplay(autoplay)
   }
 }
