@@ -28,7 +28,10 @@ export default function App() {
       <Rive
         ref={riveRef}
         onPlay={(animationName, isStateMachine) => {
-          console.log('animation name :', animationName, isStateMachine);
+          console.log('played animation name :', animationName, isStateMachine);
+        }}
+        onPause={(animationName, isStateMachine) => {
+          console.log('paused animation name :', animationName, isStateMachine);
         }}
         style={styles.box}
         fit={Fit.ScaleDown}
