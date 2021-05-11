@@ -63,4 +63,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   fun setAlignment(view: RiveReactNativeView, alignment: String) {
     view.setAlignment(RNAlignment.mapToRNAlignment(alignment))
   }
+
+  @ReactProp(name = "url")
+  fun setUrl(view: RiveReactNativeView, url: String) {
+    view.setUrl(url)
+  }
 }
