@@ -20,17 +20,18 @@ import java.net.URL
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
   private var riveAnimationView: RiveAnimationView
+  private var resId: Int = -1
   private val httpClient = ViewModelProvider(context.currentActivity as ViewModelStoreOwner).get(HttpClient::class.java)
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
-    PAUSE("onPause");
+    PAUSE("onPause"),
+    STOP("onStop");
 
     override fun toString(): String {
       return mName
     }
   }
-
 
 
   init {
@@ -64,7 +65,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyStop(animation: PlayableInstance) {
-        //TODO("Not yet implemented")
+        if (animation is LinearAnimationInstance) {
+          onStop(animation.animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onStop(animation.stateMachine.name, true)
+        }
       }
 
     }
@@ -92,6 +98,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.PAUSE.toString(), data)
   }
 
+  fun onStop(animationName: String, isStateMachine: Boolean = false) {
+    val reactContext = context as ReactContext
+
+    val data = Arguments.createMap()
+    data.putString("animationName", animationName)
+    data.putBoolean("isStateMachine", isStateMachine)
+
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STOP.toString(), data)
+  }
+
   fun play() {
     riveAnimationView.play()
   }
@@ -101,13 +117,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun stop() {
-    riveAnimationView.reset()
-    riveAnimationView.stop()
+    riveAnimationView.setRiveResource(resId, autoplay = false)
   }
 
   fun setResourceName(resourceName: String) {
     val (propsFit, propsAlignment) = Pair(riveAnimationView.fit, riveAnimationView.alignment)
-    val resId = resources.getIdentifier(resourceName, "raw", context.packageName)
+    resId = resources.getIdentifier(resourceName, "raw", context.packageName)
 
     riveAnimationView.setRiveResource(resId, fit = propsFit, alignment = propsAlignment)
   }
@@ -125,7 +140,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun setUrl(url: String) {
     httpClient.byteLiveData.observe(context.currentActivity as LifecycleOwner,
       Observer { bytes ->
-          // Pass the Rive file bytes to the animation view
+        // Pass the Rive file bytes to the animation view
         riveAnimationView.setRiveBytes(
           bytes,
           // Fit the animation to the cover the entire view
@@ -148,11 +163,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 }
 
-class HttpClient: ViewModel() {
+class HttpClient : ViewModel() {
   var byteLiveData = MutableLiveData<ByteArray>()
 
   fun fetchUrl(url: String) {
-    viewModelScope.launch{
+    viewModelScope.launch {
       withContext(Dispatchers.IO) {
         fetchAsync(url)
       }

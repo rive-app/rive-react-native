@@ -33,10 +33,17 @@ export default function App() {
         onPause={(animationName, isStateMachine) => {
           console.log('paused animation name :', animationName, isStateMachine);
         }}
+        onStop={(animationName, isStateMachine) => {
+          console.log(
+            'stopped animation name :',
+            animationName,
+            isStateMachine
+          );
+        }}
         style={styles.box}
         fit={Fit.ScaleDown}
-        // resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
-        url={'https://cdn.rive.app/animations/juice_v7.riv'}
+        resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
+        // url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={toggleAnimation}>
