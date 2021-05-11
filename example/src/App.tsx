@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Rive, { RiveRef } from 'rive-react-native';
+import Rive, { RiveRef, Fit } from 'rive-react-native';
 
 export default function App() {
   const [isPlaying, setPlaying] = React.useState(true);
@@ -28,7 +28,9 @@ export default function App() {
       <Rive
         ref={riveRef}
         style={styles.box}
-        resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
+        fit={Fit.ScaleDown}
+        // resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
+        url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={toggleAnimation}>

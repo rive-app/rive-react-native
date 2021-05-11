@@ -1,13 +1,19 @@
 package com.rivereactnative
 
 import android.widget.FrameLayout
+import androidx.lifecycle.*
 import app.rive.runtime.kotlin.RiveAnimationView
+import app.rive.runtime.kotlin.core.Fit
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.uimanager.ThemedReactContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.URL
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
   private var riveAnimationView: RiveAnimationView? = null
-
+  private val httpClient = ViewModelProvider(context.currentActivity as ViewModelStoreOwner).get(HttpClient::class.java)
   init {
     context.addLifecycleEventListener(this)
     riveAnimationView = RiveAnimationView(context)
@@ -56,6 +62,21 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView?.alignment = riveAlignment
   }
 
+  fun setUrl(url: String) {
+    httpClient.byteLiveData.observe(context.currentActivity as LifecycleOwner,
+      Observer { bytes ->
+          // Pass the Rive file bytes to the animation view
+          riveAnimationView?.setRiveBytes(
+            bytes,
+            // Fit the animation to the cover the entire view
+            fit = riveAnimationView!!.fit,
+            alignment = riveAnimationView!!.alignment
+          )
+      }
+    )
+    httpClient.fetchUrl(url)
+  }
+
   override fun onHostResume() {
     riveAnimationView?.play()
   }
@@ -66,6 +87,22 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   override fun onHostDestroy() {
     riveAnimationView?.destroy()
+  }
+}
+
+class HttpClient: ViewModel() {
+  var byteLiveData = MutableLiveData<ByteArray>()
+
+  fun fetchUrl(url: String) {
+    viewModelScope.launch{
+      withContext(Dispatchers.IO) {
+        fetchAsync(url)
+      }
+    }
+  }
+
+  private fun fetchAsync(url: String) {
+    byteLiveData.postValue(URL(url).openStream().use { it.readBytes() })
   }
 }
 

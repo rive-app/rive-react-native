@@ -6,13 +6,15 @@ import {
   ViewStyle,
 } from 'react-native';
 import type { RiveRef } from './types';
+import type { XOR } from './helpers';
+
 import { Alignment, Fit } from './types';
 
 type RiveProps = {
   fit: Fit;
+  style?: ViewStyle;
   resourceName?: string;
   url?: string;
-  style?: ViewStyle;
   ref: any;
   testID?: string;
   alignment: Alignment;
@@ -22,12 +24,10 @@ const VIEW_NAME = 'RiveReactNativeView';
 
 type Props = {
   fit?: Fit;
-  resourceName?: string;
-  url?: string;
   style?: ViewStyle;
   testID?: string;
   alignment?: Alignment;
-};
+} & XOR<{ resourceName: string }, { url: string }>;
 
 export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
 

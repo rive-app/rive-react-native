@@ -10,12 +10,14 @@ buildscript {
   dependencies {
     classpath 'com.android.tools.build:gradle:3.2.1'
     // noinspection DifferentKotlinGradleVersion
+    "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 def getExtOrDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['RiveReactNative_' + name]
@@ -29,7 +31,7 @@ android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   buildToolsVersion getExtOrDefault('buildToolsVersion')
   defaultConfig {
-    minSdkVersion 16
+    minSdkVersion 23
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     versionCode 1
     versionName "1.0"
@@ -126,7 +128,13 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
   // noinspection GradleDynamicVersion
+  def lifecycle_version = "2.3.1"
+
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+  implementation 'androidx.core:core-ktx:1.3.2'
+  implementation 'androidx.appcompat:appcompat:1.2.0'
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
   implementation 'app.rive:rive-android:0.0.9'
 }
