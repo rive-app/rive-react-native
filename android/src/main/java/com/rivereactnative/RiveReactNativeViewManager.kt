@@ -13,6 +13,15 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     STOP
   }
 
+
+  override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Map<String, String>>? {
+    val builder: MapBuilder.Builder<String, Map<String, String>> = MapBuilder.builder<String, Map<String, String>>()
+    for (event in RiveReactNativeView.Events.values()) {
+      builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()))
+    }
+    return builder.build()
+  }
+
   override fun getName() = "RiveReactNativeView"
 
   override fun getCommandsMap(): Map<String, Int>? {

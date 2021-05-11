@@ -27,6 +27,9 @@ export default function App() {
     <View style={styles.container}>
       <Rive
         ref={riveRef}
+        onPlay={(animationName, isStateMachine) => {
+          console.log('animation name :', animationName, isStateMachine);
+        }}
         style={styles.box}
         resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
       />
