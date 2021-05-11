@@ -24,7 +24,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
-    PAUSE("onPause");
+    PAUSE("onPause"),
+    STOP("onStop");
 
     override fun toString(): String {
       return mName
@@ -64,7 +65,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyStop(animation: PlayableInstance) {
-        //TODO("Not yet implemented")
+        if (animation is LinearAnimationInstance) {
+          onStop(animation.animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onStop(animation.stateMachine.name, true)
+        }
       }
 
     }
@@ -90,6 +96,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putBoolean("isStateMachine", isStateMachine)
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.PAUSE.toString(), data)
+  }
+
+  fun onStop(animationName: String, isStateMachine: Boolean = false) {
+    val reactContext = context as ReactContext
+
+    val data = Arguments.createMap()
+    data.putString("animationName", animationName)
+    data.putBoolean("isStateMachine", isStateMachine)
+
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STOP.toString(), data)
   }
 
   fun play() {
