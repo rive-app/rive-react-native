@@ -16,7 +16,8 @@ import com.facebook.react.uimanager.events.RCTEventEmitter
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
 
   enum class Events(private val mName: String) {
-    PLAY("onPlay");
+    PLAY("onPlay"),
+    PAUSE("onPause");
 
     override fun toString(): String {
       return mName
@@ -34,8 +35,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyPause(animation: PlayableInstance) {
-        //TODO("Not yet implemented")
-      }
+        if(animation is LinearAnimationInstance) {
+          onPause(animation.animation.name)
+        }
+        if(animation is StateMachineInstance) {
+          onPause(animation.stateMachine.name, true)
+        }      }
 
       override fun notifyPlay(animation: PlayableInstance) {
         if(animation is LinearAnimationInstance) {
@@ -67,6 +72,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putBoolean("isStateMachine", isStateMachine)
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.PLAY.toString(), data)
+  }
+
+  fun onPause(animationName: String, isStateMachine: Boolean = false) {
+    val reactContext = context as ReactContext
+
+    val data = Arguments.createMap()
+    data.putString("animationName", animationName)
+    data.putBoolean("isStateMachine", isStateMachine)
+
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.PAUSE.toString(), data)
   }
 
   fun play() {

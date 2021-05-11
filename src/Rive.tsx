@@ -16,6 +16,12 @@ type RiveProps = {
       isStateMachine: boolean;
     }>
   ) => void;
+  onPause?: (
+    event: NativeSyntheticEvent<{
+      animationName: string;
+      isStateMachine: boolean;
+    }>
+  ) => void;
   fit: Fit;
   alignment: Alignment;
   ref: any;
@@ -29,6 +35,7 @@ const VIEW_NAME = 'RiveReactNativeView';
 
 type Props = {
   onPlay?: (animationName: string, isStateMachine: boolean) => void;
+  onPause?: (animationName: string, isStateMachine: boolean) => void;
   fit?: Fit;
   resourceName?: string;
   url?: string;
@@ -43,6 +50,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
   (
     {
       onPlay,
+      onPause,
       style,
       resourceName,
       url,
@@ -64,6 +72,19 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         onPlay?.(animationName, isStateMachine);
       },
       [onPlay]
+    );
+
+    const onPauseHandler = useCallback(
+      (
+        event: NativeSyntheticEvent<{
+          animationName: string;
+          isStateMachine: boolean;
+        }>
+      ) => {
+        const { animationName, isStateMachine } = event.nativeEvent;
+        onPause?.(animationName, isStateMachine);
+      },
+      [onPause]
     );
 
     const play = useCallback(() => {
@@ -108,6 +129,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         fit={fit}
         url={url}
         onPlay={onPlayHandler}
+        onPause={onPauseHandler}
         alignment={alignment}
       />
     );
