@@ -4,6 +4,7 @@ import {
   UIManager,
   findNodeHandle,
   ViewStyle,
+  NativeSyntheticEvent,
 } from 'react-native';
 import type { RiveRef } from './types';
 import type { XOR } from './helpers';
@@ -11,18 +12,25 @@ import type { XOR } from './helpers';
 import { Alignment, Fit } from './types';
 
 type RiveProps = {
+  onPlay?: (
+    event: NativeSyntheticEvent<{
+      animationName: string;
+      isStateMachine: boolean;
+    }>
+  ) => void;
   fit: Fit;
-  style?: ViewStyle;
+  alignment: Alignment;
+  ref: any;
   resourceName?: string;
   url?: string;
-  ref: any;
+  style?: ViewStyle;
   testID?: string;
-  alignment: Alignment;
 };
 
 const VIEW_NAME = 'RiveReactNativeView';
 
 type Props = {
+  onPlay?: (animationName: string, isStateMachine: boolean) => void;
   fit?: Fit;
   style?: ViewStyle;
   testID?: string;
@@ -34,6 +42,7 @@ export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
 const RiveContainer = React.forwardRef<RiveRef, Props>(
   (
     {
+      onPlay,
       style,
       resourceName,
       url,
@@ -43,6 +52,20 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     ref
   ) => {
     const riveRef = useRef(null);
+
+    const onPlayHandler = useCallback(
+      (
+        event: NativeSyntheticEvent<{
+          animationName: string;
+          isStateMachine: boolean;
+        }>
+      ) => {
+        const { animationName, isStateMachine } = event.nativeEvent;
+        onPlay?.(animationName, isStateMachine);
+      },
+      [onPlay]
+    );
+
     const play = useCallback(() => {
       UIManager.dispatchViewManagerCommand(
         findNodeHandle(riveRef.current),
@@ -84,6 +107,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         resourceName={resourceName}
         fit={fit}
         url={url}
+        onPlay={onPlayHandler}
         alignment={alignment}
       />
     );
