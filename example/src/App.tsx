@@ -49,7 +49,7 @@ export default function App() {
           );
         }}
         style={styles.box}
-        fit={Fit.Contain}
+        fit={Fit.ScaleDown}
         resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
         // url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />
