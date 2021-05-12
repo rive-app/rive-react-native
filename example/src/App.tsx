@@ -41,6 +41,13 @@ export default function App() {
             isStateMachine
           );
         }}
+        onLoopEnd={(animationName, isStateMachine) => {
+          console.log(
+            'loop ended animation name :',
+            animationName,
+            isStateMachine
+          );
+        }}
         style={styles.box}
         fit={Fit.Contain}
         resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
