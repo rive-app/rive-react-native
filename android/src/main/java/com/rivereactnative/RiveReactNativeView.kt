@@ -139,7 +139,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun update() {
-    if(autoPlayChanged) {
+    if (autoPlayChanged) {
       if (riveAnimationView.autoplay) {
         riveAnimationView.play()
       } else {
