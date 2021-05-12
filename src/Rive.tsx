@@ -39,6 +39,9 @@ type RiveProps = {
   autoplay?: boolean;
   fit: Fit;
   alignment: Alignment;
+  artboardName?: string;
+  animationName?: string;
+  stateMachineName?: string;
   ref: any;
   resourceName?: string;
   url?: string;
@@ -57,6 +60,9 @@ type Props = {
   style?: ViewStyle;
   testID?: string;
   alignment?: Alignment;
+  artboardName?: string;
+  animationName?: string;
+  stateMachineName?: string;
   autoplay?: boolean;
 } & XOR<{ resourceName: string }, { url: string }>;
 
@@ -75,6 +81,9 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       url,
       alignment = Alignment.Center,
       fit = Fit.Contain,
+      artboardName,
+      animationName,
+      stateMachineName,
     },
     ref
   ) => {
@@ -179,6 +188,9 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         onStop={onStopHandler}
         onLoopEnd={onLoopEndHandler}
         alignment={alignment}
+        artboardName={artboardName}
+        animationName={animationName}
+        stateMachineName={stateMachineName}
       />
     );
   }

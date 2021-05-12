@@ -187,6 +187,19 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     httpClient.fetchUrl(url)
   }
 
+  fun setArtboardName(artboardName: String) {
+    riveAnimationView.artboardName = artboardName
+  }
+
+  fun setAnimationName(animationName: String) {
+    riveAnimationView.drawable.animationName = animationName
+  }
+
+  fun setStateMachineName(stateMachineName: String) {
+    riveAnimationView.drawable.stateMachineName = stateMachineName
+  }
+
+
   override fun onHostResume() {
   }
 
