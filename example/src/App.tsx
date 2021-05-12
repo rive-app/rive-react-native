@@ -9,7 +9,7 @@ import {
 import Rive, { RiveRef, Fit } from 'rive-react-native';
 
 export default function App() {
-  const [isPlaying, setPlaying] = React.useState(true);
+  const [isPlaying, setPlaying] = React.useState(false);
 
   const riveRef = React.useRef<RiveRef>(null);
 
@@ -27,6 +27,7 @@ export default function App() {
     <View style={styles.container}>
       <Rive
         ref={riveRef}
+        autoplay={false}
         onPlay={(animationName, isStateMachine) => {
           console.log('played animation name :', animationName, isStateMachine);
         }}
@@ -41,7 +42,7 @@ export default function App() {
           );
         }}
         style={styles.box}
-        fit={Fit.ScaleDown}
+        fit={Fit.Contain}
         resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
         // url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />

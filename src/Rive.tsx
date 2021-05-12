@@ -30,6 +30,7 @@ type RiveProps = {
       isStateMachine: boolean;
     }>
   ) => void;
+  autoplay?: boolean;
   fit: Fit;
   alignment: Alignment;
   ref: any;
@@ -49,6 +50,7 @@ type Props = {
   style?: ViewStyle;
   testID?: string;
   alignment?: Alignment;
+  autoplay?: boolean;
 } & XOR<{ resourceName: string }, { url: string }>;
 
 export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
@@ -60,6 +62,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onPause,
       onStop,
       style,
+      autoplay = true,
       resourceName,
       url,
       alignment = Alignment.Center,
@@ -146,6 +149,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         style={style}
         ref={riveRef}
         resourceName={resourceName}
+        autoplay={autoplay}
         fit={fit}
         url={url}
         onPlay={onPlayHandler}
