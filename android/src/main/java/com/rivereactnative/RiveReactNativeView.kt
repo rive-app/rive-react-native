@@ -215,15 +215,17 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setArtboardName(artboardName: String) {
-    riveAnimationView.artboardName = artboardName
+    riveAnimationView.artboardName = artboardName // it causes reloading
   }
 
   fun setAnimationName(animationName: String) {
     riveAnimationView.drawable.animationName = animationName
+    shouldBeReloaded = true
   }
 
   fun setStateMachineName(stateMachineName: String) {
     riveAnimationView.drawable.stateMachineName = stateMachineName
+    shouldBeReloaded = true
   }
 
 
