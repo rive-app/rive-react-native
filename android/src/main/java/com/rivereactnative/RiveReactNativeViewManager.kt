@@ -79,4 +79,19 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   fun setAutoplay(view: RiveReactNativeView, autoplay: Boolean) {
     view.setAutoplay(autoplay)
   }
+
+  @ReactProp(name = "artboardName")
+  fun setArtboardName(view: RiveReactNativeView, artboardName: String) {
+    view.setArtboardName(artboardName);
+  }
+
+  @ReactProp(name = "animationName")
+  fun setAnimationName(view: RiveReactNativeView, animationName: String) {
+    view.setAnimationName(animationName)
+  }
+
+  @ReactProp(name = "stateMachineName")
+  fun setStateMachineName(view: RiveReactNativeView, stateMachineName: String) {
+    view.setStateMachineName(stateMachineName)
+  }
 }
