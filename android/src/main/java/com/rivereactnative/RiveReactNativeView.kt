@@ -27,7 +27,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
     PAUSE("onPause"),
-    STOP("onStop");
+    STOP("onStop"),
+    LOOP_END("onLoopEnd");
 
     override fun toString(): String {
       return mName
@@ -39,7 +40,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView = RiveAnimationView(context)
     val listener = object : RiveDrawable.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
-        //TODO("Not yet implemented")
+        if (animation is LinearAnimationInstance) {
+          onLoopEnd(animation.animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onLoopEnd(animation.stateMachine.name, true)
+        }
       }
 
       override fun notifyPause(animation: PlayableInstance) {
@@ -110,6 +116,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STOP.toString(), data)
   }
 
+  fun onLoopEnd(animationName: String, isStateMachine: Boolean = false) {
+    val reactContext = context as ReactContext
+
+    val data = Arguments.createMap()
+    data.putString("animationName", animationName)
+    data.putBoolean("isStateMachine", isStateMachine)
+
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.LOOP_END.toString(), data)
+  }
+
   fun play() {
     riveAnimationView.play()
   }
@@ -123,7 +139,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun update() {
-    if(autoPlayChanged) {
+    if (autoPlayChanged) {
       if (riveAnimationView.autoplay) {
         riveAnimationView.play()
       } else {
