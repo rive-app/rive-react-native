@@ -20,12 +20,14 @@ import java.net.URL
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
   private var riveAnimationView: RiveAnimationView
+  private var resId: Int = -1
   private val httpClient = ViewModelProvider(context.currentActivity as ViewModelStoreOwner).get(HttpClient::class.java)
   private var autoPlayChanged = true
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
-    PAUSE("onPause");
+    PAUSE("onPause"),
+    STOP("onStop");
 
     override fun toString(): String {
       return mName
@@ -63,7 +65,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyStop(animation: PlayableInstance) {
-        //TODO("Not yet implemented")
+        if (animation is LinearAnimationInstance) {
+          onStop(animation.animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onStop(animation.stateMachine.name, true)
+        }
       }
 
     }
@@ -93,6 +100,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.PAUSE.toString(), data)
   }
 
+  fun onStop(animationName: String, isStateMachine: Boolean = false) {
+    val reactContext = context as ReactContext
+
+    val data = Arguments.createMap()
+    data.putString("animationName", animationName)
+    data.putBoolean("isStateMachine", isStateMachine)
+
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STOP.toString(), data)
+  }
+
   fun play() {
     riveAnimationView.play()
   }
@@ -102,8 +119,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun stop() {
-    riveAnimationView.reset()
-    riveAnimationView.stop()
+    riveAnimationView.setRiveResource(resId, autoplay = false)
   }
 
   fun update() {
@@ -118,7 +134,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setResourceName(resourceName: String) {
-    val resId = resources.getIdentifier(resourceName, "raw", context.packageName)
+    resId = resources.getIdentifier(resourceName, "raw", context.packageName)
     riveAnimationView.setRiveResource(resId, autoplay = false) // prevent autoplay
   }
 
