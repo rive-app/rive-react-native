@@ -5,7 +5,10 @@ export type RiveRef = {
     direction?: Direction,
     areStateMachines?: boolean
   ) => void;
-  pause: () => void;
+  pause: (
+    animationNames?: string | string[],
+    areStateMachines?: boolean
+  ) => void;
   stop: () => void;
 };
 

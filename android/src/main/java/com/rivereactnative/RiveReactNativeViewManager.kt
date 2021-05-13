@@ -1,6 +1,5 @@
 package com.rivereactnative
 
-import android.util.Log
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
@@ -40,7 +39,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     when (commandType) {
       Commands.PLAY.ordinal -> {
         args?.let {
-          val animationNames  = it.getArray(0)!!
+          val animationNames = it.getArray(0)!!
           val loopMode = it.getString(1)!!
           val direction = it.getString(2)!!
           val areStateMachines = it.getBoolean(3)
@@ -52,7 +51,15 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
 
       }
-      Commands.PAUSE.ordinal -> view.pause()
+      Commands.PAUSE.ordinal -> {
+        args?.let {
+          val animationNames = it.getArray(0)!!
+          val areStateMachines = it.getBoolean(1)
+          view.run {
+            pause((animationNames.toArrayList() as ArrayList<String>).toList(), areStateMachines)
+          }
+        }
+      }
       Commands.STOP.ordinal -> view.stop()
       else -> {
       }
@@ -85,7 +92,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   @ReactProp(name = "url")
   fun setUrl(view: RiveReactNativeView, url: String?) {
-      view.setUrl(url)
+    view.setUrl(url)
   }
 
   @ReactProp(name = "autoplay")
