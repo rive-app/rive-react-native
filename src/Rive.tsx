@@ -184,14 +184,23 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       );
     }, []);
 
+    const reset = useCallback(() => {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(riveRef.current),
+        UIManager.getViewManagerConfig(VIEW_NAME).Commands.reset,
+        []
+      );
+    }, []);
+
     useImperativeHandle(
       ref,
       () => ({
         play,
         pause,
         stop,
+        reset,
       }),
-      [play, pause, stop]
+      [play, pause, stop, reset]
     );
 
     return (
