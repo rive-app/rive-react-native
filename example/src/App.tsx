@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Rive, { RiveRef, Fit } from 'rive-react-native';
+import Rive, { RiveRef, Fit, Alignment } from 'rive-react-native';
 
 export default function App() {
   const [isPlaying, setPlaying] = React.useState(false);
+  const [fit, setFit] = React.useState(Fit.ScaleDown);
+  const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
 
   const riveRef = React.useRef<RiveRef>(null);
 
@@ -27,6 +29,7 @@ export default function App() {
     <View style={styles.container}>
       <Rive
         ref={riveRef}
+        alignment={alignment}
         autoplay={false}
         onPlay={(animationName, isStateMachine) => {
           console.log('played animation name :', animationName, isStateMachine);
@@ -49,13 +52,35 @@ export default function App() {
           );
         }}
         style={styles.box}
-        fit={Fit.ScaleDown}
+        fit={fit}
         resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
         // url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={toggleAnimation}>
           <Text style={styles.button}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            setFit((fitInner) =>
+              fitInner === Fit.Contain ? Fit.ScaleDown : Fit.Contain
+            )
+          }
+        >
+          <Text>Change FIT</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            setAlignment((fitInner) =>
+              fitInner === Alignment.TopCenter
+                ? Alignment.BottomCenter
+                : Alignment.TopCenter
+            )
+          }
+        >
+          <Text>Change Alignment</Text>
         </TouchableOpacity>
         {Platform.OS === 'android' ? (
           <TouchableOpacity onPress={stopAnimation}>

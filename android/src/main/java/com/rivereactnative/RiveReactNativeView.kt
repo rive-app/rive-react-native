@@ -1,5 +1,6 @@
 package com.rivereactnative
 
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.*
 import app.rive.runtime.kotlin.RiveAnimationView
@@ -143,11 +144,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun update() {
     reloadIfNeeded()
-    if (riveAnimationView.autoplay) {
-      riveAnimationView.play()
-    } else {
-      riveAnimationView.stop()
-    }
   }
 
   fun setResourceName(resourceName: String?) {
@@ -163,11 +159,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun setFit(rnFit: RNFit) {
     val riveFit = RNFit.mapToRiveFit(rnFit)
     riveAnimationView.fit = riveFit
+    riveAnimationView.drawable.invalidateSelf() // TODO: probably it should be a responsibility of rive-android itself
   }
 
   fun setAlignment(rnAlignment: RNAlignment) {
     val riveAlignment = RNAlignment.mapToRiveAlignment(rnAlignment)
     riveAnimationView.alignment = riveAlignment
+    riveAnimationView.drawable.invalidateSelf() // TODO: probably it should be a responsibility of rive-android itself
   }
 
   fun setAutoplay(autoplay: Boolean) {
@@ -188,7 +186,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         }
       } ?: run {
         if (resId != -1) {
-          riveAnimationView.setRiveResource(resId, fit = riveAnimationView.fit, alignment = riveAnimationView.alignment, autoplay = false)
+          riveAnimationView.setRiveResource(resId, fit = riveAnimationView.fit, alignment = riveAnimationView.alignment, autoplay = riveAnimationView.autoplay)
           url = null
         } else {
           throw IllegalStateException("You must provide a url or a resourceName!")
@@ -204,7 +202,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         // Pass the Rive file bytes to the animation view
         riveAnimationView.setRiveBytes(
           bytes,
-          // Fit the animation to the cover the entire view
           fit = riveAnimationView.fit,
           alignment = riveAnimationView.alignment,
           autoplay = riveAnimationView.autoplay
