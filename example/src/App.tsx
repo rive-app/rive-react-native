@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ScrollView,
   View,
 } from 'react-native';
 import Rive, {
@@ -16,7 +17,7 @@ import Rive, {
 
 export default function App() {
   const [isPlaying, setPlaying] = React.useState(true);
-  const [fit, setFit] = React.useState(Fit.ScaleDown);
+  const [fit, setFit] = React.useState(Fit.Cover);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
 
   const riveRef = React.useRef<RiveRef>(null);
@@ -37,6 +38,14 @@ export default function App() {
     setPlaying((prev) => !prev);
   };
 
+  const fireStateMachineTrigger = () => {
+    riveRef.current?.fireState('Swipe to delete', 'Trigger Delete');
+  };
+
+  const applyThreshold = () => {
+    riveRef.current?.setInputState('Swipe to delete', 'Swipe Threshold', 50);
+  };
+
   const stopAnimation = () => {
     riveRef.current?.stop();
     setPlaying(false);
@@ -47,7 +56,7 @@ export default function App() {
       <Rive
         ref={riveRef}
         alignment={alignment}
-        autoplay={true}
+        autoplay={false}
         onPlay={(animationName, isStateMachine) => {
           console.log('played animation name :', animationName, isStateMachine);
         }}
@@ -71,11 +80,11 @@ export default function App() {
         style={styles.box}
         fit={fit}
         resourceName={
-          Platform.OS === 'android' ? 'artboard_animations' : 'bird'
+          Platform.OS === 'android' ? 'ui_swipe_left_to_delete' : 'bird'
         }
         // url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />
-      <View style={styles.wrapper}>
+      <ScrollView style={styles.wrapper}>
         <TouchableOpacity onPress={toggleAnimation}>
           <Text style={styles.button}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>
         </TouchableOpacity>
@@ -95,6 +104,12 @@ export default function App() {
         >
           <Text>Change FIT</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={fireStateMachineTrigger}>
+          <Text style={styles.button}>Trigger</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={applyThreshold}>
+          <Text style={styles.button}>Apply threshold</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={() =>
@@ -112,7 +127,7 @@ export default function App() {
             <Text style={styles.button}>{'STOP'}</Text>
           </TouchableOpacity>
         ) : null}
-      </View>
+      </ScrollView>
     </View>
   );
 }

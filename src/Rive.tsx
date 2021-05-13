@@ -184,14 +184,46 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       );
     }, []);
 
+    const fireState = useCallback<RiveRef['fireState']>(
+      (stateMachineName, inputName) => {
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          UIManager.getViewManagerConfig(VIEW_NAME).Commands.fireState,
+          [stateMachineName, inputName]
+        );
+      },
+      []
+    );
+
+    const setInputState = useCallback<RiveRef['setInputState']>(
+      (stateMachineName, inputName, value) => {
+        if (typeof value === 'boolean') {
+          UIManager.dispatchViewManagerCommand(
+            findNodeHandle(riveRef.current),
+            UIManager.getViewManagerConfig(VIEW_NAME).Commands.setBooleanState,
+            [stateMachineName, inputName, value]
+          );
+        } else if (typeof value === 'number') {
+          UIManager.dispatchViewManagerCommand(
+            findNodeHandle(riveRef.current),
+            UIManager.getViewManagerConfig(VIEW_NAME).Commands.setNumberState,
+            [stateMachineName, inputName, value]
+          );
+        }
+      },
+      []
+    );
+
     useImperativeHandle(
       ref,
       () => ({
+        setInputState,
+        fireState,
         play,
         pause,
         stop,
       }),
-      [play, pause, stop]
+      [play, pause, stop, setInputState, fireState]
     );
 
     return (
