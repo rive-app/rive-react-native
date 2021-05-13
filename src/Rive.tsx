@@ -6,7 +6,7 @@ import {
   ViewStyle,
   NativeSyntheticEvent,
 } from 'react-native';
-import type { RiveRef } from './types';
+import { RiveRef, Direction, LoopMode } from './types';
 import type { XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
@@ -141,13 +141,25 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       [onLoopEnd]
     );
 
-    const play = useCallback(() => {
-      UIManager.dispatchViewManagerCommand(
-        findNodeHandle(riveRef.current),
-        UIManager.getViewManagerConfig(VIEW_NAME).Commands.play,
-        []
-      );
-    }, []);
+    const play = useCallback<RiveRef['play']>(
+      (
+        animationNames = [],
+        loop = LoopMode.None,
+        direction = Direction.Auto,
+        areStateMachines = false
+      ) => {
+        const animationNamesArray = Array.isArray(animationNames)
+          ? animationNames
+          : [animationNames];
+
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          UIManager.getViewManagerConfig(VIEW_NAME).Commands.play,
+          [animationNamesArray, loop, direction, areStateMachines]
+        );
+      },
+      []
+    );
 
     const pause = useCallback(() => {
       UIManager.dispatchViewManagerCommand(

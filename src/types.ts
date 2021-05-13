@@ -1,5 +1,10 @@
 export type RiveRef = {
-  play: () => void;
+  play: (
+    animationNames?: string | string[],
+    loop?: LoopMode,
+    direction?: Direction,
+    areStateMachines?: boolean
+  ) => void;
   pause: () => void;
   stop: () => void;
 };
@@ -24,4 +29,17 @@ export enum Alignment {
   BottomLeft = 'bottomLeft',
   BottomCenter = 'bottomCenter',
   BottomRight = 'bottomRight',
+}
+
+export enum LoopMode {
+  OneShot = 'oneShot',
+  Loop = 'loop',
+  PingPong = 'pingPong',
+  None = 'none',
+}
+
+export enum Direction {
+  Backwards = 'backwards',
+  Auto = 'auto',
+  Forwards = 'forwards',
 }
