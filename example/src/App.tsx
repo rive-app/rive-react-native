@@ -15,7 +15,7 @@ import Rive, {
 } from 'rive-react-native';
 
 export default function App() {
-  const [isPlaying, setPlaying] = React.useState(false);
+  const [isPlaying, setPlaying] = React.useState(true);
   const [fit, setFit] = React.useState(Fit.ScaleDown);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
 
@@ -47,7 +47,7 @@ export default function App() {
       <Rive
         ref={riveRef}
         alignment={alignment}
-        autoplay={false}
+        autoplay={true}
         onPlay={(animationName, isStateMachine) => {
           console.log('played animation name :', animationName, isStateMachine);
         }}
