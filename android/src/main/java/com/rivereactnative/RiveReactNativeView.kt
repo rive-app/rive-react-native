@@ -131,7 +131,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun play(animationNames: List<String>, rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Boolean) {
     val loop = RNLoopMode.mapToRiveLoop(rnLoopMode)
     val direction = RNDirection.mapToRiveDirection(rnDirection)
-    if(animationNames.isEmpty()) {
+    if (animationNames.isEmpty()) {
       riveAnimationView.play(loop, direction) // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
     } else {
       riveAnimationView.play(animationNames, loop, direction, areStateMachines)
@@ -139,8 +139,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   }
 
-  fun pause() {
-    riveAnimationView.pause()
+  fun pause(animationNames: List<String>, areStateMachines: Boolean) {
+    if (animationNames.isEmpty()) {
+      riveAnimationView.pause() // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
+    } else {
+      riveAnimationView.pause(animationNames, areStateMachines)
+    }
   }
 
   fun stop() {

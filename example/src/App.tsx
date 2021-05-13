@@ -28,7 +28,7 @@ export default function App() {
 
   const playBothAnimations = () => {
     isPlaying
-      ? riveRef.current?.pause()
+      ? riveRef.current?.pause(['rollaround', 'goaround'])
       : riveRef.current?.play(
           ['rollaround', 'goaround'],
           LoopMode.OneShot,
