@@ -6,7 +6,7 @@ enum class RNFit(private val mValue: String) {
   Cover("cover"),
   Contain("contain"),
   Fill("fill"),
-  FitWidth( "fitWidth"),
+  FitWidth("fitWidth"),
   FitHeight("fitHeight"),
   None("none"),
   ScaleDown("scaleDown");
@@ -18,13 +18,13 @@ enum class RNFit(private val mValue: String) {
   companion object {
 
     fun mapToRNFit(fit: String): RNFit {
-      return valueOf(values().first() {it.toString() == fit }.name)
+      return valueOf(values().first() { it.toString() == fit }.name)
     }
 
-    fun mapToRiveFit(rnFit : RNFit): Fit {
+    fun mapToRiveFit(rnFit: RNFit): Fit {
       return when (rnFit) {
         Cover -> Fit.COVER
-        Contain  -> Fit.CONTAIN
+        Contain -> Fit.CONTAIN
         Fill -> Fit.FILL
         FitWidth -> Fit.FIT_WIDTH
         FitHeight -> Fit.FIT_HEIGHT

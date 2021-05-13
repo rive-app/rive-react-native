@@ -6,7 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Rive, { RiveRef, Fit, Alignment } from 'rive-react-native';
+import Rive, {
+  RiveRef,
+  Fit,
+  Alignment,
+  LoopMode,
+  Direction,
+} from 'rive-react-native';
 
 export default function App() {
   const [isPlaying, setPlaying] = React.useState(false);
@@ -17,6 +23,17 @@ export default function App() {
 
   const toggleAnimation = () => {
     isPlaying ? riveRef.current?.pause() : riveRef.current?.play();
+    setPlaying((prev) => !prev);
+  };
+
+  const playBothAnimations = () => {
+    isPlaying
+      ? riveRef.current?.pause()
+      : riveRef.current?.play(
+          ['rollaround', 'goaround'],
+          LoopMode.OneShot,
+          Direction.Backwards
+        );
     setPlaying((prev) => !prev);
   };
 
@@ -53,12 +70,20 @@ export default function App() {
         }}
         style={styles.box}
         fit={fit}
-        resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
+        resourceName={
+          Platform.OS === 'android' ? 'artboard_animations' : 'bird'
+        }
         // url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={toggleAnimation}>
           <Text style={styles.button}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={playBothAnimations}>
+          <Text style={styles.button}>
+            {isPlaying ? 'PAUSE both' : 'PLAY both'}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}

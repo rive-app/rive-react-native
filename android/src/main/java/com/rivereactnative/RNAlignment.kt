@@ -6,7 +6,7 @@ enum class RNAlignment(private val mValue: String) {
   TopLeft("topLeft"),
   TopCenter("topCenter"),
   TopRight("topRight"),
-  CenterLeft( "centerLeft"),
+  CenterLeft("centerLeft"),
   Center("center"),
   CenterRight("centerRight"),
   BottomLeft("bottomLeft"),
@@ -20,7 +20,7 @@ enum class RNAlignment(private val mValue: String) {
   companion object {
 
     fun mapToRNAlignment(alignment: String): RNAlignment {
-      return valueOf(values().first() {it.toString() == alignment }.name)
+      return valueOf(values().first() { it.toString() == alignment }.name)
     }
 
     fun mapToRiveAlignment(v: RNAlignment): Alignment {

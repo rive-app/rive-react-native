@@ -38,7 +38,20 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   override fun receiveCommand(view: RiveReactNativeView, commandType: Int, args: ReadableArray?) {
     when (commandType) {
-      Commands.PLAY.ordinal -> view.play()
+      Commands.PLAY.ordinal -> {
+        args?.let {
+          val animationNames  = it.getArray(0)!!
+          val loopMode = it.getString(1)!!
+          val direction = it.getString(2)!!
+          val areStateMachines = it.getBoolean(3)
+          view.run {
+            val rnLoopMode = RNLoopMode.mapToRNLoopMode(loopMode)
+            val rnDirection = RNDirection.mapToRNDirection(direction)
+            play((animationNames.toArrayList() as ArrayList<String>).toList(), rnLoopMode, rnDirection, areStateMachines)
+          }
+        }
+
+      }
       Commands.PAUSE.ordinal -> view.pause()
       Commands.STOP.ordinal -> view.stop()
       else -> {
