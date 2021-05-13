@@ -144,8 +144,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun stop() {
-    shouldBeReloaded = true
-    reloadIfNeeded()
+    resetRiveResource()
   }
 
   fun update() {
@@ -184,6 +183,19 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     shouldBeReloaded = true
   }
 
+
+  private fun resetRiveResource() {
+    url?.let {
+      if(resId == -1) {
+        setUrlRiveResource(it, false)
+      }
+    } ?: run {
+      if (resId != -1) {
+        riveAnimationView.setRiveResource(resId, fit = riveAnimationView.fit, alignment = riveAnimationView.alignment, autoplay = false)
+      }
+    }
+  }
+
   private fun reloadIfNeeded() {
     if (shouldBeReloaded) {
       url?.let {
@@ -202,7 +214,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  private fun setUrlRiveResource(url: String) {
+  private fun setUrlRiveResource(url: String, autoplay: Boolean = riveAnimationView.autoplay) {
     httpClient.byteLiveData.observe(context.currentActivity as LifecycleOwner, // needs a fix
       Observer { bytes ->
         // Pass the Rive file bytes to the animation view
@@ -210,7 +222,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           bytes,
           fit = riveAnimationView.fit,
           alignment = riveAnimationView.alignment,
-          autoplay = riveAnimationView.autoplay
+          autoplay = autoplay
         )
       }
     )
