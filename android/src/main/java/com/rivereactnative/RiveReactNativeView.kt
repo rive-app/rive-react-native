@@ -1,6 +1,5 @@
 package com.rivereactnative
 
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.*
 import app.rive.runtime.kotlin.RiveAnimationView
