@@ -16,13 +16,15 @@ import com.facebook.react.uimanager.ThemedReactContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.IllegalStateException
 import java.net.URL
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
   private var riveAnimationView: RiveAnimationView
   private var resId: Int = -1
+  private var url: String? = null
   private val httpClient = ViewModelProvider(context.currentActivity as ViewModelStoreOwner).get(HttpClient::class.java)
-  private var autoPlayChanged = true
+  private var shouldBeReloaded = true
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
@@ -135,49 +137,70 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun stop() {
-    riveAnimationView.setRiveResource(resId, autoplay = false)
+    shouldBeReloaded = true
+    reloadIfNeeded()
   }
 
   fun update() {
-    if (autoPlayChanged) {
-      if (riveAnimationView.autoplay) {
-        riveAnimationView.play()
-      } else {
-        riveAnimationView.stop()
-      }
-    }
-    autoPlayChanged = false
+    reloadIfNeeded()
   }
 
-  fun setResourceName(resourceName: String) {
-    resId = resources.getIdentifier(resourceName, "raw", context.packageName)
-    riveAnimationView.setRiveResource(resId, autoplay = false) // prevent autoplay
+  fun setResourceName(resourceName: String?) {
+    resourceName?.let {
+      resId = resources.getIdentifier(resourceName, "raw", context.packageName)
+    } ?: run {
+      resId = -1
+    }
+
+    shouldBeReloaded = true
   }
 
   fun setFit(rnFit: RNFit) {
     val riveFit = RNFit.mapToRiveFit(rnFit)
     riveAnimationView.fit = riveFit
+    riveAnimationView.drawable.invalidateSelf() // TODO: probably it should be a responsibility of rive-android itself
   }
 
   fun setAlignment(rnAlignment: RNAlignment) {
     val riveAlignment = RNAlignment.mapToRiveAlignment(rnAlignment)
     riveAnimationView.alignment = riveAlignment
+    riveAnimationView.drawable.invalidateSelf() // TODO: probably it should be a responsibility of rive-android itself
   }
 
   fun setAutoplay(autoplay: Boolean) {
-    if (riveAnimationView.autoplay != autoplay) {
-      autoPlayChanged = true
-    }
     riveAnimationView.autoplay = autoplay
+    shouldBeReloaded = true
   }
 
-  fun setUrl(url: String) {
+  fun setUrl(url: String?) {
+    this.url = url
+    shouldBeReloaded = true
+  }
+
+  private fun reloadIfNeeded() {
+    if (shouldBeReloaded) {
+      url?.let {
+        if (resId == -1) {
+          setUrlRiveResource(it)
+        }
+      } ?: run {
+        if (resId != -1) {
+          riveAnimationView.setRiveResource(resId, fit = riveAnimationView.fit, alignment = riveAnimationView.alignment, autoplay = riveAnimationView.autoplay)
+          url = null
+        } else {
+          throw IllegalStateException("You must provide a url or a resourceName!")
+        }
+      }
+      shouldBeReloaded = false
+    }
+  }
+
+  private fun setUrlRiveResource(url: String) {
     httpClient.byteLiveData.observe(context.currentActivity as LifecycleOwner, // needs a fix
       Observer { bytes ->
         // Pass the Rive file bytes to the animation view
         riveAnimationView.setRiveBytes(
           bytes,
-          // Fit the animation to the cover the entire view
           fit = riveAnimationView.fit,
           alignment = riveAnimationView.alignment,
           autoplay = riveAnimationView.autoplay
@@ -188,15 +211,17 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setArtboardName(artboardName: String) {
-    riveAnimationView.artboardName = artboardName
+    riveAnimationView.artboardName = artboardName // it causes reloading
   }
 
   fun setAnimationName(animationName: String) {
     riveAnimationView.drawable.animationName = animationName
+    shouldBeReloaded = true
   }
 
   fun setStateMachineName(stateMachineName: String) {
     riveAnimationView.drawable.stateMachineName = stateMachineName
+    shouldBeReloaded = true
   }
 
 

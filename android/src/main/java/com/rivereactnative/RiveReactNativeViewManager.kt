@@ -1,5 +1,6 @@
 package com.rivereactnative
 
+import android.util.Log
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
@@ -55,7 +56,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   }
 
   @ReactProp(name = "resourceName")
-  fun setResourceName(view: RiveReactNativeView, resourceName: String) {
+  fun setResourceName(view: RiveReactNativeView, resourceName: String?) {
     view.setResourceName(resourceName)
   }
 
@@ -70,8 +71,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   }
 
   @ReactProp(name = "url")
-  fun setUrl(view: RiveReactNativeView, url: String) {
-    view.setUrl(url)
+  fun setUrl(view: RiveReactNativeView, url: String?) {
+      view.setUrl(url)
   }
 
   @ReactProp(name = "autoplay")
