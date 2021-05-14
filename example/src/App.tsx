@@ -1,10 +1,12 @@
 import * as React from 'react';
 import {
-  Platform,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import Rive, {
   RiveRef,
@@ -15,7 +17,7 @@ import Rive, {
 } from 'rive-react-native';
 
 export default function App() {
-  const [isPlaying, setPlaying] = React.useState(true);
+  const [isPlaying, setPlaying] = React.useState(false);
   const [fit, setFit] = React.useState(Fit.ScaleDown);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
 
@@ -42,95 +44,126 @@ export default function App() {
     setPlaying(false);
   };
 
+  const stopBothAnimations = () => {
+    riveRef.current?.stop(['rollaround', 'goaround']);
+    setPlaying(false);
+  };
+
   const resetAnimation = () => {
     riveRef.current?.reset();
   };
 
   return (
-    <View style={styles.container}>
-      <Rive
-        ref={riveRef}
-        alignment={alignment}
-        autoplay={true}
-        onPlay={(animationName, isStateMachine) => {
-          console.log('played animation name :', animationName, isStateMachine);
-        }}
-        onPause={(animationName, isStateMachine) => {
-          console.log('paused animation name :', animationName, isStateMachine);
-        }}
-        onStop={(animationName, isStateMachine) => {
-          console.log(
-            'stopped animation name :',
-            animationName,
-            isStateMachine
-          );
-        }}
-        onLoopEnd={(animationName, isStateMachine) => {
-          console.log(
-            'loop ended animation name :',
-            animationName,
-            isStateMachine
-          );
-        }}
-        style={styles.box}
-        fit={fit}
-        // resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
-        url={'https://cdn.rive.app/animations/juice_v7.riv'}
-      />
-      <View style={styles.wrapper}>
-        <TouchableOpacity onPress={resetAnimation}>
-          <Text style={styles.button}>{'RESET'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={toggleAnimation}>
-          <Text style={styles.button}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={playBothAnimations}>
-          <Text style={styles.button}>
-            {isPlaying ? 'PAUSE both' : 'PLAY both'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() =>
-            setFit((fitInner) =>
-              fitInner === Fit.Contain ? Fit.ScaleDown : Fit.Contain
-            )
+    <SafeAreaView style={styles.safeAreaViewContainer}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Rive
+          ref={riveRef}
+          alignment={alignment}
+          autoplay={true}
+          onPlay={(animationName, isStateMachine) => {
+            console.log(
+              'played animation name :',
+              animationName,
+              isStateMachine
+            );
+          }}
+          onPause={(animationName, isStateMachine) => {
+            console.log(
+              'paused animation name :',
+              animationName,
+              isStateMachine
+            );
+          }}
+          onStop={(animationName, isStateMachine) => {
+            console.log(
+              'stopped animation name :',
+              animationName,
+              isStateMachine
+            );
+          }}
+          onLoopEnd={(animationName, isStateMachine) => {
+            console.log(
+              'loop ended animation name :',
+              animationName,
+              isStateMachine
+            );
+          }}
+          style={styles.box}
+          fit={fit}
+          resourceName={
+            Platform.OS === 'android' ? 'artboard_animations' : 'bird'
           }
-        >
-          <Text>Change FIT</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() =>
-            setAlignment((fitInner) =>
-              fitInner === Alignment.TopCenter
-                ? Alignment.BottomCenter
-                : Alignment.TopCenter
-            )
-          }
-        >
-          <Text>Change Alignment</Text>
-        </TouchableOpacity>
-        {Platform.OS === 'android' ? (
-          <TouchableOpacity onPress={stopAnimation}>
-            <Text style={styles.button}>{'STOP'}</Text>
+          // url={'https://cdn.rive.app/animations/juice_v7.riv'}
+        />
+        <View style={styles.wrapper}>
+          <TouchableOpacity style={styles.button} onPress={resetAnimation}>
+            <Text style={styles.buttonText}>{'RESET'}</Text>
           </TouchableOpacity>
-        ) : null}
-      </View>
-    </View>
+
+          <TouchableOpacity style={styles.button} onPress={toggleAnimation}>
+            <Text style={styles.buttonText}>
+              {isPlaying ? 'PAUSE' : 'PLAY'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={playBothAnimations}>
+            <Text style={styles.buttonText}>
+              {isPlaying ? 'PAUSE both' : 'PLAY both'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              setFit((fitInner) =>
+                fitInner === Fit.Contain ? Fit.ScaleDown : Fit.Contain
+              )
+            }
+          >
+            <Text style={styles.buttonText}>{'CHANGE FIT'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              setAlignment((fitInner) =>
+                fitInner === Alignment.TopCenter
+                  ? Alignment.BottomCenter
+                  : Alignment.TopCenter
+              )
+            }
+          >
+            <Text style={styles.buttonText}>{'CHANGE ALIGNMENT'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={stopAnimation}>
+            <Text style={styles.buttonText}>{'STOP'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={stopBothAnimations}>
+            <Text style={styles.buttonText}>{'STOP both'}</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeAreaViewContainer: {
     flex: 1,
+  },
+  container: {
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   wrapper: {
     flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
   box: {
     width: '100%',
@@ -138,11 +171,16 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   button: {
-    color: 'black',
+    height: 40,
     margin: 10,
     borderColor: 'black',
     borderWidth: 1,
-    textAlign: 'center',
-    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'black',
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });
