@@ -208,10 +208,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     url?.let {
       if (resId == -1) {
         setUrlRiveResource(it, false)
+      } else {
+        throw IllegalStateException("You cannot pass both resourceName and url at the same time")
       }
     } ?: run {
       if (resId != -1) {
         riveAnimationView.setRiveResource(resId, fit = riveAnimationView.fit, alignment = riveAnimationView.alignment, autoplay = false)
+      } else {
+        throw IllegalStateException("You must provide a url or a resourceName!")
       }
     }
   }
@@ -221,6 +225,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       url?.let {
         if (resId == -1) {
           setUrlRiveResource(it)
+        } else {
+            throw IllegalStateException("You cannot pass both resourceName and url at the same time")
         }
       } ?: run {
         if (resId != -1) {
@@ -263,6 +269,17 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     shouldBeReloaded = true
   }
 
+  fun fireState(stateMachineName: String, inputName: String) {
+    riveAnimationView.fireState(stateMachineName, inputName)
+  }
+
+  fun setBooleanState(stateMachineName: String, inputName: String, value: Boolean) {
+    riveAnimationView.setBooleanState(stateMachineName, inputName, value)
+  }
+
+  fun setNumberState(stateMachineName: String, inputName: String, value: Float) {
+    riveAnimationView.setNumberState(stateMachineName, inputName, value)
+  }
 
   override fun onHostResume() {
   }

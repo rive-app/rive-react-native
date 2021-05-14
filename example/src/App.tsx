@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  ScrollView,
   View,
   Platform,
 } from 'react-native';
@@ -18,7 +18,7 @@ import Rive, {
 
 export default function App() {
   const [isPlaying, setPlaying] = React.useState(false);
-  const [fit, setFit] = React.useState(Fit.ScaleDown);
+  const [fit, setFit] = React.useState(Fit.Cover);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
 
   const riveRef = React.useRef<RiveRef>(null);
@@ -37,6 +37,14 @@ export default function App() {
           Direction.Backwards
         );
     setPlaying((prev) => !prev);
+  };
+
+  const fireStateMachineTrigger = () => {
+    riveRef.current?.fireState('Swipe to delete', 'Trigger Delete');
+  };
+
+  const applyThreshold = () => {
+    riveRef.current?.setInputState('Swipe to delete', 'Swipe Threshold', 50);
   };
 
   const stopAnimation = () => {
@@ -59,7 +67,7 @@ export default function App() {
         <Rive
           ref={riveRef}
           alignment={alignment}
-          autoplay={true}
+          autoplay={false}
           onPlay={(animationName, isStateMachine) => {
             console.log(
               'played animation name :',
@@ -91,21 +99,28 @@ export default function App() {
           style={styles.box}
           fit={fit}
           resourceName={
-            Platform.OS === 'android' ? 'artboard_animations' : 'bird'
+            Platform.OS === 'android' ? 'ui_swipe_left_to_delete' : 'bird'
           }
           // url={'https://cdn.rive.app/animations/juice_v7.riv'}
         />
         <View style={styles.wrapper}>
-          <TouchableOpacity style={styles.button} onPress={resetAnimation}>
-            <Text style={styles.buttonText}>{'RESET'}</Text>
-          </TouchableOpacity>
-
           <TouchableOpacity style={styles.button} onPress={toggleAnimation}>
             <Text style={styles.buttonText}>
               {isPlaying ? 'PAUSE' : 'PLAY'}
             </Text>
           </TouchableOpacity>
-
+          <TouchableOpacity style={styles.button} onPress={resetAnimation}>
+            <Text style={styles.buttonText}>{'RESET'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={fireStateMachineTrigger}
+          >
+            <Text style={styles.buttonText}>Trigger</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={applyThreshold}>
+            <Text style={styles.buttonText}>Apply threshold</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={playBothAnimations}>
             <Text style={styles.buttonText}>
               {isPlaying ? 'PAUSE both' : 'PLAY both'}

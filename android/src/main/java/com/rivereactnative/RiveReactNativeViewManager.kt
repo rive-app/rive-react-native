@@ -11,7 +11,10 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     PLAY,
     PAUSE,
     STOP,
-    RESET
+    RESET,
+    FIRE_STATE,
+    SET_BOOLEAN_STATE,
+    SET_NUMBER_STATE
   }
 
 
@@ -34,7 +37,13 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
       "stop",
       Commands.STOP.ordinal,
       "reset",
-      Commands.RESET.ordinal
+      Commands.RESET.ordinal,
+      "fireState",
+      Commands.FIRE_STATE.ordinal,
+      "setBooleanState",
+      Commands.SET_BOOLEAN_STATE.ordinal,
+      "setNumberState",
+      Commands.SET_NUMBER_STATE.ordinal
     )
   }
 
@@ -73,6 +82,35 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
       }
       Commands.RESET.ordinal -> view.reset()
+      Commands.FIRE_STATE.ordinal -> {
+        args?.let {
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
+          view.run {
+            fireState(stateMachineName, inputName)
+          }
+        }
+      }
+      Commands.SET_BOOLEAN_STATE.ordinal -> {
+        args?.let {
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
+          val value = it.getBoolean(2)
+          view.run {
+            setBooleanState(stateMachineName, inputName, value)
+          }
+        }
+      }
+      Commands.SET_NUMBER_STATE.ordinal -> {
+        args?.let {
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
+          val value = it.getDouble(2)
+          view.run {
+            setNumberState(stateMachineName, inputName, value.toFloat())
+          }
+        }
+      }
       else -> {
       }
     }

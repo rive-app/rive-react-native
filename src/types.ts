@@ -1,4 +1,10 @@
 export type RiveRef = {
+  fireState: (stateMachineName: string, inputName: string) => void;
+  setInputState: (
+    stateMachineName: string,
+    inputName: string,
+    value: boolean | number
+  ) => void;
   play: (
     animationNames?: string | string[],
     loop?: LoopMode,
