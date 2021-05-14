@@ -70,7 +70,7 @@ export default function AnimationFromLocalFile() {
           style={styles.button}
           onPress={() =>
             setFit((fitInner) =>
-              fitInner === Fit.Contain ? Fit.ScaleDown : Fit.Contain
+              fitInner === Fit.Cover ? Fit.ScaleDown : Fit.Cover
             )
           }
         >

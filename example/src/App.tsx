@@ -3,7 +3,8 @@ import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import AnimationFromUrl from './AnimationFromUrl';
 import AnimationFromLocalFile from './AnimationFromLocalFile';
 import MultipleAnimations from './MultipleAnimations';
-import StateMachine from './StateMachine';
+import SimpleStateMachine from './SimpleStateMachine';
+import StateMachineWithTrigger from './StateMachineWithTrigger';
 
 export default function App() {
   return (
@@ -12,7 +13,8 @@ export default function App() {
         <AnimationFromUrl />
         <AnimationFromLocalFile />
         <MultipleAnimations />
-        <StateMachine />
+        <SimpleStateMachine />
+        <StateMachineWithTrigger />
       </ScrollView>
     </SafeAreaView>
   );

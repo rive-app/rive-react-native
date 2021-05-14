@@ -1,35 +1,19 @@
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Rive, {
-  RiveRef,
-  Fit,
-  Alignment,
-  LoopMode,
-  Direction,
-} from 'rive-react-native';
+import Rive, { RiveRef, Fit, Alignment } from 'rive-react-native';
 
-export default function MultipleAnimations() {
+export default function SimpleStateMachine() {
   const autoplay = false;
   const [isPlaying, setPlaying] = React.useState(autoplay);
   const [fit, setFit] = React.useState(Fit.Cover);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
-  const [artboardName, setArtboardName] = React.useState('Square');
 
   const riveRef = React.useRef<RiveRef>(null);
 
   const toggleAnimation = () => {
-    isPlaying ? riveRef.current?.pause() : riveRef.current?.play();
-    setPlaying((prev) => !prev);
-  };
-
-  const playBothAnimations = () => {
     isPlaying
-      ? riveRef.current?.pause(['rollaround', 'goaround'])
-      : riveRef.current?.play(
-          ['rollaround', 'goaround'],
-          LoopMode.Loop,
-          Direction.Forwards
-        );
+      ? riveRef.current?.pause()
+      : riveRef.current?.play(["Designer's Test"], undefined, undefined, true);
     setPlaying((prev) => !prev);
   };
 
@@ -38,23 +22,12 @@ export default function MultipleAnimations() {
     setPlaying(false);
   };
 
-  const stopBothAnimations = () => {
-    riveRef.current?.stop(['rollaround', 'goaround']);
-    setPlaying(false);
-  };
-
   const resetAnimation = () => {
     riveRef.current?.reset();
-    setPlaying(autoplay);
   };
 
-  const changeArtboard = () => {
-    console.log('change artboard wtf');
-    setArtboardName((prevArtboardName) =>
-      prevArtboardName === 'Square' ? 'Circle' : 'Square'
-    );
-    console.log('setting autoplay WTFFF');
-    setPlaying(autoplay);
+  const setLevel = (n: number) => {
+    riveRef.current?.setInputState("Designer's Test", 'Level', n);
   };
 
   return (
@@ -63,7 +36,6 @@ export default function MultipleAnimations() {
         ref={riveRef}
         alignment={alignment}
         autoplay={autoplay}
-        artboardName={artboardName}
         onPlay={(animationName, isStateMachine) => {
           console.log('played animation name :', animationName, isStateMachine);
         }}
@@ -89,9 +61,19 @@ export default function MultipleAnimations() {
         }}
         style={styles.box}
         fit={fit}
-        resourceName={'artboard_animations'}
+        stateMachineName="Designer's Test"
+        resourceName={'skills'}
       />
       <View style={styles.wrapper}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setLevel(0);
+          }}
+        >
+          <Text style={styles.buttonText}>Set level 0</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.button} onPress={toggleAnimation}>
           <Text style={styles.buttonText}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>
         </TouchableOpacity>
@@ -99,21 +81,6 @@ export default function MultipleAnimations() {
         <TouchableOpacity style={styles.button} onPress={resetAnimation}>
           <Text style={styles.buttonText}>{'RESET'}</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={changeArtboard}>
-          <Text style={styles.buttonText}>
-            Change artboardName to{' '}
-            {artboardName === 'Square' ? 'Circle' : 'Square'}
-          </Text>
-        </TouchableOpacity>
-
-        {artboardName === 'Square' && (
-          <TouchableOpacity style={styles.button} onPress={playBothAnimations}>
-            <Text style={styles.buttonText}>
-              {isPlaying ? 'PAUSE both' : 'PLAY both'}
-            </Text>
-          </TouchableOpacity>
-        )}
 
         <TouchableOpacity
           style={styles.button}
@@ -142,12 +109,6 @@ export default function MultipleAnimations() {
         <TouchableOpacity style={styles.button} onPress={stopAnimation}>
           <Text style={styles.buttonText}>{'STOP'}</Text>
         </TouchableOpacity>
-
-        {artboardName === 'Square' && (
-          <TouchableOpacity style={styles.button} onPress={stopBothAnimations}>
-            <Text style={styles.buttonText}>{'STOP both'}</Text>
-          </TouchableOpacity>
-        )}
       </View>
     </>
   );
