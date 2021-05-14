@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import Rive, {
   RiveRef,
@@ -16,7 +17,7 @@ import Rive, {
 } from 'rive-react-native';
 
 export default function App() {
-  const [isPlaying, setPlaying] = React.useState(true);
+  const [isPlaying, setPlaying] = React.useState(false);
   const [fit, setFit] = React.useState(Fit.ScaleDown);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
 
@@ -45,6 +46,7 @@ export default function App() {
 
   const stopBothAnimations = () => {
     riveRef.current?.stop(['rollaround', 'goaround']);
+    setPlaying(false);
   };
 
   const resetAnimation = () => {
@@ -88,8 +90,10 @@ export default function App() {
           }}
           style={styles.box}
           fit={fit}
-          // resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
-          url={'https://cdn.rive.app/animations/juice_v7.riv'}
+          resourceName={
+            Platform.OS === 'android' ? 'artboard_animations' : 'bird'
+          }
+          // url={'https://cdn.rive.app/animations/juice_v7.riv'}
         />
         <View style={styles.wrapper}>
           <TouchableOpacity style={styles.button} onPress={resetAnimation}>
