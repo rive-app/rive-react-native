@@ -4,10 +4,7 @@ import android.widget.FrameLayout
 import androidx.lifecycle.*
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.RiveDrawable
-import app.rive.runtime.kotlin.core.LayerState
-import app.rive.runtime.kotlin.core.LinearAnimationInstance
-import app.rive.runtime.kotlin.core.PlayableInstance
-import app.rive.runtime.kotlin.core.StateMachineInstance
+import app.rive.runtime.kotlin.core.*
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
@@ -16,8 +13,8 @@ import com.facebook.react.uimanager.ThemedReactContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.IllegalStateException
 import java.net.URL
+import kotlin.IllegalStateException
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
   private var riveAnimationView: RiveAnimationView
@@ -30,7 +27,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     PLAY("onPlay"),
     PAUSE("onPause"),
     STOP("onStop"),
-    LOOP_END("onLoopEnd");
+    LOOP_END("onLoopEnd"),
+    STATE_CHANGED("onStateChanged");
 
     override fun toString(): String {
       return mName
@@ -69,7 +67,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyStateChanged(state: LayerState) {
-        //TODO("Not yet implemented")
+        onStateChanged(state)
       }
 
       override fun notifyStop(animation: PlayableInstance) {
@@ -126,6 +124,30 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putBoolean("isStateMachine", isStateMachine)
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.LOOP_END.toString(), data)
+  }
+
+  fun onStateChanged(layerState: LayerState) {
+    val reactContext = context as ReactContext
+    val data = Arguments.createMap()
+    when (layerState) {
+      is AnyState -> {
+        data.putString("layerState", RNLayerState.Any.toString())
+      }
+      is ExitState -> {
+        data.putString("layerState", RNLayerState.Exit.toString())
+      }
+      is EntryState -> {
+        data.putString("layerState", RNLayerState.Entry.toString())
+      }
+      is AnimationState -> {
+        data.putString("layerState", RNLayerState.Animation.toString())
+      }
+      else -> {
+        throw IllegalStateException("Unsupported LayerState type")
+      }
+    }
+
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
   }
 
   fun play(animationNames: List<String>, rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Boolean) {
@@ -226,7 +248,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         if (resId == -1) {
           setUrlRiveResource(it)
         } else {
-            throw IllegalStateException("You cannot pass both resourceName and url at the same time")
+          throw IllegalStateException("You cannot pass both resourceName and url at the same time")
         }
       } ?: run {
         if (resId != -1) {
