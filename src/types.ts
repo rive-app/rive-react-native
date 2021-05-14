@@ -10,6 +10,7 @@ export type RiveRef = {
     areStateMachines?: boolean
   ) => void;
   stop: () => void;
+  reset: () => void;
 };
 
 export enum Fit {

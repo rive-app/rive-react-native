@@ -42,6 +42,10 @@ export default function App() {
     setPlaying(false);
   };
 
+  const resetAnimation = () => {
+    riveRef.current?.reset();
+  };
+
   return (
     <View style={styles.container}>
       <Rive
@@ -70,12 +74,14 @@ export default function App() {
         }}
         style={styles.box}
         fit={fit}
-        resourceName={
-          Platform.OS === 'android' ? 'artboard_animations' : 'bird'
-        }
-        // url={'https://cdn.rive.app/animations/juice_v7.riv'}
+        // resourceName={Platform.OS === 'android' ? 'flying_car' : 'bird'}
+        url={'https://cdn.rive.app/animations/juice_v7.riv'}
       />
       <View style={styles.wrapper}>
+        <TouchableOpacity onPress={resetAnimation}>
+          <Text style={styles.button}>{'RESET'}</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={toggleAnimation}>
           <Text style={styles.button}>{isPlaying ? 'PAUSE' : 'PLAY'}</Text>
         </TouchableOpacity>

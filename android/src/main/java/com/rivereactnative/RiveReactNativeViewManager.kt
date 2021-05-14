@@ -10,7 +10,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   private enum class Commands {
     PLAY,
     PAUSE,
-    STOP
+    STOP,
+    RESET
   }
 
 
@@ -31,7 +32,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
       "pause",
       Commands.PAUSE.ordinal,
       "stop",
-      Commands.STOP.ordinal
+      Commands.STOP.ordinal,
+      "reset",
+      Commands.RESET.ordinal
     )
   }
 
@@ -61,6 +64,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
       }
       Commands.STOP.ordinal -> view.stop()
+      Commands.RESET.ordinal -> view.reset()
       else -> {
       }
     }

@@ -151,6 +151,18 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     resetRiveResource()
   }
 
+  fun reset() {
+    url?.let {
+      if(resId == -1) {
+        riveAnimationView.drawable.reset()
+      }
+    } ?: run {
+      if(resId != -1) {
+        riveAnimationView.reset()
+      }
+    }
+  }
+
   fun update() {
     reloadIfNeeded()
   }
