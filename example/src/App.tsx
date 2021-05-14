@@ -24,7 +24,9 @@ export default function App() {
   const riveRef = React.useRef<RiveRef>(null);
 
   const toggleAnimation = () => {
-    isPlaying ? riveRef.current?.pause() : riveRef.current?.play();
+    isPlaying
+      ? riveRef.current?.pause()
+      : riveRef.current?.play(["Designer's Test"], undefined, undefined, true);
     setPlaying((prev) => !prev);
   };
 
@@ -61,13 +63,17 @@ export default function App() {
     riveRef.current?.reset();
   };
 
+  const setLevel = (n: number) => {
+    riveRef.current?.setInputState("Designer's Test", 'Level', n);
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         <Rive
           ref={riveRef}
           alignment={alignment}
-          autoplay={false}
+          autoplay={true}
           onPlay={(animationName, isStateMachine) => {
             console.log(
               'played animation name :',
@@ -98,12 +104,19 @@ export default function App() {
           }}
           style={styles.box}
           fit={fit}
-          resourceName={
-            Platform.OS === 'android' ? 'ui_swipe_left_to_delete' : 'bird'
-          }
+          stateMachineName="Designer's Test"
+          resourceName={Platform.OS === 'android' ? 'skills' : 'bird'}
           // url={'https://cdn.rive.app/animations/juice_v7.riv'}
         />
         <View style={styles.wrapper}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setLevel(0);
+            }}
+          >
+            <Text style={styles.buttonText}>Set level 0</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={toggleAnimation}>
             <Text style={styles.buttonText}>
               {isPlaying ? 'PAUSE' : 'PLAY'}

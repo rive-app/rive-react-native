@@ -213,7 +213,15 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } ?: run {
       if (resId != -1) {
-        riveAnimationView.setRiveResource(resId, fit = riveAnimationView.fit, alignment = riveAnimationView.alignment, autoplay = false)
+        riveAnimationView.setRiveResource(
+          resId,
+          fit = riveAnimationView.fit,
+          alignment = riveAnimationView.alignment,
+          autoplay = false,
+          stateMachineName = riveAnimationView.drawable.stateMachineName,
+          animationName = riveAnimationView.drawable.animationName,
+          artboardName = riveAnimationView.artboardName
+        )
       } else {
         throw IllegalStateException("You must provide a url or a resourceName!")
       }
@@ -226,11 +234,19 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         if (resId == -1) {
           setUrlRiveResource(it)
         } else {
-            throw IllegalStateException("You cannot pass both resourceName and url at the same time")
+          throw IllegalStateException("You cannot pass both resourceName and url at the same time")
         }
       } ?: run {
         if (resId != -1) {
-          riveAnimationView.setRiveResource(resId, fit = riveAnimationView.fit, alignment = riveAnimationView.alignment, autoplay = riveAnimationView.autoplay)
+          riveAnimationView.setRiveResource(
+            resId,
+            fit = riveAnimationView.fit,
+            alignment = riveAnimationView.alignment,
+            autoplay = riveAnimationView.autoplay,
+            stateMachineName = riveAnimationView.drawable.stateMachineName,
+            animationName = riveAnimationView.drawable.animationName,
+            artboardName = riveAnimationView.artboardName
+          )
           url = null
         } else {
           throw IllegalStateException("You must provide a url or a resourceName!")
@@ -248,7 +264,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           bytes,
           fit = riveAnimationView.fit,
           alignment = riveAnimationView.alignment,
-          autoplay = autoplay
+          autoplay = autoplay,
+          stateMachineName = riveAnimationView.drawable.stateMachineName,
+          animationName = riveAnimationView.drawable.animationName,
+          artboardName = riveAnimationView.artboardName
         )
       }
     )
