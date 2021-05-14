@@ -6,7 +6,7 @@ import {
   ViewStyle,
   NativeSyntheticEvent,
 } from 'react-native';
-import { RiveRef, Direction, LoopMode } from './types';
+import { RiveRef, Direction, LoopMode, LayerState } from './types';
 import type { XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
@@ -36,6 +36,11 @@ type RiveProps = {
       isStateMachine: boolean;
     }>
   ) => void;
+  onStateChanged?: (
+    event: NativeSyntheticEvent<{
+      layerState: LayerState;
+    }>
+  ) => void;
   autoplay?: boolean;
   fit: Fit;
   alignment: Alignment;
@@ -56,6 +61,7 @@ type Props = {
   onPause?: (animationName: string, isStateMachine: boolean) => void;
   onStop?: (animationName: string, isStateMachine: boolean) => void;
   onLoopEnd?: (animationName: string, isStateMachine: boolean) => void;
+  onStateChanged?: (layerState: LayerState) => void;
   fit?: Fit;
   style?: ViewStyle;
   testID?: string;
@@ -75,6 +81,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onPause,
       onStop,
       onLoopEnd,
+      onStateChanged,
       style,
       autoplay = true,
       resourceName,
@@ -139,6 +146,18 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         onLoopEnd?.(animationName, isStateMachine);
       },
       [onLoopEnd]
+    );
+
+    const onStateChangedHandler = useCallback(
+      (
+        event: NativeSyntheticEvent<{
+          layerState: LayerState;
+        }>
+      ) => {
+        const { layerState } = event.nativeEvent;
+        onStateChanged?.(layerState);
+      },
+      [onStateChanged]
     );
 
     const play = useCallback<RiveRef['play']>(
@@ -254,6 +273,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         onPause={onPauseHandler}
         onStop={onStopHandler}
         onLoopEnd={onLoopEndHandler}
+        onStateChanged={onStateChangedHandler}
         alignment={alignment}
         artboardName={artboardName}
         animationName={animationName}

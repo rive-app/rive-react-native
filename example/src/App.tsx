@@ -102,6 +102,9 @@ export default function App() {
               isStateMachine
             );
           }}
+          onStateChanged={(layerState) => {
+            console.log('state changed', layerState);
+          }}
           style={styles.box}
           fit={fit}
           stateMachineName="Designer's Test"
