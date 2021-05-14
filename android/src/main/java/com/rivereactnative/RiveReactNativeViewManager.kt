@@ -11,6 +11,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     PLAY,
     PAUSE,
     STOP,
+    RESET,
     FIRE_STATE,
     SET_BOOLEAN_STATE,
     SET_NUMBER_STATE
@@ -35,6 +36,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
       Commands.PAUSE.ordinal,
       "stop",
       Commands.STOP.ordinal,
+      "reset",
+      Commands.RESET.ordinal,
       "fireState",
       Commands.FIRE_STATE.ordinal,
       "setBooleanState",
@@ -69,7 +72,16 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
-      Commands.STOP.ordinal -> view.stop()
+      Commands.STOP.ordinal -> {
+        args?.let {
+          val animationNames = it.getArray(0)!!
+          val areStateMachines = it.getBoolean(1)
+          view.run {
+            stop((animationNames.toArrayList() as ArrayList<String>).toList(), areStateMachines)
+          }
+        }
+      }
+      Commands.RESET.ordinal -> view.reset()
       Commands.FIRE_STATE.ordinal -> {
         args?.let {
           val stateMachineName = it.getString(0)!!

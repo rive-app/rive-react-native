@@ -147,8 +147,24 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  fun stop() {
-    resetRiveResource()
+  fun stop(animationNames: List<String>, areStateMachines: Boolean) {
+    if (animationNames.isEmpty()) {
+      resetRiveResource()
+    } else {
+      riveAnimationView.stop(animationNames, areStateMachines)
+    }
+  }
+
+  fun reset() {
+    url?.let {
+      if (resId == -1) {
+        riveAnimationView.drawable.reset()
+      }
+    } ?: run {
+      if (resId != -1) {
+        riveAnimationView.reset()
+      }
+    }
   }
 
   fun update() {
@@ -190,7 +206,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun resetRiveResource() {
     url?.let {
-      if(resId == -1) {
+      if (resId == -1) {
         setUrlRiveResource(it, false)
       } else {
         throw IllegalStateException("You cannot pass both resourceName and url at the same time")

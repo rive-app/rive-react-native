@@ -15,7 +15,11 @@ export type RiveRef = {
     animationNames?: string | string[],
     areStateMachines?: boolean
   ) => void;
-  stop: () => void;
+  stop: (
+    animationNames?: string | string[],
+    areStateMachines?: boolean
+  ) => void;
+  reset: () => void;
 };
 
 export enum Fit {
