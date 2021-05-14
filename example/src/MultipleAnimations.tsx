@@ -49,11 +49,9 @@ export default function MultipleAnimations() {
   };
 
   const changeArtboard = () => {
-    console.log('change artboard wtf');
     setArtboardName((prevArtboardName) =>
       prevArtboardName === 'Square' ? 'Circle' : 'Square'
     );
-    console.log('setting autoplay WTFFF');
     setPlaying(autoplay);
   };
 
