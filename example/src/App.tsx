@@ -19,14 +19,13 @@ import Rive, {
 export default function App() {
   const [isPlaying, setPlaying] = React.useState(false);
   const [fit, setFit] = React.useState(Fit.Cover);
+  const [artboardName, setArtboardName] = React.useState('Square');
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
 
   const riveRef = React.useRef<RiveRef>(null);
 
   const toggleAnimation = () => {
-    isPlaying
-      ? riveRef.current?.pause()
-      : riveRef.current?.play(["Designer's Test"], undefined, undefined, true);
+    isPlaying ? riveRef.current?.pause() : riveRef.current?.play();
     setPlaying((prev) => !prev);
   };
 
@@ -107,11 +106,21 @@ export default function App() {
           }}
           style={styles.box}
           fit={fit}
-          stateMachineName="Designer's Test"
-          resourceName={Platform.OS === 'android' ? 'skills' : 'bird'}
+          artboardName={artboardName}
+          resourceName={
+            Platform.OS === 'android' ? 'artboard_animations' : 'bird'
+          }
           // url={'https://cdn.rive.app/animations/juice_v7.riv'}
         />
         <View style={styles.wrapper}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              setArtboardName('Circle');
+            }}
+          >
+            <Text style={styles.buttonText}>Set artboard Circle</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
