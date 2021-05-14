@@ -13,6 +13,7 @@ export default function MultipleAnimations() {
   const [isPlaying, setPlaying] = React.useState(autoplay);
   const [fit, setFit] = React.useState(Fit.Cover);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
+  const [artboardName, setArtboardName] = React.useState('Square');
 
   const riveRef = React.useRef<RiveRef>(null);
 
@@ -53,6 +54,7 @@ export default function MultipleAnimations() {
         ref={riveRef}
         alignment={alignment}
         autoplay={autoplay}
+        artboardName={artboardName}
         onPlay={(animationName, isStateMachine) => {
           console.log('played animation name :', animationName, isStateMachine);
         }}
@@ -89,11 +91,13 @@ export default function MultipleAnimations() {
           <Text style={styles.buttonText}>{'RESET'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={playBothAnimations}>
-          <Text style={styles.buttonText}>
-            {isPlaying ? 'PAUSE both' : 'PLAY both'}
-          </Text>
-        </TouchableOpacity>
+        {artboardName === 'Square' && (
+          <TouchableOpacity style={styles.button} onPress={playBothAnimations}>
+            <Text style={styles.buttonText}>
+              {isPlaying ? 'PAUSE both' : 'PLAY both'}
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity
           style={styles.button}
@@ -119,13 +123,30 @@ export default function MultipleAnimations() {
           <Text style={styles.buttonText}>{'CHANGE ALIGNMENT'}</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            artboardName === 'Square'
+              ? setArtboardName('Circle')
+              : setArtboardName('Square');
+          }}
+        >
+          {artboardName === 'Square' ? (
+            <Text style={styles.buttonText}>Set artboard Circle</Text>
+          ) : (
+            <Text style={styles.buttonText}>Set artboard Square</Text>
+          )}
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.button} onPress={stopAnimation}>
           <Text style={styles.buttonText}>{'STOP'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={stopBothAnimations}>
-          <Text style={styles.buttonText}>{'STOP both'}</Text>
-        </TouchableOpacity>
+        {artboardName === 'Square' && (
+          <TouchableOpacity style={styles.button} onPress={stopBothAnimations}>
+            <Text style={styles.buttonText}>{'STOP both'}</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </>
   );

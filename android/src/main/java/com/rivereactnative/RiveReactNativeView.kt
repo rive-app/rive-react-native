@@ -298,6 +298,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setArtboardName(artboardName: String) {
     riveAnimationView.artboardName = artboardName // it causes reloading
+    riveAnimationView.drawable.invalidateSelf()
   }
 
   fun setAnimationName(animationName: String) {
