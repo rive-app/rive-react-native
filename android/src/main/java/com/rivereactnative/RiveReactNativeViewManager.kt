@@ -63,7 +63,15 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
-      Commands.STOP.ordinal -> view.stop()
+      Commands.STOP.ordinal -> {
+        args?.let {
+          val animationNames = it.getArray(0)!!
+          val areStateMachines = it.getBoolean(1)
+          view.run {
+            stop((animationNames.toArrayList() as ArrayList<String>).toList(), areStateMachines)
+          }
+        }
+      }
       Commands.RESET.ordinal -> view.reset()
       else -> {
       }

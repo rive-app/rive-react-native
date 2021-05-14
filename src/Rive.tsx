@@ -176,13 +176,20 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
-    const stop = useCallback(() => {
-      UIManager.dispatchViewManagerCommand(
-        findNodeHandle(riveRef.current),
-        UIManager.getViewManagerConfig(VIEW_NAME).Commands.stop,
-        []
-      );
-    }, []);
+    const stop = useCallback<RiveRef['stop']>(
+      (animationNames = [], areStateMachines = false) => {
+        const animationNamesArray = Array.isArray(animationNames)
+          ? animationNames
+          : [animationNames];
+
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          UIManager.getViewManagerConfig(VIEW_NAME).Commands.stop,
+          [animationNamesArray, areStateMachines]
+        );
+      },
+      []
+    );
 
     const reset = useCallback(() => {
       UIManager.dispatchViewManagerCommand(
