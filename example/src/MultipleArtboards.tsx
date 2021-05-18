@@ -12,6 +12,7 @@ export default function MultipleArtboards() {
           style={styles.animation}
           fit={Fit.Contain}
           artboardName={'Square'}
+          animationName={'goaround'}
           resourceName={'artboard_animations'}
         />
 
