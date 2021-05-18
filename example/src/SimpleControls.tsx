@@ -1,27 +1,35 @@
 import * as React from 'react';
+import { useState, useRef } from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, View } from 'react-native';
 import Rive, { RiveRef } from 'rive-react-native';
-import { Button } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
+
+const BUTTONS = ['stop', 'play', 'pause'] as const;
+type ButtonsKey = typeof BUTTONS[number];
 
 export default function SimpleControls() {
-  const autoplay = false;
-  const [isPlaying, setPlaying] = React.useState(autoplay);
+  const [activeButton, setActiveButton] = useState<ButtonsKey>('stop');
 
-  const riveRef = React.useRef<RiveRef>(null);
+  const riveRef = useRef<RiveRef>(null);
 
-  const toggleAnimation = () => {
-    isPlaying ? riveRef.current?.pause() : riveRef.current?.play();
-    setPlaying((prev) => !prev);
+  const playAnimation = () => {
+    setActiveButton('play');
+    riveRef.current?.play();
+  };
+
+  const pauseAnimation = () => {
+    setActiveButton('pause');
+    riveRef.current?.pause();
   };
 
   const stopAnimation = () => {
+    setActiveButton('stop');
     riveRef.current?.stop();
-    setPlaying(false);
   };
 
-  const resetAnimation = () => {
+  const reset = () => {
     riveRef.current?.reset();
-    setPlaying(autoplay);
+    setActiveButton('stop');
   };
 
   return (
@@ -29,32 +37,43 @@ export default function SimpleControls() {
       <ScrollView contentContainerStyle={styles.container}>
         <Rive
           ref={riveRef}
-          style={styles.animation}
-          autoplay={autoplay}
+          style={styles.box}
+          autoplay={false}
           resourceName={'flying_car'}
         />
-        <View style={styles.row}>
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={toggleAnimation}
-          >
-            {isPlaying ? 'Pause' : 'Play'}
+
+        <View style={styles.controls}>
+          <Button style={styles.resetButton} mode="contained" onPress={reset}>
+            Reset
           </Button>
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={stopAnimation}
-          >
-            {'Stop'}
-          </Button>
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={resetAnimation}
-          >
-            {'Reset'}
-          </Button>
+          <View style={styles.controlsRow}>
+            <Text>Animation: </Text>
+            <View style={styles.row}>
+              <Button
+                color={activeButton === 'play' ? 'lightgreen' : 'white'}
+                mode="contained"
+                onPress={playAnimation}
+              >
+                {'>'}
+              </Button>
+              <Button
+                style={styles.controlButtonGap}
+                color={activeButton === 'pause' ? 'blue' : 'white'}
+                mode="contained"
+                onPress={pauseAnimation}
+              >
+                ||
+              </Button>
+              <Button
+                style={styles.controlButtonGap}
+                color={activeButton === 'stop' ? 'red' : 'white'}
+                mode="contained"
+                onPress={stopAnimation}
+              >
+                []
+              </Button>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -62,6 +81,11 @@ export default function SimpleControls() {
 }
 
 const styles = StyleSheet.create({
+  controls: {
+    paddingHorizontal: 20,
+    flex: 1,
+    alignSelf: 'stretch',
+  },
   safeAreaViewContainer: {
     flex: 1,
   },
@@ -71,16 +95,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 150,
   },
-  animation: {
+  box: {
     width: '100%',
     height: 500,
     marginVertical: 20,
   },
   row: {
-    display: 'flex',
     flexDirection: 'row',
   },
-  button: {
-    marginRight: 8,
+  controlButtonGap: {
+    marginLeft: 8,
+  },
+  controlsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  resetButton: {
+    alignSelf: 'flex-start',
+    marginBottom: 20,
   },
 });
