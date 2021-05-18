@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 
-// @ts-ignore
+// @ts-ignore // Doesn't matter for the example
 export default function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>

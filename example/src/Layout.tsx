@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, View } from 'react-native';
 import Rive, { Alignment, Fit } from 'rive-react-native';
+import { isEnumKey } from './typesPredicates';
 import { Picker } from '@react-native-picker/picker';
 
 export default function Layout() {
@@ -17,10 +18,11 @@ export default function Layout() {
             mode={'dropdown'}
             style={styles.picker}
           >
-            {Object.keys(Fit).map((key) => (
-              // @ts-ignore
-              <Picker.Item key={key} value={Fit[key]} label={key} />
-            ))}
+            {Object.keys(Fit).map((key) =>
+              isEnumKey(Fit, key) ? (
+                <Picker.Item key={key} value={Fit[key]} label={key} />
+              ) : null
+            )}
           </Picker>
           <Picker
             selectedValue={alignment}
@@ -28,10 +30,11 @@ export default function Layout() {
             mode={'dropdown'}
             style={styles.picker}
           >
-            {Object.keys(Alignment).map((key) => (
-              // @ts-ignore
-              <Picker.Item key={key} value={Alignment[key]} label={key} />
-            ))}
+            {Object.keys(Alignment).map((key) =>
+              isEnumKey(Alignment, key) ? (
+                <Picker.Item key={key} value={Alignment[key]} label={key} />
+              ) : null
+            )}
           </Picker>
         </View>
         <View style={styles.animationWrapper}>

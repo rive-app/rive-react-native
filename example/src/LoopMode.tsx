@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Rive, { Direction, Fit, LoopMode, RiveRef } from 'rive-react-native';
 import { Button, RadioButton } from 'react-native-paper';
+import { isEnumKey } from './typesPredicates';
 
 export default function LoopModeComponent() {
   const riveRef = React.useRef<RiveRef>(null);
@@ -31,12 +32,13 @@ export default function LoopModeComponent() {
             Reset
           </Button>
           <RadioButton.Group
-            onValueChange={(newValue) =>
-              setDirection(
-                // @ts-ignore
-                Direction[newValue.charAt(0).toUpperCase() + newValue.slice(1)]
-              )
-            }
+            onValueChange={(newValue) => {
+              const enumKey =
+                newValue.charAt(0).toUpperCase() + newValue.slice(1);
+              if (isEnumKey(Direction, enumKey)) {
+                setDirection(Direction[enumKey]);
+              }
+            }}
             value={direction}
           >
             <View style={styles.radioButtonsWrapper}>
