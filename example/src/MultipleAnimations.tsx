@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import * as React from 'react';
+import { useRef, useState } from 'react';
 import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import Rive, { RiveRef, Fit } from 'rive-react-native';
@@ -30,6 +31,8 @@ export default function MultipleAnimations() {
 
   const reset = () => {
     riveRef.current?.reset();
+    setActiveButtonRollaround('stop');
+    setActiveButtonGoaround('stop');
   };
 
   const playGoaround = () => {
