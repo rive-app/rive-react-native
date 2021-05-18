@@ -16,6 +16,13 @@ export default function Home({ navigation }) {
         </Button>
         <Button
           mode="contained"
+          onPress={() => navigation.navigate('SimpleControls')}
+          style={styles.buttonStyle}
+        >
+          Simple Controls
+        </Button>
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('Http')}
           style={styles.buttonStyle}
         >
