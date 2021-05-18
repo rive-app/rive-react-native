@@ -1,32 +1,30 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
-import AnimationFromUrl from './AnimationFromUrl';
-import AnimationFromLocalFile from './AnimationFromLocalFile';
-import MultipleAnimations from './MultipleAnimations';
-import SimpleStateMachine from './SimpleStateMachine';
-import StateMachineWithTrigger from './StateMachineWithTrigger';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import Home from './Home';
+import Layout from './Layout';
+import Simple from './Simple';
+import Http from './Http';
+import StateMachine from './StateMachine';
+import MultipleArtboards from './MultipleArtboards';
+import LoopModeComponent from './LoopMode';
+import StateTrigger from './StateTrigger';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.safeAreaViewContainer}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <AnimationFromUrl />
-        <AnimationFromLocalFile />
-        <MultipleAnimations />
-        <SimpleStateMachine />
-        <StateMachineWithTrigger />
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Simple" component={Simple} />
+        <Stack.Screen name="Layout" component={Layout} />
+        <Stack.Screen name="Http" component={Http} />
+        <Stack.Screen name="StateMachine" component={StateMachine} />
+        <Stack.Screen name="MultipleArtboards" component={MultipleArtboards} />
+        <Stack.Screen name="LoopModeComponent" component={LoopModeComponent} />
+        <Stack.Screen name="StateTrigger" component={StateTrigger} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  safeAreaViewContainer: {
-    flex: 1,
-  },
-  container: {
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
