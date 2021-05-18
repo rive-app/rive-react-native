@@ -40,7 +40,7 @@ export default function StateTrigger() {
 
             <Button
               onPress={applyThresholdInputState}
-              style={[styles.applyButtonGap, styles.center]}
+              style={[styles.applyButtonGap, styles.center, styles.selfCenter]}
               mode="outlined"
             >
               Apply
@@ -85,7 +85,9 @@ const styles = StyleSheet.create({
   applyButtonGap: {
     marginLeft: 20,
   },
-
+  selfCenter: {
+    alignSelf: 'center',
+  },
   center: {
     alignItems: 'center',
     justifyContent: 'center',
