@@ -51,10 +51,10 @@ export default function Home({ navigation }) {
         </Button>
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('AndroidPlayer')}
+          onPress={() => navigation.navigate('StateTrigger')}
           style={styles.buttonStyle}
         >
-          Android Player
+          State Trigger
         </Button>
       </ScrollView>
     </SafeAreaView>

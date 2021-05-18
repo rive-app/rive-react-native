@@ -7,8 +7,8 @@ import Simple from './Simple';
 import Http from './Http';
 import StateMachine from './StateMachine';
 import MultipleArtboards from './MultipleArtboards';
-import AndroidPlayer from './AndroidPlayer';
 import LoopModeComponent from './LoopMode';
+import StateTrigger from './StateTrigger';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +23,7 @@ export default function App() {
         <Stack.Screen name="StateMachine" component={StateMachine} />
         <Stack.Screen name="MultipleArtboards" component={MultipleArtboards} />
         <Stack.Screen name="LoopModeComponent" component={LoopModeComponent} />
-        <Stack.Screen name="AndroidPlayer" component={AndroidPlayer} />
+        <Stack.Screen name="StateTrigger" component={StateTrigger} />
       </Stack.Navigator>
     </NavigationContainer>
   );
