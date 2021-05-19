@@ -14,6 +14,15 @@ export default function Home({ navigation }) {
         >
           Simple
         </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('MultipleAnimations')}
+          style={styles.buttonStyle}
+        >
+          Multiple animations
+        </Button>
+
         <Button
           mode="contained"
           onPress={() => navigation.navigate('Http')}
