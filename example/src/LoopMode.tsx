@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Rive, { Direction, Fit, LoopMode, RiveRef } from 'rive-react-native';
 import { Button, RadioButton } from 'react-native-paper';
 import { isEnumKey } from './typesPredicates';
@@ -38,17 +39,17 @@ export default function LoopModeComponent() {
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
+      <Rive
+        ref={riveRef}
+        autoplay={false}
+        fit={Fit.Contain}
+        style={styles.animation}
+        resourceName={'loopy'}
+      />
+      <Button mode={'contained'} onPress={reset} style={styles.resetButton}>
+        Reset
+      </Button>
       <ScrollView contentContainerStyle={styles.container}>
-        <Rive
-          ref={riveRef}
-          autoplay={false}
-          fit={Fit.Contain}
-          style={styles.animation}
-          resourceName={'loopy'}
-        />
-        <Button mode={'contained'} onPress={reset} style={styles.resetButton}>
-          Reset
-        </Button>
         <View style={styles.controls}>
           <Text style={styles.animationName}>{'Animation: Rotate 90 deg'}</Text>
           <View style={styles.buttonsRow}>
@@ -147,7 +148,7 @@ export default function LoopModeComponent() {
               mode="contained"
               style={styles.button}
               onPress={() => {
-                play('loop', rotateLoop, rotateDirection);
+                play('loop', loopDownLoop, loopDownDirection);
               }}
             >
               {'Play'}
@@ -238,7 +239,7 @@ export default function LoopModeComponent() {
               mode="contained"
               style={styles.button}
               onPress={() => {
-                play('pingpong', rotateLoop, rotateDirection);
+                play('pingpong', pingPongLoop, pingPongDirection);
               }}
             >
               {'Play'}
@@ -329,15 +330,26 @@ export default function LoopModeComponent() {
 const styles = StyleSheet.create({
   safeAreaViewContainer: {
     flex: 1,
-  },
-  resetButton: {
-    marginBottom: 16,
+    justifyContent: 'center',
   },
   container: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 150,
+  },
+  controls: {
+    flex: 1,
+    width: '100%',
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    borderTopWidth: 1,
+    borderTopColor: 'black',
+  },
+  resetButton: {
+    alignSelf: 'center',
+    marginBottom: 16,
+    maxWidth: 100,
   },
   animation: {
     width: '100%',
@@ -355,15 +367,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
-  },
-  controls: {
-    flex: 1,
-    width: '100%',
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    borderTopWidth: 1,
-    borderTopColor: 'black',
   },
   radioButtonsWrapper: {
     flexDirection: 'row',
