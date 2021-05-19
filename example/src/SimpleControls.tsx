@@ -93,11 +93,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 150,
+    paddingBottom: 32,
   },
   box: {
     width: '100%',
-    height: 500,
+    height: 400,
     marginVertical: 20,
   },
   row: {

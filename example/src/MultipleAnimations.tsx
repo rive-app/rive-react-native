@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   box: {
     width: '100%',
-    height: 500,
+    height: 400,
     marginVertical: 20,
   },
   row: {
