@@ -6,9 +6,18 @@ import Rive, { Direction, Fit, LoopMode, RiveRef } from 'rive-react-native';
 import { Button, RadioButton } from 'react-native-paper';
 import { isEnum } from './typesPredicates';
 
+const BUTTONS = ['stop', 'pause', 'play'] as const;
+type ButtonKeys = typeof BUTTONS[number];
+
 export default function LoopModeComponent() {
   const riveRef = React.useRef<RiveRef>(null);
 
+  const [rotateActiveButton, setRotateActiveButton] =
+    useState<ButtonKeys>('stop');
+  const [loopDownActiveButton, setLoopDownActiveButton] =
+    useState<ButtonKeys>('stop');
+  const [pingPongActiveButton, setPingPongActiveButton] =
+    useState<ButtonKeys>('stop');
   const [rotateDirection, setRotateDirection] = useState(Direction.Auto);
   const [loopDownDirection, setLoopDownDirection] = useState(Direction.Auto);
   const [pingPongDirection, setPingPongDirection] = useState(Direction.Auto);
@@ -41,6 +50,40 @@ export default function LoopModeComponent() {
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <Rive
         ref={riveRef}
+        onPause={(animationName) => {
+          switch (animationName) {
+            case 'oneshot': {
+              setRotateActiveButton('pause');
+              break;
+            }
+            case 'loop': {
+              setLoopDownActiveButton('pause');
+              break;
+            }
+
+            case 'pingpong': {
+              setPingPongActiveButton('pause');
+              break;
+            }
+          }
+        }}
+        onStop={(animationName) => {
+          switch (animationName) {
+            case 'oneshot': {
+              setRotateActiveButton('stop');
+              break;
+            }
+            case 'loop': {
+              setLoopDownActiveButton('stop');
+              break;
+            }
+
+            case 'pingpong': {
+              setPingPongActiveButton('stop');
+              break;
+            }
+          }
+        }}
         autoplay={false}
         fit={Fit.Contain}
         style={styles.animation}
@@ -55,30 +98,36 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
+              color={rotateActiveButton === 'play' ? 'lightgreen' : 'white'}
               style={styles.button}
               onPress={() => {
                 play('oneshot', rotateLoop, rotateDirection);
+                setRotateActiveButton('play');
               }}
             >
-              {'Play'}
+              {'>'}
             </Button>
             <Button
               mode="contained"
+              color={rotateActiveButton === 'pause' ? 'blue' : 'white'}
               style={styles.button}
               onPress={() => {
                 pause('oneshot');
+                setRotateActiveButton('pause');
               }}
             >
-              {'Pause'}
+              ||
             </Button>
             <Button
               mode="contained"
+              color={rotateActiveButton === 'stop' ? 'red' : 'white'}
               style={styles.button}
               onPress={() => {
                 stop('oneshot');
+                setRotateActiveButton('stop');
               }}
             >
-              {'Stop'}
+              []
             </Button>
           </View>
           <View style={styles.buttonsRow}>
@@ -110,7 +159,6 @@ export default function LoopModeComponent() {
             <RadioButton.Group
               onValueChange={(newValue) => {
                 if (isEnum(LoopMode, newValue)) {
-                  console.log('isEnum: ', newValue);
                   setRotateLoop(newValue);
                 }
               }}
@@ -143,30 +191,36 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
+              color={loopDownActiveButton === 'play' ? 'lightgreen' : 'white'}
               style={styles.button}
               onPress={() => {
                 play('loop', loopDownLoop, loopDownDirection);
+                setLoopDownActiveButton('play');
               }}
             >
-              {'Play'}
+              {'>'}
             </Button>
             <Button
               mode="contained"
+              color={loopDownActiveButton === 'pause' ? 'blue' : 'white'}
               style={styles.button}
               onPress={() => {
                 pause('loop');
+                setLoopDownActiveButton('pause');
               }}
             >
-              {'Pause'}
+              ||
             </Button>
             <Button
               mode="contained"
+              color={loopDownActiveButton === 'stop' ? 'red' : 'white'}
               style={styles.button}
               onPress={() => {
                 stop('loop');
+                setLoopDownActiveButton('stop');
               }}
             >
-              {'Stop'}
+              []
             </Button>
           </View>
           <View style={styles.buttonsRow}>
@@ -230,30 +284,36 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
+              color={pingPongActiveButton === 'play' ? 'lightgreen' : 'white'}
               style={styles.button}
               onPress={() => {
                 play('pingpong', pingPongLoop, pingPongDirection);
+                setPingPongActiveButton('play');
               }}
             >
-              {'Play'}
+              {'>'}
             </Button>
             <Button
               mode="contained"
+              color={pingPongActiveButton === 'pause' ? 'blue' : 'white'}
               style={styles.button}
               onPress={() => {
                 pause('pingpong');
+                setPingPongActiveButton('pause');
               }}
             >
-              {'Pause'}
+              ||
             </Button>
             <Button
               mode="contained"
+              color={pingPongActiveButton === 'stop' ? 'red' : 'white'}
               style={styles.button}
               onPress={() => {
                 stop('pingpong');
+                setPingPongActiveButton('stop');
               }}
             >
-              {'Stop'}
+              []
             </Button>
           </View>
           <View style={styles.buttonsRow}>
