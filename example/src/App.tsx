@@ -9,6 +9,7 @@ import StateMachine from './StateMachine';
 import MultipleArtboards from './MultipleArtboards';
 import LoopModeComponent from './LoopMode';
 import StateTrigger from './StateTrigger';
+import MultipleAnimations from './MultipleAnimations';
 import SimpleControls from './SimpleControls';
 
 const Stack = createStackNavigator();
@@ -19,6 +20,10 @@ export default function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Simple" component={Simple} />
+        <Stack.Screen
+          name="MultipleAnimations"
+          component={MultipleAnimations}
+        />
         <Stack.Screen name="SimpleControls" component={SimpleControls} />
         <Stack.Screen name="Layout" component={Layout} />
         <Stack.Screen name="Http" component={Http} />
