@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Rive, { Direction, Fit, LoopMode, RiveRef } from 'rive-react-native';
 import { Button, RadioButton } from 'react-native-paper';
-import { isEnumKey } from './typesPredicates';
+import { isEnum } from './typesPredicates';
 
 export default function LoopModeComponent() {
   const riveRef = React.useRef<RiveRef>(null);
@@ -84,10 +84,8 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <RadioButton.Group
               onValueChange={(newValue) => {
-                const enumKey =
-                  newValue.charAt(0).toUpperCase() + newValue.slice(1);
-                if (isEnumKey(Direction, enumKey)) {
-                  setRotateDirection(Direction[enumKey]);
+                if (isEnum(Direction, newValue)) {
+                  setRotateDirection(newValue);
                 }
               }}
               value={rotateDirection}
@@ -95,15 +93,15 @@ export default function LoopModeComponent() {
               <View style={styles.radioButtonsWrapper}>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Backwards'}</Text>
-                  <RadioButton value={'backwards'} />
+                  <RadioButton value={Direction.Backwards} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Auto'}</Text>
-                  <RadioButton value={'auto'} />
+                  <RadioButton value={Direction.Auto} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Forward'}</Text>
-                  <RadioButton value={'forwards'} />
+                  <RadioButton value={Direction.Forwards} />
                 </View>
               </View>
             </RadioButton.Group>
@@ -111,10 +109,9 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <RadioButton.Group
               onValueChange={(newValue) => {
-                const enumKey =
-                  newValue.charAt(0).toUpperCase() + newValue.slice(1);
-                if (isEnumKey(LoopMode, enumKey)) {
-                  setRotateLoop(LoopMode[enumKey]);
+                if (isEnum(LoopMode, newValue)) {
+                  console.log('isEnum: ', newValue);
+                  setRotateLoop(newValue);
                 }
               }}
               value={rotateLoop}
@@ -122,19 +119,19 @@ export default function LoopModeComponent() {
               <View style={styles.radioButtonsWrapper}>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Oneshot'}</Text>
-                  <RadioButton value={'oneShot'} />
+                  <RadioButton value={LoopMode.OneShot} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Loop'}</Text>
-                  <RadioButton value={'loop'} />
+                  <RadioButton value={LoopMode.Loop} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'PingPong'}</Text>
-                  <RadioButton value={'pingPong'} />
+                  <RadioButton value={LoopMode.PingPong} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'None'}</Text>
-                  <RadioButton value={'none'} />
+                  <RadioButton value={LoopMode.None} />
                 </View>
               </View>
             </RadioButton.Group>
@@ -175,10 +172,8 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <RadioButton.Group
               onValueChange={(newValue) => {
-                const enumKey =
-                  newValue.charAt(0).toUpperCase() + newValue.slice(1);
-                if (isEnumKey(Direction, enumKey)) {
-                  setLoopDownDirection(Direction[enumKey]);
+                if (isEnum(Direction, newValue)) {
+                  setLoopDownDirection(newValue);
                 }
               }}
               value={loopDownDirection}
@@ -186,15 +181,15 @@ export default function LoopModeComponent() {
               <View style={styles.radioButtonsWrapper}>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Backwards'}</Text>
-                  <RadioButton value={'backwards'} />
+                  <RadioButton value={Direction.Backwards} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Auto'}</Text>
-                  <RadioButton value={'auto'} />
+                  <RadioButton value={Direction.Auto} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Forward'}</Text>
-                  <RadioButton value={'forwards'} />
+                  <RadioButton value={Direction.Forwards} />
                 </View>
               </View>
             </RadioButton.Group>
@@ -202,10 +197,8 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <RadioButton.Group
               onValueChange={(newValue) => {
-                const enumKey =
-                  newValue.charAt(0).toUpperCase() + newValue.slice(1);
-                if (isEnumKey(LoopMode, enumKey)) {
-                  setLoopDownLoop(LoopMode[enumKey]);
+                if (isEnum(LoopMode, newValue)) {
+                  setLoopDownLoop(newValue);
                 }
               }}
               value={loopDownLoop}
@@ -213,19 +206,19 @@ export default function LoopModeComponent() {
               <View style={styles.radioButtonsWrapper}>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Oneshot'}</Text>
-                  <RadioButton value={'oneShot'} />
+                  <RadioButton value={LoopMode.OneShot} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Loop'}</Text>
-                  <RadioButton value={'loop'} />
+                  <RadioButton value={LoopMode.Loop} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'PingPong'}</Text>
-                  <RadioButton value={'pingPong'} />
+                  <RadioButton value={LoopMode.PingPong} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'None'}</Text>
-                  <RadioButton value={'none'} />
+                  <RadioButton value={LoopMode.None} />
                 </View>
               </View>
             </RadioButton.Group>
@@ -266,10 +259,8 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <RadioButton.Group
               onValueChange={(newValue) => {
-                const enumKey =
-                  newValue.charAt(0).toUpperCase() + newValue.slice(1);
-                if (isEnumKey(Direction, enumKey)) {
-                  setPingPongDirection(Direction[enumKey]);
+                if (isEnum(Direction, newValue)) {
+                  setPingPongDirection(newValue);
                 }
               }}
               value={pingPongDirection}
@@ -277,15 +268,15 @@ export default function LoopModeComponent() {
               <View style={styles.radioButtonsWrapper}>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Backwards'}</Text>
-                  <RadioButton value={'backwards'} />
+                  <RadioButton value={Direction.Backwards} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Auto'}</Text>
-                  <RadioButton value={'auto'} />
+                  <RadioButton value={Direction.Auto} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Forward'}</Text>
-                  <RadioButton value={'forwards'} />
+                  <RadioButton value={Direction.Forwards} />
                 </View>
               </View>
             </RadioButton.Group>
@@ -293,10 +284,8 @@ export default function LoopModeComponent() {
           <View style={styles.buttonsRow}>
             <RadioButton.Group
               onValueChange={(newValue) => {
-                const enumKey =
-                  newValue.charAt(0).toUpperCase() + newValue.slice(1);
-                if (isEnumKey(LoopMode, enumKey)) {
-                  setPingPongLoop(LoopMode[enumKey]);
+                if (isEnum(LoopMode, newValue)) {
+                  setPingPongLoop(newValue);
                 }
               }}
               value={pingPongLoop}
@@ -304,19 +293,19 @@ export default function LoopModeComponent() {
               <View style={styles.radioButtonsWrapper}>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Oneshot'}</Text>
-                  <RadioButton value={'oneShot'} />
+                  <RadioButton value={LoopMode.OneShot} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'Loop'}</Text>
-                  <RadioButton value={'loop'} />
+                  <RadioButton value={LoopMode.Loop} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'PingPong'}</Text>
-                  <RadioButton value={'pingPong'} />
+                  <RadioButton value={LoopMode.PingPong} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
                   <Text>{'None'}</Text>
-                  <RadioButton value={'none'} />
+                  <RadioButton value={LoopMode.None} />
                 </View>
               </View>
             </RadioButton.Group>
