@@ -58,7 +58,7 @@ export default function LoopModeComponent() {
           </RadioButton.Group>
         </View>
         <View style={styles.controlsRow}>
-          <Text>{'Animation: Rotate 90 deg'}</Text>
+          <Text style={styles.animationName}>{'Animation: Rotate 90 deg'}</Text>
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
@@ -100,7 +100,7 @@ export default function LoopModeComponent() {
         </View>
 
         <View style={styles.controlsRow}>
-          <Text>{'Animation: Loop Down'}</Text>
+          <Text style={styles.animationName}>{'Animation: Loop Down'}</Text>
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
@@ -141,7 +141,7 @@ export default function LoopModeComponent() {
           </View>
         </View>
         <View style={styles.controlsRow}>
-          <Text>{'Animation: Ping Pong'}</Text>
+          <Text style={styles.animationName}>{'Animation: Ping Pong'}</Text>
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
@@ -201,6 +201,11 @@ const styles = StyleSheet.create({
     height: 200,
     marginVertical: 10,
   },
+  animationName: {
+    textAlign: 'center',
+    marginRight: 32,
+    width: '30%',
+  },
   directionRow: {
     width: '100%',
     flexDirection: 'row',
@@ -216,7 +221,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flexWrap: 'wrap',
   },
   controlsRow: {

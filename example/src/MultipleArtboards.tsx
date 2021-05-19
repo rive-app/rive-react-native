@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   animation: {
     width: '100%',
-    height: 200,
+    height: 300,
     marginTop: 16,
     marginBottom: 32,
   },

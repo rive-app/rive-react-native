@@ -95,6 +95,6 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     marginBottom: 16,
-    minWidth: 200,
+    minWidth: 220,
   },
 });
