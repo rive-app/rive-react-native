@@ -28,6 +28,9 @@ export default function LoopModeComponent() {
 
   const reset = () => {
     riveRef.current?.reset();
+    setRotateActiveButton('stop');
+    setLoopDownActiveButton('stop');
+    setPingPongActiveButton('stop');
   };
 
   const play = (
