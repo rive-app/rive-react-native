@@ -29,6 +29,9 @@ class RiveReactNativeView: UIView {
         riveView.play()
     }
 
+    @objc func pause() {
+        riveView.pause()
+    }
 
 //    func updateArtboard(_ artboard: RiveArtboard) {
 //        self.artboard = artboard;
