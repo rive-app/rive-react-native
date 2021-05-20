@@ -3,12 +3,20 @@ import RiveRuntime
 
 class RiveReactNativeView: UIView {
     @objc var resourceName: String?
+    @objc var fit: String? {
+        didSet {
+            if let safeFit = fit {
+                let rnFit = RNFit.mapToRNFit(value: safeFit)
+                riveView.fit = RNFit.mapToRiveFit(rnFit: rnFit)
+            }
+        }
+    }
     let riveView = RiveView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        riveView.frame = frame
-        riveView.configure(getRiveFile(resourceName: "truck_v7"), andAutoPlay: false)
+        riveView.configure(getRiveFile(resourceName: "truck_v7"), andAutoPlay: true)
+        
         addSubview(riveView)
     }
     
