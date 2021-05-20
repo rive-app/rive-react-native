@@ -22,11 +22,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 150,
   },
   animation: {
     width: '100%',
     height: 400,
-    marginVertical: 20,
   },
 });
