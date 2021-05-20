@@ -55,6 +55,20 @@ export default function MultipleAnimations() {
       <ScrollView contentContainerStyle={styles.container}>
         <Rive
           ref={riveRef}
+          onStop={(animationName: string) => {
+            if (animationName === 'goaround') {
+              setActiveButtonGoaround('stop');
+            } else {
+              setActiveButtonRollaround('stop');
+            }
+          }}
+          onPause={(animationName: string) => {
+            if (animationName === 'goaround') {
+              setActiveButtonGoaround('pause');
+            } else {
+              setActiveButtonRollaround('pause');
+            }
+          }}
           autoplay={false}
           fit={Fit.Cover}
           style={styles.box}
@@ -145,7 +159,7 @@ const styles = StyleSheet.create({
   },
   box: {
     width: '100%',
-    height: 500,
+    height: 400,
     marginVertical: 20,
   },
   row: {

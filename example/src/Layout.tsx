@@ -11,40 +11,42 @@ export default function Layout() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
+        <Rive
+          alignment={alignment}
+          autoplay={true}
+          style={styles.animation}
+          fit={fit}
+          resourceName={'flying_car'}
+        />
         <View style={styles.row}>
-          <Picker
-            selectedValue={fit}
-            onValueChange={(value) => setFit(value)}
-            mode={'dropdown'}
-            style={styles.picker}
-          >
-            {Object.keys(Fit).map((key) =>
-              isEnumKey(Fit, key) ? (
-                <Picker.Item key={key} value={Fit[key]} label={key} />
-              ) : null
-            )}
-          </Picker>
-          <Picker
-            selectedValue={alignment}
-            onValueChange={(value) => setAlignment(value)}
-            mode={'dropdown'}
-            style={styles.picker}
-          >
-            {Object.keys(Alignment).map((key) =>
-              isEnumKey(Alignment, key) ? (
-                <Picker.Item key={key} value={Alignment[key]} label={key} />
-              ) : null
-            )}
-          </Picker>
-        </View>
-        <View style={styles.animationWrapper}>
-          <Rive
-            alignment={alignment}
-            autoplay={true}
-            style={styles.animation}
-            fit={fit}
-            resourceName={'flying_car'}
-          />
+          <View style={styles.pickerWrapper}>
+            <Picker
+              selectedValue={fit}
+              onValueChange={(value) => setFit(value)}
+              mode={'dropdown'}
+              style={styles.picker}
+            >
+              {Object.keys(Fit).map((key) =>
+                isEnumKey(Fit, key) ? (
+                  <Picker.Item key={key} value={Fit[key]} label={key} />
+                ) : null
+              )}
+            </Picker>
+          </View>
+          <View style={styles.pickerWrapper}>
+            <Picker
+              selectedValue={alignment}
+              onValueChange={(value) => setAlignment(value)}
+              mode={'dropdown'}
+              style={styles.picker}
+            >
+              {Object.keys(Alignment).map((key) =>
+                isEnumKey(Alignment, key) ? (
+                  <Picker.Item key={key} value={Alignment[key]} label={key} />
+                ) : null
+              )}
+            </Picker>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -58,24 +60,27 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 150,
+    justifyContent: 'flex-start',
   },
   animation: {
     width: '100%',
     height: 300,
   },
-  animationWrapper: {
-    width: '100%',
-    height: 500,
-    marginVertical: 20,
-  },
   picker: {
+    flex: 1,
+    width: '100%',
+  },
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 5,
+    alignItems: 'center',
     height: 50,
-    width: '50%',
+    minWidth: '50%',
+    margin: 16,
   },
   row: {
-    display: 'flex',
-    flexDirection: 'row',
+    flex: 1,
+    padding: 16,
   },
 });

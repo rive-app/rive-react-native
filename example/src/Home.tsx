@@ -17,10 +17,18 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('MultipleAnimations')}
+          onPress={() => navigation.navigate('Http')}
           style={styles.buttonStyle}
         >
-          Multiple animations
+          HTTP
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('Layout')}
+          style={styles.buttonStyle}
+        >
+          Layout
         </Button>
 
         <Button
@@ -30,34 +38,7 @@ export default function Home({ navigation }) {
         >
           Simple Controls
         </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('Http')}
-          style={styles.buttonStyle}
-        >
-          HTTP
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('Layout')}
-          style={styles.buttonStyle}
-        >
-          Layout
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('StateMachine')}
-          style={styles.buttonStyle}
-        >
-          State Machine
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('MultipleArtboards')}
-          style={styles.buttonStyle}
-        >
-          Multiple Artboards
-        </Button>
+
         <Button
           mode="contained"
           onPress={() => navigation.navigate('LoopModeComponent')}
@@ -65,6 +46,31 @@ export default function Home({ navigation }) {
         >
           Loop Mode
         </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('MultipleArtboards')}
+          style={styles.buttonStyle}
+        >
+          Multiple Artboards
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('MultipleAnimations')}
+          style={styles.buttonStyle}
+        >
+          Multiple animations
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('StateMachine')}
+          style={styles.buttonStyle}
+        >
+          State Machine
+        </Button>
+
         <Button
           mode="contained"
           onPress={() => navigation.navigate('StateTrigger')}
@@ -85,8 +91,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 16,
   },
   buttonStyle: {
-    marginBottom: 32,
+    marginBottom: 16,
+    minWidth: 220,
   },
 });

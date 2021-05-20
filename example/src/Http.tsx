@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   animation: {
     width: '100%',
-    height: 500,
+    height: 400,
     marginVertical: 20,
   },
 });
