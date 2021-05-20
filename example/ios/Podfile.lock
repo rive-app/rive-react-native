@@ -310,7 +310,7 @@ PODS:
   - rive-react-native (0.1.0):
     - React-Core
     - RiveRuntime
-  - RiveRuntime (0.0.5)
+  - RiveRuntime (0.0.3)
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.16.0):
@@ -401,7 +401,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rive-react-native (from `../..`)
-  - RiveRuntime (from `https://github.com/callstack-internal/RiveFramework.git`)
+  - RiveRuntime (from `https://github.com/rive-app/test-ios.git`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -480,7 +480,7 @@ EXTERNAL SOURCES:
   rive-react-native:
     :path: "../.."
   RiveRuntime:
-    :git: https://github.com/callstack-internal/RiveFramework.git
+    :git: https://github.com/rive-app/test-ios.git
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
@@ -496,8 +496,8 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   RiveRuntime:
-    :commit: cc8984b15746af9f271f4cc59ffa04e48990bcc3
-    :git: https://github.com/callstack-internal/RiveFramework.git
+    :commit: 497da973e950dfc117414a648d477143fa3c89da
+    :git: https://github.com/rive-app/test-ios.git
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -538,7 +538,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   rive-react-native: 78ec9539067d4c4c2201a66ff1de735e67e68f9d
-  RiveRuntime: 16e3ea7b8e50886eeee9e6f4ce802b603eb97289
+  RiveRuntime: caef28465be0ac1d011da7f4519d8349a3930cfe
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
@@ -547,6 +547,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: decc314aa4ef3fffdebc04395ccc65433a79d821
+PODFILE CHECKSUM: 393a22f7cdc9e51ef63f6fe2cde315006e6d1517
 
 COCOAPODS: 1.10.1
