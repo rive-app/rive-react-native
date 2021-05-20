@@ -4,6 +4,8 @@ import { SafeAreaView, StyleSheet, ScrollView, View } from 'react-native';
 import Rive, { RiveRef } from 'rive-react-native';
 import { Button, Text } from 'react-native-paper';
 
+const resourceName = 'truck_v7';
+
 const BUTTONS = ['stop', 'play', 'pause'] as const;
 type ButtonsKey = typeof BUTTONS[number];
 
@@ -39,7 +41,7 @@ export default function SimpleControls() {
           ref={riveRef}
           style={styles.box}
           autoplay={false}
-          resourceName={'flying_car'}
+          resourceName={resourceName}
         />
 
         <View style={styles.controls}>
