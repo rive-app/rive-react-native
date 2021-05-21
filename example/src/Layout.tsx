@@ -4,6 +4,8 @@ import Rive, { Alignment, Fit } from 'rive-react-native';
 import { isEnumKey } from './typesPredicates';
 import { Picker } from '@react-native-picker/picker';
 
+const resourceName = 'truck_v7';
+
 export default function Layout() {
   const [fit, setFit] = React.useState(Fit.Cover);
   const [alignment, setAlignment] = React.useState(Alignment.TopCenter);
@@ -16,7 +18,7 @@ export default function Layout() {
           autoplay={true}
           style={styles.animation}
           fit={fit}
-          resourceName={'flying_car'}
+          resourceName={resourceName}
         />
         <View style={styles.row}>
           <View style={styles.pickerWrapper}>

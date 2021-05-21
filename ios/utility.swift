@@ -2,11 +2,21 @@ func getRiveFile(resourceName: String, resourceExt: String=".riv") -> RiveFile {
     guard let url = Bundle.main.url(forResource: resourceName, withExtension: resourceExt) else {
         fatalError("Failed to locate \(resourceName) in bundle.")
     }
-    guard var data = try? Data(contentsOf: url) else {
-        fatalError("Failed to load \(url) from bundle.")
+    return importRiveFile(from: url)
+}
+
+func getRiveURLResource(from urlString: String) -> RiveFile {
+    guard let url = URL.init(string: urlString) else {
+        fatalError("Failed to locate resource from \(urlString)")
     }
     
-    // Import the data into a RiveFile
+    return importRiveFile(from: url)
+}
+
+func importRiveFile(from url: URL) -> RiveFile {
+    guard var data = try? Data(contentsOf: url) else {
+        fatalError("Failed to load data from the \(url).")
+    }
     let bytes = [UInt8](data)
     
     return data.withUnsafeMutableBytes{(riveBytes:UnsafeMutableRawBufferPointer)->RiveFile in

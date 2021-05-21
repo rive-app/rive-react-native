@@ -2,7 +2,26 @@ import UIKit
 import RiveRuntime
 
 class RiveReactNativeView: UIView {
-    @objc var resourceName: String?
+    private var shouldBeReloaded = true
+    private var resourceFromBundle = true
+    
+    @objc var resourceName: String? = nil {
+        didSet {
+            if let _ = resourceName {
+                url = nil
+                resourceFromBundle = true
+                shouldBeReloaded = true
+            }
+        }
+    }
+    @objc var url: String? = nil {
+        didSet {
+            if let _ = url {
+                resourceFromBundle = false
+                shouldBeReloaded = true
+            }
+        }
+    }
     @objc var fit: String? {
         didSet {
             if let safeFit = fit {
@@ -13,10 +32,14 @@ class RiveReactNativeView: UIView {
     }
     let riveView = RiveView()
     
+    override func didSetProps(_ changedProps: [String]!) {
+        reloadIfNeeded()
+    }
+    
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        riveView.configure(getRiveFile(resourceName: "truck_v7"), andAutoPlay: true)
-        
         addSubview(riveView)
     }
     
@@ -31,6 +54,25 @@ class RiveReactNativeView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func reloadIfNeeded() {
+        if(shouldBeReloaded) {
+            if let safeUrl = url {
+                if !resourceFromBundle {
+                    riveView.configure(getRiveURLResource(from: safeUrl), andAutoPlay: true)
+                } else {
+                    fatalError("You cannot pass both resourceName and url at the same time")
+                }
+            } else {
+                if resourceFromBundle {
+                    riveView.configure(getRiveFile(resourceName: "truck_v7"), andAutoPlay: true)
+                } else {
+                    fatalError("You must provide a url or a resourceName!")
+                }
+            }
+            shouldBeReloaded = false
+        }
     }
     
     @objc func play() {

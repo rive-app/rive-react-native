@@ -9,10 +9,6 @@ class RiveReactNativeViewManager: RCTViewManager {
         return RiveReactNativeView()
     }
     
-    override class func requiresMainQueueSetup() -> Bool {
-        return true
-    }
-    
     @objc func play(_ node: NSNumber, animationNames: [String], loopMode: String, direction: String, areStateMachines: Bool) {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
@@ -26,13 +22,6 @@ class RiveReactNativeViewManager: RCTViewManager {
             component.pause()
         }
     }
-    //
-    //    @objc func pause(_ node: NSNumber) {
-    //        DispatchQueue.main.async {
-    //            let component = self.bridge.uiManager.view(forReactTag: node) as! ContainerView
-    //            component.pause()
-    //        }
-    //    }
     
 }
 
