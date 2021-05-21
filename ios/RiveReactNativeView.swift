@@ -1,12 +1,14 @@
 import UIKit
 import RiveRuntime
 
-class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate {
+class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, LoopDelegate {
     private var shouldBeReloaded = true
     private var resourceFromBundle = true
     
     @objc var onPlay: RCTDirectEventBlock?
     @objc var onPause: RCTDirectEventBlock?
+    @objc var onStop: RCTDirectEventBlock?
+    @objc var onLoopEnd: RCTDirectEventBlock?
     
     @objc var resourceName: String? = nil {
         didSet {
@@ -53,6 +55,8 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate {
         super.init(frame: frame)
         riveView.playDelegate = self
         riveView.pauseDelegate = self
+        riveView.stopDelegate = self
+        riveView.loopDelegate = self
         addSubview(riveView)
     }
     
@@ -94,6 +98,14 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate {
     
     func pause(_ animationName: String) {
         onPause?(["animationName": animationName])
+    }
+    
+    func stop(_ animationName: String) {
+        onStop?(["animationName": animationName])
+    }
+    
+    func loop(_ animationName: String, type: Int) {
+        onLoopEnd?(["animationName": animationName])
     }
     
     @objc func play() {
