@@ -32,6 +32,14 @@ class RiveReactNativeView: UIView, PlayDelegate {
             }
         }
     }
+    @objc var alignment: String? {
+        didSet {
+            if let safeAlignment = alignment {
+                let rnAlignment = RNAlignment.mapToRNAlignment(value: safeAlignment)
+                riveView.alignment = RNAlignment.mapToRiveAlignment(rnAlignment: rnAlignment)
+            }
+        }
+    }
     let riveView = RiveView()
     
     override func didSetProps(_ changedProps: [String]!) {

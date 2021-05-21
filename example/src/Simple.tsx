@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
-import Rive, { Fit } from 'rive-react-native';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import Rive, { Alignment, Fit } from 'rive-react-native';
 
 const resourceName = 'truck_v7';
 
@@ -9,7 +9,8 @@ export default function Simple() {
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         <Rive
-          fit={Fit.ScaleDown}
+          fit={Fit.Contain}
+          alignment={Alignment.Center}
           style={styles.animation}
           resourceName={resourceName}
         />
