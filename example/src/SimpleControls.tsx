@@ -41,6 +41,30 @@ export default function SimpleControls() {
           ref={riveRef}
           style={styles.box}
           autoplay={false}
+          onPlay={(animationName, isStateMachine) => {
+            console.log(
+              'onPlay: ',
+              animationName,
+              'isStateMachine: ',
+              isStateMachine
+            );
+          }}
+          onPause={(animationName, isStateMachine) => {
+            console.log(
+              'onPause:',
+              animationName,
+              'isStateMachine: ',
+              isStateMachine
+            );
+          }}
+          onStop={(animationName, isStateMachine) => {
+            console.log(
+              'onStop: ',
+              animationName,
+              'isStateMachine: ',
+              isStateMachine
+            );
+          }}
           resourceName={resourceName}
         />
 
