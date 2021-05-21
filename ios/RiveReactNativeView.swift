@@ -1,9 +1,11 @@
 import UIKit
 import RiveRuntime
 
-class RiveReactNativeView: UIView {
+class RiveReactNativeView: UIView, PlayDelegate {
     private var shouldBeReloaded = true
     private var resourceFromBundle = true
+    
+    @objc var onPlay: RCTDirectEventBlock?
     
     @objc var resourceName: String? = nil {
         didSet {
@@ -40,6 +42,7 @@ class RiveReactNativeView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        riveView.playDelegate = self
         addSubview(riveView)
     }
     
@@ -73,6 +76,10 @@ class RiveReactNativeView: UIView {
             }
             shouldBeReloaded = false
         }
+    }
+    
+    func play(_ animationName: String) {
+        onPlay?(["animationName": animationName])
     }
     
     @objc func play() {
