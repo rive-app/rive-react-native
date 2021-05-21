@@ -9,8 +9,8 @@ export default function Simple() {
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         <Rive
-          fit={Fit.FitHeight}
-          alignment={Alignment.CenterLeft}
+          fit={Fit.Contain}
+          alignment={Alignment.Center}
           style={styles.animation}
           resourceName={resourceName}
         />
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
   },
   animation: {
     width: '100%',
-    height: 200,
-    backgroundColor: 'red',
+    height: 600,
   },
 });
