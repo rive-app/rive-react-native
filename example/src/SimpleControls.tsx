@@ -65,6 +65,14 @@ export default function SimpleControls() {
               isStateMachine
             );
           }}
+          onLoopEnd={(animationName, isStateMachine) => {
+            console.log(
+              'onLoopEnd: ',
+              animationName,
+              'isStateMachine: ',
+              isStateMachine
+            );
+          }}
           resourceName={resourceName}
         />
 
