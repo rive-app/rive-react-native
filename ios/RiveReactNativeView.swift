@@ -65,8 +65,8 @@ class RiveReactNativeView: UIView {
                     fatalError("You cannot pass both resourceName and url at the same time")
                 }
             } else {
-                if resourceFromBundle {
-                    riveView.configure(getRiveFile(resourceName: "truck_v7"), andAutoPlay: true)
+                if resourceFromBundle, let safeResourceName = resourceName {
+                    riveView.configure(getRiveFile(resourceName: safeResourceName), andAutoPlay: true)
                 } else {
                     fatalError("You must provide a url or a resourceName!")
                 }
