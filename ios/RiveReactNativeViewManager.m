@@ -19,6 +19,7 @@ RCT_EXPORT_VIEW_PROPERTY(onStateChanged, RCTDirectEventBlock)
 
 RCT_EXTERN_METHOD(play:(nonnull NSNumber *)node animationNames:(nonnull NSArray *)animationNames loopMode:(NSString)loopMode direction:(NSString)direction areStateMachines:(BOOL)areStateMachines)
 RCT_EXTERN_METHOD(pause:(nonnull NSNumber *)node animationNames:(nonnull NSArray *)animationNames areStateMachines:(BOOL)areStateMachines)
+RCT_EXTERN_METHOD(stop: (nonnull NSNumber *)node animationNames: (nonnull NSArray *)animationNames areStateMachines:(BOOL)areStateMachines)
 
 
 @end
