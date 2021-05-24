@@ -38,6 +38,26 @@ class RiveReactNativeViewManager: RCTViewManager {
         }
     }
     
+    @objc func fireState(_ node: NSNumber, stateMachineName: String, inputName: String) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.fireState(stateMachineName: stateMachineName, inputName: inputName)
+        }
+    }
+    @objc func setBooleanState(_ node: NSNumber, stateMachineName: String, inputName: String, value: Bool) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.setBooleanState(stateMachineName: stateMachineName, inputName: inputName, value: value)
+        }
+    }
+    
+    @objc func setNumberState(_ node: NSNumber, stateMachineName: String, inputName: String, value: NSNumber) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.setNumberState(stateMachineName: stateMachineName, inputName: inputName, value: Float(truncating: value))
+        }
+    }
+    
 }
 
 //class ContainerView: UIView {
