@@ -46,7 +46,31 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     
     @objc var autoplay: Bool { // Bool? cannot be used because objc cannot interop with it
         didSet {
-           shouldBeReloaded = true
+            shouldBeReloaded = true
+        }
+    }
+    
+    @objc var animationName: String? {
+        didSet {
+            if let _ = animationName {
+                shouldBeReloaded = true
+            }
+        }
+    }
+    
+    @objc var stateMachineName: String? {
+        didSet {
+            if let _ = stateMachineName {
+                shouldBeReloaded = true
+            }
+        }
+    }
+    
+    @objc var artboardName: String? {
+        didSet {
+            if let _ = artboardName {
+                shouldBeReloaded = true
+            }
         }
     }
     
@@ -86,13 +110,13 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         if(shouldBeReloaded) {
             if let safeUrl = url {
                 if !resourceFromBundle {
-                    riveView.configure(getRiveURLResource(from: safeUrl), andAutoPlay: autoplay)
+                    riveView.configure(getRiveURLResource(from: safeUrl),andArtboard: artboardName ,andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
                 } else {
                     fatalError("You cannot pass both resourceName and url at the same time")
                 }
             } else {
                 if resourceFromBundle, let safeResourceName = resourceName {
-                    riveView.configure(getRiveFile(resourceName: safeResourceName), andAutoPlay: autoplay)
+                    riveView.configure(getRiveFile(resourceName: safeResourceName),andArtboard: artboardName, andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
                 } else {
                     fatalError("You must provide a url or a resourceName!")
                 }
