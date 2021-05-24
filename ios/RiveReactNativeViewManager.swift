@@ -31,6 +31,13 @@ class RiveReactNativeViewManager: RCTViewManager {
         }
     }
     
+    @objc func reset(_ node: NSNumber) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.reset()
+        }
+    }
+    
 }
 
 //class ContainerView: UIView {

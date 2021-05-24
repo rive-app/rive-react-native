@@ -196,6 +196,11 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         }
     }
     
+    func reset() {
+        shouldBeReloaded = true
+        reloadIfNeeded()
+    }
+    
     
     //    func updateArtboard(_ artboard: RiveArtboard) {
     //        self.artboard = artboard;
