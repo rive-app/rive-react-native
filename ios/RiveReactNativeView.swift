@@ -167,8 +167,15 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         }
     }
     
-    @objc func play() {
-        riveView.play()
+    func play(animationNames: [String], rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Bool) {
+        let loop = RNLoopMode.mapToRiveLoop(rnLoopMode: rnLoopMode)
+        let direction = RNDirection.mapToRiveDirection(rnDirection: rnDirection)
+        if animationNames.isEmpty {
+            riveView.play(loop: loop, direction: direction)
+        } else {
+            riveView.play(animationName: animationNames[0], loop: loop, direction: direction, isStateMachine: areStateMachines)
+        }
+        
     }
     
     @objc func pause() {

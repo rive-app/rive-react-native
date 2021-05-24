@@ -18,7 +18,7 @@ enum RNFit: String {
         }
     }
     
-    static func mapToRiveFit(rnFit: RNFit) ->  Fit{
+    static func mapToRiveFit(rnFit: RNFit) -> Fit {
         switch rnFit {
         case .Contain:
             return Fit.fitContain
