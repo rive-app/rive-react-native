@@ -22,6 +22,7 @@
 		9D879D0926578A5400D01424 /* loopy.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0826578A5400D01424 /* loopy.riv */; };
 		9D879D0B26578A5E00D01424 /* artboard_animations.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0A26578A5E00D01424 /* artboard_animations.riv */; };
 		9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */; };
+		9D879D0F265BF5B300D01424 /* skills.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0E265BF5B300D01424 /* skills.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		9D879D0826578A5400D01424 /* loopy.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = loopy.riv; sourceTree = "<group>"; };
 		9D879D0A26578A5E00D01424 /* artboard_animations.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = artboard_animations.riv; sourceTree = "<group>"; };
 		9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = ui_swipe_left_to_delete.riv; sourceTree = "<group>"; };
+		9D879D0E265BF5B300D01424 /* skills.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = skills.riv; sourceTree = "<group>"; };
 		CA3E69C5B9553B26FBA2DF04 /* libPods-RiveReactNativeExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RiveReactNativeExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-RiveReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RiveReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-RiveReactNativeExample/Pods-RiveReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -187,6 +189,7 @@
 		9D4FE60A26493B460098BF6A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				9D879D0E265BF5B300D01424 /* skills.riv */,
 				9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */,
 				9D879D0A26578A5E00D01424 /* artboard_animations.riv */,
 				9D879D0826578A5400D01424 /* loopy.riv */,
@@ -338,6 +341,7 @@
 				9D879D00265642BA00D01424 /* truck_v7.riv in Resources */,
 				9D879D0B26578A5E00D01424 /* artboard_animations.riv in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				9D879D0F265BF5B300D01424 /* skills.riv in Resources */,
 				9D4FE6122649427F0098BF6A /* bird.riv in Resources */,
 				9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */,
 				9D879D0926578A5400D01424 /* loopy.riv in Resources */,
