@@ -239,7 +239,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           resId,
           fit = riveAnimationView.fit,
           alignment = riveAnimationView.alignment,
-          autoplay = riveAnimationView.autoplay,
+          autoplay = false,
           stateMachineName = riveAnimationView.drawable.stateMachineName,
           animationName = riveAnimationView.drawable.animationName,
           artboardName = riveAnimationView.artboardName
