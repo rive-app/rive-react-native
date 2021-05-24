@@ -5,6 +5,8 @@ import {
   findNodeHandle,
   ViewStyle,
   NativeSyntheticEvent,
+  StyleSheet,
+  View,
 } from 'react-native';
 import { RiveRef, Direction, LoopMode, LayerState } from './types';
 import type { XOR } from './helpers';
@@ -77,6 +79,7 @@ export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
 const RiveContainer = React.forwardRef<RiveRef, Props>(
   (
     {
+      children,
       onPlay,
       onPause,
       onStop,
@@ -91,6 +94,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       artboardName,
       animationName,
       stateMachineName,
+      testID,
     },
     ref
   ) => {
@@ -262,25 +266,43 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     );
 
     return (
-      <RiveViewManager
-        style={style}
-        ref={riveRef}
-        resourceName={resourceName}
-        autoplay={autoplay}
-        fit={fit}
-        url={url}
-        onPlay={onPlayHandler}
-        onPause={onPauseHandler}
-        onStop={onStopHandler}
-        onLoopEnd={onLoopEndHandler}
-        onStateChanged={onStateChangedHandler}
-        alignment={alignment}
-        artboardName={artboardName}
-        animationName={animationName}
-        stateMachineName={stateMachineName}
-      />
+      <View style={[styles.container, style]} ref={ref as any} testID={testID}>
+        <RiveViewManager
+          ref={riveRef}
+          resourceName={resourceName}
+          autoplay={autoplay}
+          fit={fit}
+          url={url}
+          style={styles.animation}
+          onPlay={onPlayHandler}
+          onPause={onPauseHandler}
+          onStop={onStopHandler}
+          onLoopEnd={onLoopEndHandler}
+          onStateChanged={onStateChangedHandler}
+          alignment={alignment}
+          artboardName={artboardName}
+          animationName={animationName}
+          stateMachineName={stateMachineName}
+        />
+
+        <View style={styles.children}>{children}</View>
+      </View>
     );
   }
 );
+
+const styles = StyleSheet.create({
+  children: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    flexGrow: 1,
+  },
+  animation: {
+    flex: 1,
+  },
+});
 
 export default RiveContainer;
