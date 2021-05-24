@@ -68,7 +68,7 @@ type: [`Fit`](./types.md#Fit)
 Specifies how animation should be aligned inside rive animation view.
 
 default: `Alignment.None`
-type: [`Fit`](./types.md#Alignment)
+type: [`Alignment`](./types.md#Alignment)
 
 ### artboardName _(optional)_
 
