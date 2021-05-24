@@ -178,8 +178,12 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         
     }
     
-    @objc func pause() {
-        riveView.pause()
+    func pause(animationNames: [String], areStateMachines: Bool) {
+        if animationNames.isEmpty {
+            riveView.pause()
+        } else {
+            riveView.pause(animationNames: animationNames, isStateMachine: areStateMachines)
+        }
     }
     
     //    func updateArtboard(_ artboard: RiveArtboard) {
