@@ -144,27 +144,27 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     }
     
     func stateChange(_ stateName: String) {
-        if let stateNameEnum = RNLayerState(rawValue: stateName) {
-            var result: RNLayerState? = nil
-            switch stateNameEnum {
-            case .AnyState:
-                result = .AnyState
-            case .EntryState:
-                result = .EntryState
-            case .ExitState:
-                result = .ExitState
-            case .AnimationState:
-                result = .AnimationState
-            }
-            if let safeResult = result {
-                onStateChanged?(["layerState": safeResult.rawValue])
-            } else {
-                fatalError("Unable to process state name enum : \(stateName)")
-            }
-            
-        } else {
-            fatalError("Unsupported state name: \(stateName)")
-        }
+//        if let stateNameEnum = RNLayerState(rawValue: stateName) {
+//            var result: RNLayerState? = nil
+//            switch stateNameEnum {
+//            case .AnyState:
+//                result = .AnyState
+//            case .EntryState:
+//                result = .EntryState
+//            case .ExitState:
+//                result = .ExitState
+//            case .AnimationState:
+//                result = .AnimationState
+//            }
+//            if let safeResult = result {
+//                onStateChanged?(["layerState": safeResult.rawValue])
+//            } else {
+//                fatalError("Unable to process state name enum : \(stateName)")
+//            }
+//
+//        } else {
+//            fatalError("Unsupported state name: \(stateName)")
+//        }
     }
     
     func play(animationNames: [String], rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Bool) {
@@ -200,6 +200,19 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         shouldBeReloaded = true
         reloadIfNeeded()
     }
+    
+    func fireState(stateMachineName: String, inputName: String) {
+        riveView.fireState(stateMachineName, inputName: inputName)
+    }
+    
+    func setNumberState(stateMachineName: String, inputName: String, value: Float) {
+        riveView.setNumberState(stateMachineName, inputName: inputName, value: value)
+    }
+    
+    func setBooleanState(stateMachineName: String, inputName: String, value: Bool) {
+        riveView.setBooleanState(stateMachineName, inputName: inputName, value: value)
+    }
+
     
     
     //    func updateArtboard(_ artboard: RiveArtboard) {
