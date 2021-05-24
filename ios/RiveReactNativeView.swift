@@ -43,6 +43,13 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
             }
         }
     }
+    
+    @objc var autoplay: Bool { // Bool? cannot be used because objc cannot interop with it
+        didSet {
+           shouldBeReloaded = true
+        }
+    }
+    
     let riveView = RiveView()
     
     override func didSetProps(_ changedProps: [String]!) {
@@ -52,6 +59,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     
     
     override init(frame: CGRect) {
+        self.autoplay = true // will be changed by react native
         super.init(frame: frame)
         riveView.playDelegate = self
         riveView.pauseDelegate = self
@@ -69,6 +77,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     }
     
     required init?(coder aDecoder: NSCoder) {
+        self.autoplay = true
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
@@ -77,13 +86,13 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         if(shouldBeReloaded) {
             if let safeUrl = url {
                 if !resourceFromBundle {
-                    riveView.configure(getRiveURLResource(from: safeUrl), andAutoPlay: true)
+                    riveView.configure(getRiveURLResource(from: safeUrl), andAutoPlay: autoplay)
                 } else {
                     fatalError("You cannot pass both resourceName and url at the same time")
                 }
             } else {
                 if resourceFromBundle, let safeResourceName = resourceName {
-                    riveView.configure(getRiveFile(resourceName: safeResourceName), andAutoPlay: true)
+                    riveView.configure(getRiveFile(resourceName: safeResourceName), andAutoPlay: autoplay)
                 } else {
                     fatalError("You must provide a url or a resourceName!")
                 }
