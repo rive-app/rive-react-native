@@ -186,6 +186,17 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         }
     }
     
+    func stop(animationNames: [String], areStateMachines: Bool) {
+        if animationNames.isEmpty {
+            shouldBeReloaded = true
+            autoplay = false // we want to stop animation after reload
+            reloadIfNeeded()
+        } else {
+            riveView.stop(animationNames: animationNames, isStateMachine: areStateMachines)
+        }
+    }
+    
+    
     //    func updateArtboard(_ artboard: RiveArtboard) {
     //        self.artboard = artboard;
     //    }

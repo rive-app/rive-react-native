@@ -24,6 +24,13 @@ class RiveReactNativeViewManager: RCTViewManager {
         }
     }
     
+    @objc func stop(_ node: NSNumber, animationNames: [String], areStateMachines: Bool) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.stop(animationNames: animationNames, areStateMachines: areStateMachines)
+        }
+    }
+    
 }
 
 //class ContainerView: UIView {
