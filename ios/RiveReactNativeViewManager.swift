@@ -20,7 +20,7 @@ class RiveReactNativeViewManager: RCTViewManager {
     @objc func pause(_ node: NSNumber, animationNames: [String], areStateMachines: Bool) {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
-            component.pause()
+            component.pause(animationNames: animationNames, areStateMachines: areStateMachines)
         }
     }
     
