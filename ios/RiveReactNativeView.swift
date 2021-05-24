@@ -1,7 +1,8 @@
 import UIKit
 import RiveRuntime
 
-class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, LoopDelegate {
+class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, LoopDelegate, StateChangeDelegate {
+    
     private var shouldBeReloaded = true
     private var resourceFromBundle = true
     
@@ -9,6 +10,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     @objc var onPause: RCTDirectEventBlock?
     @objc var onStop: RCTDirectEventBlock?
     @objc var onLoopEnd: RCTDirectEventBlock?
+    @objc var onStateChanged: RCTDirectEventBlock?
     
     @objc var resourceName: String? = nil {
         didSet {
@@ -81,7 +83,6 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     }
     
     
-    
     override init(frame: CGRect) {
         self.autoplay = true // will be changed by react native
         super.init(frame: frame)
@@ -89,6 +90,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         riveView.pauseDelegate = self
         riveView.stopDelegate = self
         riveView.loopDelegate = self
+        riveView.stateChangeDelegate = self
         addSubview(riveView)
     }
     
@@ -139,6 +141,30 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     
     func loop(_ animationName: String, type: Int) {
         onLoopEnd?(["animationName": animationName])
+    }
+    
+    func stateChange(_ stateName: String) {
+        if let stateNameEnum = RNLayerState(rawValue: stateName) {
+            var result: RNLayerState? = nil
+            switch stateNameEnum {
+            case .AnyState:
+                result = .AnyState
+            case .EntryState:
+                result = .EntryState
+            case .ExitState:
+                result = .ExitState
+            case .AnimationState:
+                result = .AnimationState
+            }
+            if let safeResult = result {
+                onStateChanged?(["layerState": safeResult.rawValue])
+            } else {
+                fatalError("Unable to process state name enum : \(stateName)")
+            }
+            
+        } else {
+            fatalError("Unsupported state name: \(stateName)")
+        }
     }
     
     @objc func play() {
