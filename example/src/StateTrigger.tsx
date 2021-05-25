@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { View, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { View, SafeAreaView, StyleSheet } from 'react-native';
 import Rive, { Fit, RiveRef } from 'rive-react-native';
 import { Button, TextInput } from 'react-native-paper';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function StateTrigger() {
   const riveRef = useRef<RiveRef>(null);
@@ -20,7 +21,7 @@ export default function StateTrigger() {
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <Rive
           ref={riveRef}
           autoplay={true}
@@ -29,10 +30,10 @@ export default function StateTrigger() {
           resourceName={'ui_swipe_left_to_delete'}
         />
         <View style={[styles.fill, styles.fullWidth]}>
-          <View style={[styles.row, styles.fill]}>
+          <View style={[styles.row, styles.controlsWrapper]}>
             <TextInput
               onChangeText={setThreshold}
-              style={styles.fill}
+              style={styles.thresholdInput}
               label="Swipe Threshold"
               keyboardType="decimal-pad"
               value={threshold.toString()}
@@ -50,7 +51,7 @@ export default function StateTrigger() {
             Trigger Delete
           </Button>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
@@ -63,14 +64,20 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 150,
   },
+
   box: {
     width: '100%',
     height: 400,
     marginVertical: 20,
   },
   fill: {
+    flex: 1,
+  },
+  controlsWrapper: {
+    maxHeight: 150,
+  },
+  thresholdInput: {
     flex: 1,
   },
   fullWidth: {

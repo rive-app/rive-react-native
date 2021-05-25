@@ -16,6 +16,7 @@
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-paper": "^4.8.1",
     "react-native-reanimated": "^2.1.0",
     "react-native-safe-area-context": "^3.2.0",
