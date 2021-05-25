@@ -12,15 +12,15 @@ export default function Layout() {
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
+      <Rive
+        alignment={alignment}
+        autoplay={true}
+        style={styles.animation}
+        fit={fit}
+        resourceName={resourceName}
+      />
       <ScrollView contentContainerStyle={styles.container}>
-        <Rive
-          alignment={alignment}
-          autoplay={true}
-          style={styles.animation}
-          fit={fit}
-          resourceName={resourceName}
-        />
-        <View style={styles.row}>
+        <View style={styles.pickersWrapper}>
           <View style={styles.pickerWrapper}>
             <Picker
               selectedValue={fit}
@@ -77,12 +77,11 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderRadius: 5,
     alignItems: 'center',
-    height: 50,
-    minWidth: '50%',
     margin: 16,
   },
-  row: {
+  pickersWrapper: {
     flex: 1,
     padding: 16,
+    alignSelf: 'stretch',
   },
 });
