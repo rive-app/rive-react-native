@@ -190,7 +190,7 @@ export default function LoopModeComponent() {
         </View>
 
         <View style={styles.controls}>
-          <Text style={styles.animationName}>{'Animation: Loop Down'}</Text>
+          <Text style={styles.animationName}>{'Animation: Bounce Y'}</Text>
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
@@ -283,7 +283,7 @@ export default function LoopModeComponent() {
         </View>
 
         <View style={styles.controls}>
-          <Text style={styles.animationName}>{'Animation: Ping Pong'}</Text>
+          <Text style={styles.animationName}>{'Animation: Translate X'}</Text>
           <View style={styles.buttonsRow}>
             <Button
               mode="contained"
