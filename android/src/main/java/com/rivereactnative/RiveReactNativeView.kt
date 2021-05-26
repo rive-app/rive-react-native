@@ -41,10 +41,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     val listener = object : RiveDrawable.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
-          onLoopEnd(animation.animation.name)
-        }
-        if (animation is StateMachineInstance) {
-          onLoopEnd(animation.stateMachine.name, true)
+          onLoopEnd(animation.animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
+        } else {
+          throw IllegalArgumentException("Only animation can be passed as an argument")
         }
       }
 
@@ -67,7 +66,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyStateChanged(state: LayerState) {
-        onStateChanged(state)
+        onStateChanged(state.toString())
       }
 
       override fun notifyStop(animation: PlayableInstance) {
@@ -116,36 +115,20 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STOP.toString(), data)
   }
 
-  fun onLoopEnd(animationName: String, isStateMachine: Boolean = false) {
+  fun onLoopEnd(animationName: String, loopMode: RNLoopMode) {
     val reactContext = context as ReactContext
 
     val data = Arguments.createMap()
     data.putString("animationName", animationName)
-    data.putBoolean("isStateMachine", isStateMachine)
+    data.putString("loopMode", loopMode.toString())
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.LOOP_END.toString(), data)
   }
 
-  fun onStateChanged(layerState: LayerState) {
+  fun onStateChanged(stateName: String) {
     val reactContext = context as ReactContext
     val data = Arguments.createMap()
-    when (layerState) {
-      is AnyState -> {
-        data.putString("layerState", RNLayerState.Any.toString())
-      }
-      is ExitState -> {
-        data.putString("layerState", RNLayerState.Exit.toString())
-      }
-      is EntryState -> {
-        data.putString("layerState", RNLayerState.Entry.toString())
-      }
-      is AnimationState -> {
-        data.putString("layerState", RNLayerState.Animation.toString())
-      }
-      else -> {
-        throw IllegalStateException("Unsupported LayerState type")
-      }
-    }
+    data.putString("stateName", stateName)
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
   }
