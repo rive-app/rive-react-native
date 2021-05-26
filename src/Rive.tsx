@@ -8,7 +8,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { RiveRef, Direction, LoopMode, LayerState } from './types';
+import { RiveRef, Direction, LoopMode } from './types';
 import type { XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
@@ -35,12 +35,12 @@ type RiveProps = {
   onLoopEnd?: (
     event: NativeSyntheticEvent<{
       animationName: string;
-      isStateMachine: boolean;
+      loopMode: LoopMode;
     }>
   ) => void;
   onStateChanged?: (
     event: NativeSyntheticEvent<{
-      layerState: LayerState;
+      stateName: string;
     }>
   ) => void;
   autoplay?: boolean;
@@ -62,8 +62,8 @@ type Props = {
   onPlay?: (animationName: string, isStateMachine: boolean) => void;
   onPause?: (animationName: string, isStateMachine: boolean) => void;
   onStop?: (animationName: string, isStateMachine: boolean) => void;
-  onLoopEnd?: (animationName: string, isStateMachine: boolean) => void;
-  onStateChanged?: (layerState: LayerState) => void;
+  onLoopEnd?: (animationName: string, loopMode: LoopMode) => void;
+  onStateChanged?: (stateName: string) => void;
   fit?: Fit;
   style?: ViewStyle;
   testID?: string;
@@ -143,11 +143,11 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       (
         event: NativeSyntheticEvent<{
           animationName: string;
-          isStateMachine: boolean;
+          loopMode: LoopMode;
         }>
       ) => {
-        const { animationName, isStateMachine } = event.nativeEvent;
-        onLoopEnd?.(animationName, isStateMachine);
+        const { animationName, loopMode } = event.nativeEvent;
+        onLoopEnd?.(animationName, loopMode);
       },
       [onLoopEnd]
     );
@@ -155,11 +155,11 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     const onStateChangedHandler = useCallback(
       (
         event: NativeSyntheticEvent<{
-          layerState: LayerState;
+          stateName: string;
         }>
       ) => {
-        const { layerState } = event.nativeEvent;
-        onStateChanged?.(layerState);
+        const { stateName } = event.nativeEvent;
+        onStateChanged?.(stateName);
       },
       [onStateChanged]
     );
