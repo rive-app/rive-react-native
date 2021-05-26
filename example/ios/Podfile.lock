@@ -310,7 +310,7 @@ PODS:
   - rive-react-native (0.1.0):
     - React-Core
     - RiveRuntime
-  - RiveRuntime (0.0.3)
+  - RiveRuntime (0.0.4)
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.16.0):
@@ -501,7 +501,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   RiveRuntime:
-    :commit: 497da973e950dfc117414a648d477143fa3c89da
+    :commit: 13f23e4bf789b6b57c0e81d99c58a03ef5ab85d5
     :git: https://github.com/rive-app/test-ios.git
 
 SPEC CHECKSUMS:
@@ -543,7 +543,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   rive-react-native: 78ec9539067d4c4c2201a66ff1de735e67e68f9d
-  RiveRuntime: caef28465be0ac1d011da7f4519d8349a3930cfe
+  RiveRuntime: a764475146b4a93ee4e600e57cbfd40980d7807e
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
