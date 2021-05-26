@@ -2,7 +2,6 @@ import UIKit
 import RiveRuntime
 
 class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, LoopDelegate, StateChangeDelegate {
-    
     private var shouldBeReloaded = true
     private var resourceFromBundle = true
     
@@ -127,44 +126,24 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         }
     }
     
-    func play(_ animationName: String) {
-        onPlay?(["animationName": animationName])
+    func play(_ animationName: String, isStateMachine: Bool) {
+        onPlay?(["animationName": animationName, "isStateMachine": isStateMachine])
     }
     
-    func pause(_ animationName: String) {
-        onPause?(["animationName": animationName])
+    func pause(_ animationName: String, isStateMachine: Bool) {
+        onPause?(["animationName": animationName, "isStateMachine": isStateMachine])
     }
     
-    func stop(_ animationName: String) {
-        onStop?(["animationName": animationName])
+    func stop(_ animationName: String, isStateMachine: Bool) {
+        onStop?(["animationName": animationName, "isStateMachine": isStateMachine])
     }
     
     func loop(_ animationName: String, type: Int) {
-        onLoopEnd?(["animationName": animationName])
+        onLoopEnd?(["animationName": animationName, "loopMode": RNLoopMode.mapToRNLoopMode(value: type).rawValue])
     }
     
     func stateChange(_ stateName: String) {
-//        if let stateNameEnum = RNLayerState(rawValue: stateName) {
-//            var result: RNLayerState? = nil
-//            switch stateNameEnum {
-//            case .AnyState:
-//                result = .AnyState
-//            case .EntryState:
-//                result = .EntryState
-//            case .ExitState:
-//                result = .ExitState
-//            case .AnimationState:
-//                result = .AnimationState
-//            }
-//            if let safeResult = result {
-//                onStateChanged?(["layerState": safeResult.rawValue])
-//            } else {
-//                fatalError("Unable to process state name enum : \(stateName)")
-//            }
-//
-//        } else {
-//            fatalError("Unsupported state name: \(stateName)")
-//        }
+        onStateChanged?(["stateName": stateName])
     }
     
     func play(animationNames: [String], rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Bool) {
@@ -173,7 +152,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         if animationNames.isEmpty {
             riveView.play(loop: loop, direction: direction)
         } else {
-            riveView.play(animationName: animationNames[0], loop: loop, direction: direction, isStateMachine: areStateMachines)
+            riveView.play(animationNames: animationNames, loop: loop, direction: direction, isStateMachine: areStateMachines)
         }
         
     }

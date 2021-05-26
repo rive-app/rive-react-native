@@ -22,6 +22,9 @@ export default function StateMachine() {
           fit={Fit.Cover}
           style={styles.box}
           stateMachineName="Designer's Test"
+          onStateChanged={(stateName) => {
+            console.log('onStateChanged: ', stateName);
+          }}
           resourceName={'skills'}
         />
         <RadioButton.Group

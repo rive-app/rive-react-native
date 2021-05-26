@@ -56,10 +56,3 @@ export enum Direction {
   Auto = 'auto',
   Forwards = 'forwards',
 }
-
-export enum LayerState {
-  Any = 'any',
-  Exit = 'exit',
-  Entry = 'entry',
-  Animation = 'animation',
-}
