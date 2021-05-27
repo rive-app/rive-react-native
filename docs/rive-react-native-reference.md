@@ -146,13 +146,13 @@ Specifies which animations should be played. String can be passed in case of a s
 
 default: `LoopMode.None`
 
-Specifies which [`LoopMode`](./types#LoopMode) should be used for playing the animations.
+Specifies which [`LoopMode`](./types.md#LoopMode) should be used for playing the animations.
 
 ##### direction
 
 default: `Direction.Auto`
 
-Specifies which [`Direction`](./types#Direction) should be used for playing the animations.
+Specifies which [`Direction`](./types.md#Direction) should be used for playing the animations.
 
 ##### areStateMachines
 
