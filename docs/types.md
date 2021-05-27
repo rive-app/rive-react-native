@@ -50,14 +50,3 @@ export enum Direction {
   Forwards = 'forwards',
 }
 ```
-
-## LayerState
-
-```ts
-export enum LayerState {
-  Any = 'any',
-  Exit = 'exit',
-  Entry = 'entry',
-  Animation = 'animation',
-}
-```
