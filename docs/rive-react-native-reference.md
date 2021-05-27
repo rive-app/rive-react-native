@@ -118,7 +118,7 @@ Callback function that is called when animation or stateMachine has been stopped
 
 ### onLoopEnd _(optional)_
 
-type: [`(animationName: string, loopMode: LoopMode) => void`]('./types.md#LoopMode')
+type: [`(animationName: string, loopMode: LoopMode) => void`](./types.md#LoopMode)
 
 Callback function that is called when animation loop has been ended.
 
@@ -146,13 +146,13 @@ Specifies which animations should be played. String can be passed in case of a s
 
 default: `LoopMode.None`
 
-Specifies which [`LoopMode`]('./types#LoopMode') should be used for playing the animations.
+Specifies which [`LoopMode`](./types#LoopMode) should be used for playing the animations.
 
 ##### direction
 
 default: `Direction.Auto`
 
-Specifies which [`Direction`](./types#Direction') should be used for playing the animations.
+Specifies which [`Direction`](./types#Direction) should be used for playing the animations.
 
 ##### areStateMachines
 
