@@ -118,13 +118,13 @@ Callback function that is called when animation or stateMachine has been stopped
 
 ### onLoopEnd _(optional)_
 
-type: `(animationName: string, isStateMachine: boolean) => void`
+type: [`(animationName: string, loopMode: LoopMode) => void`]('./types.md#LoopMode')
 
-Callback function that is called when animation or stateMachine loop has been ended.
+Callback function that is called when animation loop has been ended.
 
 ### onStateChanged _(optional)_
 
-type: [`(layerState: LayerState) => void`]('./types.md#LayerState')
+type: `(stateName: string) => void`
 
 Callback function that is called when the internal animation state has been changed. It's tightly coupled with state machines feature.
 
