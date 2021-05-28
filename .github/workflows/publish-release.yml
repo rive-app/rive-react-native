@@ -45,7 +45,7 @@ jobs:
         run: npm config set //registry.npmjs.org/:_authToken $NPM_PUBLISH_TOKEN
 
       - name: Publish
-        run:|
+        run: |
           chmod +x ./scripts/add_build_number.sh
           yarn release --increment=$(./scripts/add_build_number.sh ${{ github.run_number }})
         env:
