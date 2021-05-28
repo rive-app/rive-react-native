@@ -5,19 +5,18 @@ on:
     branches:
       - release/**
 jobs:
-  install:
+  publish:
     name: Install dependencies
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
+      - name: Checkout & git config
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: git config
         run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@rive.app"
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
+          git config --local user.email 'hello@rive.app'
+          git config --local user.name ${{ github.actor }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -33,21 +32,12 @@ jobs:
         run: |
           yarn install --cwd example --frozen-lockfile
           yarn install --frozen-lockfile
-  lint:
-    name: Lint and typecheck
-    runs-on: ubuntu-latest
-    needs: install
-    steps:
+
       - name: Lint
         run: yarn lint
       - name: Type Check
         run: yarn typescript
 
-  publish:
-    name: Build & Publish release
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
       - name: Build lib
         run: yarn prepare
 
@@ -57,4 +47,6 @@ jobs:
       - name: Publish
         run:|
           chmod +x ./scripts/add_build_number.sh
-          yarn release --increment=$(./scripts/add_build_number.sh ${{ GITHUB_RUN_NUMBER }})
+          yarn release --increment=$(./scripts/add_build_number.sh ${{ github.run_number }})
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
