@@ -17,7 +17,7 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@rive.app"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -52,7 +52,9 @@ jobs:
         run: yarn prepare
 
       - name: Authenticate with registry
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_PUBLISH_TOKEN
 
       - name: Publish
-        run: yarn release
+        run:|
+          chmod +x ./scripts/add_build_number.sh
+          yarn release --increment=$(./scripts/add_build_number.sh ${{ GITHUB_RUN_NUMBER }})
