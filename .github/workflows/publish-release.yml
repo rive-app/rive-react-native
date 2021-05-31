@@ -6,7 +6,7 @@ on:
       - release/**
 jobs:
   publish:
-    name: Install dependencies
+    name: Install and publish
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
