@@ -4,6 +4,7 @@ on:
     types: [closed, opened]
     branches:
       - release/**
+  workflow_dispatch:
 jobs:
   open_job:
     name: Opened
