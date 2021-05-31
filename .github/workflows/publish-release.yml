@@ -48,15 +48,15 @@ jobs:
       - name: Type Check
         run: yarn typescript
 
-      # - name: Build lib
-      #   run: yarn prepare
+      - name: Build lib
+        run: yarn prepare
 
-      # - name: Authenticate with registry
-      #   run: npm config set //registry.npmjs.org/:_authToken $NPM_PUBLISH_TOKEN
+      - name: Authenticate with registry
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_PUBLISH_TOKEN
 
-      # - name: Publish
-      #   run: |
-      #     chmod +x ./scripts/add_build_number.sh
-      #     yarn release --increment=$(./scripts/add_build_number.sh ${{ github.run_number }})
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
+      - name: Publish
+        run: |
+          chmod +x ./scripts/add_build_number.sh
+          yarn release --increment=$(./scripts/add_build_number.sh ${{ github.run_number }})
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
