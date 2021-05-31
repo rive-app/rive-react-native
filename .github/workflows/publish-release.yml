@@ -14,10 +14,16 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Git config
         run: |
           git config --local user.email 'hello@rive.app'
           git config --local user.name ${{ github.actor }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
