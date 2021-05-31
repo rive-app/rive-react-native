@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - release/**
+      - release/**-sfx
 jobs:
   publish:
     name: Install and publish
