@@ -52,7 +52,7 @@ jobs:
         run: yarn prepare
 
       - name: Authenticate with registry
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_PUBLISH_TOKEN
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_AUTOMATION_TOKEN
 
       - name: Publish
         run: |
