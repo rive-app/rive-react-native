@@ -13,7 +13,7 @@ jobs:
       - run: |
         echo PR #${{ github.event.number }} has been opened
 
-  publish:
+  publish_job:
     name: Install and publish
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
