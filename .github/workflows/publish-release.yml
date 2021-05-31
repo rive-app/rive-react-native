@@ -57,6 +57,6 @@ jobs:
       - name: Publish
         run: |
           chmod +x ./scripts/add_build_number.sh
-          npm run release --increment=$(./scripts/add_build_number.sh ${{ github.run_number }})
+          yarn release --increment=$(./scripts/add_build_number.sh ${{ github.run_number }})
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
