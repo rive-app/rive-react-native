@@ -3,23 +3,30 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - release/**
+      - main
 
   workflow_dispatch:
 jobs:
   publish:
-    name: Install dependencies
+    name: Install and publish
+    if: |
+      startsWith(github.event.pull_request.head.ref, 'release') && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Git config
         run: |
           git config --local user.email 'hello@rive.app'
           git config --local user.name ${{ github.actor }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
