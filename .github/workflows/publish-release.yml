@@ -3,14 +3,13 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main
+      - production
 
   workflow_dispatch:
 jobs:
   publish:
     name: Install and publish
-    if: |
-      startsWith(github.event.pull_request.head.ref, 'release') && github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
