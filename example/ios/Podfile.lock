@@ -307,10 +307,10 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - rive-react-native (0.1.0):
+  - rive-react-native (1.0.0):
     - React-Core
     - RiveRuntime
-  - RiveRuntime (0.0.4)
+  - RiveRuntime (0.0.8)
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.16.0):
@@ -403,7 +403,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rive-react-native (from `../..`)
-  - RiveRuntime (from `https://github.com/rive-app/test-ios.git`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -425,6 +424,7 @@ SPEC REPOS:
     - FlipperKit
     - libevent
     - OpenSSL-Universal
+    - RiveRuntime
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -482,8 +482,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   rive-react-native:
     :path: "../.."
-  RiveRuntime:
-    :git: https://github.com/rive-app/test-ios.git
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
@@ -498,11 +496,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
-
-CHECKOUT OPTIONS:
-  RiveRuntime:
-    :commit: 13f23e4bf789b6b57c0e81d99c58a03ef5ab85d5
-    :git: https://github.com/rive-app/test-ios.git
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -542,8 +535,8 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  rive-react-native: 78ec9539067d4c4c2201a66ff1de735e67e68f9d
-  RiveRuntime: a764475146b4a93ee4e600e57cbfd40980d7807e
+  rive-react-native: 164086690b49b970c3910bb9823d630f84151507
+  RiveRuntime: b134a3299e8efff5c134fa79ee674006e224fc6a
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
@@ -553,6 +546,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 393a22f7cdc9e51ef63f6fe2cde315006e6d1517
+PODFILE CHECKSUM: 7a60b8501923e113027edc977b6f9c8e43435501
 
 COCOAPODS: 1.10.1
