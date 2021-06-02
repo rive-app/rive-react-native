@@ -16,11 +16,21 @@ or
 yarn add rive-react-native
 ```
 
-- install pods for your ios project. Go to `ios` directory and run
+- install pods for your ios project. Go to the `ios` directory and run
 
 ```sh
 pod install
 ```
+
+- add this dependency to your project inside `android/app/build.gradle`
+
+```groovy
+dependencies {
+  implementation "androidx.startup:startup-runtime:1.0.0"
+}
+```
+
+More info [here](https://github.com/rive-app/rive-android#manually-initializing-rive).
 
 ## Usage
 
