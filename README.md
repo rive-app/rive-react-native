@@ -22,6 +22,16 @@ yarn add rive-react-native
 pod install
 ```
 
+- add this dependency to your project inside `android/app/build.gradle`
+
+```groovy
+dependencies {
+  implementation "androidx.startup:startup-runtime:1.0.0"
+}
+```
+
+More info [here](https://github.com/rive-app/rive-android#manually-initializing-rive).
+
 ## Usage
 
 ```tsx
