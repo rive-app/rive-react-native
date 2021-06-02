@@ -16,7 +16,7 @@ or
 yarn add rive-react-native
 ```
 
-- install pods for your ios project. Go to `ios` directory and run
+- install pods for your ios project. Go to the `ios` directory and run
 
 ```sh
 pod install
