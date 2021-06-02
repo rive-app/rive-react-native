@@ -22,6 +22,8 @@ yarn add rive-react-native
 pod install
 ```
 
+- Add empty swift file in order to create `Bridging-Header` file if it doesn't exist. _(optional)_
+
 - add this dependency to your project inside `android/app/build.gradle`
 
 ```groovy
