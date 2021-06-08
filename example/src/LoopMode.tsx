@@ -22,9 +22,9 @@ export default function LoopModeComponent() {
   const [loopDownDirection, setLoopDownDirection] = useState(Direction.Auto);
   const [pingPongDirection, setPingPongDirection] = useState(Direction.Auto);
 
-  const [rotateLoop, setRotateLoop] = useState(LoopMode.None);
-  const [loopDownLoop, setLoopDownLoop] = useState(LoopMode.None);
-  const [pingPongLoop, setPingPongLoop] = useState(LoopMode.None);
+  const [rotateLoop, setRotateLoop] = useState(LoopMode.Auto);
+  const [loopDownLoop, setLoopDownLoop] = useState(LoopMode.Auto);
+  const [pingPongLoop, setPingPongLoop] = useState(LoopMode.Auto);
 
   const reset = () => {
     riveRef.current?.reset();
@@ -35,7 +35,7 @@ export default function LoopModeComponent() {
 
   const play = (
     animationName: string,
-    loop = LoopMode.None,
+    loop = LoopMode.Auto,
     direction = Direction.Auto
   ) => {
     riveRef.current?.play(animationName, loop, direction);
@@ -181,8 +181,8 @@ export default function LoopModeComponent() {
                   <RadioButton value={LoopMode.PingPong} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
-                  <Text>{'None'}</Text>
-                  <RadioButton value={LoopMode.None} />
+                  <Text>{'Auto'}</Text>
+                  <RadioButton value={LoopMode.Auto} />
                 </View>
               </View>
             </RadioButton.Group>
@@ -274,8 +274,8 @@ export default function LoopModeComponent() {
                   <RadioButton value={LoopMode.PingPong} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
-                  <Text>{'None'}</Text>
-                  <RadioButton value={LoopMode.None} />
+                  <Text>{'Auto'}</Text>
+                  <RadioButton value={LoopMode.Auto} />
                 </View>
               </View>
             </RadioButton.Group>
@@ -367,8 +367,8 @@ export default function LoopModeComponent() {
                   <RadioButton value={LoopMode.PingPong} />
                 </View>
                 <View style={styles.radioButtonWrapper}>
-                  <Text>{'None'}</Text>
-                  <RadioButton value={LoopMode.None} />
+                  <Text>{'Auto'}</Text>
+                  <RadioButton value={LoopMode.Auto} />
                 </View>
               </View>
             </RadioButton.Group>

@@ -144,7 +144,7 @@ Specifies which animations should be played. String can be passed in case of a s
 
 ##### loop
 
-default: `LoopMode.None`
+default: `LoopMode.Auto`
 
 Specifies which [`LoopMode`](./types.md#LoopMode) should be used for playing the animations.
 

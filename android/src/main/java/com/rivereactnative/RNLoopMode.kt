@@ -1,13 +1,12 @@
 package com.rivereactnative
 
-import java.lang.IllegalArgumentException
 import app.rive.runtime.kotlin.core.Loop as RiveLoop
 
 enum class RNLoopMode(private val mValue: String) {
   OneShot("oneShot"),
   Loop("loop"),
   PingPong("pingPong"),
-  Auto("none");
+  Auto("auto");
 
   override fun toString(): String {
     return mValue
@@ -23,7 +22,7 @@ enum class RNLoopMode(private val mValue: String) {
           RiveLoop.ONESHOT -> OneShot
           RiveLoop.LOOP -> Loop
           RiveLoop.PINGPONG -> PingPong
-          RiveLoop.NONE -> Auto
+          RiveLoop.AUTO -> Auto
         }
       }
 
@@ -32,7 +31,7 @@ enum class RNLoopMode(private val mValue: String) {
         OneShot -> RiveLoop.ONESHOT
         Loop -> RiveLoop.LOOP
         PingPong -> RiveLoop.PINGPONG
-        Auto -> RiveLoop.NONE
+        Auto -> RiveLoop.AUTO
       }
     }
   }
