@@ -10,9 +10,11 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.util.RNLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.net.URL
 import kotlin.IllegalStateException
 
@@ -179,6 +181,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun setResourceName(resourceName: String?) {
     resourceName?.let {
       resId = resources.getIdentifier(resourceName, "raw", context.packageName)
+      if (resId == 0) {
+        RNLog.w(context as ReactContext, "Failed to locate .riv file: $resourceName")
+        resId = -1
+      }
     } ?: run {
       resId = -1
     }
@@ -228,7 +234,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           artboardName = riveAnimationView.artboardName
         )
       } else {
-        throw IllegalStateException("You must provide a url or a resourceName!")
+        throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
       }
     }
   }
@@ -254,7 +260,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           )
           url = null
         } else {
-          throw IllegalStateException("You must provide a url or a resourceName!")
+          throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
         }
       }
       shouldBeReloaded = false
@@ -276,7 +282,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         )
       }
     )
-    httpClient.fetchUrl(url)
+    httpClient.fetchUrl(url, context)
   }
 
   fun setArtboardName(artboardName: String) {
@@ -320,16 +326,20 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 class HttpClient : ViewModel() {
   var byteLiveData = MutableLiveData<ByteArray>()
 
-  fun fetchUrl(url: String) {
+  fun fetchUrl(url: String, reactContext: ReactContext) {
     viewModelScope.launch {
       withContext(Dispatchers.IO) {
-        fetchAsync(url)
+        fetchAsync(url, reactContext)
       }
     }
   }
 
-  private fun fetchAsync(url: String) {
-    byteLiveData.postValue(URL(url).openStream().use { it.readBytes() })
+  private fun fetchAsync(url: String, reactContext: ReactContext) {
+    try {
+      byteLiveData.postValue(URL(url).openStream().use { it.readBytes() })
+    } catch (e: IOException) {
+      RNLog.w(reactContext, "Failed to load .riv file from the $url")
+    }
   }
 }
 

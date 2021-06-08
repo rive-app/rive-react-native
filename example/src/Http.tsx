@@ -7,8 +7,8 @@ export default function Http() {
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         <Rive
-          style={styles.animation}
           url={'https://cdn.rive.app/animations/juice_v7.riv'}
+          style={styles.animation}
         />
       </ScrollView>
     </SafeAreaView>

@@ -37,7 +37,7 @@ export enum LoopMode {
   OneShot = 'oneShot',
   Loop = 'loop',
   PingPong = 'pingPong',
-  None = 'none',
+  Auto = 'auto',
 }
 ```
 

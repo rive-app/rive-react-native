@@ -2,7 +2,7 @@ enum RNLoopMode: String {
     case OneShot = "oneShot"
     case Loop = "loop"
     case PingPong = "pingPong"
-    case Auto = "none"
+    case Auto = "auto"
     
     static func mapToRNLoopMode(value: String) -> RNLoopMode {
         if let rnEnum = RNLoopMode(rawValue: value) {
