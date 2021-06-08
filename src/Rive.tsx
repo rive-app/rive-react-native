@@ -167,7 +167,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     const play = useCallback<RiveRef['play']>(
       (
         animationNames = [],
-        loop = LoopMode.None,
+        loop = LoopMode.Auto,
         direction = Direction.Auto,
         areStateMachines = false
       ) => {

@@ -1,6 +1,7 @@
 # rive-react-native
 
 This package implements native binding for Rive Runtime for iOS and Android.
+`Expo CLI` is not supported by this lib.
 
 ## Installation
 
@@ -16,7 +17,7 @@ or
 yarn add rive-react-native
 ```
 
-- install pods for your ios project. Go to the `ios` directory and run
+- install pods for your ios project. Go to the project `ios` directory and run
 
 ```sh
 pod install
@@ -33,6 +34,11 @@ dependencies {
 ```
 
 More info [here](https://github.com/rive-app/rive-android#manually-initializing-rive).
+
+Put `.riv` files inside your project:
+
+- `raw` directory on Android
+- `Assets` directory on iOS
 
 ## Usage
 

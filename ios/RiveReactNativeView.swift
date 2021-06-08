@@ -111,13 +111,17 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         if(shouldBeReloaded) {
             if let safeUrl = url {
                 if !resourceFromBundle {
-                    riveView.configure(getRiveURLResource(from: safeUrl),andArtboard: artboardName ,andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                    if  let safeResource = getRiveURLResource(from: safeUrl) {
+                        riveView.configure(safeResource,andArtboard: artboardName ,andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                    }
                 } else {
                     fatalError("You cannot pass both resourceName and url at the same time")
                 }
             } else {
                 if resourceFromBundle, let safeResourceName = resourceName {
-                    riveView.configure(getRiveFile(resourceName: safeResourceName),andArtboard: artboardName, andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                    if let safeResource = getRiveFile(resourceName: safeResourceName) {
+                        riveView.configure(safeResource,andArtboard: artboardName, andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                    }
                 } else {
                     fatalError("You must provide a url or a resourceName!")
                 }
