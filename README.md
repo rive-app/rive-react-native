@@ -1,6 +1,7 @@
 # rive-react-native
 
 This package implements native binding for Rive Runtime for iOS and Android.
+`Expo CLI` is not supported by this lib.
 
 ## Installation
 
