@@ -2,6 +2,7 @@ import UIKit
 import RiveRuntime
 
 class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, LoopDelegate, StateChangeDelegate {
+    
     private var shouldBeReloaded = true
     private var resourceFromBundle = true
     
@@ -146,8 +147,8 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         onLoopEnd?(["animationName": animationName, "loopMode": RNLoopMode.mapToRNLoopMode(value: type).rawValue])
     }
     
-    func stateChange(_ stateName: String) {
-        onStateChanged?(["stateName": stateName])
+    func stateChange(_ stateMachineName: String, _ stateName: String) {
+        onStateChanged?(["stateMachineName": stateMachineName, "stateName": stateName])
     }
     
     func play(animationNames: [String], rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Bool) {

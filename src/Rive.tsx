@@ -40,6 +40,7 @@ type RiveProps = {
   ) => void;
   onStateChanged?: (
     event: NativeSyntheticEvent<{
+      stateMachineName: string;
       stateName: string;
     }>
   ) => void;
@@ -63,7 +64,7 @@ type Props = {
   onPause?: (animationName: string, isStateMachine: boolean) => void;
   onStop?: (animationName: string, isStateMachine: boolean) => void;
   onLoopEnd?: (animationName: string, loopMode: LoopMode) => void;
-  onStateChanged?: (stateName: string) => void;
+  onStateChanged?: (stateMachineName: string, stateName: string) => void;
   fit?: Fit;
   style?: ViewStyle;
   testID?: string;
@@ -155,11 +156,12 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     const onStateChangedHandler = useCallback(
       (
         event: NativeSyntheticEvent<{
+          stateMachineName: string;
           stateName: string;
         }>
       ) => {
-        const { stateName } = event.nativeEvent;
-        onStateChanged?.(stateName);
+        const { stateMachineName, stateName } = event.nativeEvent;
+        onStateChanged?.(stateMachineName, stateName);
       },
       [onStateChanged]
     );

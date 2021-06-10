@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 export default function StateTrigger() {
   const riveRef = useRef<RiveRef>(null);
+  const riveRefUrl = useRef<RiveRef>(null);
   const [threshold, setThreshold] = useState('0.0');
   const applyThresholdInputState = () => {
     riveRef.current?.setInputState(
@@ -29,7 +30,7 @@ export default function StateTrigger() {
           style={styles.box}
           resourceName={'ui_swipe_left_to_delete'}
         />
-        <View style={[styles.fill, styles.fullWidth]}>
+        <View style={[styles.fill, styles.fullWidth, styles.examplesGap]}>
           <View style={[styles.row, styles.controlsWrapper]}>
             <TextInput
               onChangeText={setThreshold}
@@ -49,6 +50,25 @@ export default function StateTrigger() {
           </View>
           <Button onPress={trigger} style={styles.gapButton} mode="contained">
             Trigger Delete
+          </Button>
+        </View>
+
+        <Rive
+          ref={riveRefUrl}
+          autoplay
+          fit={Fit.Cover}
+          style={styles.box}
+          url="https://cdn.rive.app/animations/pulsar.riv"
+        />
+        <View style={[styles.fill, styles.fullWidth]}>
+          <Button
+            onPress={() => {
+              riveRefUrl.current?.fireState('Pulsate', 'startPulse');
+            }}
+            style={styles.gapButton}
+            mode="contained"
+          >
+            Trigger pulse
           </Button>
         </View>
       </KeyboardAwareScrollView>
@@ -98,5 +118,8 @@ const styles = StyleSheet.create({
   center: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  examplesGap: {
+    marginBottom: 20,
   },
 });

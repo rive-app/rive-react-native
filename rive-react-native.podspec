@@ -10,11 +10,11 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "11.4" }
+  s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/rive-app/rive-react-native.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
-  s.dependency "RiveRuntime"
+  s.dependency "RiveRuntime", "0.1.2"
 end

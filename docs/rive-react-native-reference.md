@@ -124,7 +124,7 @@ Callback function that is called when animation loop has been ended.
 
 ### onStateChanged _(optional)_
 
-type: `(stateName: string) => void`
+type: `(stateMachineName: string, stateName: string) => void`
 
 Callback function that is called when the internal animation state has been changed. It's tightly coupled with state machines feature.
 
