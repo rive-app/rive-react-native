@@ -52,7 +52,7 @@ function App() {
 }
 ```
 
-A more detailed guide about usage can be found [here](./docs/usage-guide.md)
+You can download the [truck_v7.riv](https://github.com/rive-app/rive-react-native/raw/main/example/ios/Assets/truck_v7.riv) file from the example/ios/Assets folder. A more detailed guide about usage can be found [here](./docs/usage-guide.md)
 
 ## Rive component
 

@@ -67,9 +67,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         }
       }
 
-      override fun notifyStateChanged(state: LayerState) {
-        onStateChanged(state.toString())
+      override fun notifyStateChanged(stateMachineName: String, stateName: String) {
+        onStateChanged(stateMachineName, stateName)
       }
+
 
       override fun notifyStop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
@@ -127,10 +128,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.LOOP_END.toString(), data)
   }
 
-  fun onStateChanged(stateName: String) {
+  fun onStateChanged(stateMachineName: String, stateName: String) {
     val reactContext = context as ReactContext
     val data = Arguments.createMap()
+    data.putString("stateMachineName", stateMachineName)
     data.putString("stateName", stateName)
+
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
   }
