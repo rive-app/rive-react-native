@@ -22,7 +22,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var riveAnimationView: RiveAnimationView
   private var resId: Int = -1
   private var url: String? = null
-  private val httpClient = ViewModelProvider(context.currentActivity as ViewModelStoreOwner).get(HttpClient::class.java)
   private var shouldBeReloaded = true
 
   enum class Events(private val mName: String) {
@@ -271,6 +270,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   private fun setUrlRiveResource(url: String, autoplay: Boolean = riveAnimationView.autoplay) {
+    val httpClient = HttpClient()
     httpClient.byteLiveData.observe(context.currentActivity as LifecycleOwner, // needs a fix
       Observer { bytes ->
         // Pass the Rive file bytes to the animation view
