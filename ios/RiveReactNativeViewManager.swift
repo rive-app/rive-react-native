@@ -57,5 +57,8 @@ class RiveReactNativeViewManager: RCTViewManager {
             component.setNumberState(stateMachineName: stateMachineName, inputName: inputName, value: Float(truncating: value))
         }
     }
-    
+
+    @objc static override func requiresMainQueueSetup() -> Bool {
+        return false
+    }
 }
