@@ -5,16 +5,23 @@ import androidx.lifecycle.*
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.RiveDrawable
 import app.rive.runtime.kotlin.core.*
+import com.android.volley.NetworkResponse
+import com.android.volley.ParseError
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.HttpHeaderParser
+import com.android.volley.toolbox.Volley
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.modules.core.ExceptionsManagerModule
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.util.RNLog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.events.EventDispatcher
 import java.io.IOException
+import java.io.UnsupportedEncodingException
 import java.net.URL
 import kotlin.IllegalStateException
 
@@ -23,6 +30,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var resId: Int = -1
   private var url: String? = null
   private var shouldBeReloaded = true
+  private var exceptionManager: ExceptionsManagerModule
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
@@ -39,6 +47,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   init {
     context.addLifecycleEventListener(this)
     riveAnimationView = RiveAnimationView(context)
+    exceptionManager = (context as ReactContext).getNativeModule(ExceptionsManagerModule::class.java)
     val listener = object : RiveDrawable.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
@@ -184,7 +193,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     resourceName?.let {
       resId = resources.getIdentifier(resourceName, "raw", context.packageName)
       if (resId == 0) {
-        RNLog.w(context as ReactContext, "Failed to locate .riv file: $resourceName")
         resId = -1
       }
     } ?: run {
@@ -226,15 +234,20 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } ?: run {
       if (resId != -1) {
-        riveAnimationView.setRiveResource(
-          resId,
-          fit = riveAnimationView.fit,
-          alignment = riveAnimationView.alignment,
-          autoplay = false,
-          stateMachineName = riveAnimationView.drawable.stateMachineName,
-          animationName = riveAnimationView.drawable.animationName,
-          artboardName = riveAnimationView.artboardName
-        )
+        try {
+          riveAnimationView.setRiveResource(
+            resId,
+            fit = riveAnimationView.fit,
+            alignment = riveAnimationView.alignment,
+            autoplay = false,
+            stateMachineName = riveAnimationView.drawable.stateMachineName,
+            animationName = riveAnimationView.drawable.animationName,
+            artboardName = riveAnimationView.artboardName
+          )
+          url = null
+        } catch (e: RiveException) {
+          showRNError("${e.message}", e)
+        }
       } else {
         throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
       }
@@ -251,16 +264,21 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         }
       } ?: run {
         if (resId != -1) {
-          riveAnimationView.setRiveResource(
-            resId,
-            fit = riveAnimationView.fit,
-            alignment = riveAnimationView.alignment,
-            autoplay = riveAnimationView.autoplay,
-            stateMachineName = riveAnimationView.drawable.stateMachineName,
-            animationName = riveAnimationView.drawable.animationName,
-            artboardName = riveAnimationView.artboardName
-          )
-          url = null
+          try {
+            riveAnimationView.setRiveResource(
+              resId,
+              fit = riveAnimationView.fit,
+              alignment = riveAnimationView.alignment,
+              autoplay = riveAnimationView.autoplay,
+              stateMachineName = riveAnimationView.drawable.stateMachineName,
+              animationName = riveAnimationView.drawable.animationName,
+              artboardName = riveAnimationView.artboardName
+            )
+            url = null
+          } catch (e: RiveException) {
+            showRNError("${e.message}", e)
+          }
+
         } else {
           throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
         }
@@ -269,11 +287,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+
   private fun setUrlRiveResource(url: String, autoplay: Boolean = riveAnimationView.autoplay) {
-    val httpClient = HttpClient()
-    httpClient.byteLiveData.observe(context.currentActivity as LifecycleOwner, // needs a fix
-      Observer { bytes ->
-        // Pass the Rive file bytes to the animation view
+    val queue = Volley.newRequestQueue(context)
+    val stringRequest = RNRiveFileRequest(url, Response.Listener<ByteArray> { bytes ->
+      try {
         riveAnimationView.setRiveBytes(
           bytes,
           fit = riveAnimationView.fit,
@@ -283,9 +301,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           animationName = riveAnimationView.drawable.animationName,
           artboardName = riveAnimationView.artboardName
         )
+      } catch (e: RiveException) {
+        showRNError("${e.message}", e)
       }
-    )
-    httpClient.fetchUrl(url, context)
+    }, Response.ErrorListener {
+      showRNError("Unable to download Rive file $url", it)
+    })
+    queue.add(stringRequest)
   }
 
   fun setArtboardName(artboardName: String) {
@@ -324,24 +346,42 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   override fun onHostDestroy() {
     riveAnimationView.destroy()
   }
-}
 
-class HttpClient : ViewModel() {
-  var byteLiveData = MutableLiveData<ByteArray>()
-
-  fun fetchUrl(url: String, reactContext: ReactContext) {
-    viewModelScope.launch {
-      withContext(Dispatchers.IO) {
-        fetchAsync(url, reactContext)
-      }
-    }
+  private fun showRNError(message: String, error: Throwable) {
+    val errorMap = Arguments.createMap()
+    errorMap.putString("message", message)
+    errorMap.putArray("stack", createStackTraceForRN(error.stackTrace))
+    exceptionManager.reportException(errorMap)
   }
 
-  private fun fetchAsync(url: String, reactContext: ReactContext) {
-    try {
-      byteLiveData.postValue(URL(url).openStream().use { it.readBytes() })
-    } catch (e: IOException) {
-      RNLog.w(reactContext, "Failed to load .riv file from the $url")
+  private fun createStackTraceForRN(stackTrace: Array<StackTraceElement>): ReadableArray {
+    val stackTraceReadableArray = Arguments.createArray()
+    for (stackTraceElement in stackTrace) {
+      val stackTraceElementMap = Arguments.createMap()
+      stackTraceElementMap.putString("methodName", stackTraceElement.methodName)
+      stackTraceElementMap.putInt("lineNumber", stackTraceElement.lineNumber)
+      stackTraceElementMap.putString("file", stackTraceElement.fileName)
+
+      stackTraceReadableArray.pushMap(stackTraceElementMap)
+    }
+    return stackTraceReadableArray
+  }
+}
+
+class RNRiveFileRequest(
+  url: String,
+  private val listener: Response.Listener<ByteArray>,
+  errorListener: Response.ErrorListener
+) : Request<ByteArray>(Method.GET, url, errorListener) {
+
+  override fun deliverResponse(response: ByteArray) = listener.onResponse(response)
+
+  override fun parseNetworkResponse(response: NetworkResponse?): Response<ByteArray> {
+    return try {
+      val bytes = response?.data ?: ByteArray(0)
+      Response.success(bytes, HttpHeaderParser.parseCacheHeaders(response))
+    } catch (e: UnsupportedEncodingException) {
+      Response.error(ParseError(e))
     }
   }
 }

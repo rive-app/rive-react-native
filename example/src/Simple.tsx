@@ -2,6 +2,7 @@ import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import Rive, { Alignment, Fit } from 'rive-react-native';
 
+// const resourceName = 'v6_file';
 const resourceName = 'truck_v7';
 
 export default function Simple() {
