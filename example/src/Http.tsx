@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
-import Rive from 'rive-react-native';
+import Rive, { RNRiveError, RNRiveErrorType } from 'rive-react-native';
 
-const url = 'https://cdn.rive.app/animations/juice_v7.riv';
+// const url = 'https://cdn.rive.app/animations/juice_v7.riv';
 // const url =
 //   'https://drive.google.com/uc?export=download&id=1SNX_aDqW7tVxm4ZArOtE7F5zupcejrls';
 // const url = 'https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg';
+const url = 'wrong_url';
 export default function Http() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
@@ -13,8 +14,15 @@ export default function Http() {
         <Rive
           url={url}
           style={styles.animation}
-          onError={() => {
-            console.log('test');
+          onError={(riveError: RNRiveError) => {
+            switch (riveError.type) {
+              case RNRiveErrorType.IncorrectRiveFileUrl: {
+                console.log(`${riveError.message} :((((`);
+                return;
+              }
+              default:
+                return;
+            }
           }}
         />
       </ScrollView>
