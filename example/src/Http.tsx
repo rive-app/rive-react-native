@@ -10,7 +10,13 @@ export default function Http() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Rive url={url} style={styles.animation} />
+        <Rive
+          url={url}
+          style={styles.animation}
+          onError={() => {
+            console.log('test');
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );

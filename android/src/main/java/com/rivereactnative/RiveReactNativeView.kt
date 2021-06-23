@@ -1,10 +1,10 @@
 package com.rivereactnative
 
 import android.widget.FrameLayout
-import androidx.lifecycle.*
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.RiveDrawable
 import app.rive.runtime.kotlin.core.*
+import app.rive.runtime.kotlin.core.errors.*
 import com.android.volley.NetworkResponse
 import com.android.volley.ParseError
 import com.android.volley.Request
@@ -18,11 +18,7 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.modules.core.ExceptionsManagerModule
 import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.UIManagerHelper;
-import com.facebook.react.uimanager.events.EventDispatcher
-import java.io.IOException
 import java.io.UnsupportedEncodingException
-import java.net.URL
 import kotlin.IllegalStateException
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
@@ -31,13 +27,15 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var url: String? = null
   private var shouldBeReloaded = true
   private var exceptionManager: ExceptionsManagerModule
+  private var isUserHandlingErrors = false
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
     PAUSE("onPause"),
     STOP("onStop"),
     LOOP_END("onLoopEnd"),
-    STATE_CHANGED("onStateChanged");
+    STATE_CHANGED("onStateChanged"),
+    ERROR("onError");
 
     override fun toString(): String {
       return mName
@@ -142,7 +140,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("stateMachineName", stateMachineName)
     data.putString("stateName", stateName)
 
-
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
   }
 
@@ -245,11 +242,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             artboardName = riveAnimationView.artboardName
           )
           url = null
-        } catch (e: RiveException) {
-          showRNError("${e.message}", e)
+        } catch (ex: Exception) {
+          showRNError("${ex.message}", ex)
         }
       } else {
-        throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
+        handleFileNotFound()
       }
     }
   }
@@ -275,12 +272,19 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               artboardName = riveAnimationView.artboardName
             )
             url = null
-          } catch (e: RiveException) {
-            showRNError("${e.message}", e)
+          } catch (ex: RiveException) {
+            if (isUserHandlingErrors) {
+              val rnError = RNError.mapToRNError(ex)
+              rnError?.let {
+                sendErrorToRN(rnError)
+              }
+            } else {
+              showRNError("${ex.message}", ex)
+            }
           }
 
         } else {
-          throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
+          handleFileNotFound()
         }
       }
       shouldBeReloaded = false
@@ -305,7 +309,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         showRNError("${e.message}", e)
       }
     }, Response.ErrorListener {
-      showRNError("Unable to download Rive file $url", it)
+      if (isUserHandlingErrors) {
+        TODO("Implement IncorrectURLRiveFile")
+      } else {
+        showRNError("Unable to download Rive file $url", it)
+      }
+
     })
     queue.add(stringRequest)
   }
@@ -323,6 +332,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun setStateMachineName(stateMachineName: String) {
     riveAnimationView.drawable.stateMachineName = stateMachineName
     shouldBeReloaded = true
+  }
+
+  fun setIsUserHandlingErrors(isUserHandlingErrors: Boolean) {
+    this.isUserHandlingErrors = isUserHandlingErrors
   }
 
   fun fireState(stateMachineName: String, inputName: String) {
@@ -347,11 +360,31 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView.destroy()
   }
 
+
+  private fun handleFileNotFound() {
+    if (isUserHandlingErrors) {
+      val rnError = RNError.FileNotFound
+      rnError.message = "File resource not found. You must provide correct url or resourceName!"
+      sendErrorToRN(rnError)
+    } else {
+      throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
+    }
+  }
+
+  private fun sendErrorToRN(error: RNError) {
+    val reactContext = context as ReactContext
+    val data = Arguments.createMap()
+    data.putString("type", error.toString())
+    data.putString("message", error.message)
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.ERROR.toString(), data)
+  }
+
   private fun showRNError(message: String, error: Throwable) {
     val errorMap = Arguments.createMap()
     errorMap.putString("message", message)
     errorMap.putArray("stack", createStackTraceForRN(error.stackTrace))
     exceptionManager.reportException(errorMap)
+
   }
 
   private fun createStackTraceForRN(stackTrace: Array<StackTraceElement>): ReadableArray {
