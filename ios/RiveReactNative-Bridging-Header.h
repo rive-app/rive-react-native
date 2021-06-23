@@ -3,3 +3,6 @@
 #import <React/RCTViewManager.h>
 #import "React/RCTUIManager.h"
 #import <React/RCTUtils.h>
+#import "React/RCTExceptionsManager.h"
+
+

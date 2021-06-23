@@ -8,8 +8,8 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { RiveRef, Direction, LoopMode } from './types';
-import type { XOR } from './helpers';
+import { RiveRef, Direction, LoopMode, RNRiveError } from './types';
+import { convertErrorFromNativeToRN, XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
 
@@ -44,6 +44,13 @@ type RiveProps = {
       stateName: string;
     }>
   ) => void;
+  onError?: (
+    event: NativeSyntheticEvent<{
+      type: string;
+      message: string;
+    }>
+  ) => void;
+  isUserHandlingErrors: boolean;
   autoplay?: boolean;
   fit: Fit;
   alignment: Alignment;
@@ -65,6 +72,7 @@ type Props = {
   onStop?: (animationName: string, isStateMachine: boolean) => void;
   onLoopEnd?: (animationName: string, loopMode: LoopMode) => void;
   onStateChanged?: (stateMachineName: string, stateName: string) => void;
+  onError?: (rnRiveError: RNRiveError) => void;
   fit?: Fit;
   style?: ViewStyle;
   testID?: string;
@@ -86,6 +94,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onStop,
       onLoopEnd,
       onStateChanged,
+      onError,
       style,
       autoplay = true,
       resourceName,
@@ -100,6 +109,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     ref
   ) => {
     const riveRef = useRef(null);
+
+    const isUserHandlingErrors = onError !== undefined;
 
     const onPlayHandler = useCallback(
       (
@@ -164,6 +175,17 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         onStateChanged?.(stateMachineName, stateName);
       },
       [onStateChanged]
+    );
+
+    const onErrorHandler = useCallback(
+      (event: NativeSyntheticEvent<{ type: string; message: string }>) => {
+        const { type, message } = event.nativeEvent;
+        const rnRiveError = convertErrorFromNativeToRN({ type, message });
+        if (rnRiveError !== null) {
+          onError?.(rnRiveError);
+        }
+      },
+      [onError]
     );
 
     const play = useCallback<RiveRef['play']>(
@@ -272,6 +294,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         <RiveViewManager
           ref={riveRef}
           resourceName={resourceName}
+          isUserHandlingErrors={isUserHandlingErrors}
           autoplay={autoplay}
           fit={fit}
           url={url}
@@ -281,6 +304,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
           onStop={onStopHandler}
           onLoopEnd={onLoopEndHandler}
           onStateChanged={onStateChangedHandler}
+          onError={onErrorHandler}
           alignment={alignment}
           artboardName={artboardName}
           animationName={animationName}

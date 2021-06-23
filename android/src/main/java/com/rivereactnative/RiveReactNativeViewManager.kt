@@ -164,4 +164,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   fun setStateMachineName(view: RiveReactNativeView, stateMachineName: String) {
     view.setStateMachineName(stateMachineName)
   }
+  @ReactProp(name = "isUserHandlingErrors")
+  fun setIsUserHandlingErrors(view: RiveReactNativeView, isUserHandlingErrors: Boolean) {
+    view.setIsUserHandlingErrors(isUserHandlingErrors)
+  }
 }
