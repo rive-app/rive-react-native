@@ -17,7 +17,7 @@ export default function Http() {
           onError={(riveError: RNRiveError) => {
             switch (riveError.type) {
               case RNRiveErrorType.IncorrectRiveFileUrl: {
-                console.log('Incorrect rive file url :((((');
+                console.log(`${riveError.message} :((((`);
                 return;
               }
               default:

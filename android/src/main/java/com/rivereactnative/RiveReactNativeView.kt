@@ -311,7 +311,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }, Response.ErrorListener {
       if (isUserHandlingErrors) {
         val rnError = RNError.IncorrectRiveFileUrl
-        rnError.message = "Unable to download Rive file"
+        rnError.message = "Unable to download Rive file $url"
         sendErrorToRN(rnError)
       } else {
         showRNError("Unable to download Rive file $url", it)
