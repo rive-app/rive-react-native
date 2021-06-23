@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import Rive, { Alignment, Fit } from 'rive-react-native';
-
+import Rive, {
+  Alignment,
+  Fit,
+  RNRiveError,
+  RNRiveErrorType,
+} from 'rive-react-native';
+// const resourceName = 'v6_file';
 const resourceName = 'truck_v7';
 
 export default function Simple() {
@@ -13,6 +18,18 @@ export default function Simple() {
           alignment={Alignment.Center}
           style={styles.animation}
           resourceName={resourceName}
+          onError={(riveError: RNRiveError) => {
+            switch (riveError.type) {
+              case RNRiveErrorType.FileNotFound: {
+                console.log('File not found :(');
+                return;
+              }
+              case RNRiveErrorType.UnsupportedRuntimeVersion: {
+                console.log('Runtime version unsupported :((((');
+                return;
+              }
+            }
+          }}
         />
       </ScrollView>
     </SafeAreaView>

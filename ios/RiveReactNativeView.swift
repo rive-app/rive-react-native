@@ -11,6 +11,8 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     @objc var onStop: RCTDirectEventBlock?
     @objc var onLoopEnd: RCTDirectEventBlock?
     @objc var onStateChanged: RCTDirectEventBlock?
+    @objc var bridge: RCTBridge? = nil
+    
     
     @objc var resourceName: String? = nil {
         didSet {
@@ -82,10 +84,21 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         reloadIfNeeded()
     }
     
-    
     override init(frame: CGRect) {
         self.autoplay = true // will be changed by react native
         super.init(frame: frame)
+        riveView.playDelegate = self
+        riveView.pauseDelegate = self
+        riveView.stopDelegate = self
+        riveView.loopDelegate = self
+        riveView.stateChangeDelegate = self
+        addSubview(riveView)
+    }
+    
+    init(initWithBridge bridge: RCTBridge) {
+        self.bridge = bridge
+        self.autoplay = true
+        super.init(frame: CGRect())
         riveView.playDelegate = self
         riveView.pauseDelegate = self
         riveView.stopDelegate = self
@@ -124,7 +137,10 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
                         riveView.configure(safeResource,andArtboard: artboardName, andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
                     }
                 } else {
-                    fatalError("You must provide a url or a resourceName!")
+                    let exceptionsManager = bridge?.module(for: RCTExceptionsManager.self) as? RCTExceptionsManager
+                    print("exceptionsManager: \(exceptionsManager)")
+                    exceptionsManager?.reportFatalException("message", stack: nil, exceptionId: 1)
+//                    fatalError("You must provide a url or a resourceName!")
                 }
             }
             shouldBeReloaded = false
