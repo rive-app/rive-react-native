@@ -4,7 +4,8 @@ import app.rive.runtime.kotlin.core.errors.*
 
 enum class RNError(private val mValue: String) {
   FileNotFound("FileNotFound"),
-  UnsupportedRuntimeVersion("UnsupportedRuntimeVersion");
+  UnsupportedRuntimeVersion("UnsupportedRuntimeVersion"),
+  IncorrectRiveFileUrl("IncorrectRiveFileUrl");
 
   var message: String = "Default message"
 

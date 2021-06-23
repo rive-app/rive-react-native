@@ -60,6 +60,7 @@ export enum Direction {
 export enum RNRiveErrorType {
   FileNotFound = 'FileNotFound',
   UnsupportedRuntimeVersion = 'UnsupportedRuntimeVersion',
+  IncorrectRiveFileUrl = 'IncorrectRiveFileUrl',
 }
 
 export type RNRiveError = {
