@@ -277,9 +277,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           )
           url = null
         } catch (ex: RiveException) {
-          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-          rnRiveError?.let {
-            sendErrorToRN(rnRiveError)
+          if  (isUserHandlingErrors) {
+            val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+            rnRiveError?.let {
+              sendErrorToRN(rnRiveError)
+            }
+          } else {
+            showRNRiveError("${ex.message}", ex)
           }
         }
       } else {
