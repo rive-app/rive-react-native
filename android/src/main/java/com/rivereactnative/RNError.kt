@@ -24,7 +24,8 @@ enum class RNError(private val mValue: String) {
         is ArtboardException -> {
           val err = IncorrectArtboardName
           err.message = ex.message!!
-          return err        }
+          return err
+        }
         is UnsupportedRuntimeVersionException -> {
           val err = UnsupportedRuntimeVersion
           err.message = ex.message!!
@@ -38,7 +39,8 @@ enum class RNError(private val mValue: String) {
         is AnimationException -> {
           val err = IncorrectAnimationName
           err.message = ex.message!!
-          return err        }
+          return err
+        }
         is StateMachineException -> {
           val err = IncorrectStateMachineName
           err.message = ex.message!!

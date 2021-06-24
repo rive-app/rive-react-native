@@ -276,8 +276,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             artboardName = riveAnimationView.artboardName
           )
           url = null
-        } catch (ex: Exception) {
-          showRNError("${ex.message}", ex)
+        } catch (ex: RiveException) {
+          val rnError = RNError.mapToRNError(ex)
+          rnError?.let {
+            sendErrorToRN(rnError)
+          }
         }
       } else {
         handleFileNotFound()
