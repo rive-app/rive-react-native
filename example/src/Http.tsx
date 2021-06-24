@@ -20,6 +20,10 @@ export default function Http() {
                 console.log(`${riveError.message} :((((`);
                 return;
               }
+              case RNRiveErrorType.MalformedFile: {
+                console.log(`${riveError.message}`);
+                return;
+              }
               default:
                 return;
             }
