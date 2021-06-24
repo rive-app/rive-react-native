@@ -153,14 +153,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       try {
         riveAnimationView.play(animationNames, loop, direction, areStateMachines)
       } catch (ex: RiveException) {
-        if (isUserHandlingErrors) {
-          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-          rnRiveError?.let {
-            sendErrorToRN(rnRiveError)
-          }
-        } else {
-          showRNRiveError("${ex.message}", ex)
-        }
+        handleRiveException(ex)
       }
     }
 
@@ -173,14 +166,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       try {
         riveAnimationView.pause(animationNames, areStateMachines)
       } catch (ex: RiveException) {
-        if (isUserHandlingErrors) {
-          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-          rnRiveError?.let {
-            sendErrorToRN(rnRiveError)
-          }
-        } else {
-          showRNRiveError("${ex.message}", ex)
-        }
+        handleRiveException(ex)
       }
     }
   }
@@ -192,14 +178,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       try {
         riveAnimationView.stop(animationNames, areStateMachines)
       } catch (ex: RiveException) {
-        if (isUserHandlingErrors) {
-          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-          rnRiveError?.let {
-            sendErrorToRN(rnRiveError)
-          }
-        } else {
-          showRNRiveError("${ex.message}", ex)
-        }
+        handleRiveException(ex)
       }
     }
   }
@@ -277,14 +256,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           )
           url = null
         } catch (ex: RiveException) {
-          if  (isUserHandlingErrors) {
-            val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-            rnRiveError?.let {
-              sendErrorToRN(rnRiveError)
-            }
-          } else {
-            showRNRiveError("${ex.message}", ex)
-          }
+          handleRiveException(ex)
         }
       } else {
         handleFileNotFound()
@@ -314,14 +286,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             )
             url = null
           } catch (ex: RiveException) {
-            if (isUserHandlingErrors) {
-              val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-              rnRiveError?.let {
-                sendErrorToRN(rnRiveError)
-              }
-            } else {
-              showRNRiveError("${ex.message}", ex)
-            }
+            handleRiveException(ex)
           }
 
         } else {
@@ -347,14 +312,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           artboardName = riveAnimationView.artboardName
         )
       } catch (ex: RiveException) {
-        if (isUserHandlingErrors) {
-          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-          rnRiveError?.let {
-            sendErrorToRN(rnRiveError)
-          }
-        } else {
-          showRNRiveError("${ex.message}", ex)
-        }
+        handleRiveException(ex)
       }
     }, {
       if (isUserHandlingErrors) {
@@ -374,14 +332,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       riveAnimationView.artboardName = artboardName // it causes reloading
       riveAnimationView.drawable.invalidateSelf()
     } catch (ex: RiveException) {
-      if (isUserHandlingErrors) {
-        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-        rnRiveError?.let {
-          sendErrorToRN(rnRiveError)
-        }
-      } else {
-        showRNRiveError("${ex.message}", ex)
-      }
+      handleRiveException(ex)
     }
   }
 
@@ -403,14 +354,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     try {
       riveAnimationView.fireState(stateMachineName, inputName)
     } catch (ex: RiveException) {
-      if (isUserHandlingErrors) {
-        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-        rnRiveError?.let {
-          sendErrorToRN(rnRiveError)
-        }
-      } else {
-        showRNRiveError("${ex.message}", ex)
-      }
+      handleRiveException(ex);
     }
   }
 
@@ -418,14 +362,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     try {
       riveAnimationView.setBooleanState(stateMachineName, inputName, value)
     } catch (ex: RiveException) {
-      if (isUserHandlingErrors) {
-        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-        rnRiveError?.let {
-          sendErrorToRN(rnRiveError)
-        }
-      } else {
-        showRNRiveError("${ex.message}", ex)
-      }
+      handleRiveException(ex)
     }
   }
 
@@ -433,14 +370,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     try {
       riveAnimationView.setNumberState(stateMachineName, inputName, value)
     } catch (ex: RiveException) {
-      if (isUserHandlingErrors) {
-        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
-        rnRiveError?.let {
-          sendErrorToRN(rnRiveError)
-        }
-      } else {
-        showRNRiveError("${ex.message}", ex)
-      }
+      handleRiveException(ex)
     }
   }
 
@@ -454,6 +384,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView.destroy()
   }
 
+  private fun handleRiveException(exception: RiveException) {
+    if (isUserHandlingErrors) {
+      val rnRiveError = RNRiveError.mapToRNRiveError(exception)
+      rnRiveError?.let {
+        sendErrorToRN(rnRiveError)
+      }
+    } else {
+      showRNRiveError("${exception.message}", exception)
+    }
+  }
 
   private fun handleFileNotFound() {
     if (isUserHandlingErrors) {
