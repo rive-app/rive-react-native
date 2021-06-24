@@ -379,35 +379,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setAnimationName(animationName: String) {
-    try {
-      riveAnimationView.drawable.animationName = animationName
-      shouldBeReloaded = true
-    } catch (ex: RiveException) {
-      if (isUserHandlingErrors) {
-        val rnError = RNError.mapToRNError(ex)
-        rnError?.let {
-          sendErrorToRN(rnError)
-        }
-      } else {
-        showRNError("${ex.message}", ex)
-      }
-    }
+    riveAnimationView.drawable.animationName = animationName
+    shouldBeReloaded = true
   }
 
   fun setStateMachineName(stateMachineName: String) {
-    try {
-      riveAnimationView.drawable.stateMachineName = stateMachineName
-      shouldBeReloaded = true
-    } catch (ex: RiveException) {
-      if (isUserHandlingErrors) {
-        val rnError = RNError.mapToRNError(ex)
-        rnError?.let {
-          sendErrorToRN(rnError)
-        }
-      } else {
-        showRNError("${ex.message}", ex)
-      }
-    }
+    riveAnimationView.drawable.stateMachineName = stateMachineName
+    shouldBeReloaded = true
   }
 
   fun setIsUserHandlingErrors(isUserHandlingErrors: Boolean) {
