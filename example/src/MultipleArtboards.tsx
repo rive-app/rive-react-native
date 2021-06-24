@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, Text } from 'react-native';
-import Rive, { Fit } from 'rive-react-native';
+import Rive, { Fit, RNRiveError, RNRiveErrorType } from 'rive-react-native';
 
 export default function MultipleArtboards() {
   return (
@@ -11,9 +11,19 @@ export default function MultipleArtboards() {
           autoplay={true}
           style={styles.animation}
           fit={Fit.Contain}
-          artboardName={'Square'}
+          artboardName={'Squares'}
           animationName={'goaround'}
           resourceName={'artboard_animations'}
+          onError={(riveError: RNRiveError) => {
+            switch (riveError.type) {
+              case RNRiveErrorType.IncorrectArtboardName: {
+                console.log(`${riveError.message} :((((`);
+                return;
+              }
+              default:
+                return;
+            }
+          }}
         />
 
         <Text>Square - roll around</Text>
