@@ -154,12 +154,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         riveAnimationView.play(animationNames, loop, direction, areStateMachines)
       } catch (ex: RiveException) {
         if (isUserHandlingErrors) {
-          val rnError = RNError.mapToRNError(ex)
-          rnError?.let {
-            sendErrorToRN(rnError)
+          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+          rnRiveError?.let {
+            sendErrorToRN(rnRiveError)
           }
         } else {
-          showRNError("${ex.message}", ex)
+          showRNRiveError("${ex.message}", ex)
         }
       }
     }
@@ -174,12 +174,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         riveAnimationView.pause(animationNames, areStateMachines)
       } catch (ex: RiveException) {
         if (isUserHandlingErrors) {
-          val rnError = RNError.mapToRNError(ex)
-          rnError?.let {
-            sendErrorToRN(rnError)
+          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+          rnRiveError?.let {
+            sendErrorToRN(rnRiveError)
           }
         } else {
-          showRNError("${ex.message}", ex)
+          showRNRiveError("${ex.message}", ex)
         }
       }
     }
@@ -193,12 +193,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         riveAnimationView.stop(animationNames, areStateMachines)
       } catch (ex: RiveException) {
         if (isUserHandlingErrors) {
-          val rnError = RNError.mapToRNError(ex)
-          rnError?.let {
-            sendErrorToRN(rnError)
+          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+          rnRiveError?.let {
+            sendErrorToRN(rnRiveError)
           }
         } else {
-          showRNError("${ex.message}", ex)
+          showRNRiveError("${ex.message}", ex)
         }
       }
     }
@@ -277,9 +277,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           )
           url = null
         } catch (ex: RiveException) {
-          val rnError = RNError.mapToRNError(ex)
-          rnError?.let {
-            sendErrorToRN(rnError)
+          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+          rnRiveError?.let {
+            sendErrorToRN(rnRiveError)
           }
         }
       } else {
@@ -311,12 +311,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             url = null
           } catch (ex: RiveException) {
             if (isUserHandlingErrors) {
-              val rnError = RNError.mapToRNError(ex)
-              rnError?.let {
-                sendErrorToRN(rnError)
+              val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+              rnRiveError?.let {
+                sendErrorToRN(rnRiveError)
               }
             } else {
-              showRNError("${ex.message}", ex)
+              showRNRiveError("${ex.message}", ex)
             }
           }
 
@@ -331,7 +331,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun setUrlRiveResource(url: String, autoplay: Boolean = riveAnimationView.autoplay) {
     val queue = Volley.newRequestQueue(context)
-    val stringRequest = RNRiveFileRequest(url, Response.Listener<ByteArray> { bytes ->
+    val stringRequest = RNRiveFileRequest(url, { bytes ->
       try {
         riveAnimationView.setRiveBytes(
           bytes,
@@ -344,21 +344,21 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         )
       } catch (ex: RiveException) {
         if (isUserHandlingErrors) {
-          val rnError = RNError.mapToRNError(ex)
-          rnError?.let {
-            sendErrorToRN(rnError)
+          val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+          rnRiveError?.let {
+            sendErrorToRN(rnRiveError)
           }
         } else {
-          showRNError("${ex.message}", ex)
+          showRNRiveError("${ex.message}", ex)
         }
       }
-    }, Response.ErrorListener {
+    }, {
       if (isUserHandlingErrors) {
-        val rnError = RNError.IncorrectRiveFileUrl
-        rnError.message = "Unable to download Rive file $url"
-        sendErrorToRN(rnError)
+        val rnRiveError = RNRiveError.IncorrectRiveFileUrl
+        rnRiveError.message = "Unable to download Rive file $url"
+        sendErrorToRN(rnRiveError)
       } else {
-        showRNError("Unable to download Rive file $url", it)
+        showRNRiveError("Unable to download Rive file $url", it)
       }
 
     })
@@ -371,12 +371,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       riveAnimationView.drawable.invalidateSelf()
     } catch (ex: RiveException) {
       if (isUserHandlingErrors) {
-        val rnError = RNError.mapToRNError(ex)
-        rnError?.let {
-          sendErrorToRN(rnError)
+        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+        rnRiveError?.let {
+          sendErrorToRN(rnRiveError)
         }
       } else {
-        showRNError("${ex.message}", ex)
+        showRNRiveError("${ex.message}", ex)
       }
     }
   }
@@ -400,12 +400,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       riveAnimationView.fireState(stateMachineName, inputName)
     } catch (ex: RiveException) {
       if (isUserHandlingErrors) {
-        val rnError = RNError.mapToRNError(ex)
-        rnError?.let {
-          sendErrorToRN(rnError)
+        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+        rnRiveError?.let {
+          sendErrorToRN(rnRiveError)
         }
       } else {
-        showRNError("${ex.message}", ex)
+        showRNRiveError("${ex.message}", ex)
       }
     }
   }
@@ -415,12 +415,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       riveAnimationView.setBooleanState(stateMachineName, inputName, value)
     } catch (ex: RiveException) {
       if (isUserHandlingErrors) {
-        val rnError = RNError.mapToRNError(ex)
-        rnError?.let {
-          sendErrorToRN(rnError)
+        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+        rnRiveError?.let {
+          sendErrorToRN(rnRiveError)
         }
       } else {
-        showRNError("${ex.message}", ex)
+        showRNRiveError("${ex.message}", ex)
       }
     }
   }
@@ -430,12 +430,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       riveAnimationView.setNumberState(stateMachineName, inputName, value)
     } catch (ex: RiveException) {
       if (isUserHandlingErrors) {
-        val rnError = RNError.mapToRNError(ex)
-        rnError?.let {
-          sendErrorToRN(rnError)
+        val rnRiveError = RNRiveError.mapToRNRiveError(ex)
+        rnRiveError?.let {
+          sendErrorToRN(rnRiveError)
         }
       } else {
-        showRNError("${ex.message}", ex)
+        showRNRiveError("${ex.message}", ex)
       }
     }
   }
@@ -453,15 +453,15 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun handleFileNotFound() {
     if (isUserHandlingErrors) {
-      val rnError = RNError.FileNotFound
-      rnError.message = "File resource not found. You must provide correct url or resourceName!"
-      sendErrorToRN(rnError)
+      val rnRiveError = RNRiveError.FileNotFound
+      rnRiveError.message = "File resource not found. You must provide correct url or resourceName!"
+      sendErrorToRN(rnRiveError)
     } else {
       throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
     }
   }
 
-  private fun sendErrorToRN(error: RNError) {
+  private fun sendErrorToRN(error: RNRiveError) {
     val reactContext = context as ReactContext
     val data = Arguments.createMap()
     data.putString("type", error.toString())
@@ -469,7 +469,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.ERROR.toString(), data)
   }
 
-  private fun showRNError(message: String, error: Throwable) {
+  private fun showRNRiveError(message: String, error: Throwable) {
     val errorMap = Arguments.createMap()
     errorMap.putString("message", message)
     errorMap.putArray("stack", createStackTraceForRN(error.stackTrace))

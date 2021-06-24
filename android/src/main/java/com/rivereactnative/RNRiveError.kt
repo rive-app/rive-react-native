@@ -2,7 +2,7 @@ package com.rivereactnative
 
 import app.rive.runtime.kotlin.core.errors.*
 
-enum class RNError(private val mValue: String) {
+enum class RNRiveError(private val mValue: String) {
   FileNotFound("FileNotFound"),
   UnsupportedRuntimeVersion("UnsupportedRuntimeVersion"),
   IncorrectRiveFileUrl("IncorrectRiveFileUrl"),
@@ -19,7 +19,7 @@ enum class RNError(private val mValue: String) {
   }
 
   companion object {
-    fun mapToRNError(ex: RiveException): RNError? {
+    fun mapToRNRiveError(ex: RiveException): RNRiveError? {
       return when (ex) {
         is ArtboardException -> {
           val err = IncorrectArtboardName
