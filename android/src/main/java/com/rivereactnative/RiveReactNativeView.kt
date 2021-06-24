@@ -149,7 +149,19 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     if (animationNames.isEmpty()) {
       riveAnimationView.play(loop, direction) // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
     } else {
-      riveAnimationView.play(animationNames, loop, direction, areStateMachines)
+
+      try {
+        riveAnimationView.play(animationNames, loop, direction, areStateMachines)
+      } catch (ex: RiveException) {
+        if (isUserHandlingErrors) {
+          val rnError = RNError.mapToRNError(ex)
+          rnError?.let {
+            sendErrorToRN(rnError)
+          }
+        } else {
+          showRNError("${ex.message}", ex)
+        }
+      }
     }
 
   }
@@ -158,7 +170,18 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     if (animationNames.isEmpty()) {
       riveAnimationView.pause() // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
     } else {
-      riveAnimationView.pause(animationNames, areStateMachines)
+      try {
+        riveAnimationView.pause(animationNames, areStateMachines)
+      } catch (ex: RiveException) {
+        if (isUserHandlingErrors) {
+          val rnError = RNError.mapToRNError(ex)
+          rnError?.let {
+            sendErrorToRN(rnError)
+          }
+        } else {
+          showRNError("${ex.message}", ex)
+        }
+      }
     }
   }
 
@@ -166,7 +189,18 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     if (animationNames.isEmpty()) {
       resetRiveResource()
     } else {
-      riveAnimationView.stop(animationNames, areStateMachines)
+      try {
+        riveAnimationView.stop(animationNames, areStateMachines)
+      } catch (ex: RiveException) {
+        if (isUserHandlingErrors) {
+          val rnError = RNError.mapToRNError(ex)
+          rnError?.let {
+            sendErrorToRN(rnError)
+          }
+        } else {
+          showRNError("${ex.message}", ex)
+        }
+      }
     }
   }
 
@@ -305,8 +339,15 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           animationName = riveAnimationView.drawable.animationName,
           artboardName = riveAnimationView.artboardName
         )
-      } catch (e: RiveException) {
-        showRNError("${e.message}", e)
+      } catch (ex: RiveException) {
+        if (isUserHandlingErrors) {
+          val rnError = RNError.mapToRNError(ex)
+          rnError?.let {
+            sendErrorToRN(rnError)
+          }
+        } else {
+          showRNError("${ex.message}", ex)
+        }
       }
     }, Response.ErrorListener {
       if (isUserHandlingErrors) {
@@ -322,18 +363,51 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setArtboardName(artboardName: String) {
-    riveAnimationView.artboardName = artboardName // it causes reloading
-    riveAnimationView.drawable.invalidateSelf()
+    try {
+      riveAnimationView.artboardName = artboardName // it causes reloading
+      riveAnimationView.drawable.invalidateSelf()
+    } catch (ex: RiveException) {
+      if (isUserHandlingErrors) {
+        val rnError = RNError.mapToRNError(ex)
+        rnError?.let {
+          sendErrorToRN(rnError)
+        }
+      } else {
+        showRNError("${ex.message}", ex)
+      }
+    }
   }
 
   fun setAnimationName(animationName: String) {
-    riveAnimationView.drawable.animationName = animationName
-    shouldBeReloaded = true
+    try {
+      riveAnimationView.drawable.animationName = animationName
+      shouldBeReloaded = true
+    } catch (ex: RiveException) {
+      if (isUserHandlingErrors) {
+        val rnError = RNError.mapToRNError(ex)
+        rnError?.let {
+          sendErrorToRN(rnError)
+        }
+      } else {
+        showRNError("${ex.message}", ex)
+      }
+    }
   }
 
   fun setStateMachineName(stateMachineName: String) {
-    riveAnimationView.drawable.stateMachineName = stateMachineName
-    shouldBeReloaded = true
+    try {
+      riveAnimationView.drawable.stateMachineName = stateMachineName
+      shouldBeReloaded = true
+    } catch (ex: RiveException) {
+      if (isUserHandlingErrors) {
+        val rnError = RNError.mapToRNError(ex)
+        rnError?.let {
+          sendErrorToRN(rnError)
+        }
+      } else {
+        showRNError("${ex.message}", ex)
+      }
+    }
   }
 
   fun setIsUserHandlingErrors(isUserHandlingErrors: Boolean) {
@@ -341,15 +415,48 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun fireState(stateMachineName: String, inputName: String) {
-    riveAnimationView.fireState(stateMachineName, inputName)
+    try {
+      riveAnimationView.fireState(stateMachineName, inputName)
+    } catch (ex: RiveException) {
+      if (isUserHandlingErrors) {
+        val rnError = RNError.mapToRNError(ex)
+        rnError?.let {
+          sendErrorToRN(rnError)
+        }
+      } else {
+        showRNError("${ex.message}", ex)
+      }
+    }
   }
 
   fun setBooleanState(stateMachineName: String, inputName: String, value: Boolean) {
-    riveAnimationView.setBooleanState(stateMachineName, inputName, value)
+    try {
+      riveAnimationView.setBooleanState(stateMachineName, inputName, value)
+    } catch (ex: RiveException) {
+      if (isUserHandlingErrors) {
+        val rnError = RNError.mapToRNError(ex)
+        rnError?.let {
+          sendErrorToRN(rnError)
+        }
+      } else {
+        showRNError("${ex.message}", ex)
+      }
+    }
   }
 
   fun setNumberState(stateMachineName: String, inputName: String, value: Float) {
-    riveAnimationView.setNumberState(stateMachineName, inputName, value)
+    try {
+      riveAnimationView.setNumberState(stateMachineName, inputName, value)
+    } catch (ex: RiveException) {
+      if (isUserHandlingErrors) {
+        val rnError = RNError.mapToRNError(ex)
+        rnError?.let {
+          sendErrorToRN(rnError)
+        }
+      } else {
+        showRNError("${ex.message}", ex)
+      }
+    }
   }
 
   override fun onHostResume() {

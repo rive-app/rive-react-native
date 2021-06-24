@@ -5,7 +5,12 @@ import app.rive.runtime.kotlin.core.errors.*
 enum class RNError(private val mValue: String) {
   FileNotFound("FileNotFound"),
   UnsupportedRuntimeVersion("UnsupportedRuntimeVersion"),
-  IncorrectRiveFileUrl("IncorrectRiveFileUrl");
+  IncorrectRiveFileUrl("IncorrectRiveFileUrl"),
+  IncorrectAnimationName("IncorrectAnimationName"),
+  MalformedFile("MalformedFile"),
+  IncorrectArtboardName("IncorrectArtboardName"),
+  IncorrectStateMachineName("IncorrectStateMachineName"),
+  IncorrectStateMachineInput("IncorrectStateMachineInput");
 
   var message: String = "Default message"
 
@@ -17,21 +22,32 @@ enum class RNError(private val mValue: String) {
     fun mapToRNError(ex: RiveException): RNError? {
       return when (ex) {
         is ArtboardException -> {
-          null
-        }
+          val err = IncorrectArtboardName
+          err.message = ex.message!!
+          return err        }
         is UnsupportedRuntimeVersionException -> {
           val err = UnsupportedRuntimeVersion
           err.message = ex.message!!
           return err
         }
         is MalformedFileException -> {
-          null
+          val err = MalformedFile
+          err.message = ex.message!!
+          return err
         }
         is AnimationException -> {
-          null
-        }
+          val err = IncorrectAnimationName
+          err.message = ex.message!!
+          return err        }
         is StateMachineException -> {
-          null
+          val err = IncorrectStateMachineName
+          err.message = ex.message!!
+          return err
+        }
+        is StateMachineInputException -> {
+          val err = IncorrectStateMachineInput
+          err.message = ex.message!!
+          return err
         }
         else -> null
       }
