@@ -11,13 +11,17 @@ export default function MultipleArtboards() {
           autoplay={true}
           style={styles.animation}
           fit={Fit.Contain}
-          artboardName={'Squares'}
-          animationName={'goaround'}
+          artboardName={'Square'}
+          animationName={'goaroundsssss'}
           resourceName={'artboard_animations'}
           onError={(riveError: RNRiveError) => {
             switch (riveError.type) {
               case RNRiveErrorType.IncorrectArtboardName: {
                 console.log(`${riveError.message} :((((`);
+                return;
+              }
+              case RNRiveErrorType.IncorrectAnimationName: {
+                console.log(riveError.message + ' :((((((');
                 return;
               }
               default:

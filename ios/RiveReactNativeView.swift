@@ -121,12 +121,11 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
                     do {
                         let riveUrlResource = try getRiveURLResource(from: safeUrl)
                         try riveView.configure(riveUrlResource,andArtboard: artboardName ,andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
-                    } catch {
-                        
+                    } catch let error as NSError {
+                        handleRiveError(error: error)
                     }
                     
                 } else {
-                    //fatalError("You cannot pass both resourceName and url at the same time")
                     RCTLogError("You cannot pass both resourceName and url at the same time")
                 }
             } else {
@@ -136,16 +135,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
                         try riveView.configure(resourceRiveFile,andArtboard: artboardName, andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
                         
                     } catch let error as NSError {
-                        print("ERROR: \(error)")
-                        if isUserHandlingErrors {
-                            let rnRiveError = RNRiveError.mapToRNRiveError(riveError: error)
-                            if let safeRnRiveError = rnRiveError {
-                                onRNRiveError(safeRnRiveError)
-                            }
-                        } else {
-                            RCTLogError(error.localizedDescription)
-                        }
-                        
+                        handleRiveError(error: error)
                     }
                     
                 } else {
@@ -193,7 +183,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
                 try riveView.play(animationNames: animationNames, loop: loop, direction: direction, isStateMachine: areStateMachines)
             }
         } catch let error as NSError {
-            // handleRiveError(error)
+            handleRiveError(error: error)
         }
         
     }
@@ -223,19 +213,42 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     
     
     func fireState(stateMachineName: String, inputName: String) {
-        try! riveView.fireState(stateMachineName, inputName: inputName)
+        do {
+            try riveView.fireState(stateMachineName, inputName: inputName)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
     }
     
     func setNumberState(stateMachineName: String, inputName: String, value: Float) {
-        try! riveView.setNumberState(stateMachineName, inputName: inputName, value: value)
+        do {
+            try riveView.setNumberState(stateMachineName, inputName: inputName, value: value)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
     }
     
     func setBooleanState(stateMachineName: String, inputName: String, value: Bool) {
-        try! riveView.setBooleanState(stateMachineName, inputName: inputName, value: value)
+        do {
+            try riveView.setBooleanState(stateMachineName, inputName: inputName, value: value)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
     }
     
     private func onRNRiveError(_ rnRiveError: BaseRNRiveError) {
         onError?(["type": rnRiveError.type, "message": rnRiveError.message])
+    }
+    
+    private func handleRiveError(error: NSError) {
+        if isUserHandlingErrors {
+            let rnRiveError = RNRiveError.mapToRNRiveError(riveError: error)
+            if let safeRnRiveError = rnRiveError {
+                onRNRiveError(safeRnRiveError)
+            }
+        } else {
+            RCTLogError(error.localizedDescription)
+        }
     }
 }
 
