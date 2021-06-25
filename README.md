@@ -1,3 +1,6 @@
+![Build Status](https://github.com/rive-app/rive-react-native/actions/workflows/typecheck-lint.yml/badge.svg) 
+![Discord badge](https://img.shields.io/discord/532365473602600965)
+![Twitter handle](https://img.shields.io/twitter/follow/rive_app.svg?style=social&label=Follow)
 # rive-react-native
 
 This package implements native binding for Rive Runtime for iOS and Android.
