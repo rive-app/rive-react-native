@@ -5,7 +5,7 @@ import RiveRuntime
 class RiveReactNativeViewManager: RCTViewManager {
     
     override func view() -> UIView! {
-        return RiveReactNativeView(initWithBridge: bridge)
+        return RiveReactNativeView()
     }
     
     @objc func play(_ node: NSNumber, animationNames: [String], loopMode: String, direction: String, areStateMachines: Bool) {
