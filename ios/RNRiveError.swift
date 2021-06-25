@@ -46,8 +46,7 @@ struct RNRiveError {
         default:
             return nil
         }
-        
-        resultError?.message = riveError.localizedDescription
+        resultError?.message = riveError.userInfo["NSLocalizedDescriptionKey"] as! String
         return resultError
     }
 }
@@ -62,5 +61,5 @@ func createMalformedFileError() -> NSError {
 }
 
 func createIncorrectRiveURL(_ url: String) -> NSError {
-    return NSError(domain: RiveErrorDomain, code: 900, userInfo: ["NSLocalizedDescriptionKey": "Unable to download Rive file \(url)", "name": "IncorrectRiveFileURL"])
+    return NSError(domain: RiveErrorDomain, code: 900, userInfo: ["NSLocalizedDescriptionKey": "Unable to download Rive file from: \(url)", "name": "IncorrectRiveFileURL"])
 }
