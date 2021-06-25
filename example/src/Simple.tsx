@@ -17,7 +17,7 @@ export default function Simple() {
           fit={Fit.Contain}
           alignment={Alignment.Center}
           style={styles.animation}
-          animationName="dupa"
+          animationName="exampleName"
           resourceName={resourceName}
           onError={(riveError: RNRiveError) => {
             switch (riveError.type) {
