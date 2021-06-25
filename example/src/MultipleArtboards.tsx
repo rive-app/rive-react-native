@@ -12,7 +12,7 @@ export default function MultipleArtboards() {
           style={styles.animation}
           fit={Fit.Contain}
           artboardName={'Squares'}
-          animationName={'goaround'}
+          animationName={'goaroundsssss'}
           resourceName={'artboard_animations'}
           onError={(riveError: RNRiveError) => {
             switch (riveError.type) {
