@@ -137,7 +137,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
                     } catch let error as NSError {
                         handleRiveError(error: error)
                     }
-                
+                    
                 } else {
                     let message = "File resource not found. You must provide correct url or resourceName!"
                     if isUserHandlingErrors {
