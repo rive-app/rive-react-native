@@ -12,6 +12,8 @@ import LoopModeComponent from './LoopMode';
 import StateTrigger from './StateTrigger';
 import MultipleAnimations from './MultipleAnimations';
 import SimpleControls from './SimpleControls';
+import ErrorNotHandled from './ErrorNotHandled';
+import ErrorHandledManually from './ErrorHandledManually';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +45,11 @@ export default function App() {
             component={LoopModeComponent}
           />
           <Stack.Screen name="StateTrigger" component={StateTrigger} />
+          <Stack.Screen name="ErrorNotHandled" component={ErrorNotHandled} />
+          <Stack.Screen
+            name="ErrorHandledManually"
+            component={ErrorHandledManually}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
