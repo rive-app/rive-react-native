@@ -51,3 +51,16 @@ struct RNRiveError {
         return resultError
     }
 }
+
+
+func createFileNotFoundError() -> NSError {
+    return NSError(domain: RiveErrorDomain, code: 800, userInfo: ["NSLocalizedDescriptionKey": "File not found", "name": "FileNotFound"])
+}
+
+func createMalformedFileError() -> NSError {
+    return NSError(domain: RiveErrorDomain, code: RiveErrorCode.malformedFile.rawValue, userInfo: ["NSLocalizedDescriptionKey": "Malformed Rive File", "name": "Malformed"])
+}
+
+func createIncorrectRiveURL(_ url: String) -> NSError {
+    return NSError(domain: RiveErrorDomain, code: 900, userInfo: ["NSLocalizedDescriptionKey": "Unable to download Rive file \(url)", "name": "IncorrectRiveFileURL"])
+}
