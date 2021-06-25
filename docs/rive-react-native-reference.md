@@ -128,6 +128,14 @@ type: `(stateMachineName: string, stateName: string) => void`
 
 Callback function that is called when the internal animation state has been changed. It's tightly coupled with state machines feature.
 
+### onError _(optional)_
+
+type: `(riveError: RNRiveError) => void`
+
+Callback function that is called when error is thrown. Allows manual handling of thrown errors that are described by `RnRiveErrorType`.
+
+#####If not provided then default error screen is displayed in case of an error.
+
 ## Ref methods
 
 ### play
