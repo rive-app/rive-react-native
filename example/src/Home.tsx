@@ -78,6 +78,22 @@ export default function Home({ navigation }) {
         >
           State Trigger
         </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('ErrorHandledAutomatically')}
+          style={styles.buttonStyle}
+        >
+          Error Handled Automatically
+        </Button>
+
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('ErrorHandledManually')}
+          style={styles.buttonStyle}
+        >
+          Error Handled Manually
+        </Button>
       </ScrollView>
     </SafeAreaView>
   );
@@ -95,6 +111,6 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     marginBottom: 16,
-    minWidth: 220,
+    minWidth: 300,
   },
 });
