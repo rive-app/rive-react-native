@@ -17,9 +17,14 @@ export default function Simple() {
           fit={Fit.Contain}
           alignment={Alignment.Center}
           style={styles.animation}
+          animationName="exampleName"
           resourceName={resourceName}
           onError={(riveError: RNRiveError) => {
             switch (riveError.type) {
+              case RNRiveErrorType.IncorrectAnimationName: {
+                console.log('IncorrectAnimationName :(');
+                return;
+              }
               case RNRiveErrorType.FileNotFound: {
                 console.log('File not found :(');
                 return;

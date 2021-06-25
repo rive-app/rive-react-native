@@ -309,8 +309,8 @@ PODS:
     - React-jsi (= 0.63.4)
   - rive-react-native (2.0.0):
     - React-Core
-    - RiveRuntime (= 0.1.2)
-  - RiveRuntime (0.1.2)
+    - RiveRuntime (= 0.2.0)
+  - RiveRuntime (0.2.0)
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.16.0):
@@ -403,6 +403,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rive-react-native (from `../..`)
+  - RiveRuntime (from `https://github.com/rive-app/rive-ios-pod.git`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -424,7 +425,6 @@ SPEC REPOS:
     - FlipperKit
     - libevent
     - OpenSSL-Universal
-    - RiveRuntime
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -482,6 +482,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   rive-react-native:
     :path: "../.."
+  RiveRuntime:
+    :git: https://github.com/rive-app/rive-ios-pod.git
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
@@ -496,6 +498,11 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
+
+CHECKOUT OPTIONS:
+  RiveRuntime:
+    :commit: ffa2f5dfe04af1fc7a1437f92b9a36869a796d58
+    :git: https://github.com/rive-app/rive-ios-pod.git
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -535,8 +542,8 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  rive-react-native: a3abdc9e39e0cf7f4f07bd6206db773af0b42d6f
-  RiveRuntime: 93bb76c462f2afe67a4edaafa878f236f1c622bf
+  rive-react-native: de9ed369018bd620b87f42f444788f777edd7406
+  RiveRuntime: 4243aaa8702376e050a12f2b3178813e8474d633
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
@@ -546,6 +553,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 7a60b8501923e113027edc977b6f9c8e43435501
+PODFILE CHECKSUM: 5cc5b14beafa92c248bb8b441de1696d7a5ed03f
 
 COCOAPODS: 1.10.1
