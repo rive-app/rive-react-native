@@ -121,12 +121,11 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
                     do {
                         let riveUrlResource = try getRiveURLResource(from: safeUrl)
                         try riveView.configure(riveUrlResource,andArtboard: artboardName ,andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
-                    } catch {
-                        
+                    } catch let error as NSError {
+                        handleRiveError(error: error)
                     }
                     
                 } else {
-                    //fatalError("You cannot pass both resourceName and url at the same time")
                     RCTLogError("You cannot pass both resourceName and url at the same time")
                 }
             } else {
