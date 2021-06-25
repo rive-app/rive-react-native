@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Rive, {
-  Fit,
-  RiveRef,
-  RNRiveError,
-  RNRiveErrorType,
-} from 'rive-react-native';
+import Rive, { Fit, RiveRef } from 'rive-react-native';
 import { RadioButton } from 'react-native-paper';
 
 export default function StateMachine() {
@@ -35,20 +30,6 @@ export default function StateMachine() {
               'stateName: ',
               stateName
             );
-          }}
-          onError={(riveError: RNRiveError) => {
-            switch (riveError.type) {
-              case RNRiveErrorType.IncorrectStateMachineName: {
-                console.log(`${riveError.message} :((((`);
-                return;
-              }
-              case RNRiveErrorType.IncorrectStateMachineInput: {
-                console.log(`${riveError.message} :(((`);
-                return;
-              }
-              default:
-                return;
-            }
           }}
           resourceName={'skills'}
         />

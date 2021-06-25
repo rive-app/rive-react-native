@@ -1,11 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
-import Rive, {
-  Fit,
-  RiveRef,
-  RNRiveError,
-  RNRiveErrorType,
-} from 'rive-react-native';
+import Rive, { Fit, RiveRef } from 'rive-react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -34,20 +29,6 @@ export default function StateTrigger() {
           fit={Fit.Cover}
           style={styles.box}
           resourceName={'ui_swipe_left_to_delete'}
-          onError={(riveError: RNRiveError) => {
-            switch (riveError.type) {
-              case RNRiveErrorType.IncorrectStateMachineName: {
-                console.log(`${riveError.message} :((((`);
-                return;
-              }
-              case RNRiveErrorType.IncorrectStateMachineInput: {
-                console.log(`${riveError.message} :(((`);
-                return;
-              }
-              default:
-                return;
-            }
-          }}
         />
         <View style={[styles.fill, styles.fullWidth, styles.examplesGap]}>
           <View style={[styles.row, styles.controlsWrapper]}>

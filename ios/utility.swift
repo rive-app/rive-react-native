@@ -7,7 +7,6 @@ func getRiveFile(resourceName: String, resourceExt: String=".riv") throws ->  Ri
 
 func getRiveURLResource(from urlString: String) throws -> RiveFile {
     guard let url = URL.init(string: urlString) else {
-        RCTLogWarn("Failed to locate resource from \(urlString)")
         throw createIncorrectRiveURL(urlString)
         
     }
@@ -17,7 +16,7 @@ func getRiveURLResource(from urlString: String) throws -> RiveFile {
 
 func importRiveFile(from url: URL) throws ->  RiveFile {
     guard var data = try? Data(contentsOf: url) else {
-        throw createFileNotFoundError()
+        throw createIncorrectRiveURL(url.absoluteString)
     }
     let bytes = [UInt8](data)
     

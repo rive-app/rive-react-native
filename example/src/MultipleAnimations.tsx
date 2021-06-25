@@ -2,12 +2,7 @@ import * as React from 'react';
 import { useRef, useState } from 'react';
 import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import Rive, {
-  RiveRef,
-  Fit,
-  RNRiveError,
-  RNRiveErrorType,
-} from 'rive-react-native';
+import Rive, { RiveRef, Fit } from 'rive-react-native';
 
 const BUTTONS = ['stop', 'pause', 'play'] as const;
 type ButtonKeys = typeof BUTTONS[number];
@@ -72,16 +67,6 @@ export default function MultipleAnimations() {
               setActiveButtonGoaround('pause');
             } else {
               setActiveButtonRollaround('pause');
-            }
-          }}
-          onError={(riveError: RNRiveError) => {
-            switch (riveError.type) {
-              case RNRiveErrorType.IncorrectAnimationName: {
-                console.log(`${riveError.message} :((((`);
-                return;
-              }
-              default:
-                return;
             }
           }}
           autoplay={false}
