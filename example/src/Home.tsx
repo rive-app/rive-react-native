@@ -81,10 +81,10 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('ErrorHandledAutomatically')}
+          onPress={() => navigation.navigate('ErrorNotHandled')}
           style={styles.buttonStyle}
         >
-          Error Handled Automatically
+          Error not Handled
         </Button>
 
         <Button

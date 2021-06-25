@@ -132,9 +132,9 @@ Callback function that is called when the internal animation state has been chan
 
 type: `(riveError: RNRiveError) => void`
 
-Callback function that is called when error is thrown. Allows manual handling of thrown errors that are described by `RnRiveErrorType`.
+Callback function that is called when error is thrown. Allows manual handling of thrown errors that are described by [`RNRiveError`](./types.md#RNRiveError).
 
-#####If not provided then default error screen is displayed in case of an error.
+#####If not provided then default React Native error screen is displayed in case of an error.
 
 ## Ref methods
 

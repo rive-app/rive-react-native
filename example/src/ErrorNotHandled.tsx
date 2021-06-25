@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import Rive, { Alignment, Fit } from 'rive-react-native';
-const resourceName = 'v6_file';
 
-export default function ErrorHandledAutomatically() {
+const resourceName = 'v6_file'; // unsupported Rive runtime
+
+export default function ErrorNotHandled() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -11,7 +12,6 @@ export default function ErrorHandledAutomatically() {
           fit={Fit.Contain}
           alignment={Alignment.Center}
           style={styles.animation}
-          animationName="exampleName"
           resourceName={resourceName}
         />
       </ScrollView>
