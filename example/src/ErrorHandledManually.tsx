@@ -7,6 +7,8 @@ import Rive, {
   RNRiveErrorType,
 } from 'rive-react-native';
 
+// const malformedFileUrl = 'https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg';
+
 export default function ErrorHandledManually() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
