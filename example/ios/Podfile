@@ -9,7 +9,6 @@ target 'RiveReactNativeExample' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'rive-react-native', :path => '../..'
-  pod 'RiveRuntime', :git => 'https://github.com/rive-app/rive-ios-pod.git'
 
   # Enables Flipper.
   #
