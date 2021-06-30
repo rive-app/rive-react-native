@@ -1,14 +1,19 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
-import Rive from 'rive-react-native';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import Rive, { Alignment, Fit } from 'rive-react-native';
 
-const url = 'https://cdn.rive.app/animations/juice_v7.riv';
+const resourceName = 'v6_file'; // unsupported Rive runtime
 
-export default function Http() {
+export default function ErrorNotHandled() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Rive url={url} style={styles.animation} />
+        <Rive
+          fit={Fit.Contain}
+          alignment={Alignment.Center}
+          style={styles.animation}
+          resourceName={resourceName}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -22,11 +27,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 150,
   },
   animation: {
     width: '100%',
-    height: 400,
-    marginVertical: 20,
+    height: 600,
   },
 });

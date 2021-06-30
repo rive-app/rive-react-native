@@ -56,3 +56,19 @@ export enum Direction {
   Auto = 'auto',
   Forwards = 'forwards',
 }
+
+export enum RNRiveErrorType {
+  FileNotFound = 'FileNotFound',
+  UnsupportedRuntimeVersion = 'UnsupportedRuntimeVersion',
+  IncorrectRiveFileUrl = 'IncorrectRiveFileUrl',
+  IncorrectAnimationName = 'IncorrectAnimationName',
+  MalformedFile = 'MalformedFile',
+  IncorrectArtboardName = 'IncorrectArtboardName',
+  IncorrectStateMachineName = 'IncorrectStateMachineName',
+  IncorrectStateMachineInput = 'IncorrectStateMachineInput',
+}
+
+export type RNRiveError = {
+  message: string;
+  type: RNRiveErrorType;
+};

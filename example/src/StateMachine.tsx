@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Text } from 'react-native';
+import { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Rive, { Fit, RiveRef } from 'rive-react-native';
 import { RadioButton } from 'react-native-paper';
-import { useState } from 'react';
 
 export default function StateMachine() {
   const riveRef = React.useRef<RiveRef>(null);

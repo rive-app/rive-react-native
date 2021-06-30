@@ -1,7 +1,6 @@
 import UIKit
 import RiveRuntime
 
-
 @objc(RiveReactNativeViewManager)
 class RiveReactNativeViewManager: RCTViewManager {
     

@@ -11,6 +11,9 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     @objc var onStop: RCTDirectEventBlock?
     @objc var onLoopEnd: RCTDirectEventBlock?
     @objc var onStateChanged: RCTDirectEventBlock?
+    @objc var onError: RCTDirectEventBlock?
+    @objc var isUserHandlingErrors: Bool
+    
     
     @objc var resourceName: String? = nil {
         didSet {
@@ -76,15 +79,17 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         }
     }
     
+    
+    
     let riveView = RiveView()
     
     override func didSetProps(_ changedProps: [String]!) {
         reloadIfNeeded()
     }
     
-    
     override init(frame: CGRect) {
         self.autoplay = true // will be changed by react native
+        self.isUserHandlingErrors = false
         super.init(frame: frame)
         riveView.playDelegate = self
         riveView.pauseDelegate = self
@@ -104,6 +109,7 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     
     required init?(coder aDecoder: NSCoder) {
         self.autoplay = true
+        self.isUserHandlingErrors = false
         super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
@@ -112,19 +118,35 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         if(shouldBeReloaded) {
             if let safeUrl = url {
                 if !resourceFromBundle {
-                    if  let safeResource = getRiveURLResource(from: safeUrl) {
-                        riveView.configure(safeResource,andArtboard: artboardName ,andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                    do {
+                        let riveUrlResource = try getRiveURLResource(from: safeUrl)
+                        try riveView.configure(riveUrlResource,andArtboard: artboardName ,andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                    } catch let error as NSError {
+                        handleRiveError(error: error)
                     }
+                    
                 } else {
-                    fatalError("You cannot pass both resourceName and url at the same time")
+                    RCTLogError("You cannot pass both resourceName and url at the same time")
                 }
             } else {
                 if resourceFromBundle, let safeResourceName = resourceName {
-                    if let safeResource = getRiveFile(resourceName: safeResourceName) {
-                        riveView.configure(safeResource,andArtboard: artboardName, andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                    do {
+                        let resourceRiveFile = try getRiveFile(resourceName: safeResourceName)
+                        try riveView.configure(resourceRiveFile,andArtboard: artboardName, andAnimation: animationName, andStateMachine: stateMachineName, andAutoPlay: autoplay)
+                        
+                    } catch let error as NSError {
+                        handleRiveError(error: error)
                     }
+                    
                 } else {
-                    fatalError("You must provide a url or a resourceName!")
+                    let message = "File resource not found. You must provide correct url or resourceName!"
+                    if isUserHandlingErrors {
+                        var rnRiveError = RNRiveError.FileNotFound
+                        rnRiveError.message = message
+                        onRNRiveError(rnRiveError)
+                    } else {
+                        RCTLogError(message)
+                    }
                 }
             }
             shouldBeReloaded = false
@@ -154,10 +176,14 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
     func play(animationNames: [String], rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Bool) {
         let loop = RNLoopMode.mapToRiveLoop(rnLoopMode: rnLoopMode)
         let direction = RNDirection.mapToRiveDirection(rnDirection: rnDirection)
-        if animationNames.isEmpty {
-            riveView.play(loop: loop, direction: direction)
-        } else {
-            riveView.play(animationNames: animationNames, loop: loop, direction: direction, isStateMachine: areStateMachines)
+        do {
+            if animationNames.isEmpty {
+                try riveView.play(loop: loop, direction: direction)
+            } else {
+                try riveView.play(animationNames: animationNames, loop: loop, direction: direction, isStateMachine: areStateMachines)
+            }
+        } catch let error as NSError {
+            handleRiveError(error: error)
         }
         
     }
@@ -185,16 +211,44 @@ class RiveReactNativeView: UIView, PlayDelegate, PauseDelegate, StopDelegate, Lo
         reloadIfNeeded()
     }
     
+    
     func fireState(stateMachineName: String, inputName: String) {
-        riveView.fireState(stateMachineName, inputName: inputName)
+        do {
+            try riveView.fireState(stateMachineName, inputName: inputName)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
     }
     
     func setNumberState(stateMachineName: String, inputName: String, value: Float) {
-        riveView.setNumberState(stateMachineName, inputName: inputName, value: value)
+        do {
+            try riveView.setNumberState(stateMachineName, inputName: inputName, value: value)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
     }
     
     func setBooleanState(stateMachineName: String, inputName: String, value: Bool) {
-        riveView.setBooleanState(stateMachineName, inputName: inputName, value: value)
+        do {
+            try riveView.setBooleanState(stateMachineName, inputName: inputName, value: value)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
+    }
+    
+    private func onRNRiveError(_ rnRiveError: BaseRNRiveError) {
+        onError?(["type": rnRiveError.type, "message": rnRiveError.message])
+    }
+    
+    private func handleRiveError(error: NSError) {
+        if isUserHandlingErrors {
+            let rnRiveError = RNRiveError.mapToRNRiveError(riveError: error)
+            if let safeRnRiveError = rnRiveError {
+                onRNRiveError(safeRnRiveError)
+            }
+        } else {
+            RCTLogError(error.localizedDescription)
+        }
     }
 }
 
