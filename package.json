@@ -1,6 +1,6 @@
 {
   "name": "rive-react-native",
-  "version": "2.1.27",
+  "version": "2.1.28",
   "description": "Rive React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
