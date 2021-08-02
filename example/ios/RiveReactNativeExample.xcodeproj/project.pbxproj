@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RiveReactNativeExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RiveReactNativeExampleTests.m */; };
+		042FD22726B81BD1004556A3 /* constrained.riv in Resources */ = {isa = PBXBuildFile; fileRef = 042FD22626B81BD1004556A3 /* constrained.riv */; };
 		04A886F326A990050078530A /* two_bone_ik.riv in Resources */ = {isa = PBXBuildFile; fileRef = 04A886F226A990050078530A /* two_bone_ik.riv */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -49,6 +50,7 @@
 		00E356EE1AD99517003FC87E /* RiveReactNativeExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RiveReactNativeExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RiveReactNativeExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RiveReactNativeExampleTests.m; sourceTree = "<group>"; };
+		042FD22626B81BD1004556A3 /* constrained.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = constrained.riv; sourceTree = "<group>"; };
 		04A886F226A990050078530A /* two_bone_ik.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = two_bone_ik.riv; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RiveReactNativeExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RiveReactNativeExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RiveReactNativeExample/AppDelegate.h; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 		9D4FE60A26493B460098BF6A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				042FD22626B81BD1004556A3 /* constrained.riv */,
 				04A886F226A990050078530A /* two_bone_ik.riv */,
 				9DBF1CC42684937E0008391A /* v6_file.riv */,
 				9D879D0E265BF5B300D01424 /* skills.riv */,
@@ -345,6 +348,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D879D00265642BA00D01424 /* truck_v7.riv in Resources */,
+				042FD22726B81BD1004556A3 /* constrained.riv in Resources */,
 				9D879D0B26578A5E00D01424 /* artboard_animations.riv in Resources */,
 				04A886F326A990050078530A /* two_bone_ik.riv in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
