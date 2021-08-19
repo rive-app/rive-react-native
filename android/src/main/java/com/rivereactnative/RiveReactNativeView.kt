@@ -26,7 +26,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var resId: Int = -1
   private var url: String? = null
   private var shouldBeReloaded = true
-  private var exceptionManager: ExceptionsManagerModule
+  private var exceptionManager: ExceptionsManagerModule?
   private var isUserHandlingErrors = false
 
   enum class Events(private val mName: String) {
@@ -417,7 +417,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     val errorMap = Arguments.createMap()
     errorMap.putString("message", message)
     errorMap.putArray("stack", createStackTraceForRN(error.stackTrace))
-    exceptionManager.reportException(errorMap)
+    exceptionManager?.reportException(errorMap)
 
   }
 
