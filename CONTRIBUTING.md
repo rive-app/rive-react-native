@@ -55,6 +55,21 @@ To edit the Objective-C files, open `example/ios/RiveReactNativeExample.xcworksp
 
 To edit the Kotlin files, open `example/android` in Android studio and find the source files at `rivereactnative` under `Android`.
 
+### Debugging against local rive-android
+
+Sometimes it maybe necessary to debug the react native package against local installs of the runtime.
+
+Build your local `rive-android` package (run the `rive-android:kotlin[build]` gradle command) and then simply update the `android/build.gradle` file.
+
+Comment out the rive-android dependency and replace it with the file pointer to the release. e.g.:
+
+```sh
+// implementation 'app.rive:rive-android:0.2.14'
+implementation files("/Users/maxwelltalbot/development/rive/rive-android/kotlin/build/outputs/aar/kotlin-release.aar")
+```
+
+If you are looking to debug actual log outputs from the rive-android bundle as opposed to react-native itself, you may need to connect logcat to this process.
+
 ### Commit message convention
 
 We follow the [conventional commits specification](https://www.conventionalcommits.org/en) for our commit messages:
