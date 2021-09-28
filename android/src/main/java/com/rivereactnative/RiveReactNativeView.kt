@@ -13,7 +13,6 @@ import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.LifecycleEventListener
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.modules.core.ExceptionsManagerModule
@@ -21,7 +20,8 @@ import com.facebook.react.uimanager.ThemedReactContext
 import java.io.UnsupportedEncodingException
 import kotlin.IllegalStateException
 
-class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context), LifecycleEventListener {
+
+class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
   private var riveAnimationView: RiveAnimationView
   private var resId: Int = -1
   private var url: String? = null
@@ -43,7 +43,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   init {
-    context.addLifecycleEventListener(this)
     riveAnimationView = RiveAnimationView(context)
     exceptionManager = (context as ReactContext).getNativeModule(ExceptionsManagerModule::class.java)
     val listener = object : RiveDrawable.Listener {
@@ -372,16 +371,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     } catch (ex: RiveException) {
       handleRiveException(ex)
     }
-  }
-
-  override fun onHostResume() {
-  }
-
-  override fun onHostPause() {
-  }
-
-  override fun onHostDestroy() {
-    riveAnimationView.destroy()
   }
 
   private fun handleRiveException(exception: RiveException) {
