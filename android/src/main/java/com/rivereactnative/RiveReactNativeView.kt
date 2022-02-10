@@ -1,8 +1,9 @@
 package com.rivereactnative
 
 import android.widget.FrameLayout
+import androidx.startup.AppInitializer
 import app.rive.runtime.kotlin.RiveAnimationView
-import app.rive.runtime.kotlin.RiveDrawable
+import app.rive.runtime.kotlin.RiveArtboardRenderer
 import app.rive.runtime.kotlin.core.*
 import app.rive.runtime.kotlin.core.errors.*
 import com.android.volley.NetworkResponse
@@ -45,7 +46,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   init {
     riveAnimationView = RiveAnimationView(context)
     exceptionManager = (context as ReactContext).getNativeModule(ExceptionsManagerModule::class.java)
-    val listener = object : RiveDrawable.Listener {
+    val listener = object : RiveArtboardRenderer.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
           onLoopEnd(animation.animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
@@ -185,7 +186,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun reset() {
     url?.let {
       if (resId == -1) {
-        riveAnimationView.drawable.reset()
+        riveAnimationView.renderer.reset()
       }
     } ?: run {
       if (resId != -1) {
@@ -214,13 +215,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun setFit(rnFit: RNFit) {
     val riveFit = RNFit.mapToRiveFit(rnFit)
     riveAnimationView.fit = riveFit
-    riveAnimationView.drawable.invalidateSelf() // TODO: probably it should be a responsibility of rive-android itself
   }
 
   fun setAlignment(rnAlignment: RNAlignment) {
     val riveAlignment = RNAlignment.mapToRiveAlignment(rnAlignment)
     riveAnimationView.alignment = riveAlignment
-    riveAnimationView.drawable.invalidateSelf() // TODO: probably it should be a responsibility of rive-android itself
   }
 
   fun setAutoplay(autoplay: Boolean) {
@@ -249,8 +248,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             fit = riveAnimationView.fit,
             alignment = riveAnimationView.alignment,
             autoplay = false,
-            stateMachineName = riveAnimationView.drawable.stateMachineName,
-            animationName = riveAnimationView.drawable.animationName,
+            stateMachineName = riveAnimationView.renderer.stateMachineName,
+            animationName = riveAnimationView.renderer.animationName,
             artboardName = riveAnimationView.artboardName
           )
           url = null
@@ -279,8 +278,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               fit = riveAnimationView.fit,
               alignment = riveAnimationView.alignment,
               autoplay = riveAnimationView.autoplay,
-              stateMachineName = riveAnimationView.drawable.stateMachineName,
-              animationName = riveAnimationView.drawable.animationName,
+              stateMachineName = riveAnimationView.renderer.stateMachineName,
+              animationName = riveAnimationView.renderer.animationName,
               artboardName = riveAnimationView.artboardName
             )
             url = null
@@ -306,8 +305,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           fit = riveAnimationView.fit,
           alignment = riveAnimationView.alignment,
           autoplay = autoplay,
-          stateMachineName = riveAnimationView.drawable.stateMachineName,
-          animationName = riveAnimationView.drawable.animationName,
+          stateMachineName = riveAnimationView.renderer.stateMachineName,
+          animationName = riveAnimationView.renderer.animationName,
           artboardName = riveAnimationView.artboardName
         )
       } catch (ex: RiveException) {
@@ -329,19 +328,18 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun setArtboardName(artboardName: String) {
     try {
       riveAnimationView.artboardName = artboardName // it causes reloading
-      riveAnimationView.drawable.invalidateSelf()
     } catch (ex: RiveException) {
       handleRiveException(ex)
     }
   }
 
   fun setAnimationName(animationName: String) {
-    riveAnimationView.drawable.animationName = animationName
+    riveAnimationView.renderer.animationName = animationName
     shouldBeReloaded = true
   }
 
   fun setStateMachineName(stateMachineName: String) {
-    riveAnimationView.drawable.stateMachineName = stateMachineName
+    riveAnimationView.renderer.stateMachineName = stateMachineName
     shouldBeReloaded = true
   }
 
