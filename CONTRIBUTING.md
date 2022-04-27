@@ -55,6 +55,30 @@ To edit the Objective-C files, open `example/ios/RiveReactNativeExample.xcworksp
 
 To edit the Kotlin files, open `example/android` in Android studio and find the source files at `rivereactnative` under `Android`.
 
+### Upgrading Rive iOS and Android runtime dependencies
+
+#### Updating iOS RiveRuntime
+
+Before running `yarn` at the root level of the project, set the appropriate version of the iOS runtime in `rive-react-native.podspec` at the root of the folder:
+
+```
+s.dependency "RiveRuntime", "1.0.18"
+```
+
+In the example folder, run the following command to update the example project to retrieve the expected `RiveRuntime` dependency you're upgrading to:
+
+```
+pod update RiveRuntime
+```
+
+#### Updating Android runtime
+
+In the top-level `android` folder, change the dependency version in `build.gradle` to the version you're looking to upgrade to in the dependencies:
+
+```
+implementation 'app.rive:rive-android:2.0.26'
+```
+
 ### Debugging against local rive-android
 
 Sometimes it maybe necessary to debug the react native package against local installs of the runtime.

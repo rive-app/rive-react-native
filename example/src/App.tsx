@@ -14,6 +14,7 @@ import MultipleAnimations from './MultipleAnimations';
 import SimpleControls from './SimpleControls';
 import ErrorNotHandled from './ErrorNotHandled';
 import ErrorHandledManually from './ErrorHandledManually';
+import MeshExample from './MeshExample';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name="SimpleControls" component={SimpleControls} />
           <Stack.Screen name="Layout" component={Layout} />
           <Stack.Screen name="Http" component={Http} />
+          <Stack.Screen name="MeshExample" component={MeshExample} />
           <Stack.Screen name="StateMachine" component={StateMachine} />
           <Stack.Screen
             name="MultipleArtboards"
