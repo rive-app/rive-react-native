@@ -307,10 +307,10 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - rive-react-native (2.1.35):
+  - rive-react-native (2.1.36):
     - React-Core
-    - RiveRuntime (= 0.15.8)
-  - RiveRuntime (0.15.8)
+    - RiveRuntime (= 1.0.18)
+  - RiveRuntime (1.0.18)
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (1.16.0):
@@ -535,8 +535,8 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  rive-react-native: f496fc6f258347c2389eed9b2270ac543dfd0df7
-  RiveRuntime: 06472caa79fbb6815b27b475f777cf5543d1813f
+  rive-react-native: f3e4552e7f2aeabebd7d2674330ef759bc51faf8
+  RiveRuntime: e36e481478d5332694427ddbc12cc50ccfa8a1bc
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211

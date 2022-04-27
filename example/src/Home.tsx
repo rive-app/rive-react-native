@@ -25,6 +25,14 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
+          onPress={() => navigation.navigate('MeshExample')}
+          style={styles.buttonStyle}
+        >
+          Mesh Example
+        </Button>
+
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('Layout')}
           style={styles.buttonStyle}
         >
