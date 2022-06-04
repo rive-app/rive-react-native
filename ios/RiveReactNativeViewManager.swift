@@ -56,6 +56,24 @@ class RiveReactNativeViewManager: RCTViewManager {
             component.setNumberState(stateMachineName: stateMachineName, inputName: inputName, value: Float(truncating: value))
         }
     }
+    
+    @objc func touchBegan(_ node: NSNumber, x: NSNumber, y: NSNumber) {
+        DispatchQueue.main.async {
+            let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            let touch = CGPoint(x: x.doubleValue, y: y.doubleValue)
+            view.touchBegan(touch)
+            print("Touch Began")
+        }
+    }
+    
+    @objc func touchEnded(_ node: NSNumber, x: NSNumber, y: NSNumber) {
+        DispatchQueue.main.async {
+            let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            let touch = CGPoint(x: x.doubleValue, y: y.doubleValue)
+            view.touchEnded(touch)
+            print("Touch Ended")
+        }
+    }
 
     @objc static override func requiresMainQueueSetup() -> Bool {
         return false

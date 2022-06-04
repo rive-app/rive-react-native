@@ -7,6 +7,8 @@ import {
   NativeSyntheticEvent,
   StyleSheet,
   View,
+  TouchableWithoutFeedback,
+  GestureResponderEvent,
 } from 'react-native';
 import { RiveRef, Direction, LoopMode, RNRiveError } from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
@@ -281,6 +283,29 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
+
+    const touchBegan = useCallback<RiveRef['touchBegan']>(
+      (x: Number, y: Number) => {
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current), 
+          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchBegan, 
+          [x, y]
+        );
+      },
+      []
+    );
+
+    const touchEnded = useCallback<RiveRef['touchEnded']>(
+      (x: Number, y: Number) => {
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current), 
+          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchEnded, 
+          [x, y]
+        );
+      },
+      []
+    );
+
     useImperativeHandle(
       ref,
       () => ({
@@ -290,10 +315,12 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         pause,
         stop,
         reset,
+        touchBegan,
+        touchEnded,
       }),
-      [play, pause, stop, reset, setInputState, fireState]
+      [play, pause, stop, reset, setInputState, fireState, touchBegan, touchEnded]
     );
-
+    
     return (
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
         <RiveViewManager
@@ -315,8 +342,12 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
           animationName={animationName}
           stateMachineName={stateMachineName}
         />
-
-        <View style={styles.children}>{children}</View>
+        
+        <TouchableWithoutFeedback onPressIn={(event:GestureResponderEvent) => touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)}>
+        <TouchableWithoutFeedback onPressOut={(event:GestureResponderEvent) => touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)}>
+          <View style={styles.animation}>{children}</View>
+        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
