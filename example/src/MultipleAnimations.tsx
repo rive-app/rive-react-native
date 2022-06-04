@@ -70,7 +70,7 @@ export default function MultipleAnimations() {
             }
           }}
           autoplay={false}
-          fit={Fit.Cover}
+          fit={Fit.Contain}
           style={styles.box}
           resourceName={'artboard_animations'}
         />
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   },
   box: {
     width: '100%',
-    height: 400,
+    height: 600,
     marginVertical: 20,
   },
   row: {

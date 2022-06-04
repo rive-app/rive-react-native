@@ -26,6 +26,10 @@ RCT_EXTERN_METHOD(reset:(nonnull NSNumber *)node)
 RCT_EXTERN_METHOD(fireState:(nonnull NSNumber *)node stateMachineName:(nonnull NSString)stateMachineName inputName:(nonnull NSString)inputName)
 RCT_EXTERN_METHOD(setBooleanState:(nonnull NSNumber *)node stateMachineName:(nonnull NSString)stateMachineName inputName:(nonnull NSString)inputName value:(BOOL)value)
 RCT_EXTERN_METHOD(setNumberState:(nonnull NSNumber *)node stateMachineName:(nonnull NSString)stateMachineName inputName:(nonnull NSString)inputName value:(nonnull NSNumber *)value)
+RCT_EXTERN_METHOD(touchBegan:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
+RCT_EXTERN_METHOD(touchMoved:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
+RCT_EXTERN_METHOD(touchEnded:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
+RCT_EXTERN_METHOD(touchCancelled:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
 
 @end
 
