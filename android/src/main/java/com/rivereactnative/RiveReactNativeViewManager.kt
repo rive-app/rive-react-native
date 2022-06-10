@@ -1,5 +1,6 @@
 package com.rivereactnative
 
+import android.view.MotionEvent
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
@@ -14,7 +15,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     RESET,
     FIRE_STATE,
     SET_BOOLEAN_STATE,
-    SET_NUMBER_STATE
+    SET_NUMBER_STATE,
+    TOUCH_BEGAN,
+    TOUCH_ENDED
   }
 
 
@@ -43,12 +46,15 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
       "setBooleanState",
       Commands.SET_BOOLEAN_STATE.ordinal,
       "setNumberState",
+      Commands.SET_NUMBER_STATE.ordinal,
+      "touchBegan",
       Commands.SET_NUMBER_STATE.ordinal
     )
   }
 
   override fun receiveCommand(view: RiveReactNativeView, commandType: Int, args: ReadableArray?) {
     when (commandType) {
+      // Playback Controls
       Commands.PLAY.ordinal -> {
         args?.let {
           val animationNames = it.getArray(0)!!
@@ -82,6 +88,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
       }
       Commands.RESET.ordinal -> view.reset()
+
+      // StateMachine inputs
       Commands.FIRE_STATE.ordinal -> {
         args?.let {
           val stateMachineName = it.getString(0)!!
@@ -111,6 +119,30 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+
+      // Touch Events
+      Commands.TOUCH_BEGAN.ordinal -> {
+        args?.let {
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
+          val value = it.getDouble(2)
+          view.run {
+//            renderer.pointerEvent(PointerEvents.POINTER_DOWN, x,y)
+          }
+        }
+      }
+      Commands.TOUCH_ENDED.ordinal -> {
+        args?.let {
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
+          val value = it.getDouble(2)
+          view.run {
+//            this.riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_UP, x,y)
+            this.onStateChanged()
+          }
+        }
+      }
+      // Other
       else -> {
       }
     }
