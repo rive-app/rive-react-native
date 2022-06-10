@@ -283,12 +283,11 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
-
     const touchBegan = useCallback<RiveRef['touchBegan']>(
       (x: Number, y: Number) => {
         UIManager.dispatchViewManagerCommand(
-          findNodeHandle(riveRef.current), 
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchBegan, 
+          findNodeHandle(riveRef.current),
+          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchBegan,
           [x, y]
         );
       },
@@ -298,8 +297,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     const touchEnded = useCallback<RiveRef['touchEnded']>(
       (x: Number, y: Number) => {
         UIManager.dispatchViewManagerCommand(
-          findNodeHandle(riveRef.current), 
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchEnded, 
+          findNodeHandle(riveRef.current),
+          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchEnded,
           [x, y]
         );
       },
@@ -318,9 +317,18 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         touchBegan,
         touchEnded,
       }),
-      [play, pause, stop, reset, setInputState, fireState, touchBegan, touchEnded]
+      [
+        play,
+        pause,
+        stop,
+        reset,
+        setInputState,
+        fireState,
+        touchBegan,
+        touchEnded,
+      ]
     );
-    
+
     return (
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
         <RiveViewManager
@@ -342,11 +350,22 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
           animationName={animationName}
           stateMachineName={stateMachineName}
         />
-        
-        <TouchableWithoutFeedback onPressIn={(event:GestureResponderEvent) => touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)}>
-        <TouchableWithoutFeedback onPressOut={(event:GestureResponderEvent) => touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)}>
-          <View style={styles.animation}>{children}</View>
-        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback
+          onPressIn={(event: GestureResponderEvent) =>
+            touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)
+          }
+        >
+          <TouchableWithoutFeedback
+            onPressOut={(event: GestureResponderEvent) =>
+              touchEnded(
+                event.nativeEvent.locationX,
+                event.nativeEvent.locationY
+              )
+            }
+          >
+            <View style={styles.animation}>{children}</View>
+          </TouchableWithoutFeedback>
         </TouchableWithoutFeedback>
       </View>
     );

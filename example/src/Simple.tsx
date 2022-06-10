@@ -5,7 +5,7 @@ import Rive, { Alignment, Fit } from 'rive-react-native';
 const resourceName = 'hero_editor';
 
 export default function Simple() {
-  console.log("Simple");
+  console.log('Simple');
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -14,7 +14,7 @@ export default function Simple() {
           alignment={Alignment.Center}
           style={styles.animation}
           resourceName={resourceName}
-          stateMachineName={"Jellyfish"}
+          stateMachineName={'Jellyfish'}
         />
       </ScrollView>
     </SafeAreaView>

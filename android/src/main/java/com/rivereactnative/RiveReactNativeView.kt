@@ -77,7 +77,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         onStateChanged(stateMachineName, stateName)
       }
 
-
       override fun notifyStop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
           onStop(animation.animation.name)
@@ -141,6 +140,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("stateName", stateName)
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
+  }
+
+  fun onTouchDown(x: Float, y: Float) {
+    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_DOWN, x,y)
   }
 
   fun play(animationNames: List<String>, rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Boolean) {
