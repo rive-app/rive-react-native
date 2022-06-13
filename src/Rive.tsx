@@ -361,17 +361,11 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
           onPressIn={(event: GestureResponderEvent) =>
             touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)
           }
+          onPressOut={(event: GestureResponderEvent) =>
+            touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)
+          }
         >
-          <TouchableWithoutFeedback
-            onPressOut={(event: GestureResponderEvent) =>
-              touchEnded(
-                event.nativeEvent.locationX,
-                event.nativeEvent.locationY
-              )
-            }
-          >
-            <View style={styles.animation}>{children}</View>
-          </TouchableWithoutFeedback>
+          <View style={styles.animation}>{children}</View>
         </TouchableWithoutFeedback>
       </View>
     );

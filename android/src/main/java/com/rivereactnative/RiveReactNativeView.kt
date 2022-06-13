@@ -1,7 +1,6 @@
 package com.rivereactnative
 
 import android.widget.FrameLayout
-import androidx.startup.AppInitializer
 import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.RiveArtboardRenderer
@@ -409,7 +408,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     errorMap.putString("message", message)
     errorMap.putArray("stack", createStackTraceForRN(error.stackTrace))
     exceptionManager?.reportException(errorMap)
-
   }
 
   private fun createStackTraceForRN(stackTrace: Array<StackTraceElement>): ReadableArray {

@@ -5,7 +5,6 @@ import Rive, { Alignment, Fit } from 'rive-react-native';
 const resourceName = 'hero_editor';
 
 export default function Simple() {
-  console.log('Simple');
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
