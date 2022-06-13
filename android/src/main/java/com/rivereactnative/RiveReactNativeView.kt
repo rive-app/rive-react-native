@@ -2,6 +2,7 @@ package com.rivereactnative
 
 import android.widget.FrameLayout
 import androidx.startup.AppInitializer
+import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.RiveArtboardRenderer
 import app.rive.runtime.kotlin.core.*
@@ -23,11 +24,11 @@ import kotlin.IllegalStateException
 
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
-  private var riveAnimationView: RiveAnimationView
+  private var riveAnimationView: RiveAnimationView = RiveAnimationView(context)
   private var resId: Int = -1
   private var url: String? = null
   private var shouldBeReloaded = true
-  private var exceptionManager: ExceptionsManagerModule?
+  private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
 
   enum class Events(private val mName: String) {
@@ -44,12 +45,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   init {
-    riveAnimationView = RiveAnimationView(context)
-    exceptionManager = (context as ReactContext).getNativeModule(ExceptionsManagerModule::class.java)
     val listener = object : RiveArtboardRenderer.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
-          onLoopEnd(animation.animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
+          onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
         } else {
           throw IllegalArgumentException("Only animation can be passed as an argument")
         }
@@ -57,19 +56,19 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
       override fun notifyPause(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
-          onPause(animation.animation.name)
+          onPause(animation.name)
         }
         if (animation is StateMachineInstance) {
-          onPause(animation.stateMachine.name, true)
+          onPause(animation.name, true)
         }
       }
 
       override fun notifyPlay(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
-          onPlay(animation.animation.name)
+          onPlay(animation.name)
         }
         if (animation is StateMachineInstance) {
-          onPlay(animation.stateMachine.name, true)
+          onPlay(animation.name, true)
         }
       }
 
@@ -79,10 +78,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
       override fun notifyStop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
-          onStop(animation.animation.name)
+          onStop(animation.name)
         }
         if (animation is StateMachineInstance) {
-          onStop(animation.stateMachine.name, true)
+          onStop(animation.name, true)
         }
       }
 
@@ -104,7 +103,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun onPause(animationName: String, isStateMachine: Boolean = false) {
     val reactContext = context as ReactContext
-
 
     val data = Arguments.createMap()
     data.putString("animationName", animationName)
@@ -142,10 +140,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
   }
 
-  fun onTouchDown(x: Float, y: Float) {
-    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_DOWN, x,y)
-  }
-
   fun play(animationNames: List<String>, rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Boolean) {
     val loop = RNLoopMode.mapToRiveLoop(rnLoopMode)
     val direction = RNDirection.mapToRiveDirection(rnDirection)
@@ -159,7 +153,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         handleRiveException(ex)
       }
     }
-
   }
 
   fun pause(animationNames: List<String>, areStateMachines: Boolean) {
@@ -196,6 +189,22 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         riveAnimationView.reset()
       }
     }
+  }
+
+  fun touchBegan(x: Float, y: Float) {
+    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
+    riveAnimationView.stateMachines.forEach {
+      it.pointerDown(x, y)
+    }
+    riveAnimationView.play()
+  }
+
+  fun touchEnded(x: Float, y: Float) {
+    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_UP, x, y)
+    riveAnimationView.stateMachines.forEach {
+      it.pointerUp(x, y)
+    }
+    riveAnimationView.play()
   }
 
   fun update() {
