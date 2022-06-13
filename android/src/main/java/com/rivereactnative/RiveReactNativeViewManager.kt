@@ -8,19 +8,6 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 
 class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
-  private enum class Commands {
-    PLAY,
-    PAUSE,
-    STOP,
-    RESET,
-    FIRE_STATE,
-    SET_BOOLEAN_STATE,
-    SET_NUMBER_STATE,
-    TOUCH_BEGAN,
-    TOUCH_ENDED
-  }
-
-
   override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Map<String, String>>? {
     val builder: MapBuilder.Builder<String, Map<String, String>> = MapBuilder.builder<String, Map<String, String>>()
     for (event in RiveReactNativeView.Events.values()) {
@@ -31,31 +18,11 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   override fun getName() = "RiveReactNativeView"
 
-  override fun getCommandsMap(): Map<String, Int>? {
-    return MapBuilder.of(
-      "play",
-      Commands.PLAY.ordinal,
-      "pause",
-      Commands.PAUSE.ordinal,
-      "stop",
-      Commands.STOP.ordinal,
-      "reset",
-      Commands.RESET.ordinal,
-      "fireState",
-      Commands.FIRE_STATE.ordinal,
-      "setBooleanState",
-      Commands.SET_BOOLEAN_STATE.ordinal,
-      "setNumberState",
-      Commands.SET_NUMBER_STATE.ordinal,
-      "touchBegan",
-      Commands.SET_NUMBER_STATE.ordinal
-    )
-  }
-
-  override fun receiveCommand(view: RiveReactNativeView, commandType: Int, args: ReadableArray?) {
-    when (commandType) {
+  override fun receiveCommand(view: RiveReactNativeView, commandId: String, args: ReadableArray?) {
+    when (commandId) {
       // Playback Controls
-      Commands.PLAY.ordinal -> {
+
+      "play" -> {
         args?.let {
           val animationNames = it.getArray(0)!!
           val loopMode = it.getString(1)!!
@@ -69,7 +36,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
 
       }
-      Commands.PAUSE.ordinal -> {
+      "pause" -> {
         args?.let {
           val animationNames = it.getArray(0)!!
           val areStateMachines = it.getBoolean(1)
@@ -78,7 +45,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
-      Commands.STOP.ordinal -> {
+      "stop" -> {
         args?.let {
           val animationNames = it.getArray(0)!!
           val areStateMachines = it.getBoolean(1)
@@ -87,10 +54,11 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
-      Commands.RESET.ordinal -> view.reset()
+      "reset" -> view.reset()
 
       // StateMachine inputs
-      Commands.FIRE_STATE.ordinal -> {
+
+      "fireState" -> {
         args?.let {
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
@@ -99,7 +67,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
-      Commands.SET_BOOLEAN_STATE.ordinal -> {
+      "setBooleanState" -> {
         args?.let {
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
@@ -109,7 +77,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
-      Commands.SET_NUMBER_STATE.ordinal -> {
+      "setNumberState" -> {
         args?.let {
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
@@ -121,30 +89,29 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
       }
 
       // Touch Events
-      Commands.TOUCH_BEGAN.ordinal -> {
+
+      "touchBegan" -> {
         args?.let {
-          val stateMachineName = it.getString(0)!!
-          val inputName = it.getString(1)!!
-          val value = it.getDouble(2)
+          val x: Double = it.getDouble(0)
+          val y: Double = it.getDouble(1)
           view.run {
-//            renderer.pointerEvent(PointerEvents.POINTER_DOWN, x,y)
+            this.touchBegan(x.toFloat(), y.toFloat())
           }
         }
       }
-      Commands.TOUCH_ENDED.ordinal -> {
+      "touchEnded" -> {
         args?.let {
-          val stateMachineName = it.getString(0)!!
-          val inputName = it.getString(1)!!
-          val value = it.getDouble(2)
+          val x: Double = it.getDouble(0)
+          val y: Double = it.getDouble(1)
           view.run {
-//            this.riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_UP, x,y)
-            this.onStateChanged()
+            this.touchEnded(x.toFloat(), y.toFloat())
           }
         }
       }
+
       // Other
-      else -> {
-      }
+
+      else -> { }
     }
   }
 

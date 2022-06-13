@@ -10,7 +10,13 @@ import {
   TouchableWithoutFeedback,
   GestureResponderEvent,
 } from 'react-native';
-import { RiveRef, Direction, LoopMode, RNRiveError } from './types';
+import {
+  RiveRef,
+  Direction,
+  LoopMode,
+  RNRiveError,
+  ViewManagerMethod,
+} from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
@@ -195,7 +201,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       [onError]
     );
 
-    const play = useCallback<RiveRef['play']>(
+    const play = useCallback<RiveRef[ViewManagerMethod.play]>(
       (
         animationNames = [],
         loop = LoopMode.Auto,
@@ -208,14 +214,14 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.play,
+          ViewManagerMethod.play,
           [animationNamesArray, loop, direction, areStateMachines]
         );
       },
       []
     );
 
-    const pause = useCallback<RiveRef['pause']>(
+    const pause = useCallback<RiveRef[ViewManagerMethod.pause]>(
       (animationNames = [], areStateMachines = false) => {
         const animationNamesArray = Array.isArray(animationNames)
           ? animationNames
@@ -223,14 +229,14 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.pause,
+          ViewManagerMethod.pause,
           [animationNamesArray, areStateMachines]
         );
       },
       []
     );
 
-    const stop = useCallback<RiveRef['stop']>(
+    const stop = useCallback<RiveRef[ViewManagerMethod.stop]>(
       (animationNames = [], areStateMachines = false) => {
         const animationNamesArray = Array.isArray(animationNames)
           ? animationNames
@@ -238,7 +244,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.stop,
+          ViewManagerMethod.stop,
           [animationNamesArray, areStateMachines]
         );
       },
@@ -248,16 +254,16 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     const reset = useCallback(() => {
       UIManager.dispatchViewManagerCommand(
         findNodeHandle(riveRef.current),
-        UIManager.getViewManagerConfig(VIEW_NAME).Commands.reset,
+        ViewManagerMethod.reset,
         []
       );
     }, []);
 
-    const fireState = useCallback<RiveRef['fireState']>(
+    const fireState = useCallback<RiveRef[ViewManagerMethod.fireState]>(
       (triggerStateMachineName, inputName) => {
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.fireState,
+          ViewManagerMethod.fireState,
           [triggerStateMachineName, inputName]
         );
       },
@@ -269,13 +275,13 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         if (typeof value === 'boolean') {
           UIManager.dispatchViewManagerCommand(
             findNodeHandle(riveRef.current),
-            UIManager.getViewManagerConfig(VIEW_NAME).Commands.setBooleanState,
+            ViewManagerMethod.setBooleanState,
             [triggerStateMachineName, inputName, value]
           );
         } else if (typeof value === 'number') {
           UIManager.dispatchViewManagerCommand(
             findNodeHandle(riveRef.current),
-            UIManager.getViewManagerConfig(VIEW_NAME).Commands.setNumberState,
+            ViewManagerMethod.setNumberState,
             [triggerStateMachineName, inputName, value]
           );
         }
@@ -283,22 +289,22 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
-    const touchBegan = useCallback<RiveRef['touchBegan']>(
+    const touchBegan = useCallback<RiveRef[ViewManagerMethod.touchBegan]>(
       (x: Number, y: Number) => {
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchBegan,
+          ViewManagerMethod.touchBegan,
           [x, y]
         );
       },
       []
     );
 
-    const touchEnded = useCallback<RiveRef['touchEnded']>(
+    const touchEnded = useCallback<RiveRef[ViewManagerMethod.touchEnded]>(
       (x: Number, y: Number) => {
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
-          UIManager.getViewManagerConfig(VIEW_NAME).Commands.touchEnded,
+          ViewManagerMethod.touchEnded,
           [x, y]
         );
       },

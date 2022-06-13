@@ -286,4 +286,3 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveTouchDelegate, RState
         }
     }
 }
-

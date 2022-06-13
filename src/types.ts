@@ -24,6 +24,18 @@ export type RiveRef = {
   touchEnded: (x: Number, y: Number) => void;
 };
 
+export enum ViewManagerMethod {
+  play = 'play',
+  pause = 'pause',
+  stop = 'stop',
+  reset = 'reset',
+  fireState = 'fireState',
+  setBooleanState = 'setBooleanState',
+  setNumberState = 'setNumberState',
+  touchBegan = 'touchBegan',
+  touchEnded = 'touchEnded',
+}
+
 export enum Fit {
   Cover = 'cover',
   Contain = 'contain',
