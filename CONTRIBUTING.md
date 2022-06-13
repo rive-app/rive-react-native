@@ -2,6 +2,31 @@
 
 We want this community to be friendly and respectful to each other. Please follow it in all your interactions with the project.
 
+## Dependency Prereqs
+
+In order to run the example React Native project in this repo, you may need to ensure you have the following dependencies and considerations below installed and taken into account.
+
+### General
+Follow dependency installation instructions from the [React Native docs here](https://reactnative.dev/docs/environment-setup#installing-dependencies) to get setup with iOS and Android. Make sure to select the following tabs in the docs:
+- Select the **React Native CLI Quickstart** tab
+- **Development OS**: `macOS` or other OS you're working with
+- **Target OS**: Select either `Android` or `iOS` based on whichever platform you're trying to work with/set up
+
+### iOS
+
+- You may need to run `pod update RiveRuntime` or `pod install` in the `example/iOS` folder to get the runtime updated or installed
+
+### Android
+- Follow dependency installation instructions from the [React Native docs here](https://reactnative.dev/docs/environment-setup#installing-dependencies) to get setup with the Android SDK
+- Ensure that if you installed a new version of JDK, it is set as the `JAVA_HOME` appropriately in your env system (i.e `.zshrc`). You can also verify the new JDK via `java -version` in the command-line. Set the env variable like so: 
+```
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home`
+```
+
+### M1 Considerations
+
+If you're running on an M1, you may need to run terminal-based commands off [Rosetta](https://www.courier.com/blog/tips-and-tricks-to-setup-your-apple-m1-for-development/) as it may not support new M1 architecture.
+
 ## Development workflow
 
 To get started with the project, run `yarn` in the root directory to install the required dependencies for each package:
@@ -14,7 +39,7 @@ yarn
 
 While developing, you can run the [example app](/example/) to test your changes. Any changes you make in your library's JavaScript code will be reflected in the example app without a rebuild. If you change any native code, then you'll need to rebuild the example app.
 
-To start the packager:
+To start the metro server:
 
 ```sh
 yarn example start
