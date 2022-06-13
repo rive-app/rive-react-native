@@ -46,10 +46,6 @@ Put `.riv` files inside your project:
 - `raw` directory on Android
 - `Assets` directory on iOS
 
-### Expo
-
-Since rive-react-native has native bindings to iOS and Android, you need to generate a native project in order to run you app. This can be done with `expo run:android` or `expo run:ios`. See https://docs.expo.dev/workflow/customizing/ for more information.
-
 ## Usage
 
 ```tsx
