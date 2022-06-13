@@ -62,7 +62,6 @@ class RiveReactNativeViewManager: RCTViewManager {
             let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
             let touch = CGPoint(x: x.doubleValue, y: y.doubleValue)
             view.touchBegan(touch)
-            print("Touch Began")
         }
     }
     
@@ -71,7 +70,6 @@ class RiveReactNativeViewManager: RCTViewManager {
             let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
             let touch = CGPoint(x: x.doubleValue, y: y.doubleValue)
             view.touchEnded(touch)
-            print("Touch Ended")
         }
     }
 

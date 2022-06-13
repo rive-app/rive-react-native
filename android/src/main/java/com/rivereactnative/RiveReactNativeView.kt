@@ -192,19 +192,18 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun touchBegan(x: Float, y: Float) {
-    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
     riveAnimationView.stateMachines.forEach {
       it.pointerDown(x, y)
+      riveAnimationView.play(animationName = it.name)
     }
-    riveAnimationView.play()
+
   }
 
   fun touchEnded(x: Float, y: Float) {
-    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_UP, x, y)
     riveAnimationView.stateMachines.forEach {
       it.pointerUp(x, y)
+      riveAnimationView.play(animationName = it.name)
     }
-    riveAnimationView.play()
   }
 
   fun update() {
