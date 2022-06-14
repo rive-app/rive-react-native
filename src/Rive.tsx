@@ -337,26 +337,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
     return (
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
-        <RiveViewManager
-          ref={riveRef}
-          resourceName={resourceName}
-          isUserHandlingErrors={isUserHandlingErrors}
-          autoplay={autoplay}
-          fit={fit}
-          url={url}
-          style={styles.animation}
-          onPlay={onPlayHandler}
-          onPause={onPauseHandler}
-          onStop={onStopHandler}
-          onLoopEnd={onLoopEndHandler}
-          onStateChanged={onStateChangedHandler}
-          onError={onErrorHandler}
-          alignment={alignment}
-          artboardName={artboardName}
-          animationName={animationName}
-          stateMachineName={stateMachineName}
-        />
-
+        <View style={styles.children}>{children}</View>
         <TouchableWithoutFeedback
           onPressIn={(event: GestureResponderEvent) =>
             touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)
@@ -365,7 +346,25 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)
           }
         >
-          <View style={styles.animation}>{children}</View>
+          <RiveViewManager
+            ref={riveRef}
+            resourceName={resourceName}
+            isUserHandlingErrors={isUserHandlingErrors}
+            autoplay={autoplay}
+            fit={fit}
+            url={url}
+            style={styles.animation}
+            onPlay={onPlayHandler}
+            onPause={onPauseHandler}
+            onStop={onStopHandler}
+            onLoopEnd={onLoopEndHandler}
+            onStateChanged={onStateChangedHandler}
+            onError={onErrorHandler}
+            alignment={alignment}
+            artboardName={artboardName}
+            animationName={animationName}
+            stateMachineName={stateMachineName}
+          />
         </TouchableWithoutFeedback>
       </View>
     );
