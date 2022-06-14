@@ -45,13 +45,13 @@ To start the metro server:
 yarn example start
 ```
 
-To run the example app on Android:
+To run the example app on Android, you can run the Android project in `example/android` in Android Studio, OR at the top level of the project, run:
 
 ```sh
 yarn example android
 ```
 
-To run the example app on iOS:
+To run the example app on iOS, you can run the iOS project in `example/ios` in XCode, OR at the top level of the project, run:
 
 ```sh
 yarn example ios
