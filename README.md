@@ -2,71 +2,64 @@
 ![Discord badge](https://img.shields.io/discord/532365473602600965)
 ![Twitter handle](https://img.shields.io/twitter/follow/rive_app.svg?style=social&label=Follow)
 
-# rive-react-native
+# Rive React Native
 
-This package implements native binding for Rive Runtime for iOS and Android.
-`Expo CLI` is not supported by this lib.
+![Rive hero image](https://rive-app.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fff44ed5f-1eea-4154-81ef-84547e61c3fd%2Frive_notion.png?table=block&id=f198cab2-c0bc-4ce8-970c-42220379bcf3&spaceId=9c949665-9ad9-445f-b9c4-5ee204f8b60c&width=2000&userId=&cache=v2)
 
-Further runtime documentation can be found in [Rive's help center](https://help.rive.app/runtimes).
+A React Native runtime library for [Rive](https://rive.app).
 
-## Installation
+This library is a wrapper around the iOS/Android runtime, providing a component and ref pattern for React Native applications.
 
-- install `rive-react-native` dependency using yarn or npm
+## Table of contents
 
-```sh
-npm install rive-react-native
-```
+- :star: [Rive Overview](#rive-overview)
+- 🚀 [Getting Started & API docs](#getting-started)
+- :mag: [Supported Devices](#supported-devices)
+- :books: [Examples](#examples)
+- 👨‍💻 [Contributing](#contributing)
+- :question: [Issues](#issues)
 
-or
+## Rive Overview
 
-```sh
-yarn add rive-react-native
-```
+[Rive](https://rive.app) is a real-time interactive design and animation tool that helps teams create and run interactive animations anywhere. Designers and developers use our collaborative editor to create motion graphics that respond to different states and user inputs. Our lightweight open-source runtime libraries allow them to load their animations into apps, games, and websites.
 
-- install pods for your ios project. Go to the project `ios` directory and run
+:house_with_garden: [Homepage](https://rive.app/)
 
-```sh
-pod install
-```
+:blue_book: [General help docs](https://help.rive.app/)
 
-- Add empty swift file in order to create `Bridging-Header` file if it doesn't exist. _(optional)_
+🛠 [Resources for building in Rive](https://rive.app/resources/)
 
-- add this dependency to your project inside `android/app/build.gradle`
+## Getting Started
 
-```groovy
-dependencies {
-  implementation "androidx.startup:startup-runtime:1.0.0"
-}
-```
+Follow along with the link below for a quick start in getting Rive React Native integrated into your multi-platform applications.
 
-More info [here](https://github.com/rive-app/rive-android#manually-initializing-rive).
+[Getting Started with Rive in React Native](https://help.rive.app/runtimes/overview/react-native)
 
-Put `.riv` files inside your project:
+[API documentation](https://help.rive.app/runtimes/overview/react-native/props)
 
-- `raw` directory on Android
-- `Assets` directory on iOS
+## Supported Devices
 
-## Usage
+Because this runtime library has a dependency on the [Rive Android](https://github.com/rive-app/rive-android) and [Rive iOS](https://github.com/rive-app/rive-ios) runtimes, the supported devices align with each of these dependencies minimum supported devices, as well as the minimum device requirements of the React Native framework.
 
-```tsx
-import Rive from 'rive-react-native';
+- iOS: **14.0+**
+- Android:
+  - Minimum SDK version: **21**
+  - Target SDK version: **29**
 
-const resourceName = 'truck_v7'; // file truck_v7.riv
+## Examples
 
-function App() {
-  return <Rive resourceName={resourceName} />;
-}
-```
+Check out the `example/` folder to run an example application using the Rive React Native runtime. It runs on the local build of this library, and showcases a number of ways to use the Rive component and `useRef` hook pattern:
 
-You can download the [truck_v7.riv](https://github.com/rive-app/rive-react-native/raw/main/example/ios/Assets/truck_v7.riv) file from the example/ios/Assets folder. A more detailed guide about usage can be found [here](./docs/usage-guide.md)
-
-## Rive component
-
-`Rive` is a component that can render a native rive animation.
-
-- [Props documentation](./docs/rive-react-native-reference.md#props)
-- [Ref methods documentation](./docs/rive-react-native-reference.md#ref-methods)
+- Setting a Rive file via a URL, or asset in the Android/iOS projects
+- Setting layout and loop mode options
+- Displaying single or multiple animations / artboards on one component
+- Setting up and maniuplating a state machine via inputs
+- ...and more!
 
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+We love contributions! Check out our [contributing docs](./CONTRIBUTING.md) to get more details into how to run this project, the examples, and more all locally.
+
+## Issues
+
+Have an issue with using the runtime, or want to suggest a feature/API to help make your development life better? Log an issue in our [issues](https://github.com/rive-app/rive-react-native/issues) tab! You can also browse older issues and discussion threads there to see solutions that may have worked for common problems.
