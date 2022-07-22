@@ -44,7 +44,7 @@ Because this runtime library has a dependency on the [Rive Android](https://gith
 - iOS: **14.0+**
 - Android:
   - Minimum SDK version: **21**
-  - Target SDK version: **29**
+  - Target SDK version: **31**
 
 ## Examples
 
