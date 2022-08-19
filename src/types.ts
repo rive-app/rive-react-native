@@ -20,8 +20,8 @@ export type RiveRef = {
     areStateMachines?: boolean
   ) => void;
   reset: () => void;
-  touchBegan: (x: Number, y: Number) => void;
-  touchEnded: (x: Number, y: Number) => void;
+  touchBegan: (x: number, y: number) => void;
+  touchEnded: (x: number, y: number) => void;
 };
 
 export enum ViewManagerMethod {

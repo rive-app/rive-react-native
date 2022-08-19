@@ -290,23 +290,27 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     );
 
     const touchBegan = useCallback<RiveRef[ViewManagerMethod.touchBegan]>(
-      (x: Number, y: Number) => {
-        UIManager.dispatchViewManagerCommand(
-          findNodeHandle(riveRef.current),
-          ViewManagerMethod.touchBegan,
-          [x, y]
-        );
+      (x: number, y: number) => {
+        if (!isNaN(x) && !isNaN(y)) {
+          UIManager.dispatchViewManagerCommand(
+            findNodeHandle(riveRef.current),
+            ViewManagerMethod.touchBegan,
+            [x, y]
+          );
+        }
       },
       []
     );
 
     const touchEnded = useCallback<RiveRef[ViewManagerMethod.touchEnded]>(
-      (x: Number, y: Number) => {
-        UIManager.dispatchViewManagerCommand(
-          findNodeHandle(riveRef.current),
-          ViewManagerMethod.touchEnded,
-          [x, y]
-        );
+      (x: number, y: number) => {
+        if (!isNaN(x) && !isNaN(y)) {
+          UIManager.dispatchViewManagerCommand(
+            findNodeHandle(riveRef.current),
+            ViewManagerMethod.touchEnded,
+            [x, y]
+          );
+        }
       },
       []
     );
