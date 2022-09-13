@@ -376,13 +376,13 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 );
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
   children: {
     position: 'absolute',
     width: '100%',
     height: '100%',
-  },
-  container: {
-    flexGrow: 1,
   },
   animation: {
     flex: 1,
