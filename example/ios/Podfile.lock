@@ -307,7 +307,7 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - rive-react-native (2.1.37):
+  - rive-react-native (3.0.41):
     - React-Core
     - RiveRuntime (= 2.0.24)
   - RiveRuntime (2.0.24)
@@ -535,7 +535,7 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  rive-react-native: 8c3d0cde1580cc2a189ebb96b7edebd4098da7c0
+  rive-react-native: 82f0730d6be9cc8a32a11863686affb52b925ed0
   RiveRuntime: 650973fe4ce429ca087042f7a2f5b894c7f9cb60
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
