@@ -20,26 +20,26 @@ enum RNAlignment: String {
         }
     }
     
-    static func mapToRiveAlignment(rnAlignment: RNAlignment) ->  Alignment{
+    static func mapToRiveAlignment(rnAlignment: RNAlignment) ->  RiveAlignment {
         switch rnAlignment {
         case .TopLeft:
-            return Alignment.alignmentTopLeft
+            return RiveAlignment.topLeft
         case .TopCenter:
-            return Alignment.alignmentTopCenter
+            return RiveAlignment.topCenter
         case .TopRight:
-            return Alignment.alignmentTopRight
+            return RiveAlignment.topRight
         case .CenterLeft:
-            return Alignment.alignmentCenterLeft
+            return RiveAlignment.centerLeft
         case .Center:
-            return Alignment.alignmentCenter
+            return RiveAlignment.center
         case .CenterRight:
-            return Alignment.alignmentCenterRight
+            return RiveAlignment.centerRight
         case .BottomLeft:
-            return Alignment.alignmentBottomLeft
+            return RiveAlignment.bottomLeft
         case .BottomCenter:
-            return Alignment.alignmentBottomCenter
+            return RiveAlignment.bottomCenter
         case .BottomRight:
-            return Alignment.alignmentBottomRight
+            return RiveAlignment.bottomRight
         }
     }
 }

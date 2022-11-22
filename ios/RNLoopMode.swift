@@ -14,15 +14,15 @@ enum RNLoopMode: String {
     
     
     static func mapToRNLoopMode(value: Int) -> RNLoopMode {
-        if let riveEnum = RiveRuntime.Loop(rawValue: value) {
+        if let riveEnum = RiveRuntime.RiveLoop(rawValue: value) {
             switch (riveEnum) {
-            case .loopOneShot:
+            case .oneShot:
                 return .OneShot
-            case .loopLoop:
+            case .loop:
                 return .Loop
-            case .loopPingPong:
+            case .pingPong:
                 return .PingPong
-            case .loopAuto:
+            case .autoLoop:
                 return .Auto
             default:
                 return .Auto
@@ -34,16 +34,16 @@ enum RNLoopMode: String {
         }
     }
     
-    static func mapToRiveLoop(rnLoopMode: RNLoopMode) ->  Loop{
+    static func mapToRiveLoop(rnLoopMode: RNLoopMode) ->  RiveLoop {
         switch rnLoopMode {
         case .OneShot:
-            return .loopOneShot
+            return .oneShot
         case .Loop:
-            return .loopLoop
+            return .loop
         case .PingPong:
-            return .loopPingPong
+            return .pingPong
         case .Auto:
-            return .loopAuto
+            return .autoLoop
         }
     }
 }
