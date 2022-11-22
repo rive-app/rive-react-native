@@ -38,6 +38,7 @@ export default function StateTrigger() {
               label="Swipe Threshold"
               keyboardType="decimal-pad"
               value={threshold.toString()}
+              autoComplete={false}
             />
 
             <Button
