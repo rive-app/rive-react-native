@@ -18,22 +18,22 @@ enum RNFit: String {
         }
     }
     
-    static func mapToRiveFit(rnFit: RNFit) -> Fit {
+    static func mapToRiveFit(rnFit: RNFit) -> RiveFit {
         switch rnFit {
         case .Contain:
-            return Fit.fitContain
+            return RiveFit.contain
         case .Cover:
-            return Fit.fitCover
+            return RiveFit.cover
         case .Fill:
-            return Fit.fitFill
+            return RiveFit.fill
         case .FitWidth:
-            return Fit.fitFitWidth
+            return RiveFit.fitWidth
         case .FitHeight:
-            return Fit.fitFitHeight
+            return RiveFit.fitHeight
         case .None:
-            return Fit.fitNone
+            return RiveFit.noFit
         case .ScaleDown:
-            return Fit.fitScaleDown
+            return RiveFit.scaleDown
         }
     }
 }

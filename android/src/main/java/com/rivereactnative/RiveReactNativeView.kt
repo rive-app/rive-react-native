@@ -26,9 +26,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var riveAnimationView: RiveAnimationView = RiveAnimationView(context)
   private var resId: Int = -1
   private var url: String? = null
+  private var animationName: String? = null
+  private var stateMachineName: String? = null
+  private var artboardName: String? = null
+  private var fit: Fit = Fit.CONTAIN
+  private var alignment: Alignment = Alignment.CENTER
   private var shouldBeReloaded = true
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
+
+  private var isAttached = false;
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
@@ -46,28 +53,34 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   init {
     val listener = object : RiveArtboardRenderer.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
-        if (animation is LinearAnimationInstance) {
-          onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
-        } else {
-          throw IllegalArgumentException("Only animation can be passed as an argument")
+        if (riveAnimationView.isAttachedToWindow) {
+          if (animation is LinearAnimationInstance) {
+            onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
+          } else {
+            throw IllegalArgumentException("Only animation can be passed as an argument")
+          }
         }
       }
 
       override fun notifyPause(animation: PlayableInstance) {
-        if (animation is LinearAnimationInstance) {
-          onPause(animation.name)
-        }
-        if (animation is StateMachineInstance) {
-          onPause(animation.name, true)
+        if (riveAnimationView.isAttachedToWindow) {
+          if (animation is LinearAnimationInstance) {
+            onPause(animation.name)
+          }
+          if (animation is StateMachineInstance) {
+            onPause(animation.name, true)
+          }
         }
       }
 
       override fun notifyPlay(animation: PlayableInstance) {
-        if (animation is LinearAnimationInstance) {
-          onPlay(animation.name)
-        }
-        if (animation is StateMachineInstance) {
-          onPlay(animation.name, true)
+        if (riveAnimationView.isAttachedToWindow) {
+          if (animation is LinearAnimationInstance) {
+            onPlay(animation.name)
+          }
+          if (animation is StateMachineInstance) {
+            onPlay(animation.name, true)
+          }
         }
       }
 
@@ -76,11 +89,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyStop(animation: PlayableInstance) {
-        if (animation is LinearAnimationInstance) {
-          onStop(animation.name)
-        }
-        if (animation is StateMachineInstance) {
-          onStop(animation.name, true)
+        if (riveAnimationView.isAttachedToWindow) {
+          if (animation is LinearAnimationInstance) {
+            onStop(animation.name)
+          }
+          if (animation is StateMachineInstance) {
+            onStop(animation.name, true)
+          }
         }
       }
 
@@ -90,6 +105,25 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     addView(riveAnimationView)
   }
 
+  override fun onAttachedToWindow() {
+    // RiveReactNativeView may attach multiple times for any reason, so using
+    // a flag here isAttached to determine when it was initially attached to
+    // only addView once
+    if (childCount == 0 && isAttached == false) {
+      addView(riveAnimationView)
+      update()
+      isAttached = true
+    }  
+    super.onAttachedToWindow()
+  }
+
+
+  override fun onDetachedFromWindow() {
+    // Starting in Rive Android 4.0+, we need to coordinate removing this view with
+    // the underlying RiveAnimationView when resources are cleaned up
+    removeView(riveAnimationView)
+    super.onDetachedFromWindow();
+  }
   fun onPlay(animationName: String, isStateMachine: Boolean = false) {
     val reactContext = context as ReactContext
 
@@ -217,11 +251,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setFit(rnFit: RNFit) {
     val riveFit = RNFit.mapToRiveFit(rnFit)
+    this.fit = riveFit
     riveAnimationView.fit = riveFit
   }
 
   fun setAlignment(rnAlignment: RNAlignment) {
     val riveAlignment = RNAlignment.mapToRiveAlignment(rnAlignment)
+    this.alignment = riveAlignment
     riveAnimationView.alignment = riveAlignment
   }
 
@@ -248,12 +284,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         try {
           riveAnimationView.setRiveResource(
             resId,
-            fit = riveAnimationView.fit,
-            alignment = riveAnimationView.alignment,
+            fit = this.fit,
+            alignment = this.alignment,
             autoplay = false,
-            stateMachineName = riveAnimationView.renderer.stateMachineName,
-            animationName = riveAnimationView.renderer.animationName,
-            artboardName = riveAnimationView.artboardName
+            stateMachineName = this.stateMachineName,
+            animationName = this.animationName,
+            artboardName = this.artboardName
           )
           url = null
         } catch (ex: RiveException) {
@@ -278,12 +314,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           try {
             riveAnimationView.setRiveResource(
               resId,
-              fit = riveAnimationView.fit,
-              alignment = riveAnimationView.alignment,
+              fit = this.fit,
+              alignment = this.alignment,
               autoplay = riveAnimationView.autoplay,
-              stateMachineName = riveAnimationView.renderer.stateMachineName,
-              animationName = riveAnimationView.renderer.animationName,
-              artboardName = riveAnimationView.artboardName
+              stateMachineName = this.stateMachineName,
+              animationName = this.animationName,
+              artboardName = this.artboardName
             )
             url = null
           } catch (ex: RiveException) {
@@ -305,12 +341,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       try {
         riveAnimationView.setRiveBytes(
           bytes,
-          fit = riveAnimationView.fit,
-          alignment = riveAnimationView.alignment,
+          fit = this.fit,
+          alignment = this.alignment,
           autoplay = autoplay,
-          stateMachineName = riveAnimationView.renderer.stateMachineName,
-          animationName = riveAnimationView.renderer.animationName,
-          artboardName = riveAnimationView.artboardName
+          stateMachineName = this.stateMachineName,
+          animationName = this.animationName,
+          artboardName = this.artboardName
         )
       } catch (ex: RiveException) {
         handleRiveException(ex)
@@ -330,6 +366,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setArtboardName(artboardName: String) {
     try {
+      this.artboardName = artboardName
       riveAnimationView.artboardName = artboardName // it causes reloading
     } catch (ex: RiveException) {
       handleRiveException(ex)
@@ -337,11 +374,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setAnimationName(animationName: String) {
+    this.animationName = animationName
     riveAnimationView.renderer.animationName = animationName
     shouldBeReloaded = true
   }
 
   fun setStateMachineName(stateMachineName: String) {
+    this.stateMachineName = stateMachineName
     riveAnimationView.renderer.stateMachineName = stateMachineName
     shouldBeReloaded = true
   }

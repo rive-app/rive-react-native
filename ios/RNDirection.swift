@@ -11,14 +11,14 @@ enum RNDirection: String {
         }
     }
     
-    static func mapToRiveDirection(rnDirection: RNDirection) -> Direction {
+    static func mapToRiveDirection(rnDirection: RNDirection) -> RiveDirection {
         switch rnDirection {
         case .Backwards:
-            return .directionBackwards
+            return .backwards
         case .Auto:
-            return .directionAuto
+            return .autoDirection
         case .Forwards:
-            return .directionForwards
+            return .forwards
         }
     }
 }

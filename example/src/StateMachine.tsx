@@ -6,11 +6,11 @@ import { RadioButton } from 'react-native-paper';
 
 export default function StateMachine() {
   const riveRef = React.useRef<RiveRef>(null);
-  const [selectedLevel, setSelectedLevel] = useState('2');
+  const [selectedLevel, setSelectedLevel] = useState('0');
 
   const setLevel = (n: number) => {
     setSelectedLevel(n.toString());
-    riveRef.current?.setInputState("Designer's Test", 'Level', n);
+    riveRef.current?.setInputState('skill-controller', 'level', n);
   };
 
   return (
@@ -21,7 +21,7 @@ export default function StateMachine() {
           autoplay={true}
           fit={Fit.Cover}
           style={styles.box}
-          stateMachineName="Designer's Test"
+          stateMachineName="skill-controller"
           onStateChanged={(stateMachineName, stateName) => {
             console.log(
               'onStateChanged: ',
@@ -31,7 +31,7 @@ export default function StateMachine() {
               stateName
             );
           }}
-          resourceName={'skills'}
+          resourceName={'skills_listener'}
         />
         <RadioButton.Group
           onValueChange={(newValue) => setLevel(parseInt(newValue, 10))}

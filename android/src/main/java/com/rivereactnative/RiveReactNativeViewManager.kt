@@ -118,12 +118,6 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   override fun createViewInstance(reactContext: ThemedReactContext): RiveReactNativeView {
     return RiveReactNativeView(reactContext)
   }
-
-  override fun onAfterUpdateTransaction(view: RiveReactNativeView) {
-    super.onAfterUpdateTransaction(view)
-    view.update()
-  }
-
   @ReactProp(name = "resourceName")
   fun setResourceName(view: RiveReactNativeView, resourceName: String?) {
     view.setResourceName(resourceName)
