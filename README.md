@@ -56,6 +56,10 @@ Check out the `example/` folder to run an example application using the Rive Rea
 - Setting up and maniuplating a state machine via inputs
 - ...and more!
 
+### Awesome Rive
+
+For even more examples and resources on using Rive at runtime or in other tools, checkout the [awesome-rive](https://github.com/rive-app/awesome-rive) repo.
+
 ## Contributing
 
 We love contributions! Check out our [contributing docs](./CONTRIBUTING.md) to get more details into how to run this project, the examples, and more all locally.
