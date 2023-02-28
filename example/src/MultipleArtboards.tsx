@@ -11,9 +11,9 @@ export default function MultipleArtboards() {
           autoplay={true}
           style={styles.animation}
           fit={Fit.Contain}
-          artboardName={'Square'}
-          animationName={'goaround'}
-          resourceName={'artboard_animations'}
+          artboardName={'Avatar 1'}
+          animationName={'idlePreview'}
+          resourceName={'avatars'}
         />
 
         <Text>Square - roll around</Text>
@@ -21,8 +21,8 @@ export default function MultipleArtboards() {
           autoplay={true}
           style={styles.animation}
           fit={Fit.Contain}
-          artboardName={'Square'}
-          resourceName={'artboard_animations'}
+          artboardName={'Avatar 2'}
+          resourceName={'avatars'}
         />
 
         <Text>Circle</Text>
@@ -30,8 +30,8 @@ export default function MultipleArtboards() {
           autoplay={true}
           style={styles.animation}
           fit={Fit.Contain}
-          artboardName={'Circle'}
-          resourceName={'artboard_animations'}
+          artboardName={'Avatar 3'}
+          resourceName={'avatars'}
         />
 
         <Text>Star</Text>
@@ -39,8 +39,8 @@ export default function MultipleArtboards() {
           autoplay={true}
           style={styles.animation}
           fit={Fit.Contain}
-          artboardName={'Star'}
-          resourceName={'artboard_animations'}
+          artboardName={'All Avatars'}
+          resourceName={'avatars'}
         />
       </ScrollView>
     </SafeAreaView>

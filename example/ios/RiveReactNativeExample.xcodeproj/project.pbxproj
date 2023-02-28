@@ -27,6 +27,7 @@
 		9DBF1CC52684937E0008391A /* v6_file.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9DBF1CC42684937E0008391A /* v6_file.riv */; };
 		C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = C3C07471283BE07300E8EB33 /* hero_editor.riv */; };
 		E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5637D79292BD26D000CBC1E /* skills_listener.riv */; };
+		E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5A17A8F299AA0F5008CC433 /* avatars.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +90,7 @@
 		D9C4F25984EC4D5086341FDB /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-RiveReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RiveReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-RiveReactNativeExample/Pods-RiveReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
 		E5637D79292BD26D000CBC1E /* skills_listener.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = skills_listener.riv; sourceTree = "<group>"; };
+		E5A17A8F299AA0F5008CC433 /* avatars.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = avatars.riv; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -242,6 +244,7 @@
 				04A886F226A990050078530A /* two_bone_ik.riv */,
 				9DBF1CC42684937E0008391A /* v6_file.riv */,
 				9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */,
+				E5A17A8F299AA0F5008CC433 /* avatars.riv */,
 				E5637D79292BD26D000CBC1E /* skills_listener.riv */,
 				9D879D0A26578A5E00D01424 /* artboard_animations.riv */,
 				9D879D0826578A5400D01424 /* loopy.riv */,
@@ -399,6 +402,7 @@
 				9DBF1CC52684937E0008391A /* v6_file.riv in Resources */,
 				9D4FE6122649427F0098BF6A /* bird.riv in Resources */,
 				9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */,
+				E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */,
 				9D879D0926578A5400D01424 /* loopy.riv in Resources */,
 				C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,

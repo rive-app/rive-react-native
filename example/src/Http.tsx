@@ -11,10 +11,19 @@ export default function Http() {
       <ScrollView contentContainerStyle={styles.container}>
         <Rive
           url={url}
-          artboardName="Avatar 2"
-          animationName="idlePreview"
+          artboardName={'Avatar 3'}
+          stateMachineName={'avatar3'}
           style={styles.animation}
           autoplay={true}
+          onPlay={(name, isSM) => {
+            console.log('PLAY: NAME + SM', name, isSM);
+          }}
+          onStop={(name, isSM) => {
+            console.log('STOP: NAME + SM', name, isSM);
+          }}
+          onPause={(name, isSM) => {
+            console.log('PAUSE: NAME + SM', name, isSM);
+          }}
         />
       </ScrollView>
     </SafeAreaView>
