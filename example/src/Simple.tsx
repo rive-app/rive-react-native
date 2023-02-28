@@ -2,8 +2,6 @@ import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import Rive, { Alignment, Fit } from 'rive-react-native';
 
-const resourceName = 'hero_editor';
-
 export default function Simple() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
@@ -12,8 +10,20 @@ export default function Simple() {
           fit={Fit.Contain}
           alignment={Alignment.Center}
           style={styles.animation}
-          resourceName={resourceName}
-          stateMachineName={'Jellyfish'}
+          artboardName={'Avatar 3'}
+          animationName="idlePreview"
+          resourceName={'avatars'}
+          onPlay={(name, isSM) => {
+            console.log('PLAYED! - ', name, isSM);
+          }}
+          onStop={(animationName, isStateMachine) => {
+            console.log(
+              'STOPPED! - ',
+              animationName,
+              'isStateMachine: ',
+              isStateMachine
+            );
+          }}
         />
       </ScrollView>
     </SafeAreaView>
