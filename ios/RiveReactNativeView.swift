@@ -3,7 +3,6 @@ import RiveRuntime
 
 class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate {
     // MARK: RiveReactNativeView Properties
-    private var shouldBeReloaded = true
     private var resourceFromBundle = true
     
     // MARK: React Callbacks
@@ -15,66 +14,18 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     @objc var onError: RCTDirectEventBlock?
     @objc var isUserHandlingErrors: Bool
     
-   // MARK: RiveRuntime Bindings
-   var viewModel: RiveViewModel! {
-       willSet {
-           viewModel?.riveView?.playerDelegate = nil
-           viewModel?.riveView?.stateMachineDelegate = nil
-           viewModel?.riveView?.removeFromSuperview()
-           viewModel?.deregisterView()
-           viewModel = nil
-       }
-       didSet {
-           let riveView = viewModel.createRiveView()
-            riveView.playerDelegate = self
-            riveView.stateMachineDelegate = self
-//            DispatchQueue.main.async {
-//               riveView.stateMachineDelegate = self
-//              riveView.playerDelegate = self
-//            }
-           addSubview(riveView)
-       }
-   }
+    // MARK: RiveRuntime Bindings
+    var riveView: RiveView!
+    var viewModel: RiveViewModel!
     
     @objc var resourceName: String? = nil {
         didSet {
-            if let name = resourceName {
-                url = nil
-                resourceFromBundle = true
-                if (viewModel == nil) {
-                    debugPrint("SETTING RESOURCE (no VM)")
-                    shouldBeReloaded = false
-                }
-                debugPrint("SETTING RESOURCE - autoplay \(autoplay) artboard \(artboardName) animation \(animationName) stateMachineName \(stateMachineName)")
-                if let smName = stateMachineName {
-                    viewModel = RiveViewModel(fileName: name, stateMachineName: smName, artboardName: artboardName)
-                } else if let animName = animationName {
-                    viewModel = RiveViewModel(fileName: name, animationName: animName, artboardName: artboardName)
-                } else {
-                    viewModel = RiveViewModel(fileName: name, artboardName: artboardName)
-                }
-            }
+            configureViewModelFromResource()
         }
     }
     @objc var url: String? = nil {
         didSet {
-            if let url = url {
-                resourceName = nil
-                resourceFromBundle = false
-//                if (viewModel == nil) {
-//                    debugPrint("SETTING URL (noVM)")
-//                    shouldBeReloaded = false
-//                }
-                debugPrint("SETTING URL - autoplay \(autoplay) artboard \(artboardName) animation \(animationName) stateMachineName \(stateMachineName)")
-                viewModel = RiveViewModel(webURL: url)
-//                if let smName = stateMachineName {
-//                    viewModel = RiveViewModel(webURL: url, stateMachineName: smName, artboardName: artboardName)
-//                } else if let animName = animationName {
-//                    viewModel = RiveViewModel(webURL: url, animationName: animName, artboardName: artboardName)
-//                } else {
-//                    viewModel = RiveViewModel(webURL: url)
-//                }
-            }
+            configureViewModelFromUrl()
         }
     }
     @objc var fit: String? {
@@ -100,46 +51,14 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
         }
     }
     
-    @objc var artboardName: String? {
-        didSet {
-            if viewModel != nil, let name = artboardName {
-//                shouldBeReloaded = true
-                // RiveFile may not be set yet so artboard will be set on the reload
-                debugPrint("artboardName - current \(viewModel?.riveModel?.artboard?.name()) \(name)")
-                if (url == nil && viewModel?.riveModel?.artboard?.name() != name) {
-                    debugPrint("artboardName - SETTING \(viewModel?.riveModel?.artboard?.name()) \(name)")
-                    shouldBeReloaded = true
-                    try! viewModel?.riveModel?.setArtboard(name)
-                 }
-            }
-        }
-    }
+    @objc var artboardName: String?
     
-    @objc var animationName: String? {
-        didSet {
-            if let name = animationName {
-                if viewModel != nil && viewModel?.riveModel?.animation?.name() != name {
-                    debugPrint("animationName - SETTING \(viewModel?.riveModel?.animation?.name()) \(name)")
-                    shouldBeReloaded = true
-                    try! viewModel?.riveModel?.setAnimation(name)
-                }
-//                shouldBeReloaded = true
-//                try! viewModel?.riveModel?.setAnimation(name)
-            }
-        }
-    }
     
-    @objc var stateMachineName: String? {
-        didSet {
-            if viewModel != nil, let name = stateMachineName {
-                if viewModel?.riveModel?.stateMachine?.name() != name {
-                    debugPrint("stateMachineName - SETTING \(viewModel?.riveModel?.stateMachine?.name()) \(name)")
-                    shouldBeReloaded = true
-                    try! viewModel?.riveModel?.setStateMachine(name)
-                }
-            }
-        }
-    }
+    @objc var animationName: String?
+    
+    
+    @objc var stateMachineName: String?
+    
     
     override init(frame: CGRect) {
         self.autoplay = false // will be changed by react native
@@ -156,9 +75,8 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     
     // MARK: - React Native Helpers
     
-    override func didSetProps(_ changedProps: [String]!) {
-        print("DID SET PROPS \(changedProps)")
-        reloadIfNeeded()
+    override func removeFromSuperview() {
+        removeReactSubview(riveView) // TODO: Investigate if this is the optimal place to remove, and if this is necessary.
     }
     
     override func layoutSubviews() {
@@ -168,62 +86,63 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
         }
     }
     
-    private func reloadIfNeeded() {
-        if(shouldBeReloaded) {
-            if let safeUrl = url {
-                if !resourceFromBundle {
-                    if let sm = stateMachineName {
-                        debugPrint("reload new VM (State Machine) - \(artboardName) \(sm)")
-                        viewModel = RiveViewModel(
-                            webURL: safeUrl,
-                            stateMachineName: sm,
-                            autoPlay: autoplay,
-                            artboardName: artboardName
-                        )
-                    }
-                    else {
-                        viewModel = RiveViewModel(
-                            webURL: safeUrl,
-                            animationName: animationName,
-                            autoPlay: autoplay,
-                            artboardName: artboardName
-                        )
-                    }
-                } else {
-                    RCTLogError("You cannot pass both resourceName and url at the same time")
-                }
+    override func didSetProps(_ changedProps: [String]!) {
+        reloadView()
+    }
+    
+    private func createNewView(updatedViewModel : RiveViewModel){
+        removeReactSubview(riveView)
+        viewModel = updatedViewModel
+        riveView = viewModel.createRiveView();
+        addSubview(riveView)
+    }
+    
+    private func configureViewModelFromResource() {
+        if let name = resourceName {
+            url = nil
+            resourceFromBundle = true
+            
+            var updatedViewModel: RiveViewModel
+            if let smName = stateMachineName {
+                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, artboardName: artboardName)
+            } else if let animName = animationName {
+                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, artboardName: artboardName)
             } else {
-                if resourceFromBundle, let safeResourceName = resourceName {
-                    // TODO: DONT REMOVE THIS LINE OR THINGS BREAK. Figure out why
-                    viewModel?.stop()
-                    if let sm = stateMachineName {
-                        viewModel = RiveViewModel(
-                            fileName: safeResourceName,
-                            stateMachineName: sm,
-                            autoPlay: autoplay,
-                            artboardName: artboardName
-                        )
-                    }
-                    else {
-                        viewModel = RiveViewModel(
-                            fileName: safeResourceName,
-                            animationName: animationName,
-                            autoPlay: autoplay,
-                            artboardName: artboardName
-                        )
-                    }
-                } else {
-                    let message = "File resource not found. You must provide correct url or resourceName!"
-                    if isUserHandlingErrors {
-                        var rnRiveError = RNRiveError.FileNotFound
-                        rnRiveError.message = message
-                        onRNRiveError(rnRiveError)
-                    } else {
-                        RCTLogError(message)
-                    }
-                }
+                updatedViewModel = RiveViewModel(fileName: name, artboardName: artboardName)
             }
-            shouldBeReloaded = false
+            
+            createNewView(updatedViewModel: updatedViewModel)
+        }
+    }
+    
+    private func configureViewModelFromUrl() {
+        if let url = url {
+            resourceName = nil
+            resourceFromBundle = false
+            
+            var updatedViewModel: RiveViewModel
+            if let smName = stateMachineName {
+                updatedViewModel = RiveViewModel(webURL: url, stateMachineName: smName, artboardName: artboardName)
+            } else if let animName = animationName {
+                updatedViewModel = RiveViewModel(webURL: url, animationName: animName, artboardName: artboardName)
+            } else {
+                updatedViewModel = RiveViewModel(webURL: url)
+            }
+            
+            createNewView(updatedViewModel: updatedViewModel)
+        }
+    }
+    
+    private func reloadView() {
+        if resourceFromBundle {
+            do {
+                try viewModel?.configureModel(artboardName: artboardName, stateMachineName: stateMachineName, animationName: animationName)
+            } catch let error as NSError {
+                handleRiveError(error: error)
+            }
+            
+        } else {
+            configureViewModelFromUrl() // TODO: calling viewModel?.configureModel for a URL ViewModel throws. Requires further investigation. Currently recreating the whole ViewModel upon URL change.
         }
     }
     
@@ -250,8 +169,7 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     
     func reset() {
         viewModel.reset()
-        shouldBeReloaded = true
-        reloadIfNeeded()
+        reloadView()
     }
     
     // MARK: - StateMachine Inputs
@@ -269,7 +187,6 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     
     // MARK: - StateMachineDelegate
-
     
     @objc func stateMachine(_ stateMachine: RiveStateMachineInstance, didChangeState stateName: String) {
         debugPrint("STATE MACHINE callback \(stateMachine.name()) \(stateName)")
@@ -294,28 +211,28 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     
     func player(pausedWithModel riveModel: RiveModel?) {
         debugPrint("ADVANCE BY PAUSE")
-         onPause?([
+        onPause?([
             "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name(),
-             "isStateMachine": riveModel?.stateMachine != nil
-         ])
+            "isStateMachine": riveModel?.stateMachine != nil
+        ])
     }
     
     func player(loopedWithModel riveModel: RiveModel?, type: Int) {
-         onLoopEnd?([
-             "animationName": riveModel?.animation!.name(),
-             "loopMode": RNLoopMode.mapToRNLoopMode(value: type).rawValue
-         ])
+        onLoopEnd?([
+            "animationName": riveModel?.animation!.name(),
+            "loopMode": RNLoopMode.mapToRNLoopMode(value: type).rawValue
+        ])
     }
     
     func player(stoppedWithModel riveModel: RiveModel?) {
         debugPrint("ADVANCE BY STOP \(riveModel?.animation?.name())")
-//        shouldBeReloaded = true
-//        autoplay = false // we want to stop animation after reload
-//        reloadIfNeeded()
-         onStop?([
+        //        shouldBeReloaded = true
+        //        autoplay = false // we want to stop animation after reload
+        //        reloadIfNeeded()
+        onStop?([
             "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name(),
-             "isStateMachine": riveModel?.stateMachine != nil
-         ])
+            "isStateMachine": riveModel?.stateMachine != nil
+        ])
     }
     
     func player(didAdvanceby seconds: Double, riveModel: RiveModel?) {
