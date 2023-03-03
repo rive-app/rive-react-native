@@ -4,6 +4,7 @@ import RiveRuntime
 class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate {
     // MARK: RiveReactNativeView Properties
     private var resourceFromBundle = true
+    private var requiresLocalResourceReconfigure = false
     
     // MARK: React Callbacks
     @objc var onPlay: RCTDirectEventBlock?
@@ -20,24 +21,29 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     
     @objc var resourceName: String? = nil {
         didSet {
-            configureViewModelFromResource()
-        }
-    }
-    @objc var url: String? = nil {
-        didSet {
-            if let url = url {
-                resourceName = nil
-                resourceFromBundle = false
-                // Don't construct until didSetProps is run
-//                configureViewModelFromUrl()
+            if (resourceName != nil) {
+                url = nil
+                resourceFromBundle = true;
+                requiresLocalResourceReconfigure = true;
             }
         }
     }
+    
+    @objc var url: String? = nil {
+        didSet {
+            if (url != nil) {
+                resourceName = nil
+                resourceFromBundle = false
+            }
+        }
+    }
+    
     @objc var fit: String?
     
     @objc var alignment: String?
     
-    @objc var autoplay: Bool {
+    @objc var autoplay: Bool
+    {
         didSet {
             if let viewModel = viewModel {
                 viewModel.autoPlay = autoplay
@@ -81,7 +87,17 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-        reloadView()
+        if (changedProps.contains("url") || changedProps.contains("resourceName") || changedProps.contains("artboardName") || changedProps.contains("animationName") || changedProps.contains("stateMachineName")) {
+            reloadView()
+        }
+        
+        if (changedProps.contains("fit")) {
+            viewModel?.fit = convertFit(fit)
+        }
+        
+        if (changedProps.contains("alignment"))  {
+            viewModel?.alignment = convertAlignment(alignment)
+        }
     }
     
     private func convertFit(_ fit: String? = nil) -> RiveFit {
@@ -112,16 +128,17 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
             url = nil
             resourceFromBundle = true
             
-            var updatedViewModel: RiveViewModel
+            let updatedViewModel : RiveViewModel
             if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else if let animName = animationName {
-                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else {
-                updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             }
             
             createNewView(updatedViewModel: updatedViewModel)
+            requiresLocalResourceReconfigure = false
         }
     }
     
@@ -130,13 +147,13 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
             resourceName = nil
             resourceFromBundle = false
             
-            var updatedViewModel: RiveViewModel
+            let updatedViewModel : RiveViewModel
             if let smName = stateMachineName {
                 updatedViewModel = RiveViewModel(webURL: url, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else if let animName = animationName {
                 updatedViewModel = RiveViewModel(webURL: url, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else {
-                updatedViewModel = RiveViewModel(webURL: url, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay)
+                updatedViewModel = RiveViewModel(webURL: url, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             }
             
             createNewView(updatedViewModel: updatedViewModel)
@@ -145,17 +162,22 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     
     private func reloadView() {
         if resourceFromBundle {
+            if requiresLocalResourceReconfigure {
+                configureViewModelFromResource()
+                return; // exit early, new RiveViewModel created, no need to configure further
+            }
+            
             do {
                 try viewModel?.configureModel(artboardName: artboardName, stateMachineName: stateMachineName, animationName: animationName)
-                viewModel.fit = convertFit(fit)
-                viewModel.alignment = convertAlignment(alignment)
             } catch let error as NSError {
                 handleRiveError(error: error)
             }
             
         } else {
-            configureViewModelFromUrl() // TODO: calling viewModel?.configureModel for a URL ViewModel throws. Requires further investigation. Currently recreating the whole ViewModel upon URL change.
+            configureViewModelFromUrl() // TODO: calling viewModel?.configureModel for a URL ViewModel throws. Requires further investigation. Currently recreating the whole ViewModel for certain prop changes.
         }
+        
+        
     }
     
     // MARK: - Playback Controls
@@ -163,7 +185,6 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     func play(animationName: String? = nil, rnLoopMode: RNLoopMode, rnDirection: RNDirection) {
         let loop = RNLoopMode.mapToRiveLoop(rnLoopMode: rnLoopMode)
         let direction = RNDirection.mapToRiveDirection(rnDirection: rnDirection)
-        let model = viewModel.riveModel!
         if (animationName ?? "").isEmpty {
             viewModel.play(loop: loop, direction: direction)
         } else {
@@ -287,7 +308,7 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     
     private func handleTouch(location: CGPoint, action: (RiveStateMachineInstance, CGPoint)->Void) {
-        if let rView = viewModel.riveView {
+        if (viewModel.riveView != nil) {
             let artboardLocation = viewModel.riveView!.artboardLocation(
                 fromTouchLocation: location,
                 inArtboard: viewModel.riveModel!.artboard!.bounds(),
