@@ -117,10 +117,15 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     
     private func createNewView(updatedViewModel : RiveViewModel){
+        riveView?.playerDelegate = nil
+        riveView?.stateMachineDelegate = nil
         removeReactSubview(riveView)
+        
         viewModel = updatedViewModel
         riveView = viewModel.createRiveView();
         addSubview(riveView)
+        riveView?.playerDelegate = self
+        riveView?.stateMachineDelegate = self
     }
     
     private func configureViewModelFromResource() {
@@ -234,9 +239,8 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     
     func player(playedWithModel riveModel: RiveModel?) {
         if (riveModel?.animation != nil || riveModel?.stateMachine != nil) {
-            debugPrint("ADVANCE BY PLAY \(animationName) \(stateMachineName) \(riveModel?.animation?.name() ?? riveModel?.stateMachine?.name())");
             onPlay?([
-                "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name(),
+                "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name() ?? "",
                 "isStateMachine": riveModel?.stateMachine != nil
             ])
         }
@@ -245,30 +249,27 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     func player(pausedWithModel riveModel: RiveModel?) {
         debugPrint("ADVANCE BY PAUSE")
         onPause?([
-            "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name(),
+            "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name() ?? "",
             "isStateMachine": riveModel?.stateMachine != nil
         ])
     }
     
     func player(loopedWithModel riveModel: RiveModel?, type: Int) {
         onLoopEnd?([
-            "animationName": riveModel?.animation!.name(),
+            "animationName": riveModel?.animation?.name() ?? "",
             "loopMode": RNLoopMode.mapToRNLoopMode(value: type).rawValue
         ])
     }
     
     func player(stoppedWithModel riveModel: RiveModel?) {
-        debugPrint("ADVANCE BY STOP \(riveModel?.animation?.name())")
-        //        shouldBeReloaded = true
-        //        autoplay = false // we want to stop animation after reload
-        //        reloadIfNeeded()
         onStop?([
-            "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name(),
+            "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name() ?? "",
             "isStateMachine": riveModel?.stateMachine != nil
         ])
     }
     
     func player(didAdvanceby seconds: Double, riveModel: RiveModel?) {
+        // TODO: implement if in Android
     }
     
     // MARK: - Touch Events
