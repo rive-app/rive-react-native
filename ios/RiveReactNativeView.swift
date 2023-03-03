@@ -25,29 +25,23 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     @objc var url: String? = nil {
         didSet {
-            configureViewModelFromUrl()
-        }
-    }
-    @objc var fit: String? {
-        didSet {
-            if let safeFit = fit {
-                let rnFit = RNFit.mapToRNFit(value: safeFit)
-                viewModel.fit = RNFit.mapToRiveFit(rnFit: rnFit)
+            if let url = url {
+                resourceName = nil
+                resourceFromBundle = false
+                // Don't construct until didSetProps is run
+//                configureViewModelFromUrl()
             }
         }
     }
-    @objc var alignment: String? {
-        didSet {
-            if let safeAlignment = alignment {
-                let rnAlignment = RNAlignment.mapToRNAlignment(value: safeAlignment)
-                viewModel.alignment = RNAlignment.mapToRiveAlignment(rnAlignment: rnAlignment)
-            }
-        }
-    }
+    @objc var fit: String?
+    
+    @objc var alignment: String?
     
     @objc var autoplay: Bool {
         didSet {
-            viewModel.autoPlay = autoplay
+            if let viewModel = viewModel {
+                viewModel.autoPlay = autoplay
+            }
         }
     }
     
@@ -90,6 +84,22 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
         reloadView()
     }
     
+    private func convertFit(_ fit: String? = nil) -> RiveFit {
+        if let safeFit = fit {
+            let rnFit = RNFit.mapToRNFit(value: safeFit)
+            return RNFit.mapToRiveFit(rnFit: rnFit)
+        }
+        return RiveFit.contain
+    }
+    
+    private func convertAlignment(_ alignment: String? = nil) -> RiveAlignment {
+        if let safeAlignment = alignment {
+            let rnAlignment = RNAlignment.mapToRNAlignment(value: safeAlignment)
+            return RNAlignment.mapToRiveAlignment(rnAlignment: rnAlignment)
+        }
+        return RiveAlignment.center
+    }
+    
     private func createNewView(updatedViewModel : RiveViewModel){
         removeReactSubview(riveView)
         viewModel = updatedViewModel
@@ -104,11 +114,11 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
             
             var updatedViewModel: RiveViewModel
             if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), artboardName: artboardName)
             } else if let animName = animationName {
-                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), artboardName: artboardName)
             } else {
-                updatedViewModel = RiveViewModel(fileName: name, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), artboardName: artboardName)
             }
             
             createNewView(updatedViewModel: updatedViewModel)
@@ -122,11 +132,11 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
             
             var updatedViewModel: RiveViewModel
             if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(webURL: url, stateMachineName: smName, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(webURL: url, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else if let animName = animationName {
-                updatedViewModel = RiveViewModel(webURL: url, animationName: animName, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(webURL: url, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else {
-                updatedViewModel = RiveViewModel(webURL: url)
+                updatedViewModel = RiveViewModel(webURL: url, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay)
             }
             
             createNewView(updatedViewModel: updatedViewModel)
@@ -137,6 +147,8 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
         if resourceFromBundle {
             do {
                 try viewModel?.configureModel(artboardName: artboardName, stateMachineName: stateMachineName, animationName: animationName)
+                viewModel.fit = convertFit(fit)
+                viewModel.alignment = convertAlignment(alignment)
             } catch let error as NSError {
                 handleRiveError(error: error)
             }
