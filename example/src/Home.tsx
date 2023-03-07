@@ -65,14 +65,6 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('MultipleAnimations')}
-          style={styles.buttonStyle}
-        >
-          Multiple animations
-        </Button>
-
-        <Button
-          mode="contained"
           onPress={() => navigation.navigate('StateMachine')}
           style={styles.buttonStyle}
         >
