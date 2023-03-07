@@ -6,19 +6,12 @@ export type RiveRef = {
     value: boolean | number
   ) => void;
   play: (
-    animationNames?: string | string[],
+    animationName?: string,
     loop?: LoopMode,
-    direction?: Direction,
-    areStateMachines?: boolean
+    direction?: Direction
   ) => void;
-  pause: (
-    animationNames?: string | string[],
-    areStateMachines?: boolean
-  ) => void;
-  stop: (
-    animationNames?: string | string[],
-    areStateMachines?: boolean
-  ) => void;
+  pause: () => void;
+  stop: () => void;
   reset: () => void;
   touchBegan: (x: number, y: number) => void;
   touchEnded: (x: number, y: number) => void;
