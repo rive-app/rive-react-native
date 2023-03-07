@@ -13,17 +13,6 @@ export default function Simple() {
           artboardName={'Avatar 3'}
           animationName="idlePreview"
           resourceName={'avatars'}
-          onPlay={(name, isSM) => {
-            console.log('PLAYED! - ', name, isSM);
-          }}
-          onStop={(animationName, isStateMachine) => {
-            console.log(
-              'STOPPED! - ',
-              animationName,
-              'isStateMachine: ',
-              isStateMachine
-            );
-          }}
         />
       </ScrollView>
     </SafeAreaView>
