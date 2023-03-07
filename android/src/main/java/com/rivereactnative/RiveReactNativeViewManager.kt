@@ -24,36 +24,19 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "play" -> {
         args?.let {
-          val animationNames = it.getArray(0)!!
+          val animationName = it.getString(0)!!
           val loopMode = it.getString(1)!!
           val direction = it.getString(2)!!
-          val areStateMachines = it.getBoolean(3)
           view.run {
             val rnLoopMode = RNLoopMode.mapToRNLoopMode(loopMode)
             val rnDirection = RNDirection.mapToRNDirection(direction)
-            play((animationNames.toArrayList() as ArrayList<String>).toList(), rnLoopMode, rnDirection, areStateMachines)
+            play(animationName, rnLoopMode, rnDirection)
           }
         }
 
       }
-      "pause" -> {
-        args?.let {
-          val animationNames = it.getArray(0)!!
-          val areStateMachines = it.getBoolean(1)
-          view.run {
-            pause((animationNames.toArrayList() as ArrayList<String>).toList(), areStateMachines)
-          }
-        }
-      }
-      "stop" -> {
-        args?.let {
-          val animationNames = it.getArray(0)!!
-          val areStateMachines = it.getBoolean(1)
-          view.run {
-            stop((animationNames.toArrayList() as ArrayList<String>).toList(), areStateMachines)
-          }
-        }
-      }
+      "pause" -> view.pause()
+      "stop" -> view.stop()
       "reset" -> view.reset()
 
       // StateMachine inputs

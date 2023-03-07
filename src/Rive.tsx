@@ -203,53 +203,35 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
     const play = useCallback<RiveRef[ViewManagerMethod.play]>(
       (
-        animationNames = [],
+        // eslint-disable-next-line no-shadow
+        animationName = '', // TODO change
         loop = LoopMode.Auto,
-        direction = Direction.Auto,
-        areStateMachines = false
+        direction = Direction.Auto
       ) => {
-        const animationNamesArray = Array.isArray(animationNames)
-          ? animationNames
-          : [animationNames];
-
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
           ViewManagerMethod.play,
-          [animationNamesArray, loop, direction, areStateMachines]
+          [animationName, loop, direction]
         );
       },
       []
     );
 
-    const pause = useCallback<RiveRef[ViewManagerMethod.pause]>(
-      (animationNames = [], areStateMachines = false) => {
-        const animationNamesArray = Array.isArray(animationNames)
-          ? animationNames
-          : [animationNames];
+    const pause = useCallback<RiveRef[ViewManagerMethod.pause]>(() => {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(riveRef.current),
+        ViewManagerMethod.pause,
+        []
+      );
+    }, []);
 
-        UIManager.dispatchViewManagerCommand(
-          findNodeHandle(riveRef.current),
-          ViewManagerMethod.pause,
-          [animationNamesArray, areStateMachines]
-        );
-      },
-      []
-    );
-
-    const stop = useCallback<RiveRef[ViewManagerMethod.stop]>(
-      (animationNames = [], areStateMachines = false) => {
-        const animationNamesArray = Array.isArray(animationNames)
-          ? animationNames
-          : [animationNames];
-
-        UIManager.dispatchViewManagerCommand(
-          findNodeHandle(riveRef.current),
-          ViewManagerMethod.stop,
-          [animationNamesArray, areStateMachines]
-        );
-      },
-      []
-    );
+    const stop = useCallback<RiveRef[ViewManagerMethod.stop]>(() => {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(riveRef.current),
+        ViewManagerMethod.stop,
+        []
+      );
+    }, []);
 
     const reset = useCallback(() => {
       UIManager.dispatchViewManagerCommand(

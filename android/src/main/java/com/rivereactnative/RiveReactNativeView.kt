@@ -165,42 +165,33 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
   }
 
-  fun play(animationNames: List<String>, rnLoopMode: RNLoopMode, rnDirection: RNDirection, areStateMachines: Boolean) {
+  fun play(animationName: String, rnLoopMode: RNLoopMode, rnDirection: RNDirection) {
     val loop = RNLoopMode.mapToRiveLoop(rnLoopMode)
     val direction = RNDirection.mapToRiveDirection(rnDirection)
-    if (animationNames.isEmpty()) {
+    if (animationName.isEmpty()) {
       riveAnimationView.play(loop, direction) // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
     } else {
-
       try {
-        riveAnimationView.play(animationNames, loop, direction, areStateMachines)
+        riveAnimationView.play(animationName, loop, direction)
       } catch (ex: RiveException) {
         handleRiveException(ex)
       }
     }
   }
 
-  fun pause(animationNames: List<String>, areStateMachines: Boolean) {
-    if (animationNames.isEmpty()) {
-      riveAnimationView.pause() // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
-    } else {
-      try {
-        riveAnimationView.pause(animationNames, areStateMachines)
-      } catch (ex: RiveException) {
-        handleRiveException(ex)
-      }
+  fun pause() {
+    try {
+      riveAnimationView.pause()
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
     }
   }
 
-  fun stop(animationNames: List<String>, areStateMachines: Boolean) {
-    if (animationNames.isEmpty()) {
-      resetRiveResource()
-    } else {
-      try {
-        riveAnimationView.stop(animationNames, areStateMachines)
-      } catch (ex: RiveException) {
-        handleRiveException(ex)
-      }
+  fun stop() {
+    try {
+      riveAnimationView.stop()
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
     }
   }
 

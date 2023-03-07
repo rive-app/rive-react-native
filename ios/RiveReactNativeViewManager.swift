@@ -8,23 +8,22 @@ class RiveReactNativeViewManager: RCTViewManager {
         return RiveReactNativeView()
     }
     
-    @objc func play(_ node: NSNumber, animationNames: [String], loop: String, direction: String, areStateMachines: Bool) {
+    @objc func play(_ node: NSNumber, animationName: String, loop: String, direction: String) {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
-            component.play(animationName: animationNames.isEmpty ? "" : animationNames.first, rnLoopMode: RNLoopMode.mapToRNLoopMode(value: loop), rnDirection: RNDirection.mapToRNDirection(value: direction))
+            component.play(animationName: animationName, rnLoopMode: RNLoopMode.mapToRNLoopMode(value: loop), rnDirection: RNDirection.mapToRNDirection(value: direction))
             
         }
     }
     
-    // Might need to keep method signatures and just change the component.pause() to be iOS
-    @objc func pause(_ node: NSNumber, animationNames: [String], areStateMachines: Bool) {
+    @objc func pause(_ node: NSNumber) {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
             component.pause()
         }
     }
     
-    @objc func stop(_ node: NSNumber, animationNames: [String], areStateMachines: Bool) {
+    @objc func stop(_ node: NSNumber) {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
             component.stop()
