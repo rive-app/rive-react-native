@@ -6,7 +6,7 @@ export default function MultipleArtboards() {
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text>Square - go around</Text>
+        <Text>Avatar 1</Text>
         <Rive
           autoplay={true}
           style={styles.animation}
@@ -16,7 +16,7 @@ export default function MultipleArtboards() {
           resourceName={'avatars'}
         />
 
-        <Text>Square - roll around</Text>
+        <Text>Avatar 2</Text>
         <Rive
           autoplay={true}
           style={styles.animation}
@@ -25,7 +25,7 @@ export default function MultipleArtboards() {
           resourceName={'avatars'}
         />
 
-        <Text>Circle</Text>
+        <Text>Avatar 3</Text>
         <Rive
           autoplay={true}
           style={styles.animation}
@@ -34,7 +34,7 @@ export default function MultipleArtboards() {
           resourceName={'avatars'}
         />
 
-        <Text>Star</Text>
+        <Text>All Avatars</Text>
         <Rive
           autoplay={true}
           style={styles.animation}

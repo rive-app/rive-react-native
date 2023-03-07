@@ -73,14 +73,6 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('StateTrigger')}
-          style={styles.buttonStyle}
-        >
-          State Trigger
-        </Button>
-
-        <Button
-          mode="contained"
           onPress={() => navigation.navigate('ErrorNotHandled')}
           style={styles.buttonStyle}
         >

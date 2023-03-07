@@ -53,34 +53,28 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   init {
     val listener = object : RiveArtboardRenderer.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
-          } else {
-            throw IllegalArgumentException("Only animation can be passed as an argument")
-          }
+        if (animation is LinearAnimationInstance) {
+          onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
+        } else {
+          throw IllegalArgumentException("Only animation can be passed as an argument")
         }
       }
 
       override fun notifyPause(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onPause(animation.name)
-          }
-          if (animation is StateMachineInstance) {
-            onPause(animation.name, true)
-          }
+        if (animation is LinearAnimationInstance) {
+          onPause(animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onPause(animation.name, true)
         }
       }
 
       override fun notifyPlay(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onPlay(animation.name)
-          }
-          if (animation is StateMachineInstance) {
-            onPlay(animation.name, true)
-          }
+        if (animation is LinearAnimationInstance) {
+          onPlay(animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onPlay(animation.name, true)
         }
       }
 
@@ -89,13 +83,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
       override fun notifyStop(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onStop(animation.name)
-          }
-          if (animation is StateMachineInstance) {
-            onStop(animation.name, true)
-          }
+        if (animation is LinearAnimationInstance) {
+          onStop(animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onStop(animation.name, true)
         }
       }
 
@@ -113,7 +105,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       addView(riveAnimationView)
       update()
       isAttached = true
-    }  
+    }
     super.onAttachedToWindow()
   }
 
