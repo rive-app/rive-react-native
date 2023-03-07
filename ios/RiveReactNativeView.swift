@@ -227,12 +227,10 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     // MARK: - StateMachineDelegate
     
     @objc func stateMachine(_ stateMachine: RiveStateMachineInstance, didChangeState stateName: String) {
-        debugPrint("STATE MACHINE callback \(stateMachine.name()) \(stateName)")
         onStateChanged?(["stateMachineName": stateMachine.name(), "stateName": stateName])
     }
     
     @objc func stateMachine(_ stateMachine: RiveStateMachineInstance, receivedInput input: StateMachineInput) {
-        debugPrint("STATE MACHINE callback")
     }
     
     // MARK: - PlayerDelegate
@@ -247,7 +245,6 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     
     func player(pausedWithModel riveModel: RiveModel?) {
-        debugPrint("ADVANCE BY PAUSE")
         onPause?([
             "animationName": riveModel?.animation?.name() ?? riveModel?.stateMachine?.name() ?? "",
             "isStateMachine": riveModel?.stateMachine != nil

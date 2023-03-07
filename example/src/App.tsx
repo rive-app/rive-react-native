@@ -9,7 +9,6 @@ import Http from './Http';
 import StateMachine from './StateMachine';
 import MultipleArtboards from './MultipleArtboards';
 import LoopModeComponent from './LoopMode';
-import StateTrigger from './StateTrigger';
 import SimpleControls from './SimpleControls';
 import ErrorNotHandled from './ErrorNotHandled';
 import ErrorHandledManually from './ErrorHandledManually';
@@ -41,7 +40,6 @@ export default function App() {
             name="LoopModeComponent"
             component={LoopModeComponent}
           />
-          <Stack.Screen name="StateTrigger" component={StateTrigger} />
           <Stack.Screen name="ErrorNotHandled" component={ErrorNotHandled} />
           <Stack.Screen
             name="ErrorHandledManually"
