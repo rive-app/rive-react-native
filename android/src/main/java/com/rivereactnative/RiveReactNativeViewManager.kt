@@ -101,6 +101,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   override fun createViewInstance(reactContext: ThemedReactContext): RiveReactNativeView {
     return RiveReactNativeView(reactContext)
   }
+
   @ReactProp(name = "resourceName")
   fun setResourceName(view: RiveReactNativeView, resourceName: String?) {
     view.setResourceName(resourceName)

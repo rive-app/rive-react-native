@@ -31,6 +31,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var artboardName: String? = null
   private var fit: Fit = Fit.CONTAIN
   private var alignment: Alignment = Alignment.CENTER
+  private var autoplay: Boolean = false;
   private var shouldBeReloaded = true
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
@@ -93,7 +94,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
     }
     riveAnimationView.registerListener(listener)
-    riveAnimationView.autoplay = false
+    autoplay = false
     addView(riveAnimationView)
   }
 
@@ -245,7 +246,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setAutoplay(autoplay: Boolean) {
-    riveAnimationView.autoplay = autoplay
+    this.autoplay = autoplay
     shouldBeReloaded = true
   }
 
@@ -269,7 +270,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             resId,
             fit = this.fit,
             alignment = this.alignment,
-            autoplay = false,
+            autoplay = autoplay,
             stateMachineName = this.stateMachineName,
             animationName = this.animationName,
             artboardName = this.artboardName
@@ -299,7 +300,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               resId,
               fit = this.fit,
               alignment = this.alignment,
-              autoplay = riveAnimationView.autoplay,
+              autoplay = autoplay,
               stateMachineName = this.stateMachineName,
               animationName = this.animationName,
               artboardName = this.artboardName
@@ -318,7 +319,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
 
-  private fun setUrlRiveResource(url: String, autoplay: Boolean = riveAnimationView.autoplay) {
+  private fun setUrlRiveResource(url: String, autoplay: Boolean = this.autoplay) {
     val queue = Volley.newRequestQueue(context)
     val stringRequest = RNRiveFileRequest(url, { bytes ->
       try {
