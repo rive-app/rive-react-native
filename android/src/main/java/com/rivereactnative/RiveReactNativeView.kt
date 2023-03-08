@@ -169,7 +169,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     val loop = RNLoopMode.mapToRiveLoop(rnLoopMode)
     val direction = RNDirection.mapToRiveDirection(rnDirection)
     if (animationName.isEmpty()) {
-      riveAnimationView.play(loop, direction) // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
+      riveAnimationView.play(loop, direction)
     } else {
       try {
         riveAnimationView.play(animationName, loop, direction)
