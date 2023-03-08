@@ -8,7 +8,8 @@ export type RiveRef = {
   play: (
     animationName?: string,
     loop?: LoopMode,
-    direction?: Direction
+    direction?: Direction,
+    isStateMachine?: boolean
   ) => void;
   pause: () => void;
   stop: () => void;

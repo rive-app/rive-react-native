@@ -187,10 +187,10 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     
     // MARK: - Playback Controls
     
-    func play(animationName: String? = nil, rnLoopMode: RNLoopMode, rnDirection: RNDirection) {
+    func play(animationName: String? = nil, rnLoopMode: RNLoopMode, rnDirection: RNDirection, isStateMachine: Bool) {
         let loop = RNLoopMode.mapToRiveLoop(rnLoopMode: rnLoopMode)
         let direction = RNDirection.mapToRiveDirection(rnDirection: rnDirection)
-        if (animationName ?? "").isEmpty {
+        if (animationName ?? "").isEmpty || isStateMachine {
             viewModel.play(loop: loop, direction: direction)
         } else {
             viewModel.play(animationName: animationName, loop: loop, direction: direction)

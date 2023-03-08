@@ -8,10 +8,10 @@ class RiveReactNativeViewManager: RCTViewManager {
         return RiveReactNativeView()
     }
     
-    @objc func play(_ node: NSNumber, animationName: String, loop: String, direction: String) {
+    @objc func play(_ node: NSNumber, animationName: String, loop: String, direction: String, isStateMachine: Bool) {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
-            component.play(animationName: animationName, rnLoopMode: RNLoopMode.mapToRNLoopMode(value: loop), rnDirection: RNDirection.mapToRNDirection(value: direction))
+            component.play(animationName: animationName, rnLoopMode: RNLoopMode.mapToRNLoopMode(value: loop), rnDirection: RNDirection.mapToRNDirection(value: direction), isStateMachine: isStateMachine);
             
         }
     }

@@ -166,14 +166,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
   }
 
-  fun play(animationName: String, rnLoopMode: RNLoopMode, rnDirection: RNDirection) {
+  fun play(animationName: String, rnLoopMode: RNLoopMode, rnDirection: RNDirection, isStateMachine: Boolean) {
     val loop = RNLoopMode.mapToRiveLoop(rnLoopMode)
     val direction = RNDirection.mapToRiveDirection(rnDirection)
     if (animationName.isEmpty()) {
-      riveAnimationView.play(loop, direction)
+      riveAnimationView.play(loop, direction) // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
     } else {
       try {
-        riveAnimationView.play(animationName, loop, direction)
+        riveAnimationView.play(animationName, loop, direction, isStateMachine)
       } catch (ex: RiveException) {
         handleRiveException(ex)
       }
