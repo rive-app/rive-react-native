@@ -27,10 +27,11 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           val animationName = it.getString(0)!!
           val loopMode = it.getString(1)!!
           val direction = it.getString(2)!!
+          val isStateMachine = it.getBoolean(3)
           view.run {
             val rnLoopMode = RNLoopMode.mapToRNLoopMode(loopMode)
             val rnDirection = RNDirection.mapToRNDirection(direction)
-            play(animationName, rnLoopMode, rnDirection)
+            play(animationName, rnLoopMode, rnDirection, isStateMachine)
           }
         }
 
