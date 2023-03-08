@@ -41,36 +41,62 @@ export default function LoopModeComponent() {
     riveRef.current?.play(animationName, loop, direction);
   };
 
-  const pause = (animationName: string) => {
-    riveRef.current?.pause(animationName);
+  const pause = () => {
+    riveRef.current?.pause();
   };
 
-  const stop = (animationName: string) => {
-    riveRef.current?.stop(animationName);
+  const stop = () => {
+    riveRef.current?.stop();
   };
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <Rive
         ref={riveRef}
+        onPlay={(animationName, _) => {
+          switch (animationName) {
+            case 'oneshot':
+              setRotateActiveButton('play');
+              setLoopDownActiveButton('stop');
+              setPingPongActiveButton('stop');
+              break;
+            case 'loop':
+              setLoopDownActiveButton('play');
+              setRotateActiveButton('stop');
+              setPingPongActiveButton('stop');
+              break;
+            case 'pingpong':
+              setPingPongActiveButton('play');
+              setRotateActiveButton('stop');
+              setLoopDownActiveButton('stop');
+              break;
+          }
+        }}
         onPause={(animationName) => {
           switch (animationName) {
             case 'oneshot': {
               setRotateActiveButton('pause');
+              setLoopDownActiveButton('stop');
+              setPingPongActiveButton('stop');
               break;
             }
             case 'loop': {
               setLoopDownActiveButton('pause');
+              setRotateActiveButton('stop');
+              setPingPongActiveButton('stop');
               break;
             }
 
             case 'pingpong': {
               setPingPongActiveButton('pause');
+              setLoopDownActiveButton('stop');
+              setRotateActiveButton('stop');
               break;
             }
           }
         }}
         onStop={(animationName) => {
+          console.log(animationName);
           switch (animationName) {
             case 'oneshot': {
               setRotateActiveButton('stop');
@@ -80,7 +106,6 @@ export default function LoopModeComponent() {
               setLoopDownActiveButton('stop');
               break;
             }
-
             case 'pingpong': {
               setPingPongActiveButton('stop');
               break;
@@ -115,7 +140,7 @@ export default function LoopModeComponent() {
               color={rotateActiveButton === 'pause' ? 'blue' : 'white'}
               style={styles.button}
               onPress={() => {
-                pause('oneshot');
+                pause();
                 setRotateActiveButton('pause');
               }}
             >
@@ -126,7 +151,7 @@ export default function LoopModeComponent() {
               color={rotateActiveButton === 'stop' ? 'red' : 'white'}
               style={styles.button}
               onPress={() => {
-                stop('oneshot');
+                stop();
                 setRotateActiveButton('stop');
               }}
             >
@@ -208,7 +233,7 @@ export default function LoopModeComponent() {
               color={loopDownActiveButton === 'pause' ? 'blue' : 'white'}
               style={styles.button}
               onPress={() => {
-                pause('loop');
+                pause();
                 setLoopDownActiveButton('pause');
               }}
             >
@@ -219,7 +244,7 @@ export default function LoopModeComponent() {
               color={loopDownActiveButton === 'stop' ? 'red' : 'white'}
               style={styles.button}
               onPress={() => {
-                stop('loop');
+                stop();
                 setLoopDownActiveButton('stop');
               }}
             >
@@ -301,7 +326,7 @@ export default function LoopModeComponent() {
               color={pingPongActiveButton === 'pause' ? 'blue' : 'white'}
               style={styles.button}
               onPress={() => {
-                pause('pingpong');
+                pause();
                 setPingPongActiveButton('pause');
               }}
             >
@@ -312,7 +337,7 @@ export default function LoopModeComponent() {
               color={pingPongActiveButton === 'stop' ? 'red' : 'white'}
               style={styles.button}
               onPress={() => {
-                stop('pingpong');
+                stop();
                 setPingPongActiveButton('stop');
               }}
             >
