@@ -16,6 +16,7 @@ This library is a wrapper around the iOS/Android runtime, providing a component 
 - 🚀 [Getting Started & API docs](#getting-started)
 - :mag: [Supported Devices](#supported-devices)
 - :books: [Examples](#examples)
+- 🏃 [Migration Guides](#migration-guides)
 - 👨‍💻 [Contributing](#contributing)
 - :question: [Issues](#issues)
 
@@ -55,6 +56,12 @@ Check out the `example/` folder to run an example application using the Rive Rea
 - Displaying single or multiple animations / artboards on one component
 - Setting up and maniuplating a state machine via inputs
 - ...and more!
+
+## Migration Guides
+
+Using an older version of the runtime and need to learn how to upgrade to the latest version? Check out the migration guides below in our help center that help guide you through version bumps; breaking changes and all!
+
+[Migration guides](https://help.rive.app/runtimes/overview/react-native/migrating-from-v3-to-v4)
 
 ## Contributing
 
