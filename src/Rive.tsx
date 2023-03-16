@@ -9,6 +9,7 @@ import {
   View,
   TouchableWithoutFeedback,
   GestureResponderEvent,
+  StyleProp,
 } from 'react-native';
 import {
   RiveRef,
@@ -68,7 +69,7 @@ type RiveProps = {
   ref: any;
   resourceName?: string;
   url?: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 };
 
