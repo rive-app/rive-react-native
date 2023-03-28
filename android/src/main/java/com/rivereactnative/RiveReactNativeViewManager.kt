@@ -1,6 +1,7 @@
 package com.rivereactnative
 
 import android.view.MotionEvent
+import android.util.Log
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
@@ -19,6 +20,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   override fun getName() = "RiveReactNativeView"
 
   override fun receiveCommand(view: RiveReactNativeView, commandId: String, args: ReadableArray?) {
+    Log.d("XYZ", "COMMAND -> $commandId ${view.isAttachedToWindow}")
     when (commandId) {
       // Playback Controls
 
@@ -101,6 +103,12 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   override fun createViewInstance(reactContext: ThemedReactContext): RiveReactNativeView {
     return RiveReactNativeView(reactContext)
+  }
+
+  override fun onAfterUpdateTransaction(view: RiveReactNativeView) {
+    super.onAfterUpdateTransaction(view)
+    Log.d("XYZ", "Bout to update ${view.isAttachedToWindow}")
+    view.update()
   }
 
   @ReactProp(name = "resourceName")

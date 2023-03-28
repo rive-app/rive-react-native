@@ -11,7 +11,9 @@ export default function Simple() {
           alignment={Alignment.Center}
           style={styles.animation}
           artboardName={'Avatar 3'}
-          animationName="idlePreview"
+          autoplay={true}
+          // animationName="idlePreview"
+          stateMachineName="avatar3"
           resourceName={'avatars'}
         />
       </ScrollView>
