@@ -37,8 +37,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
 
-  private var isAttached = false;
-
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
     PAUSE("onPause"),
@@ -53,54 +51,43 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   init {
-    Log.d("XYZ", "INITIALIZING $isAttachedToWindow")
     val listener = object : RiveArtboardRenderer.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
-          } else {
-            throw IllegalArgumentException("Only animation can be passed as an argument")
-          }
+        if (animation is LinearAnimationInstance) {
+          onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
+        } else {
+          throw IllegalArgumentException("Only animation can be passed as an argument")
         }
       }
 
       override fun notifyPause(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onPause(animation.name)
-          }
-          if (animation is StateMachineInstance) {
-            onPause(animation.name, true)
-          }
+        if (animation is LinearAnimationInstance) {
+          onPause(animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onPause(animation.name, true)
         }
       }
 
       override fun notifyPlay(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onPlay(animation.name)
-          }
-          if (animation is StateMachineInstance) {
-            onPlay(animation.name, true)
-          }
+        if (animation is LinearAnimationInstance) {
+          onPlay(animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onPlay(animation.name, true)
         }
       }
 
       override fun notifyStateChanged(stateMachineName: String, stateName: String) {
-        if (riveAnimationView.isAttachedToWindow) {
-          onStateChanged(stateMachineName, stateName)
-        }
+        onStateChanged(stateMachineName, stateName)
       }
 
       override fun notifyStop(animation: PlayableInstance) {
-        if (riveAnimationView.isAttachedToWindow) {
-          if (animation is LinearAnimationInstance) {
-            onStop(animation.name)
-          }
-          if (animation is StateMachineInstance) {
-            onStop(animation.name, true)
-          }
+        if (animation is LinearAnimationInstance) {
+          onStop(animation.name)
+        }
+        if (animation is StateMachineInstance) {
+          onStop(animation.name, true)
         }
       }
 
@@ -109,44 +96,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView.autoplay = false
     autoplay = false
     addView(riveAnimationView)
-    Log.d("XYZ", "init - riveAnimationView added to view $isAttached")
   }
-
-//   override fun onAttachedToWindow() {
-//     // RiveReactNativeView may attach multiple times for any reason, so using
-//     // a flag here isAttached to determine when it was initially attached to
-//     // only addView once
-// //    Log.d("XYZ", "onAttachedToWindow (beforeCheck) - isAttached? $isAttachedToWindow, childCount, $childCount ${riveAnimationView.renderer.artboardName}")
-//     if (childCount == 0 && isAttached == false) {
-// //      this.riveAnimationView = RiveAnimationView(context)
-// //      addView(riveAnimationView)
-//       Log.d("XYZ", "onAttachedToWindow (after add view) - isAttached? $isAttachedToWindow, childCount, $childCount  ${riveAnimationView.renderer.artboardName}")
-// //      update()
-//       isAttached = true
-//     }
-//     super.onAttachedToWindow()
-//   }
-////
-////
-
-//  override fun onAttachedToWindow() {
-//    Log.d("XYZ", "onAttachedToWindow () - isAttached? $isAttached, childCount, $childCount ${riveAnimationView.renderer.artboardName}")
-//    addView(riveAnimationView)
-//    super.onAttachedToWindow()
-//  }
-
-//   override fun onDetachedFromWindow() {
-//     // Starting in Rive Android 4.0+, we need to coordinate removing this view with
-//     // the underlying RiveAnimationView when resources are cleaned up
-//     Log.d("XYZ", "onDetachedFromWindow (before remove view) - isAttached? $isAttached, childCount, $childCount ${riveAnimationView.renderer.artboardName}")
-// //    removeView(riveAnimationView)
-//     super.onDetachedFromWindow();
-//   }
 
   fun onPlay(animationName: String, isStateMachine: Boolean = false) {
     val reactContext = context as ReactContext
 
-    Log.d("XYZ", "onPlay - isStateMachine? $isStateMachine $animationName")
     val data = Arguments.createMap()
     data.putString("animationName", animationName)
     data.putBoolean("isStateMachine", isStateMachine)
@@ -157,7 +111,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun onPause(animationName: String, isStateMachine: Boolean = false) {
     val reactContext = context as ReactContext
 
-    Log.d("XYZ", "onPause - isStateMachine? $isStateMachine $animationName")
     val data = Arguments.createMap()
     data.putString("animationName", animationName)
     data.putBoolean("isStateMachine", isStateMachine)
@@ -168,7 +121,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun onStop(animationName: String, isStateMachine: Boolean = false) {
     val reactContext = context as ReactContext
 
-    Log.d("XYZ", "onStop - hit")
     val data = Arguments.createMap()
     data.putString("animationName", animationName)
     data.putBoolean("isStateMachine", isStateMachine)
@@ -188,7 +140,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun onStateChanged(stateMachineName: String, stateName: String) {
     val reactContext = context as ReactContext
-    Log.d("XYZ", "onStateChanged - hit")
     val data = Arguments.createMap()
     data.putString("stateMachineName", stateMachineName)
     data.putString("stateName", stateName)
@@ -197,15 +148,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun play(animationName: String, rnLoopMode: RNLoopMode, rnDirection: RNDirection, isStateMachine: Boolean) {
-    Log.d("XYZ", "play() - hit")
     val loop = RNLoopMode.mapToRiveLoop(rnLoopMode)
     val direction = RNDirection.mapToRiveDirection(rnDirection)
     if (animationName.isEmpty()) {
-      Log.d("XYZ", "play() - no animationName, bout to play")
       riveAnimationView.play(loop, direction) // intentionally we skipped areStateMachines argument to keep same behaviour as it is in the native sdk
     } else {
       try {
-        Log.d("XYZ", "play() - animationName $animationName, bout to play, isStateMachine, $isStateMachine")
         riveAnimationView.play(animationName, loop, direction, isStateMachine)
       } catch (ex: RiveException) {
         handleRiveException(ex)
@@ -223,7 +171,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun stop() {
     try {
-      Log.d("XYZ", "stop() hit")
       riveAnimationView.stop()
     } catch (ex: RiveException) {
       handleRiveException(ex)
@@ -233,7 +180,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun reset() {
     url?.let {
       if (resId == -1) {
-        riveAnimationView.renderer.reset()
+        riveAnimationView.artboardRenderer?.reset()
       }
     } ?: run {
       if (resId != -1) {
@@ -243,25 +190,20 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun touchBegan(x: Float, y: Float) {
-    Log.d("XYZ", "TOUCH BEGAN")
-    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
+    riveAnimationView.artboardRenderer?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
   }
 
   fun touchEnded(x: Float, y: Float) {
-    Log.d("XYZ", "TOUCH ENDED")
-    riveAnimationView.renderer.pointerEvent(PointerEvents.POINTER_UP, x, y)
+    riveAnimationView.artboardRenderer?.pointerEvent(PointerEvents.POINTER_UP, x, y)
   }
 
   fun update() {
-    Log.d("XYZ", "update() called!! isAttached? $isAttachedToWindow")
     reloadIfNeeded()
   }
 
   fun setResourceName(resourceName: String?) {
     resourceName?.let {
-      Log.d("XYZ", "setResourceName - $resourceName, isAttached? $isAttachedToWindow")
       resId = resources.getIdentifier(resourceName, "raw", context.packageName)
-      Log.d("XYZ", "setResourceName - resId, $resId")
       if (resId == 0) {
         resId = -1
       }
@@ -296,7 +238,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
 
   private fun resetRiveResource() {
-    Log.d("XYZ", "resetRiveResource was called?????")
     url?.let {
       if (resId == -1) {
         setUrlRiveResource(it, false)
@@ -327,7 +268,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun reloadIfNeeded() {
     if (shouldBeReloaded) {
-      Log.d("XYZ", "reloadIfNeeded should be reloaded? $shouldBeReloaded")
       url?.let {
         if (resId == -1) {
           setUrlRiveResource(it)
@@ -337,7 +277,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       } ?: run {
         if (resId != -1) {
           try {
-            Log.d("XYZ", "should be reloaded? $isAttachedToWindow ${riveAnimationView.isAttachedToWindow} ${riveAnimationView.renderer.artboardName}")
             riveAnimationView.setRiveResource(
               resId,
               fit = this.fit,
@@ -347,10 +286,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               animationName = this.animationName,
               artboardName = this.artboardName
             )
-//            riveAnimationView.play("avatar", Loop.AUTO, Direction.AUTO, true)
-//            removeView(riveAnimationView)
-//            addView(riveAnimationView)
-            Log.d("XYZ", "after setting rive resource ${this.fit} ${this.alignment} ${this.autoplay} ${this.stateMachineName} ${this.animationName} ${this.artboardName}")
             url = null
           } catch (ex: RiveException) {
             handleRiveException(ex)
@@ -397,7 +332,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun setArtboardName(artboardName: String) {
     try {
       this.artboardName = artboardName
-      Log.d("XYZ", "setArtboardName $artboardName, isAttached? $isAttachedToWindow")
       riveAnimationView.artboardName = artboardName // it causes reloading
     } catch (ex: RiveException) {
       handleRiveException(ex)
@@ -406,15 +340,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setAnimationName(animationName: String) {
     this.animationName = animationName
-//    riveAnimationView.renderer.animationName = animationName
+    riveAnimationView.artboardRenderer?.animationName = animationName
     shouldBeReloaded = true
   }
 
   fun setStateMachineName(stateMachineName: String) {
     try {
       this.stateMachineName = stateMachineName
-      Log.d("XYZ", "setStateMachine $stateMachineName, isAttached? $isAttachedToWindow")
-      // riveAnimationView.renderer.stateMachineName = stateMachineName
+      riveAnimationView.artboardRenderer?.stateMachineName = stateMachineName
       shouldBeReloaded = true
     } catch (ex: RiveException) {
       handleRiveException(ex)
