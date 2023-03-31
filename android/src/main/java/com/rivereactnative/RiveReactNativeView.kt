@@ -1,7 +1,6 @@
 package com.rivereactnative
 
 import android.widget.FrameLayout
-import android.util.Log
 import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.RiveArtboardRenderer
@@ -93,7 +92,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
     }
     riveAnimationView.registerListener(listener)
-    riveAnimationView.autoplay = false
     autoplay = false
     addView(riveAnimationView)
   }
@@ -345,13 +343,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setStateMachineName(stateMachineName: String) {
-    try {
       this.stateMachineName = stateMachineName
       riveAnimationView.artboardRenderer?.stateMachineName = stateMachineName
       shouldBeReloaded = true
-    } catch (ex: RiveException) {
-      handleRiveException(ex)
-    }
   }
 
   fun setIsUserHandlingErrors(isUserHandlingErrors: Boolean) {
