@@ -3,6 +3,7 @@ package com.rivereactnative
 import android.widget.FrameLayout
 import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
+import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.RiveArtboardRenderer
 import app.rive.runtime.kotlin.core.*
 import app.rive.runtime.kotlin.core.errors.*
@@ -50,7 +51,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   init {
-    val listener = object : RiveArtboardRenderer.Listener {
+    val listener = object : RiveFileController.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
           onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
