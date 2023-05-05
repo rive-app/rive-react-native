@@ -6,8 +6,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
-    "postinstall": "patch-package"
+    "start": "react-native start"
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "^0.2.8",
