@@ -14,7 +14,7 @@
     "@react-navigation/native": "6.x",
     "@react-navigation/stack": "6.x",
     "react": "17.0.2",
-    "react-native": "0.65.0",
+    "react-native": "0.66.4",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-paper": "^4.8.1",
@@ -27,7 +27,7 @@
     "@babel/runtime": "^7.12.5",
     "@types/react-native": "^0.64.5",
     "babel-plugin-module-resolver": "^4.0.0",
-    "metro-react-native-babel-preset": "^0.64.0",
+    "metro-react-native-babel-preset": "^0.66.2",
     "react-native-codegen": "0.0.7"
   }
 }

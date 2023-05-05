@@ -4,15 +4,16 @@ buildscript {
     ext {
         buildToolsVersion = "30.0.3"
         minSdkVersion = 21
-        compileSdkVersion = 31
-        targetSdkVersion = 31
-        kotlinVersion = "1.7.10"
+        compileSdkVersion = 33
+        targetSdkVersion = 33
+        kotlinVersion = "1.8.10"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
+        // classpath 'com.android.tools.build:gradle:8.0.0'
         classpath "com.android.tools.build:gradle:4.1.2"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -39,7 +40,7 @@ allprojects {
     
     configurations.all {
         resolutionStrategy {
-            force 'com.facebook.react:react-native:0.65.0'
+            force 'com.facebook.react:react-native:0.66.4'
         }
     }
 }
