@@ -8,7 +8,6 @@ buildscript {
   }
 
   dependencies {
-    // classpath "com.android.tools.build:gradle:8.0.0"
     classpath "com.android.tools.build:gradle:4.1.2"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -26,11 +25,6 @@ def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['RiveReactNative_' + name]).toInteger()
 }
 
-/**
- * Architectures to build native code for in debug.
- */
-def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
-
 android {
   // namespace 'com.rivereactnative'
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
@@ -44,14 +38,6 @@ android {
   }
 
   buildTypes {
-    debug {
-      signingConfig signingConfigs.debug
-      if (nativeArchitectures) {
-        ndk {
-          abiFilters nativeArchitectures.split(',')
-        }
-      }
-    }
     release {
       minifyEnabled false
     }
