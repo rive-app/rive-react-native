@@ -134,7 +134,7 @@ dependencies {
   implementation 'androidx.core:core-ktx:1.10.0'
   implementation 'androidx.appcompat:appcompat:1.6.1'
   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
-  implementation 'app.rive:rive-android:4.4.4'
+  implementation 'app.rive:rive-android:4.5.0'
   implementation "androidx.startup:startup-runtime:1.1.0"
   implementation 'com.android.volley:volley:1.2.0'
 }
