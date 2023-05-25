@@ -60,6 +60,12 @@ Check out the `example/` folder to run an example application using the Rive Rea
 
 For even more examples and resources on using Rive at runtime or in other tools, checkout the [awesome-rive](https://github.com/rive-app/awesome-rive) repo.
 
+## Migration Guides
+
+Using an older version of the runtime and need to learn how to upgrade to the latest version? Check out the migration guides below in our help center that help guide you through version bumps; breaking changes and all!
+
+[Migration guides](https://help.rive.app/runtimes/overview/react-native/migrating-from-v3-to-v4)
+
 ## Contributing
 
 We love contributions! Check out our [contributing docs](./CONTRIBUTING.md) to get more details into how to run this project, the examples, and more all locally.
