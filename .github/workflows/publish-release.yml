@@ -17,9 +17,9 @@ jobs:
           git config --local user.name ${{ github.actor }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 18.x
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
