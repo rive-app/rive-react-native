@@ -90,6 +90,7 @@ type Props = {
   animationName?: string;
   stateMachineName?: string;
   autoplay?: boolean;
+  children?: any;
 } & XOR<{ resourceName: string }, { url: string }>;
 
 export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
