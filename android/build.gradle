@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:4.1.2"
+    classpath "com.android.tools.build:gradle:7.3.1"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -29,6 +29,7 @@ android {
   // namespace 'com.rivereactnative'
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   buildToolsVersion getExtOrDefault('buildToolsVersion')
+  ndkVersion "23.1.7779620"
   defaultConfig {
     minSdkVersion 21
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
@@ -48,6 +49,13 @@ android {
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  packagingOptions {
+    pickFirst "lib/x86/libc++_shared.so"
+    pickFirst "lib/x86_64/libc++_shared.so"
+    pickFirst "lib/armeabi-v7a/libc++_shared.so"
+    pickFirst "lib/arm64-v8a/libc++_shared.so"
   }
 }
 
@@ -134,7 +142,7 @@ dependencies {
   implementation 'androidx.core:core-ktx:1.10.0'
   implementation 'androidx.appcompat:appcompat:1.6.1'
   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
-  implementation 'app.rive:rive-android:5.1.5'
+  implementation 'app.rive:rive-android:6.0.1'
   implementation "androidx.startup:startup-runtime:1.1.1"
   implementation 'com.android.volley:volley:1.2.0'
 }
