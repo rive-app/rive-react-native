@@ -202,6 +202,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView.artboardRenderer?.pointerEvent(PointerEvents.POINTER_UP, x, y)
   }
 
+  fun getTextRunValue(textRunName: String): String? {
+    return riveAnimationView.getTextRunValue(textRunName);
+  }
+
+  fun setTextRunValue(textRunName: String, textValue: String) {
+    riveAnimationView.setTextRunValue(textRunName, textValue);
+  }
+
   fun update() {
     reloadIfNeeded()
   }
