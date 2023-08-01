@@ -300,6 +300,30 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
+    const getTextRunValue = useCallback<
+      RiveRef[ViewManagerMethod.getTextRunValue]
+    >((textRunName: string): string | undefined => {
+      if (textRunName) {
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          ViewManagerMethod.getTextRunValue,
+          [textRunName]
+        );
+      }
+    }, []);
+
+    const setTextRunValue = useCallback<
+      RiveRef[ViewManagerMethod.setTextRunValue]
+    >((textRunName: string, textValue: string) => {
+      if (textRunName) {
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          ViewManagerMethod.setTextRunValue,
+          [textRunName, textValue]
+        );
+      }
+    }, []);
+
     useImperativeHandle(
       ref,
       () => ({
@@ -311,6 +335,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         reset,
         touchBegan,
         touchEnded,
+        getTextRunValue,
+        setTextRunValue,
       }),
       [
         play,
@@ -321,6 +347,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         fireState,
         touchBegan,
         touchEnded,
+        getTextRunValue,
+        setTextRunValue,
       ]
     );
 
