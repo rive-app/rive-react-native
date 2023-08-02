@@ -13,6 +13,7 @@ struct RNRiveError {
     static let IncorrectArtboardName = BaseRNRiveError(type: "IncorrectArtboardName")
     static let IncorrectStateMachineName = BaseRNRiveError(type: "IncorrectStateMachineName")
     static let IncorrectStateMachineInput = BaseRNRiveError(type: "IncorrectStateMachineInput")
+    static let TextRunNotFoundError = BaseRNRiveError(type: "TextRunNotFoundError")
     
     
     static func mapToRNRiveError(riveError: NSError) -> BaseRNRiveError? {
@@ -42,6 +43,9 @@ struct RNRiveError {
             break;
         case "NoStateMachineInputFound":
             resultError = RNRiveError.IncorrectStateMachineInput
+            break;
+        case "TextRunNotFoundError":
+            resultError = RNRiveError.TextRunNotFoundError
             break;
         default:
             return nil

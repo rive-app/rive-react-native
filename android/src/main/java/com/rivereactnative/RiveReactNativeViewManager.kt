@@ -95,15 +95,6 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       // Text Run
 
-      "getTextRunValue" -> {
-        args?.let {
-          val textRunName: String = it.getString(0)
-          view.run {
-            this.getTextRunValue(textRunName)
-          }
-        }
-      }
-
       "setTextRunValue" -> {
         args?.let {
           val textRunName: String = it.getString(0)
