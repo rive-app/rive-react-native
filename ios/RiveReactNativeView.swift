@@ -224,6 +224,20 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
         viewModel.setInput(inputName, value: value)
     }
     
+    func getTextRunValue(textRunName: String, textCb: RCTResponseSenderBlock) {
+        let textRunValue = viewModel.getTextRunValue(textRunName)
+        textCb([textRunValue!])
+    }
+    
+    // MARK: - Text Runs
+    func setTextRunValue(textRunName: String, textRunValue: String) throws {
+        do {
+            try viewModel.setTextRunValue(textRunName, textValue: textRunValue)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
+    }
+    
     // MARK: - StateMachineDelegate
     
     @objc func stateMachine(_ stateMachine: RiveStateMachineInstance, didChangeState stateName: String) {

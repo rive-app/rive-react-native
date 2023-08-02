@@ -16,7 +16,10 @@ export type RiveRef = {
   reset: () => void;
   touchBegan: (x: number, y: number) => void;
   touchEnded: (x: number, y: number) => void;
-  getTextRunValue: (textRunName: string) => string | undefined;
+  getTextRunValue: (
+    textRunName: string,
+    textCb: (textRunValue: string | undefined) => void
+  ) => void;
   setTextRunValue: (textRunName: string, value: string) => void;
 };
 

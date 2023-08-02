@@ -30,6 +30,8 @@ RCT_EXTERN_METHOD(touchBegan:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(
 RCT_EXTERN_METHOD(touchMoved:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
 RCT_EXTERN_METHOD(touchEnded:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
 RCT_EXTERN_METHOD(touchCancelled:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
-
+RCT_EXTERN_METHOD(getTextRunValue:(nonnull NSNumber *)node textRunName:(nonnull NSString)textRunName textCb:(RCTResponseSenderBlock)textCb)
+RCT_EXTERN_METHOD(setTextRunValue:(nonnull NSNumber *)node textRunName:(nonnull NSString)textRunName textRunValue:(nonnull
+    NSString)textRunValue)
 @end
 

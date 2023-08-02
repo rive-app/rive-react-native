@@ -2,6 +2,7 @@ import React, { useCallback, useImperativeHandle, useRef } from 'react';
 import {
   requireNativeComponent,
   UIManager,
+  NativeModules,
   findNodeHandle,
   ViewStyle,
   NativeSyntheticEvent,
@@ -300,17 +301,25 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
+    // Retrieving values from a Native Module directly isn't supported; we have to
+    // use a callback the native module can call into with the returned value
     const getTextRunValue = useCallback<
       RiveRef[ViewManagerMethod.getTextRunValue]
-    >((textRunName: string): string | undefined => {
-      if (textRunName) {
-        UIManager.dispatchViewManagerCommand(
-          findNodeHandle(riveRef.current),
-          ViewManagerMethod.getTextRunValue,
-          [textRunName]
-        );
-      }
-    }, []);
+    >(
+      (
+        textRunName: string,
+        textCb: (textValueRun: string | undefined) => void
+      ) => {
+        if (textRunName) {
+          NativeModules.RiveReactNativeViewManager.getTextRunValue(
+            findNodeHandle(riveRef.current),
+            textRunName,
+            textCb
+          );
+        }
+      },
+      []
+    );
 
     const setTextRunValue = useCallback<
       RiveRef[ViewManagerMethod.setTextRunValue]
