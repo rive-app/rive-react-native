@@ -26,6 +26,7 @@
 		9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */; };
 		9DBF1CC52684937E0008391A /* v6_file.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9DBF1CC42684937E0008391A /* v6_file.riv */; };
 		C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = C3C07471283BE07300E8EB33 /* hero_editor.riv */; };
+		E554409B2A79DC8100D550DE /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = E554409A2A79DC8100D550DE /* hello_world_text.riv */; };
 		E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5637D79292BD26D000CBC1E /* skills_listener.riv */; };
 		E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5A17A8F299AA0F5008CC433 /* avatars.riv */; };
 		E5F3FC4029B2661500D6D265 /* switch.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5F3FC3F29B2661500D6D265 /* switch.riv */; };
@@ -90,6 +91,7 @@
 		CC5818FED9124A6CA1145A8C /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		D9C4F25984EC4D5086341FDB /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-RiveReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RiveReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-RiveReactNativeExample/Pods-RiveReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
+		E554409A2A79DC8100D550DE /* hello_world_text.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello_world_text.riv; path = ../../android/app/src/main/res/raw/hello_world_text.riv; sourceTree = "<group>"; };
 		E5637D79292BD26D000CBC1E /* skills_listener.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = skills_listener.riv; sourceTree = "<group>"; };
 		E5A17A8F299AA0F5008CC433 /* avatars.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = avatars.riv; sourceTree = "<group>"; };
 		E5F3FC3F29B2661500D6D265 /* switch.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = switch.riv; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				C3C07471283BE07300E8EB33 /* hero_editor.riv */,
+				E554409A2A79DC8100D550DE /* hello_world_text.riv */,
 				042FD22626B81BD1004556A3 /* constrained.riv */,
 				04A886F226A990050078530A /* two_bone_ik.riv */,
 				9DBF1CC42684937E0008391A /* v6_file.riv */,
@@ -404,6 +407,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				9DBF1CC52684937E0008391A /* v6_file.riv in Resources */,
 				9D4FE6122649427F0098BF6A /* bird.riv in Resources */,
+				E554409B2A79DC8100D550DE /* hello_world_text.riv in Resources */,
 				9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */,
 				E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */,
 				9D879D0926578A5400D01424 /* loopy.riv in Resources */,

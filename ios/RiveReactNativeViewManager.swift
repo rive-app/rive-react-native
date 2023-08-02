@@ -73,6 +73,24 @@ class RiveReactNativeViewManager: RCTViewManager {
        }
    }
 
+    @objc func getTextRunValue(_ node:NSNumber, textRunName: String, textCb: @escaping RCTResponseSenderBlock) {
+        DispatchQueue.main.async {
+           let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+           view.getTextRunValue(textRunName: textRunName, textCb: textCb)
+        }
+    }
+   
+    
+    @objc func setTextRunValue(_ node: NSNumber, textRunName: String, textRunValue: String) {
+        DispatchQueue.main.async {
+            let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            // Dont catch here, but just removing the error for now
+            do {
+                try view.setTextRunValue(textRunName: textRunName, textRunValue: textRunValue)
+            } catch {}
+        }
+    }
+
     @objc static override func requiresMainQueueSetup() -> Bool {
         return false
     }
