@@ -18,7 +18,7 @@ export default function DynamicText() {
     // Set the TextRun value of the 'name' TextRun
     // The name must exist else an error will be thrown
     // See: https://help.rive.app/runtimes/text
-    riveRef.current?.setTextRunValue('names', e);
+    riveRef.current?.setTextRunValue('name', e);
   };
 
   return (
