@@ -10,7 +10,8 @@ enum class RNRiveError(private val mValue: String) {
   MalformedFile("MalformedFile"),
   IncorrectArtboardName("IncorrectArtboardName"),
   IncorrectStateMachineName("IncorrectStateMachineName"),
-  IncorrectStateMachineInput("IncorrectStateMachineInput");
+  IncorrectStateMachineInput("IncorrectStateMachineInput"),
+  TextRunNotFoundError("TextRunNotFoundError");
 
   var message: String = "Default message"
 
@@ -48,6 +49,11 @@ enum class RNRiveError(private val mValue: String) {
         }
         is StateMachineInputException -> {
           val err = IncorrectStateMachineInput
+          err.message = ex.message!!
+          return err
+        }
+        is TextValueRunException -> {
+          val err = TextRunNotFoundError
           err.message = ex.message!!
           return err
         }
