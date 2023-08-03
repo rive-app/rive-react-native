@@ -487,10 +487,10 @@ PODS:
     - React-jsi (= 0.72.3)
     - React-logger (= 0.72.3)
     - React-perflogger (= 0.72.3)
-  - rive-react-native (5.0.0):
+  - rive-react-native (6.0.1):
     - React-Core
-    - RiveRuntime (= 5.1.1)
-  - RiveRuntime (5.1.1)
+    - RiveRuntime (= 5.1.2)
+  - RiveRuntime (5.1.2)
   - RNCMaskedView (0.2.9):
     - React-Core
   - RNCPicker (1.16.8):
@@ -693,9 +693,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 57d2868c099736d80fcd648bf211b4431e51a558
+  boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
   FBLazyVector: 4cce221dd782d3ff7c4172167bba09d58af67ccb
   FBReactNativeSpec: c6bd9e179757b3c0ecf815864fae8032377903ef
   Flipper: 6edb735e6c3e332975d1b17956bcc584eccf5818
@@ -707,7 +707,7 @@ SPEC CHECKSUMS:
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   FlipperKit: 2efad7007d6745a3f95e4034d547be637f89d3f6
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: 5337263514dd6f09803962437687240c5dc39aa4
   hermes-engine: 10fbd3f62405c41ea07e71973ea61e1878d07322
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -744,8 +744,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 837c1bebd2f84572db17698cd702ceaf585b0d9a
   React-utils: bcb57da67eec2711f8b353f6e3d33bd8e4b2efa3
   ReactCommon: 3ccb8fb14e6b3277e38c73b0ff5e4a1b8db017a9
-  rive-react-native: a9a261e51c6b90cd19ab15aa1395ba2a39e596c0
-  RiveRuntime: db71970b0793e53222e47d9e7ffb4717686a9510
+  rive-react-native: 9a2c4c2eb3877c2c6b33ed2f5c680be0d5508824
+  RiveRuntime: 8d7244b38d15cab2e34ae8ef28815dfd20ca6a8a
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: 0991c56da7815c0cf946d6f63cf920b25296e5f6
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
@@ -757,4 +757,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5ef3edaac0021600a1e0462aa4c2c8c364c536b3
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
