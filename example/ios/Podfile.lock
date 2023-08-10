@@ -487,10 +487,10 @@ PODS:
     - React-jsi (= 0.72.3)
     - React-logger (= 0.72.3)
     - React-perflogger (= 0.72.3)
-  - rive-react-native (6.0.1):
+  - rive-react-native (6.0.3):
     - React-Core
-    - RiveRuntime (= 5.1.3)
-  - RiveRuntime (5.1.3)
+    - RiveRuntime (= 5.1.5)
+  - RiveRuntime (5.1.5)
   - RNCMaskedView (0.2.9):
     - React-Core
   - RNCPicker (1.16.8):
@@ -744,8 +744,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 837c1bebd2f84572db17698cd702ceaf585b0d9a
   React-utils: bcb57da67eec2711f8b353f6e3d33bd8e4b2efa3
   ReactCommon: 3ccb8fb14e6b3277e38c73b0ff5e4a1b8db017a9
-  rive-react-native: 9cce14b0054b4cf71708be1b7c340a755b500338
-  RiveRuntime: 0829b44f7922d93a4e032833fce7b55411f6e98f
+  rive-react-native: e0cd8d23fe155fd25186761898ed2b11ddf70e33
+  RiveRuntime: deb4e08a0fca56c5b038393a8237a7aadff3b552
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: 0991c56da7815c0cf946d6f63cf920b25296e5f6
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
