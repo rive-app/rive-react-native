@@ -107,7 +107,7 @@ When an underlying runtime like [rive-ios](https://github.com/rive-app/rive-ios)
 Before running `yarn` at the root level of the project, set the appropriate version of the iOS runtime in `rive-react-native.podspec` at the root of the folder:
 
 ```
-s.dependency "RiveRuntime", "1.0.18"
+s.dependency "RiveRuntime", "5.1.6"
 ```
 
 In the example folder, run the following command to update the example project to retrieve the expected `RiveRuntime` dependency you're upgrading to:
@@ -121,7 +121,7 @@ pod update RiveRuntime
 In the top-level `android` folder, change the dependency version in `build.gradle` to the version you're looking to upgrade to in the dependencies:
 
 ```
-implementation 'app.rive:rive-android:2.0.26'
+implementation 'app.rive:rive-android:8.2.1'
 ```
 
 ### Debugging against local rive-android
