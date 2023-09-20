@@ -73,6 +73,14 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
+          onPress={() => navigation.navigate('Events')}
+          style={styles.buttonStyle}
+        >
+          Events
+        </Button>
+
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('DynamicText')}
           style={styles.buttonStyle}
         >

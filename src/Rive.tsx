@@ -17,6 +17,8 @@ import {
   LoopMode,
   RNRiveError,
   ViewManagerMethod,
+  RiveGeneralEvent,
+  RiveOpenUrlEvent,
 } from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
 
@@ -53,6 +55,11 @@ type RiveProps = {
       stateName: string;
     }>
   ) => void;
+  onRiveEventReceived?: (
+    event: NativeSyntheticEvent<{
+      riveEvent: RiveGeneralEvent | RiveOpenUrlEvent;
+    }>
+  ) => void;
   onError?: (
     event: NativeSyntheticEvent<{
       type: string;
@@ -81,6 +88,7 @@ type Props = {
   onStop?: (animationName: string, isStateMachine: boolean) => void;
   onLoopEnd?: (animationName: string, loopMode: LoopMode) => void;
   onStateChanged?: (stateMachineName: string, stateName: string) => void;
+  onRiveEventReceived?: (event: RiveGeneralEvent | RiveOpenUrlEvent) => void;
   onError?: (rnRiveError: RNRiveError) => void;
   fit?: Fit;
   style?: ViewStyle;
@@ -104,6 +112,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onStop,
       onLoopEnd,
       onStateChanged,
+      onRiveEventReceived,
       onError,
       style,
       autoplay = true,
@@ -190,6 +199,18 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         onStateChanged?.(eventStateMachineName, stateName);
       },
       [onStateChanged]
+    );
+
+    const onRiveEventReceivedHandler = useCallback(
+      (
+        event: NativeSyntheticEvent<{
+          riveEvent: RiveGeneralEvent | RiveOpenUrlEvent;
+        }>
+      ) => {
+        const { riveEvent } = event.nativeEvent;
+        onRiveEventReceived?.(riveEvent);
+      },
+      [onRiveEventReceived]
     );
 
     const onErrorHandler = useCallback(
@@ -362,6 +383,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             onStop={onStopHandler}
             onLoopEnd={onLoopEndHandler}
             onStateChanged={onStateChangedHandler}
+            onRiveEventReceived={onRiveEventReceivedHandler}
             onError={onErrorHandler}
             alignment={alignment}
             artboardName={artboardName}

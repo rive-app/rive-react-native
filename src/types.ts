@@ -83,3 +83,21 @@ export type RNRiveError = {
   message: string;
   type: RNRiveErrorType;
 };
+
+export interface RiveEventProperties {
+  [key: string]: number | boolean | string;
+}
+
+export interface RiveEvent {
+  name: string;
+  type: number;
+  delay?: number;
+  properties?: RiveEventProperties;
+}
+
+export interface RiveGeneralEvent extends RiveEvent {}
+
+export interface RiveOpenUrlEvent extends RiveEvent {
+  url?: string;
+  target?: string;
+}

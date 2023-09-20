@@ -30,6 +30,7 @@
 		E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5637D79292BD26D000CBC1E /* skills_listener.riv */; };
 		E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5A17A8F299AA0F5008CC433 /* avatars.riv */; };
 		E5F3FC4029B2661500D6D265 /* switch.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5F3FC3F29B2661500D6D265 /* switch.riv */; };
+		E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5FC4EA92ABB975100D98158 /* rating.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		E5637D79292BD26D000CBC1E /* skills_listener.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = skills_listener.riv; sourceTree = "<group>"; };
 		E5A17A8F299AA0F5008CC433 /* avatars.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = avatars.riv; sourceTree = "<group>"; };
 		E5F3FC3F29B2661500D6D265 /* switch.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = switch.riv; sourceTree = "<group>"; };
+		E5FC4EA92ABB975100D98158 /* rating.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = rating.riv; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -250,6 +252,7 @@
 				9DBF1CC42684937E0008391A /* v6_file.riv */,
 				E5F3FC3F29B2661500D6D265 /* switch.riv */,
 				9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */,
+				E5FC4EA92ABB975100D98158 /* rating.riv */,
 				E5A17A8F299AA0F5008CC433 /* avatars.riv */,
 				E5637D79292BD26D000CBC1E /* skills_listener.riv */,
 				9D879D0A26578A5E00D01424 /* artboard_animations.riv */,
@@ -400,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D879D00265642BA00D01424 /* truck_v7.riv in Resources */,
+				E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */,
 				042FD22726B81BD1004556A3 /* constrained.riv in Resources */,
 				9D879D0B26578A5E00D01424 /* artboard_animations.riv in Resources */,
 				E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */,
