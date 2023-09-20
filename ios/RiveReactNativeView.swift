@@ -12,6 +12,7 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     @objc var onStop: RCTDirectEventBlock?
     @objc var onLoopEnd: RCTDirectEventBlock?
     @objc var onStateChanged: RCTDirectEventBlock?
+    @objc var onRiveEventReceived: RCTDirectEventBlock?
     @objc var onError: RCTDirectEventBlock?
     @objc var isUserHandlingErrors: Bool
     
@@ -240,6 +241,22 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     
     @objc func stateMachine(_ stateMachine: RiveStateMachineInstance, receivedInput input: StateMachineInput) {
+    }
+    
+    @objc func onRiveEventReceived(onRiveEvent riveEvent: RiveEvent) {
+        // Need to convert NSObject to Dictionary so React Native can support the serialization to JS
+        // Might be a better way to convert NSObject -> Dictionary in the future
+        var eventDict = [
+            "name": riveEvent.name(),
+            "type": riveEvent.type(),
+            "delay": riveEvent.delay(),
+            "properties": riveEvent.properties(),
+        ] as [String : Any]
+        if let openUrlEvent = riveEvent as? RiveOpenUrlEvent {
+            eventDict["url"] = openUrlEvent.url()
+            eventDict["target"] = openUrlEvent.target()
+        }
+        onRiveEventReceived?(["riveEvent": eventDict])
     }
     
     // MARK: - PlayerDelegate

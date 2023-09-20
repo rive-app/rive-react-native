@@ -14,6 +14,7 @@ import ErrorNotHandled from './ErrorNotHandled';
 import ErrorHandledManually from './ErrorHandledManually';
 import MeshExample from './MeshExample';
 import DynamicText from './DynamicText';
+import Events from './Events';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,7 @@ export default function App() {
           <Stack.Screen name="Http" component={Http} />
           <Stack.Screen name="MeshExample" component={MeshExample} />
           <Stack.Screen name="StateMachine" component={StateMachine} />
+          <Stack.Screen name="Events" component={Events} />
           <Stack.Screen name="DynamicText" component={DynamicText} />
           <Stack.Screen
             name="MultipleArtboards"
