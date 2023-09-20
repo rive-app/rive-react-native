@@ -4,7 +4,6 @@ import android.widget.FrameLayout
 import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.controllers.RiveFileController
-import app.rive.runtime.kotlin.RiveArtboardRenderer
 import app.rive.runtime.kotlin.core.*
 import app.rive.runtime.kotlin.core.errors.*
 import com.android.volley.NetworkResponse
@@ -13,14 +12,14 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.Volley
-import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.modules.core.ExceptionsManagerModule
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.events.RCTEventEmitter
 import java.io.UnsupportedEncodingException
-import kotlin.IllegalStateException
 
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
@@ -43,6 +42,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     STOP("onStop"),
     LOOP_END("onLoopEnd"),
     STATE_CHANGED("onStateChanged"),
+    RIVE_EVENT("onRiveEventReceived"),
     ERROR("onError");
 
     override fun toString(): String {
@@ -92,7 +92,18 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
 
     }
+
+    val eventListener = object : RiveFileController.RiveEventListener {
+      override fun notifyEvent(event: RiveEvent) {
+        when (event) {
+          is RiveGeneralEvent -> onRiveEventReceived(event as RiveGeneralEvent)
+          is RiveOpenURLEvent -> onRiveEventReceived(event as RiveOpenURLEvent)
+        }
+      }
+    }
+
     riveAnimationView.registerListener(listener)
+    riveAnimationView.addEventListener(eventListener)
     autoplay = false
     addView(riveAnimationView)
   }
@@ -144,6 +155,45 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("stateName", stateName)
 
     reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.STATE_CHANGED.toString(), data)
+  }
+
+  private fun convertHashMapToWritableMap(hashMap: HashMap<String, Any>): WritableMap {
+    val writableMap = Arguments.createMap()
+
+    for ((key, value) in hashMap) {
+      when (value) {
+        is String -> writableMap.putString(key, value)
+        is Int -> writableMap.putInt(key, value)
+        is Float -> writableMap.putDouble(key, value.toDouble())
+        is Double -> writableMap.putDouble(key, value)
+        is Boolean -> writableMap.putBoolean(key, value)
+      }
+    }
+
+    return writableMap
+  }
+
+  fun onRiveEventReceived(event: RiveEvent) {
+    val reactContext = context as ReactContext
+    val topLevelDict = Arguments.createMap()
+
+    val eventProperties = Arguments.createMap().apply {
+      putString("name", event.name)
+      putDouble("delay", event.delay.toDouble())
+      putMap("properties", convertHashMapToWritableMap(event.properties))
+    }
+
+    if (event is RiveOpenURLEvent) {
+      eventProperties.putString("url", event.url)
+      eventProperties.putString("target", event.target)
+    }
+
+    topLevelDict.putMap(
+      "riveEvent",
+      eventProperties
+    )
+
+    reactContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(id, Events.RIVE_EVENT.toString(), topLevelDict)
   }
 
   fun play(animationName: String, rnLoopMode: RNLoopMode, rnDirection: RNDirection, isStateMachine: Boolean) {
