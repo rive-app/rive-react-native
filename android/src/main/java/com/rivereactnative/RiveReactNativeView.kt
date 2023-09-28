@@ -3,6 +3,8 @@ package com.rivereactnative
 import android.widget.FrameLayout
 import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
+import app.rive.runtime.kotlin.controllers.ControllerState
+import app.rive.runtime.kotlin.controllers.ControllerStateManagement
 import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.core.*
 import app.rive.runtime.kotlin.core.errors.*
@@ -23,7 +25,7 @@ import java.io.UnsupportedEncodingException
 
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
-  private var riveAnimationView: RiveAnimationView = RiveAnimationView(context)
+  private var riveAnimationView: RiveAnimationView
   private var resId: Int = -1
   private var url: String? = null
   private var animationName: String? = null
@@ -35,6 +37,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var shouldBeReloaded = true
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
+  @OptIn(ControllerStateManagement::class)
+  private var controllerState: ControllerState? = null;
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
@@ -51,6 +55,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   init {
+    riveAnimationView = RiveAnimationView(context)
+
     val listener = object : RiveFileController.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
         if (animation is LinearAnimationInstance) {
@@ -106,6 +112,44 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     riveAnimationView.addEventListener(eventListener)
     autoplay = false
     addView(riveAnimationView)
+  }
+
+  @OptIn(ControllerStateManagement::class)
+  override fun onAttachedToWindow() {
+    // The below solves: https://github.com/rive-app/rive-react-native/issues/198
+    // When the view is returned to, we reuse the view's resources.
+    // For example, navigating to a new page and returning, or a TabView.
+    controllerState?.let {
+      riveAnimationView.restoreControllerState(it);
+      // The controller refCount is a combination of the creation of the controller and the
+      // initialization of the RiveArtboardRenderer (which calls acquire on the controller).
+
+      // This could be decoupled in future versions of the Android runtime, and this code
+      // may require updating.
+      //
+      // For now we're doing a safety check to only add an additional acquire if the refCount is 0.
+      // As the RiveFileController would automatically have incremented the refCount on instantiation,
+      // and decreased when navigating away. It's safe to assume it should not be 0 at this point as
+      // the view still exists.
+      if (riveAnimationView.controller.refCount == 0) {
+        riveAnimationView.controller.acquire();
+        // Another approach would be to recreate the entire RiveAnimationView and call addView again.
+        // But this does not work great due to this issue: https://github.com/facebook/react-native/issues/17968
+        // Additionally, it may not be the most optimal route as the entire view needs to be recreated
+        // including all of the attached resources.
+      }
+
+      // Re-add the view
+      addView(riveAnimationView)
+    }
+    super.onAttachedToWindow()
+  }
+
+  @OptIn(ControllerStateManagement::class)
+  override fun onDetachedFromWindow() {
+    controllerState = riveAnimationView?.saveControllerState();
+    removeView(riveAnimationView)
+    super.onDetachedFromWindow()
   }
 
   fun onPlay(animationName: String, isStateMachine: Boolean = false) {
