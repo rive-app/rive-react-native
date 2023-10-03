@@ -1,6 +1,5 @@
 package com.rivereactnative
 
-import android.util.Log
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
@@ -113,6 +112,11 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   override fun createViewInstance(reactContext: ThemedReactContext): RiveReactNativeView {
     return RiveReactNativeView(reactContext)
+  }
+
+  override fun onDropViewInstance(view: RiveReactNativeView) {
+    view.dispose();
+    super.onDropViewInstance(view)
   }
 
   override fun onAfterUpdateTransaction(view: RiveReactNativeView) {

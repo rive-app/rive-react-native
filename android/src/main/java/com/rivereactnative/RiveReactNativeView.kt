@@ -115,6 +115,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   @OptIn(ControllerStateManagement::class)
+  fun dispose() {
+    removeView(riveAnimationView)
+    controllerState?.dispose();
+  }
+
+  @OptIn(ControllerStateManagement::class)
   override fun onAttachedToWindow() {
     // The below solves: https://github.com/rive-app/rive-react-native/issues/198
     // When the view is returned to, we reuse the view's resources.
