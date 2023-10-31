@@ -17,8 +17,8 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     @objc var isUserHandlingErrors: Bool
     
     // MARK: RiveRuntime Bindings
-    var riveView: RiveView!
-    var viewModel: RiveViewModel!
+    var riveView: RiveView?
+    var viewModel: RiveViewModel?
     
     @objc var resourceName: String? = nil {
         didSet {
@@ -123,8 +123,8 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
         removeReactSubview(riveView)
         
         viewModel = updatedViewModel
-        riveView = viewModel.createRiveView();
-        addSubview(riveView)
+        riveView = viewModel!.createRiveView();
+        addSubview(riveView!)
         riveView?.playerDelegate = self
         riveView?.stateMachineDelegate = self
     }
@@ -192,37 +192,37 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
         let loop = RNLoopMode.mapToRiveLoop(rnLoopMode: rnLoopMode)
         let direction = RNDirection.mapToRiveDirection(rnDirection: rnDirection)
         if (animationName ?? "").isEmpty || isStateMachine {
-            viewModel.play(loop: loop, direction: direction)
+            viewModel?.play(loop: loop, direction: direction)
         } else {
-            viewModel.play(animationName: animationName, loop: loop, direction: direction)
+            viewModel?.play(animationName: animationName, loop: loop, direction: direction)
         }
     }
     
     func pause() {
-        viewModel.pause()
+        viewModel?.pause()
     }
     
     func stop() {
-        viewModel.stop()
+        viewModel?.stop()
     }
     
     func reset() {
-        viewModel.reset()
+        viewModel?.reset()
         reloadView()
     }
     
     // MARK: - StateMachine Inputs
     
     func fireState(stateMachineName: String, inputName: String) {
-        viewModel.triggerInput(inputName)
+        viewModel?.triggerInput(inputName)
     }
     
     func setNumberState(stateMachineName: String, inputName: String, value: Float) {
-        viewModel.setInput(inputName, value: value)
+        viewModel?.setInput(inputName, value: value)
     }
     
     func setBooleanState(stateMachineName: String, inputName: String, value: Bool) {
-        viewModel.setInput(inputName, value: value)
+        viewModel?.setInput(inputName, value: value)
     }
     
     // MARK: - Text Runs
@@ -332,8 +332,8 @@ class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate 
     }
     
     private func handleTouch(location: CGPoint, action: (RiveStateMachineInstance, CGPoint)->Void) {
-        if (viewModel.riveView != nil) {
-            let artboardLocation = viewModel.riveView!.artboardLocation(
+        if let viewModel = viewModel, let riveView = viewModel.riveView {
+            let artboardLocation = riveView.artboardLocation(
                 fromTouchLocation: location,
                 inArtboard: viewModel.riveModel!.artboard!.bounds(),
                 fit: viewModel.fit,
