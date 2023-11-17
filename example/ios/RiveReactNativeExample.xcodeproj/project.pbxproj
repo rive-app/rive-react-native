@@ -28,6 +28,7 @@
 		C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = C3C07471283BE07300E8EB33 /* hero_editor.riv */; };
 		E554409B2A79DC8100D550DE /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = E554409A2A79DC8100D550DE /* hello_world_text.riv */; };
 		E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5637D79292BD26D000CBC1E /* skills_listener.riv */; };
+		E59C19102B07F6FE002F0CBA /* nested_menu.riv in Resources */ = {isa = PBXBuildFile; fileRef = E59C190F2B07F6FE002F0CBA /* nested_menu.riv */; };
 		E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5A17A8F299AA0F5008CC433 /* avatars.riv */; };
 		E5F3FC4029B2661500D6D265 /* switch.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5F3FC3F29B2661500D6D265 /* switch.riv */; };
 		E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5FC4EA92ABB975100D98158 /* rating.riv */; };
@@ -94,6 +95,7 @@
 		E00ACF0FDA8BF921659E2F9A /* Pods-RiveReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RiveReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-RiveReactNativeExample/Pods-RiveReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
 		E554409A2A79DC8100D550DE /* hello_world_text.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello_world_text.riv; path = ../../android/app/src/main/res/raw/hello_world_text.riv; sourceTree = "<group>"; };
 		E5637D79292BD26D000CBC1E /* skills_listener.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = skills_listener.riv; sourceTree = "<group>"; };
+		E59C190F2B07F6FE002F0CBA /* nested_menu.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = nested_menu.riv; sourceTree = "<group>"; };
 		E5A17A8F299AA0F5008CC433 /* avatars.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = avatars.riv; sourceTree = "<group>"; };
 		E5F3FC3F29B2661500D6D265 /* switch.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = switch.riv; sourceTree = "<group>"; };
 		E5FC4EA92ABB975100D98158 /* rating.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = rating.riv; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */,
 				E5FC4EA92ABB975100D98158 /* rating.riv */,
 				E5A17A8F299AA0F5008CC433 /* avatars.riv */,
+				E59C190F2B07F6FE002F0CBA /* nested_menu.riv */,
 				E5637D79292BD26D000CBC1E /* skills_listener.riv */,
 				9D879D0A26578A5E00D01424 /* artboard_animations.riv */,
 				9D879D0826578A5400D01424 /* loopy.riv */,
@@ -416,6 +419,7 @@
 				E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */,
 				9D879D0926578A5400D01424 /* loopy.riv in Resources */,
 				C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */,
+				E59C19102B07F6FE002F0CBA /* nested_menu.riv in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E5F3FC4029B2661500D6D265 /* switch.riv in Resources */,
 			);

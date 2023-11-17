@@ -81,6 +81,14 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
+          onPress={() => navigation.navigate('NestedInputs')}
+          style={styles.buttonStyle}
+        >
+          Nested Inputs
+        </Button>
+
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('DynamicText')}
           style={styles.buttonStyle}
         >
