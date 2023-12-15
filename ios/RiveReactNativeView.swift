@@ -1,7 +1,7 @@
 import UIKit
 import RiveRuntime
 
-class RiveReactNativeView: UIView, RivePlayerDelegate, RiveStateMachineDelegate {
+class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate {
     // MARK: RiveReactNativeView Properties
     private var resourceFromBundle = true
     private var requiresLocalResourceReconfigure = false
