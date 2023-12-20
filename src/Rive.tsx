@@ -66,6 +66,7 @@ type RiveProps = {
       message: string;
     }>
   ) => void;
+  onPress?: () => void;
   isUserHandlingErrors: boolean;
   autoplay?: boolean;
   fit: Fit;
@@ -78,6 +79,7 @@ type RiveProps = {
   url?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
+  disableDefaultTouchHandling?: boolean;
 };
 
 const VIEW_NAME = 'RiveReactNativeView';
@@ -90,6 +92,7 @@ type Props = {
   onStateChanged?: (stateMachineName: string, stateName: string) => void;
   onRiveEventReceived?: (event: RiveGeneralEvent | RiveOpenUrlEvent) => void;
   onError?: (rnRiveError: RNRiveError) => void;
+  onPress?: () => void;
   fit?: Fit;
   style?: ViewStyle;
   testID?: string;
@@ -99,6 +102,7 @@ type Props = {
   stateMachineName?: string;
   autoplay?: boolean;
   children?: React.ReactNode;
+  disableDefaultTouchHandling?: boolean;
 } & XOR<{ resourceName: string }, { url: string }>;
 
 export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
@@ -114,6 +118,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onStateChanged,
       onRiveEventReceived,
       onError,
+      onPress,
       style,
       autoplay = true,
       resourceName,
@@ -124,6 +129,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       animationName,
       stateMachineName,
       testID,
+      disableDefaultTouchHandling = false,
     },
     ref
   ) => {
@@ -364,11 +370,14 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         <View style={styles.children}>{children}</View>
         <TouchableWithoutFeedback
           onPressIn={(event: GestureResponderEvent) =>
+            !disableDefaultTouchHandling &&
             touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)
           }
           onPressOut={(event: GestureResponderEvent) =>
+            !disableDefaultTouchHandling &&
             touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)
           }
+          onPress={onPress}
         >
           <RiveViewManager
             ref={riveRef}
