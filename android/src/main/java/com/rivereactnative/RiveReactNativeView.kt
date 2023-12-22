@@ -1,10 +1,12 @@
 package com.rivereactnative
 
 import android.widget.FrameLayout
+import androidx.annotation.CallSuper
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
-import app.rive.runtime.kotlin.controllers.ControllerState
-import app.rive.runtime.kotlin.controllers.ControllerStateManagement
 import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.core.*
 import app.rive.runtime.kotlin.core.errors.*
@@ -23,9 +25,46 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import java.io.UnsupportedEncodingException
 
+class ReactNativeRiveViewLifecycleObserver() :
+  DefaultLifecycleObserver {
+  override fun onCreate(owner: LifecycleOwner) { }
+
+  override fun onStart(owner: LifecycleOwner) { }
+
+  override fun onResume(owner: LifecycleOwner) { }
+
+  override fun onPause(owner: LifecycleOwner) { }
+
+  override fun onStop(owner: LifecycleOwner) { }
+
+  /**
+   * OnDestroy is different in Rive ReactNative compared to Rive Android.
+   * Releasing dependencies is managed in `ReactNativeRiveAnimationView.dispose()`
+   *
+   * TODO: Expose a way in Rive Android to access the list of dependencies to dispose so that
+   * these can always be in sync. Or override `RiveViewLifecycleObserver`.
+   */
+  @CallSuper
+  override fun onDestroy(owner: LifecycleOwner) {
+    owner.lifecycle.removeObserver(this)
+  }
+}
+
+class ReactNativeRiveAnimationView(private val context: ThemedReactContext) : RiveAnimationView(context) {
+  private lateinit var dependencies: List<RefCount>;
+
+  fun dispose() {
+    dependencies.forEach { it.release() }
+  }
+
+  override fun createObserver(): LifecycleObserver {
+    dependencies = listOfNotNull(controller, rendererAttributes.assetLoader)
+    return ReactNativeRiveViewLifecycleObserver()
+  }
+}
 
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
-  private var riveAnimationView: RiveAnimationView
+  private var riveAnimationView: ReactNativeRiveAnimationView
   private var resId: Int = -1
   private var url: String? = null
   private var animationName: String? = null
@@ -37,8 +76,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var shouldBeReloaded = true
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
-  @OptIn(ControllerStateManagement::class)
-  private var controllerState: ControllerState? = null;
+  private var willDispose = false;
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
@@ -55,7 +93,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   init {
-    riveAnimationView = RiveAnimationView(context)
+    riveAnimationView = ReactNativeRiveAnimationView(context)
 
     val listener = object : RiveFileController.Listener {
       override fun notifyLoop(animation: PlayableInstance) {
@@ -114,47 +152,15 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     addView(riveAnimationView)
   }
 
-  @OptIn(ControllerStateManagement::class)
   fun dispose() {
-    removeView(riveAnimationView)
-    controllerState?.dispose();
+    willDispose = true;
   }
 
-  @OptIn(ControllerStateManagement::class)
-  override fun onAttachedToWindow() {
-    // The below solves: https://github.com/rive-app/rive-react-native/issues/198
-    // When the view is returned to, we reuse the view's resources.
-    // For example, navigating to a new page and returning, or a TabView.
-    controllerState?.let {
-      riveAnimationView.restoreControllerState(it);
-      // The controller refCount is a combination of the creation of the controller and the
-      // initialization of the RiveArtboardRenderer (which calls acquire on the controller).
-
-      // This could be decoupled in future versions of the Android runtime, and this code
-      // may require updating.
-      //
-      // For now we're doing a safety check to only add an additional acquire if the refCount is 0.
-      // As the RiveFileController would automatically have incremented the refCount on instantiation,
-      // and decreased when navigating away. It's safe to assume it should not be 0 at this point as
-      // the view still exists.
-      if (riveAnimationView.controller.refCount == 0) {
-        riveAnimationView.controller.acquire();
-        // Another approach would be to recreate the entire RiveAnimationView and call addView again.
-        // But this does not work great due to this issue: https://github.com/facebook/react-native/issues/17968
-        // Additionally, it may not be the most optimal route as the entire view needs to be recreated
-        // including all of the attached resources.
-      }
-
-      // Re-add the view
-      addView(riveAnimationView)
-    }
-    super.onAttachedToWindow()
-  }
-
-  @OptIn(ControllerStateManagement::class)
   override fun onDetachedFromWindow() {
-    controllerState = riveAnimationView?.saveControllerState();
-    removeView(riveAnimationView)
+    if (willDispose) {
+      riveAnimationView?.dispose();
+    }
+
     super.onDetachedFromWindow()
   }
 
