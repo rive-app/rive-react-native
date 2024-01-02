@@ -487,7 +487,7 @@ PODS:
     - React-jsi (= 0.72.7)
     - React-logger (= 0.72.7)
     - React-perflogger (= 0.72.7)
-  - rive-react-native (6.1.1):
+  - rive-react-native (6.2.2):
     - React-Core
     - RiveRuntime (= 5.5.1)
   - RiveRuntime (5.5.1)
@@ -744,7 +744,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 7649c3b46c8dee1853691ecf60146a16ae59253c
   React-utils: 56838edeaaf651220d1e53cd0b8934fb8ce68415
   ReactCommon: 5f704096ccf7733b390f59043b6fa9cc180ee4f6
-  rive-react-native: 112e318d564488e79cef71ed192f13b5768e196b
+  rive-react-native: 201f67cb0ef9d59958cfffc078ec386d9854a8ac
   RiveRuntime: b57830ff73f406f3b4022f457b16690535ca4d05
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: 0991c56da7815c0cf946d6f63cf920b25296e5f6
@@ -755,6 +755,6 @@ SPEC CHECKSUMS:
   Yoga: 4c3aa327e4a6a23eeacd71f61c81df1bcdf677d5
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 165985228018ffc684f730a5317d5c648394975e
+PODFILE CHECKSUM: 2e1de35b032a6e591da83a5975df1059c489c1d8
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
