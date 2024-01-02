@@ -228,7 +228,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     // MARK: - Text Runs
     func setTextRunValue(textRunName: String, textRunValue: String) throws {
         do {
-            try viewModel.setTextRunValue(textRunName, textValue: textRunValue)
+            try viewModel?.setTextRunValue(textRunName, textValue: textRunValue)
         } catch let error as NSError {
             handleRiveError(error: error)
         }
