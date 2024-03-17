@@ -26,7 +26,7 @@ func importRiveFile(from url: URL) throws ->  RiveFile {
         }
         let pointer = rawPointer.bindMemory(to: UInt8.self, capacity: bytes.count)
         
-            let riveFile = try RiveFile(bytes:pointer, byteLength: UInt64(bytes.count))
-            return riveFile
+        let riveFile = try RiveFile(bytes:pointer, byteLength: UInt64(bytes.count), loadCdn: true)
+        return riveFile
     }
 }

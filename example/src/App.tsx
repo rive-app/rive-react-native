@@ -16,6 +16,7 @@ import MeshExample from './MeshExample';
 import DynamicText from './DynamicText';
 import NestedInputs from './NestedInputs';
 import Events from './Events';
+import OutOfBandAssets from './OutOfBandAssets';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,7 @@ export default function App() {
           <Stack.Screen name="Events" component={Events} />
           <Stack.Screen name="NestedInputs" component={NestedInputs} />
           <Stack.Screen name="DynamicText" component={DynamicText} />
+          <Stack.Screen name="OutOfBandAssets" component={OutOfBandAssets} />
           <Stack.Screen
             name="MultipleArtboards"
             component={MultipleArtboards}

@@ -26,10 +26,12 @@
 		9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */; };
 		9DBF1CC52684937E0008391A /* v6_file.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9DBF1CC42684937E0008391A /* v6_file.riv */; };
 		C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = C3C07471283BE07300E8EB33 /* hero_editor.riv */; };
+		E5119C452B59DD4A0051E08A /* cat-994454.webp in Resources */ = {isa = PBXBuildFile; fileRef = E5119C442B59DD4A0051E08A /* cat-994454.webp */; };
 		E554409B2A79DC8100D550DE /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = E554409A2A79DC8100D550DE /* hello_world_text.riv */; };
 		E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5637D79292BD26D000CBC1E /* skills_listener.riv */; };
 		E59C19102B07F6FE002F0CBA /* nested_menu.riv in Resources */ = {isa = PBXBuildFile; fileRef = E59C190F2B07F6FE002F0CBA /* nested_menu.riv */; };
 		E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5A17A8F299AA0F5008CC433 /* avatars.riv */; };
+		E5E405172B53560900751A94 /* cat_wall.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5E405162B53560900751A94 /* cat_wall.riv */; };
 		E5F3FC4029B2661500D6D265 /* switch.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5F3FC3F29B2661500D6D265 /* switch.riv */; };
 		E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5FC4EA92ABB975100D98158 /* rating.riv */; };
 /* End PBXBuildFile section */
@@ -93,10 +95,12 @@
 		CC5818FED9124A6CA1145A8C /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		D9C4F25984EC4D5086341FDB /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-RiveReactNativeExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RiveReactNativeExample.release.xcconfig"; path = "Target Support Files/Pods-RiveReactNativeExample/Pods-RiveReactNativeExample.release.xcconfig"; sourceTree = "<group>"; };
+		E5119C442B59DD4A0051E08A /* cat-994454.webp */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cat-994454.webp"; sourceTree = "<group>"; };
 		E554409A2A79DC8100D550DE /* hello_world_text.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello_world_text.riv; path = ../../android/app/src/main/res/raw/hello_world_text.riv; sourceTree = "<group>"; };
 		E5637D79292BD26D000CBC1E /* skills_listener.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = skills_listener.riv; sourceTree = "<group>"; };
 		E59C190F2B07F6FE002F0CBA /* nested_menu.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = nested_menu.riv; sourceTree = "<group>"; };
 		E5A17A8F299AA0F5008CC433 /* avatars.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = avatars.riv; sourceTree = "<group>"; };
+		E5E405162B53560900751A94 /* cat_wall.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = cat_wall.riv; sourceTree = "<group>"; };
 		E5F3FC3F29B2661500D6D265 /* switch.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = switch.riv; sourceTree = "<group>"; };
 		E5FC4EA92ABB975100D98158 /* rating.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = rating.riv; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -252,10 +256,12 @@
 				042FD22626B81BD1004556A3 /* constrained.riv */,
 				04A886F226A990050078530A /* two_bone_ik.riv */,
 				9DBF1CC42684937E0008391A /* v6_file.riv */,
+				E5E405162B53560900751A94 /* cat_wall.riv */,
 				E5F3FC3F29B2661500D6D265 /* switch.riv */,
 				9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */,
 				E5FC4EA92ABB975100D98158 /* rating.riv */,
 				E5A17A8F299AA0F5008CC433 /* avatars.riv */,
+				E5119C442B59DD4A0051E08A /* cat-994454.webp */,
 				E59C190F2B07F6FE002F0CBA /* nested_menu.riv */,
 				E5637D79292BD26D000CBC1E /* skills_listener.riv */,
 				9D879D0A26578A5E00D01424 /* artboard_animations.riv */,
@@ -405,6 +411,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5119C452B59DD4A0051E08A /* cat-994454.webp in Resources */,
 				9D879D00265642BA00D01424 /* truck_v7.riv in Resources */,
 				E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */,
 				042FD22726B81BD1004556A3 /* constrained.riv in Resources */,
@@ -413,6 +420,7 @@
 				04A886F326A990050078530A /* two_bone_ik.riv in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				9DBF1CC52684937E0008391A /* v6_file.riv in Resources */,
+				E5E405172B53560900751A94 /* cat_wall.riv in Resources */,
 				9D4FE6122649427F0098BF6A /* bird.riv in Resources */,
 				E554409B2A79DC8100D550DE /* hello_world_text.riv in Resources */,
 				9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */,
@@ -907,7 +915,11 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
@@ -964,7 +976,11 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

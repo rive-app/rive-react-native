@@ -24,6 +24,47 @@ import { convertErrorFromNativeToRN, XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
 
+interface FileAsset {
+  cdnBaseUrl: string;
+  cdnUuid: string;
+  fileExtension: string;
+  name: string;
+  uniqueFilename: string;
+}
+
+interface FileHandlerOptions {
+  willHandleAsset?: boolean;
+  /**
+   * Name of the asset in the iOS main bundle
+   */
+  bundledAssetName?: string;
+  /**
+   * URL of the asset to pull from
+   */
+  assetUrl?: string;
+  /**
+   * Raw bytes data of the asset to load in
+   */
+  assetData?: Number[];
+  // TODO: Maybe add property to tell native to cache this asset?
+  // Then we can add an API that consumers call from JS to native
+  // that updates the cached asset with new FileHandlerOptions?
+}
+
+interface FilesHandledMapping {
+  [key: string]: FileHandlerOptions;
+}
+
+interface FileFactory {
+  decodeFont: (data: Uint8Array) => any;
+  decodeImage: (data: Uint8Array) => any;
+}
+
+interface CustomLoaderParameters {
+  fileAsset: FileAsset;
+  factory: FileFactory;
+}
+
 type RiveProps = {
   onPlay?: (
     event: NativeSyntheticEvent<{
@@ -60,6 +101,10 @@ type RiveProps = {
       riveEvent: RiveGeneralEvent | RiveOpenUrlEvent;
     }>
   ) => void;
+  onCustomAssetLoader?: (
+    event: NativeSyntheticEvent<CustomLoaderParameters>
+  ) => void;
+  initialAssetsHandled?: FilesHandledMapping;
   onError?: (
     event: NativeSyntheticEvent<{
       type: string;
@@ -89,6 +134,9 @@ type Props = {
   onLoopEnd?: (animationName: string, loopMode: LoopMode) => void;
   onStateChanged?: (stateMachineName: string, stateName: string) => void;
   onRiveEventReceived?: (event: RiveGeneralEvent | RiveOpenUrlEvent) => void;
+  // onCustomAssetLoader?: (fileAsset: FileAsset, factory: FileFactory) => void;
+  // onCustomAssetLoader?: () => void;
+  initialAssetsHandled?: FilesHandledMapping;
   onError?: (rnRiveError: RNRiveError) => void;
   fit?: Fit;
   style?: ViewStyle;
@@ -113,6 +161,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onLoopEnd,
       onStateChanged,
       onRiveEventReceived,
+      // onCustomAssetLoader,
+      initialAssetsHandled,
       onError,
       style,
       autoplay = true,
@@ -212,6 +262,17 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       },
       [onRiveEventReceived]
     );
+
+    // const onCustomAssetLoaderHandler = useCallback(
+    //   (event: NativeSyntheticEvent<CustomLoaderParameters>) => {
+    //     console.log('JS customAssetLoaderHandler');
+    //     const { fileAsset, factory } = event.nativeEvent;
+    //     console.log('HANDLER INVOKED!', fileAsset, factory);
+    //     onCustomAssetLoader?.(fileAsset, factory);
+    //     // customAssetLoader?.();
+    //   },
+    //   [onCustomAssetLoader]
+    // );
 
     const onErrorHandler = useCallback(
       (event: NativeSyntheticEvent<{ type: string; message: string }>) => {
@@ -384,6 +445,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             onLoopEnd={onLoopEndHandler}
             onStateChanged={onStateChangedHandler}
             onRiveEventReceived={onRiveEventReceivedHandler}
+            // onCustomAssetLoader={onCustomAssetLoaderHandler}
+            initialAssetsHandled={initialAssetsHandled}
             onError={onErrorHandler}
             alignment={alignment}
             artboardName={artboardName}

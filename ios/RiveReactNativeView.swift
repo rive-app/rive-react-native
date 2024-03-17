@@ -1,6 +1,35 @@
 import UIKit
 import RiveRuntime
 
+struct FileHandlerOptions {
+    var willHandleAsset: Bool
+    var bundledAssetName: String?
+    var assetUrl: String?
+
+    init(from dictionary: NSDictionary) {
+        // If the user omits this property but supplies a bundledAssetName, we can
+        // most likely assume they meant to handle the asset themselves since they
+        // want to load the specified asset from the bundle
+        self.willHandleAsset = dictionary["willHandleAsset"] as? Bool ?? (dictionary["bundledAssetName"] as? String)?.isEmpty ?? false
+        self.bundledAssetName = dictionary["bundledAssetName"] as? String ?? nil
+        self.assetUrl = dictionary["assetUrl"] as? String ?? nil
+    }
+}
+
+struct SwiftFilesHandled {
+    var files: [String: FileHandlerOptions]
+
+    init(from rnFilesHandled: NSDictionary) {
+        var filesHandled = [String: FileHandlerOptions]()
+        if let dictionary = rnFilesHandled as? [String: NSDictionary] {
+            for (key, value) in dictionary {
+                filesHandled[key] = FileHandlerOptions(from: value)
+            }
+        }
+        self.files = filesHandled
+    }
+}
+
 class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate {
     // MARK: RiveReactNativeView Properties
     private var resourceFromBundle = true
@@ -14,6 +43,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     @objc var onStateChanged: RCTDirectEventBlock?
     @objc var onRiveEventReceived: RCTDirectEventBlock?
     @objc var onError: RCTDirectEventBlock?
+    @objc var onCustomAssetLoader: RCTDirectEventBlock?
     @objc var isUserHandlingErrors: Bool
     
     // MARK: RiveRuntime Bindings
@@ -38,6 +68,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             }
         }
     }
+    
+    @objc var initialAssetsHandled: NSDictionary?
     
     @objc var fit: String?
     
@@ -129,6 +161,34 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         riveView?.stateMachineDelegate = self
     }
     
+    private func isImageFile(fileName: String) -> Bool {
+        // May need a better way to detect image assets
+        let imageFileExtensions = ["jpg", "jpeg", "png", "webp"]
+
+        let lowercasedFileName = fileName.lowercased()
+        for ext in imageFileExtensions {
+            if lowercasedFileName.hasSuffix(".\(ext)") {
+                return true
+            }
+        }
+        return false
+    }
+    
+    private func splitFileNameAndExtension(fileName: String) -> (name: String, ext: String)? {
+        let components = fileName.components(separatedBy: ".")
+
+        // Ensure there is at least one period in the filename
+        guard components.count > 1 else {
+            return nil
+        }
+
+        // Extract the name and extension
+        let name = components.dropLast().joined(separator: ".")
+        let ext = components.last!
+
+        return (name, ext)
+    }
+    
     private func configureViewModelFromResource() {
         if let name = resourceName {
             url = nil
@@ -136,7 +196,33 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             
             let updatedViewModel : RiveViewModel
             if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, loadCdn: true,
+                    customLoader: {(asset: RiveFileAsset, data: Data, factory: RiveFactory) -> Bool in
+                    
+                    // Check for configuration that dictates whether to load in assets from the bundle here
+                    // and/or whether the asset loading should be handled by the consumer
+                    //
+                    // Note: This config object is used to avoid synchronous calls over the bridge to React Native
+                    // as this is not recommended. So we use a config object for consumers to dictate what assets are
+                    // included in the xcode project that we can load in, and the return value for customAssetLoader
+                    if let workingFilesHandled = self.initialAssetsHandled {
+                        let convertedFilesHandled = SwiftFilesHandled(from: workingFilesHandled)
+                        if let fileToHandle = convertedFilesHandled.files["\(asset.name())"] {
+                            // Load asset flow:
+                            // 1. Load from bundle if bundle asset name provided
+                            // 2. Load from URL if url to load from is provided
+                            // 3. Load the raw bytes passed in from RN if provided
+                            if let bundleAssetName = fileToHandle.bundledAssetName as String? {
+                                self.handleBundleAsset(bundleAssetName: bundleAssetName, asset: asset, factory: factory)
+                            } else if let assetUrl = fileToHandle.assetUrl as String? {
+                                self.handleUrlAsset(assetUrl: assetUrl, asset: asset, factory: factory)
+                            }
+                            return fileToHandle.willHandleAsset;
+                        }
+                    }
+                    return false
+                    }
+                )
             } else if let animName = animationName {
                 updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else {
@@ -148,14 +234,55 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
     }
     
+    private func handleBundleAsset(bundleAssetName: String, asset: RiveFileAsset, factory: RiveFactory) {
+        let splitBundleAssetName = self.splitFileNameAndExtension(fileName: bundleAssetName)
+        guard let folderUrl = Bundle.main.url(forResource: splitBundleAssetName?.name, withExtension: splitBundleAssetName?.ext) else {
+            fatalError("Could not find the asset \(bundleAssetName)")
+       }
+        // TODO: also handle fonts
+       do {
+           let fileData = try Data(contentsOf: folderUrl)
+           if self.isImageFile(fileName: bundleAssetName) {
+               let renderImage = factory.decodeImage(fileData)
+               (asset as! RiveImageAsset).renderImage(renderImage)
+           }
+       } catch {
+           fatalError("Could not create a Rive render image for \(bundleAssetName)")
+       }
+    }
+    
+    private func handleUrlAsset(assetUrl: String, asset: RiveFileAsset, factory: RiveFactory) {
+        let url = URL(string: assetUrl)!
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                if self.isImageFile(fileName: asset.name()) {
+                    let renderImage = factory.decodeImage(data)
+                    debugPrint("IS IMAGE \(renderImage)");
+                    (asset as! RiveImageAsset).renderImage(renderImage)
+                }
+            }
+            
+//            if (first){
+//                first=false;
+//                if let fontAsset = self.cachedFont, let font=self.fontCache.randomElement() {
+//                    fontAsset.font(font);
+//                }
+//            }
+        
+        }
+        task.resume()
+    }
+    
     private func configureViewModelFromUrl() {
         if let url = url {
             resourceName = nil
             resourceFromBundle = false
             
             let updatedViewModel : RiveViewModel
+            // TODO: Need to make change in rive-ios to add customLoader callback when passing a URL for the Rive asset
             if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(webURL: url, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(webURL: url, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, loadCdn: true, artboardName: artboardName
+                )
             } else if let animName = animationName {
                 updatedViewModel = RiveViewModel(webURL: url, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             } else {
