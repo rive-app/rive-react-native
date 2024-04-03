@@ -315,40 +315,32 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         reset,
         setTextRunValue,
       }),
-      [
-        play,
-        pause,
-        stop,
-        reset,
-        setInputState,
-        fireState,
-        setTextRunValue,
-      ]
+      [play, pause, stop, reset, setInputState, fireState, setTextRunValue]
     );
 
     return (
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
         <View style={styles.children}>{children}</View>
-          <RiveViewManager
-            ref={riveRef}
-            resourceName={resourceName}
-            isUserHandlingErrors={isUserHandlingErrors}
-            autoplay={autoplay}
-            fit={fit}
-            url={url}
-            style={styles.animation}
-            onPlay={onPlayHandler}
-            onPause={onPauseHandler}
-            onStop={onStopHandler}
-            onLoopEnd={onLoopEndHandler}
-            onStateChanged={onStateChangedHandler}
-            onRiveEventReceived={onRiveEventReceivedHandler}
-            onError={onErrorHandler}
-            alignment={alignment}
-            artboardName={artboardName}
-            animationName={animationName}
-            stateMachineName={stateMachineName}
-          />
+        <RiveViewManager
+          ref={riveRef}
+          resourceName={resourceName}
+          isUserHandlingErrors={isUserHandlingErrors}
+          autoplay={autoplay}
+          fit={fit}
+          url={url}
+          style={styles.animation}
+          onPlay={onPlayHandler}
+          onPause={onPauseHandler}
+          onStop={onStopHandler}
+          onLoopEnd={onLoopEndHandler}
+          onStateChanged={onStateChangedHandler}
+          onRiveEventReceived={onRiveEventReceivedHandler}
+          onError={onErrorHandler}
+          alignment={alignment}
+          artboardName={artboardName}
+          animationName={animationName}
+          stateMachineName={stateMachineName}
+        />
       </View>
     );
   }
