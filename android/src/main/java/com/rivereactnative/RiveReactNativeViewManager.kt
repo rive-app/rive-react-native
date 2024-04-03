@@ -71,27 +71,6 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
       }
 
-      // Touch Events
-
-      "touchBegan" -> {
-        args?.let {
-          val x: Double = it.getDouble(0)
-          val y: Double = it.getDouble(1)
-          view.run {
-            this.touchBegan(x.toFloat(), y.toFloat())
-          }
-        }
-      }
-      "touchEnded" -> {
-        args?.let {
-          val x: Double = it.getDouble(0)
-          val y: Double = it.getDouble(1)
-          view.run {
-            this.touchEnded(x.toFloat(), y.toFloat())
-          }
-        }
-      }
-
       // Text Run
 
       "setTextRunValue" -> {

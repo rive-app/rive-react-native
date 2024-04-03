@@ -57,22 +57,6 @@ class RiveReactNativeViewManager: RCTViewManager {
         }
     }
     
-   @objc func touchBegan(_ node: NSNumber, x: NSNumber, y: NSNumber) {
-       DispatchQueue.main.async {
-           let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
-           let touch = CGPoint(x: x.doubleValue, y: y.doubleValue)
-           view.touchBegan(touch)
-       }
-   }
-
-   @objc func touchEnded(_ node: NSNumber, x: NSNumber, y: NSNumber) {
-       DispatchQueue.main.async {
-           let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
-           let touch = CGPoint(x: x.doubleValue, y: y.doubleValue)
-           view.touchEnded(touch)
-       }
-   }
-    
     @objc func setTextRunValue(_ node: NSNumber, textRunName: String, textRunValue: String) {
         DispatchQueue.main.async {
             let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView

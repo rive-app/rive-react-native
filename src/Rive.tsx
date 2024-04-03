@@ -7,8 +7,6 @@ import {
   NativeSyntheticEvent,
   StyleSheet,
   View,
-  TouchableWithoutFeedback,
-  GestureResponderEvent,
   StyleProp,
 } from 'react-native';
 import {
@@ -294,33 +292,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       },
       []
     );
-
-    const touchBegan = useCallback<RiveRef[ViewManagerMethod.touchBegan]>(
-      (x: number, y: number) => {
-        if (!isNaN(x) && !isNaN(y)) {
-          UIManager.dispatchViewManagerCommand(
-            findNodeHandle(riveRef.current),
-            ViewManagerMethod.touchBegan,
-            [x, y]
-          );
-        }
-      },
-      []
-    );
-
-    const touchEnded = useCallback<RiveRef[ViewManagerMethod.touchEnded]>(
-      (x: number, y: number) => {
-        if (!isNaN(x) && !isNaN(y)) {
-          UIManager.dispatchViewManagerCommand(
-            findNodeHandle(riveRef.current),
-            ViewManagerMethod.touchEnded,
-            [x, y]
-          );
-        }
-      },
-      []
-    );
-
     const setTextRunValue = useCallback<
       RiveRef[ViewManagerMethod.setTextRunValue]
     >((textRunName: string, textValue: string) => {
@@ -342,8 +313,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         pause,
         stop,
         reset,
-        touchBegan,
-        touchEnded,
         setTextRunValue,
       }),
       [
@@ -353,8 +322,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         reset,
         setInputState,
         fireState,
-        touchBegan,
-        touchEnded,
         setTextRunValue,
       ]
     );
@@ -362,14 +329,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     return (
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
         <View style={styles.children}>{children}</View>
-        <TouchableWithoutFeedback
-          onPressIn={(event: GestureResponderEvent) =>
-            touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)
-          }
-          onPressOut={(event: GestureResponderEvent) =>
-            touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)
-          }
-        >
           <RiveViewManager
             ref={riveRef}
             resourceName={resourceName}
@@ -390,7 +349,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             animationName={animationName}
             stateMachineName={stateMachineName}
           />
-        </TouchableWithoutFeedback>
       </View>
     );
   }

@@ -5,7 +5,6 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import app.rive.runtime.kotlin.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.core.*
@@ -298,14 +297,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         riveAnimationView.reset()
       }
     }
-  }
-
-  fun touchBegan(x: Float, y: Float) {
-    riveAnimationView.artboardRenderer?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
-  }
-
-  fun touchEnded(x: Float, y: Float) {
-    riveAnimationView.artboardRenderer?.pointerEvent(PointerEvents.POINTER_UP, x, y)
   }
 
   fun setTextRunValue(textRunName: String, textValue: String) {

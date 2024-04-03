@@ -14,8 +14,6 @@ export type RiveRef = {
   pause: () => void;
   stop: () => void;
   reset: () => void;
-  touchBegan: (x: number, y: number) => void;
-  touchEnded: (x: number, y: number) => void;
   setTextRunValue: (textRunName: string, value: string) => void;
 };
 
@@ -27,8 +25,6 @@ export enum ViewManagerMethod {
   fireState = 'fireState',
   setBooleanState = 'setBooleanState',
   setNumberState = 'setNumberState',
-  touchBegan = 'touchBegan',
-  touchEnded = 'touchEnded',
   setTextRunValue = 'setTextRunValue',
 }
 

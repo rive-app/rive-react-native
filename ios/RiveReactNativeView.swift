@@ -295,57 +295,6 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         // TODO: implement if in Android
     }
     
-    // MARK: - Touch Events
-    
-    @objc open func touchBegan(_ location: CGPoint) {
-        handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
-            if (riveView.stateMachineDelegate?.touchBegan != nil) {
-                riveView.stateMachineDelegate?.touchBegan?(onArtboard: artboard, atLocation: abLocation)
-            }
-        }
-    }
-    
-    @objc open func touchMoved(_ location: CGPoint) {
-        handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
-            riveView.stateMachineDelegate?.touchMoved?(onArtboard: artboard, atLocation: abLocation)
-        }
-    }
-    
-    @objc open func touchEnded(_ location: CGPoint) {
-        handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
-            riveView.stateMachineDelegate?.touchEnded?(onArtboard: artboard, atLocation: abLocation)
-        }
-    }
-    
-    @objc open func touchCancelled(_ location: CGPoint) {
-        handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
-            riveView.stateMachineDelegate?.touchCancelled?(onArtboard: artboard, atLocation: abLocation)
-        }
-    }
-    
-    private func handleTouch(location: CGPoint, action: (RiveStateMachineInstance, CGPoint)->Void) {
-        if let viewModel = viewModel, let riveView = viewModel.riveView {
-            let artboardLocation = riveView.artboardLocation(
-                fromTouchLocation: location,
-                inArtboard: viewModel.riveModel!.artboard!.bounds(),
-                fit: viewModel.fit,
-                alignment: viewModel.alignment
-            )
-            if let stateMachine = viewModel.riveModel?.stateMachine {
-                viewModel.play()
-                action(stateMachine, artboardLocation)
-            }
-        }
-    }
-    
     // MARK: - Error Handling
     
     private func onRNRiveError(_ rnRiveError: BaseRNRiveError) {
