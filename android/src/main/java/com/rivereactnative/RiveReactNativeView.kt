@@ -5,7 +5,7 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import app.rive.runtime.kotlin.PointerEvents
+import app.rive.runtime.kotlin.renderers.PointerEvents
 import app.rive.runtime.kotlin.RiveAnimationView
 import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.core.*
@@ -158,7 +158,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   override fun onDetachedFromWindow() {
     if (willDispose) {
-      riveAnimationView?.dispose();
+      riveAnimationView.dispose();
     }
 
     super.onDetachedFromWindow()
@@ -301,16 +301,16 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun touchBegan(x: Float, y: Float) {
-    riveAnimationView.artboardRenderer?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
+    riveAnimationView.controller.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
   }
 
   fun touchEnded(x: Float, y: Float) {
-    riveAnimationView.artboardRenderer?.pointerEvent(PointerEvents.POINTER_UP, x, y)
+    riveAnimationView.controller.pointerEvent(PointerEvents.POINTER_UP, x, y)
   }
 
   fun setTextRunValue(textRunName: String, textValue: String) {
     try {
-      riveAnimationView.artboardRenderer?.activeArtboard?.textRun(textRunName)?.text = textValue;
+      riveAnimationView.controller.activeArtboard?.textRun(textRunName)?.text = textValue;
     } catch (ex: RiveException) {
       handleRiveException(ex)
     }
@@ -459,13 +459,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setAnimationName(animationName: String) {
     this.animationName = animationName
-    riveAnimationView.artboardRenderer?.animationName = animationName
     shouldBeReloaded = true
   }
 
   fun setStateMachineName(stateMachineName: String) {
       this.stateMachineName = stateMachineName
-      riveAnimationView.artboardRenderer?.stateMachineName = stateMachineName
       shouldBeReloaded = true
   }
 
