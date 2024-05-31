@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   GestureResponderEvent,
   StyleProp,
+  NativeModules,
 } from 'react-native';
 import {
   RiveRef,
@@ -19,10 +20,16 @@ import {
   ViewManagerMethod,
   RiveGeneralEvent,
   RiveOpenUrlEvent,
+  RiveRendererInterface,
 } from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
+
+const { RiveReactNativeRendererModule } = NativeModules;
+
+export const RiveRenderer =
+  RiveReactNativeRendererModule as RiveRendererInterface;
 
 type RiveProps = {
   onPlay?: (
