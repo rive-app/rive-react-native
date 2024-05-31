@@ -67,6 +67,18 @@ export enum Direction {
   Forwards = 'forwards',
 }
 
+export enum RiveRendererIOS {
+  Rive = 'riveRenderer',
+  Skia = 'skiaRenderer',
+  CoreGraphics = 'cgRenderer',
+}
+
+export enum RiveRendererAndroid {
+  Rive = 'riveRenderer',
+  Skia = 'skiaRenderer',
+  Canvas = 'canvasRenderer',
+}
+
 export enum RNRiveErrorType {
   FileNotFound = 'FileNotFound',
   UnsupportedRuntimeVersion = 'UnsupportedRuntimeVersion',
@@ -100,4 +112,11 @@ export interface RiveGeneralEvent extends RiveEvent {}
 export interface RiveOpenUrlEvent extends RiveEvent {
   url?: string;
   target?: string;
+}
+
+export interface RiveRendererInterface {
+  defaultRenderer(
+    iosRenderer: RiveRendererIOS,
+    androidRenderer: RiveRendererAndroid
+  ): void;
 }

@@ -1,4 +1,6 @@
 export * from './types';
-import Rive from './Rive';
+import Rive, { RiveRenderer } from './Rive';
+
+export { RiveRenderer };
 
 export default Rive;

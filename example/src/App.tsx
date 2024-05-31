@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -17,9 +17,34 @@ import DynamicText from './DynamicText';
 import NestedInputs from './NestedInputs';
 import Events from './Events';
 
+import {
+  RiveRenderer,
+  RiveRendererAndroid,
+  RiveRendererIOS,
+} from 'rive-react-native';
+
 const Stack = createStackNavigator();
 
-export default function App() {
+export default function Main() {
+  // Configure the defualt renderer to use for both iOS and Android.
+  // For more information: https://rive.app/community/doc/overview/docD20dU9Rod
+  //
+  // This is optional. The current defaults are:
+  // - iOS: Skia
+  // - Android: Skia
+  // In the future the default will be the Rive Renderer (RiveRendererIOS.Rive and RiveRendererAndroid.Rive)
+  //
+  useEffect(() => {
+    RiveRenderer.defaultRenderer(
+      RiveRendererIOS.Rive,
+      RiveRendererAndroid.Skia
+    );
+  }, []);
+
+  return <App />;
+}
+
+function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
