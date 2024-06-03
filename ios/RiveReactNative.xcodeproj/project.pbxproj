@@ -24,6 +24,9 @@
 		B3E7B5891CC2AC0600A0062D /* RiveReactNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RiveReactNative.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* RiveReactNative-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RiveReactNative-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* RiveReactNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveReactNative.swift; sourceTree = "<group>"; };
+		F86B6E412C0DCEE5001AD21C /* RiveReactNativeRendererModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RiveReactNativeRendererModuleBridge.m; sourceTree = "<group>"; };
+		F86B6E422C0DCEFF001AD21C /* RiveReactNativeRendererModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveReactNativeRendererModule.swift; sourceTree = "<group>"; };
+		F86B6E432C0DCF12001AD21C /* RNRiveRendererType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNRiveRendererType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +51,9 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				F86B6E432C0DCF12001AD21C /* RNRiveRendererType.swift */,
+				F86B6E422C0DCEFF001AD21C /* RiveReactNativeRendererModule.swift */,
+				F86B6E412C0DCEE5001AD21C /* RiveReactNativeRendererModuleBridge.m */,
 				9D4FE606264939290098BF6A /* MyRiveView.swift */,
 				F4FF95D6245B92E800C19C63 /* RiveReactNative.swift */,
 				B3E7B5891CC2AC0600A0062D /* RiveReactNative.m */,
