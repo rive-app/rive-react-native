@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
-  s.dependency "RiveRuntime", "5.11.6"
+  s.dependency "RiveRuntime", "5.12.0"
 end
