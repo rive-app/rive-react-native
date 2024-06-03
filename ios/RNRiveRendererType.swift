@@ -9,9 +9,9 @@ import Foundation
 import RiveRuntime
 
 enum RNRiveRendererType: String {
-    case Rive = "riveRenderer"
-    case Skia = "skiaRenderer"
-    case CoreGraphics = "cgRenderer"
+    case Rive = "rive"
+    case Skia = "skia"
+    case CoreGraphics = "coreGraphics"
     
     static func mapToRNRiveRendererType(value: String) -> RNRiveRendererType {
         if let rnEnum = RNRiveRendererType(rawValue: value) {

@@ -68,15 +68,15 @@ export enum Direction {
 }
 
 export enum RiveRendererIOS {
-  Rive = 'riveRenderer',
-  Skia = 'skiaRenderer',
-  CoreGraphics = 'cgRenderer',
+  Rive = 'rive',
+  Skia = 'skia',
+  CoreGraphics = 'coreGraphics',
 }
 
 export enum RiveRendererAndroid {
-  Rive = 'riveRenderer',
-  Skia = 'skiaRenderer',
-  Canvas = 'canvasRenderer',
+  Rive = 'rive',
+  Skia = 'skia',
+  Canvas = 'canvas',
 }
 
 export enum RNRiveErrorType {

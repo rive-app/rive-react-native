@@ -3,9 +3,9 @@ package com.rivereactnative
 import app.rive.runtime.kotlin.core.RendererType
 
 enum class RNRiveRendererType(private val rendererTypeName: String) {
-  Rive("riveRenderer"),
-  Skia("skiaRenderer"),
-  Canvas("canvasRenderer");
+  Rive("rive"),
+  Skia("skia"),
+  Canvas("canvas");
 
   override fun toString(): String {
     return rendererTypeName
