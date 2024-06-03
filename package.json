@@ -1,6 +1,6 @@
 {
   "name": "rive-react-native",
-  "version": "7.1.0",
+  "version": "7.1.1",
   "description": "Rive React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -50,8 +50,8 @@
     "@commitlint/config-conventional": "^11.0.0",
     "@react-native-community/eslint-config": "^2.0.0",
     "@react-native/metro-config": "^0.72.11",
-    "@tsconfig/react-native": "^3.0.0",
     "@release-it/conventional-changelog": "^2.0.0",
+    "@tsconfig/react-native": "^3.0.0",
     "@types/jest": "^26.0.0",
     "@types/react": "^18.0.24",
     "@types/react-native": "0.72.2",
