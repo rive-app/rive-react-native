@@ -224,6 +224,18 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     func setBooleanState(stateMachineName: String, inputName: String, value: Bool) {
         viewModel?.setInput(inputName, value: value)
     }
+
+    func fireStateAtPath(inputName: String, path: String) {
+        viewModel?.triggerInput(inputName, path: path)
+    }
+
+    func setNumberStateAtPath(inputName: String, value: Float, path: String) {
+        viewModel?.setInput(inputName, value: value, path: path)
+    }
+    
+    func setBooleanStateAtPath(inputName: String, value: Bool, path: String) {
+        viewModel?.setInput(inputName, value: value, path: path)
+    }
     
     // MARK: - Text Runs
     func setTextRunValue(textRunName: String, textRunValue: String) throws {
