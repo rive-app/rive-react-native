@@ -43,6 +43,7 @@ class RiveReactNativeViewManager: RCTViewManager {
             component.fireState(stateMachineName: stateMachineName, inputName: inputName)
         }
     }
+
     @objc func setBooleanState(_ node: NSNumber, stateMachineName: String, inputName: String, value: Bool) {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
@@ -54,6 +55,27 @@ class RiveReactNativeViewManager: RCTViewManager {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
             component.setNumberState(stateMachineName: stateMachineName, inputName: inputName, value: Float(truncating: value))
+        }
+    }
+
+    @objc func fireStateAtPath(_ node: NSNumber, inputName: String, path: String) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.fireStateAtPath(inputName: inputName, path: path)
+        }
+    }
+
+    @objc func setBooleanStateAtPath(_ node: NSNumber, inputName: String, value: Bool, path: String) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.setBooleanStateAtPath(inputName: inputName, value: value, path: path)
+        }
+    }
+    
+    @objc func setNumberStateAtPath(_ node: NSNumber, inputName: String, value: NSNumber, path: String) {
+        DispatchQueue.main.async {
+            let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            component.setNumberStateAtPath(inputName: inputName, value: Float(truncating: value), path: path)
         }
     }
     

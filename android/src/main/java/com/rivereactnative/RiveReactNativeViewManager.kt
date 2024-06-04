@@ -70,6 +70,35 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+      "fireStateAtPath" -> {
+        args?.let {
+          val inputName = it.getString(0)
+          val path = it.getString(1)
+          view.run {
+            fireStateAtPath(inputName, path)
+          }
+        }
+      }
+      "setBooleanStateAtPath" -> {
+        args?.let {
+          val inputName = it.getString(0)
+          val value = it.getBoolean(1)
+          val path = it.getString(2)
+          view.run {
+            setBooleanStateAtPath(inputName, value, path)
+          }
+        }
+      }
+      "setNumberStateAtPath" -> {
+        args?.let {
+          val inputName = it.getString(0)
+          val value = it.getDouble(1)
+          val path = it.getString(2)
+          view.run {
+            setNumberStateAtPath(inputName, value.toFloat(), path)
+          }
+        }
+      }
 
       // Touch Events
 

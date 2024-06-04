@@ -32,6 +32,8 @@
 		E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5A17A8F299AA0F5008CC433 /* avatars.riv */; };
 		E5F3FC4029B2661500D6D265 /* switch.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5F3FC3F29B2661500D6D265 /* switch.riv */; };
 		E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5FC4EA92ABB975100D98158 /* rating.riv */; };
+		F8AA4CA42C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */; };
+		F8AA4CA52C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +103,7 @@
 		E5FC4EA92ABB975100D98158 /* rating.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = rating.riv; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = runtime_nested_inputs.riv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +258,7 @@
 				E5F3FC3F29B2661500D6D265 /* switch.riv */,
 				9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */,
 				E5FC4EA92ABB975100D98158 /* rating.riv */,
+				F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */,
 				E5A17A8F299AA0F5008CC433 /* avatars.riv */,
 				E59C190F2B07F6FE002F0CBA /* nested_menu.riv */,
 				E5637D79292BD26D000CBC1E /* skills_listener.riv */,
@@ -398,6 +402,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8AA4CA52C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +414,7 @@
 				E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */,
 				042FD22726B81BD1004556A3 /* constrained.riv in Resources */,
 				9D879D0B26578A5E00D01424 /* artboard_animations.riv in Resources */,
+				F8AA4CA42C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */,
 				E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */,
 				04A886F326A990050078530A /* two_bone_ik.riv in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,

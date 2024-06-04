@@ -495,6 +495,30 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+  fun fireStateAtPath(inputName: String, path: String) {
+    try {
+      riveAnimationView.fireStateAtPath(inputName, path)
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
+  fun setBooleanStateAtPath(inputName: String, value: Boolean, path: String) {
+    try {
+      riveAnimationView.setBooleanStateAtPath(inputName, value, path)
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
+  fun setNumberStateAtPath(inputName: String, value: Float, path: String) {
+    try {
+      riveAnimationView.setNumberStateAtPath(inputName, value, path)
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
   private fun handleRiveException(exception: RiveException) {
     if (isUserHandlingErrors) {
       val rnRiveError = RNRiveError.mapToRNRiveError(exception)

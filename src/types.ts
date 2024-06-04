@@ -5,6 +5,12 @@ export type RiveRef = {
     inputName: string,
     value: boolean | number
   ) => void;
+  fireStateAtPath: (inputName: string, path: string) => void;
+  setInputStateAtPath: (
+    inputName: string,
+    value: boolean | number,
+    path: string
+  ) => void;
   play: (
     animationName?: string,
     loop?: LoopMode,
@@ -27,6 +33,9 @@ export enum ViewManagerMethod {
   fireState = 'fireState',
   setBooleanState = 'setBooleanState',
   setNumberState = 'setNumberState',
+  fireStateAtPath = 'fireStateAtPath',
+  setBooleanStateAtPath = 'setBooleanStateAtPath',
+  setNumberStateAtPath = 'setNumberStateAtPath',
   touchBegan = 'touchBegan',
   touchEnded = 'touchEnded',
   setTextRunValue = 'setTextRunValue',

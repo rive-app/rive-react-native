@@ -302,6 +302,35 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
+    const fireStateAtPath = useCallback<
+      RiveRef[ViewManagerMethod.fireStateAtPath]
+    >((inputName, path) => {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(riveRef.current),
+        ViewManagerMethod.fireStateAtPath,
+        [inputName, path]
+      );
+    }, []);
+
+    const setInputStateAtPath = useCallback<RiveRef['setInputStateAtPath']>(
+      (inputName, value, path) => {
+        if (typeof value === 'boolean') {
+          UIManager.dispatchViewManagerCommand(
+            findNodeHandle(riveRef.current),
+            ViewManagerMethod.setBooleanStateAtPath,
+            [inputName, value, path]
+          );
+        } else if (typeof value === 'number') {
+          UIManager.dispatchViewManagerCommand(
+            findNodeHandle(riveRef.current),
+            ViewManagerMethod.setNumberStateAtPath,
+            [inputName, value, path]
+          );
+        }
+      },
+      []
+    );
+
     const touchBegan = useCallback<RiveRef[ViewManagerMethod.touchBegan]>(
       (x: number, y: number) => {
         if (!isNaN(x) && !isNaN(y)) {
@@ -344,7 +373,9 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       ref,
       () => ({
         setInputState,
+        setInputStateAtPath,
         fireState,
+        fireStateAtPath,
         play,
         pause,
         stop,
@@ -359,7 +390,9 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         stop,
         reset,
         setInputState,
+        setInputStateAtPath,
         fireState,
+        fireStateAtPath,
         touchBegan,
         touchEnded,
         setTextRunValue,
