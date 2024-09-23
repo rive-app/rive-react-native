@@ -8523,10 +8523,10 @@ please-upgrade-node@^3.2.0:
   dependencies:
     semver-compare "^1.0.0"
 
-pod-install@^0.1.0:
-  version "0.1.22"
-  resolved "https://registry.npmjs.org/pod-install/-/pod-install-0.1.22.tgz"
-  integrity sha512-Rq62AZ+VK+2K7Si8bkSMECNXrnSAtbpbV4z8Hz8M0S4t+9Ag8vPTG9V/mfphAHPAas7OfbIjP3zOq2MeMpFadw==
+pod-install@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/pod-install/-/pod-install-0.2.2.tgz#3375026ff1e317f87140b8f51ed955084d0c35e5"
+  integrity sha512-NgQpKiuWZo8mWU+SVxmrn+ARy9+fFYzW53ze6CDTo70u5Ie8AVSn7FqolDC/c7+N4/kQ1BldAnXEab6SNYA8xw==
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
