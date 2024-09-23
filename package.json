@@ -67,7 +67,7 @@
     "react": "18.2.0",
     "react-native": "0.72.7",
     "react-native-builder-bob": "^0.18.0",
-    "react-native-codegen": " 0.0.7",
+    "react-native-codegen": "^0.70.7",
     "release-it": "^16.2.1",
     "typescript": "^4.8.4"
   },
