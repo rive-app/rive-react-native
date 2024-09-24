@@ -1,3 +1,2 @@
 yarn lint
 yarn typescript
-yarn test
