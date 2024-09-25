@@ -7,7 +7,7 @@ import { Button, RadioButton } from 'react-native-paper';
 import { isEnum } from './typesPredicates';
 
 const BUTTONS = ['stop', 'pause', 'play'] as const;
-type ButtonKeys = typeof BUTTONS[number];
+type ButtonKeys = (typeof BUTTONS)[number];
 
 export default function LoopModeComponent() {
   const riveRef = React.useRef<RiveRef>(null);

@@ -7,7 +7,7 @@ import { Button, Text } from 'react-native-paper';
 const resourceName = 'truck_v7';
 
 const BUTTONS = ['stop', 'play', 'pause'] as const;
-type ButtonsKey = typeof BUTTONS[number];
+type ButtonsKey = (typeof BUTTONS)[number];
 
 export default function SimpleControls() {
   const [activeButton, setActiveButton] = useState<ButtonsKey>('stop');
