@@ -487,10 +487,10 @@ PODS:
     - React-jsi (= 0.72.7)
     - React-logger (= 0.72.7)
     - React-perflogger (= 0.72.7)
-  - rive-react-native (7.2.0):
+  - rive-react-native (7.3.0):
     - React-Core
-    - RiveRuntime (= 5.14.0)
-  - RiveRuntime (5.14.0)
+    - RiveRuntime (= 5.16.0)
+  - RiveRuntime (5.16.0)
   - RNCMaskedView (0.2.9):
     - React-Core
   - RNCPicker (1.16.8):
@@ -744,8 +744,8 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 7649c3b46c8dee1853691ecf60146a16ae59253c
   React-utils: 56838edeaaf651220d1e53cd0b8934fb8ce68415
   ReactCommon: 5f704096ccf7733b390f59043b6fa9cc180ee4f6
-  rive-react-native: c5f46a81d999be348e3a4875f5d5a42b0288db78
-  RiveRuntime: c470cc8daa0c192c678f7abb35b980f95d2bb625
+  rive-react-native: 6f3125064bd7eb301343be4b4019938f22625d0b
+  RiveRuntime: ef01e938a098fbe2a98353145c2939e077556f06
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
   RNCPicker: 0991c56da7815c0cf946d6f63cf920b25296e5f6
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
@@ -755,6 +755,6 @@ SPEC CHECKSUMS:
   Yoga: 4c3aa327e4a6a23eeacd71f61c81df1bcdf677d5
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 2e1de35b032a6e591da83a5975df1059c489c1d8
+PODFILE CHECKSUM: 2162e0768710a1457a43053c4af0534adf174041
 
 COCOAPODS: 1.15.2
