@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.swift_version = "5.0"
 
   s.dependency "React-Core"
-  s.dependency "RiveRuntime", "5.16.0"
+  s.dependency "RiveRuntime", "6.2.0"
 end
