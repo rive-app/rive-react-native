@@ -10,9 +10,8 @@ import RiveRuntime
 
 enum RNRiveRendererType: String {
     case Rive = "rive"
-    case Skia = "skia"
     case CoreGraphics = "coreGraphics"
-    
+
     static func mapToRNRiveRendererType(value: String) -> RNRiveRendererType {
         if let rnEnum = RNRiveRendererType(rawValue: value) {
             return rnEnum
@@ -20,13 +19,11 @@ enum RNRiveRendererType: String {
             fatalError("Unsupported renderer type: \(value)")
         }
     }
-    
+
     static func mapToRendererType(rnRendererType: RNRiveRendererType) -> RendererType {
         switch rnRendererType {
         case .Rive:
             return RendererType.riveRenderer
-        case .Skia:
-            return RendererType.skiaRenderer
         case .CoreGraphics:
             return RendererType.cgRenderer
         }

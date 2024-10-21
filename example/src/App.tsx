@@ -30,7 +30,7 @@ export default function Main() {
   // For more information: https://rive.app/community/doc/overview/docD20dU9Rod
   //
   // This is optional. The current defaults are:
-  // - iOS: Skia
+  // - iOS: Rive
   // - Android: Skia
   // In the future the default will be the Rive Renderer (RiveRendererIOS.Rive and RiveRendererAndroid.Rive)
   //
