@@ -78,7 +78,6 @@ export enum Direction {
 
 export enum RiveRendererIOS {
   Rive = 'rive',
-  Skia = 'skia',
   CoreGraphics = 'coreGraphics',
 }
 
