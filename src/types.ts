@@ -43,6 +43,7 @@ export enum ViewManagerMethod {
 
 export enum Fit {
   Cover = 'cover',
+  Layout = 'layout',
   Contain = 'contain',
   Fill = 'fill',
   FitWidth = 'fitWidth',

@@ -10,10 +10,8 @@ export default function Simple() {
           fit={Fit.Contain}
           alignment={Alignment.Center}
           style={styles.animation}
-          artboardName={'Avatar 3'}
           autoplay={true}
-          animationName="idlePreview"
-          resourceName={'avatars'}
+          resourceName={'layouts'}
         />
       </ScrollView>
     </SafeAreaView>
