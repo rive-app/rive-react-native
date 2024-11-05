@@ -4,7 +4,6 @@ import app.rive.runtime.kotlin.core.Fit
 
 enum class RNFit(private val mValue: String) {
   Cover("cover"),
-  layout("layout"),
   Contain("contain"),
   Fill("fill"),
   FitWidth("fitWidth"),
@@ -25,7 +24,6 @@ enum class RNFit(private val mValue: String) {
     fun mapToRiveFit(rnFit: RNFit): Fit {
       return when (rnFit) {
         Cover -> Fit.COVER
-        Layout -> Fit.LAYOUT
         Contain -> Fit.CONTAIN
         Fill -> Fit.FILL
         FitWidth -> Fit.FIT_WIDTH
