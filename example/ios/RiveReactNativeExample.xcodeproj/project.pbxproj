@@ -25,7 +25,7 @@
 		9D879D0B26578A5E00D01424 /* artboard_animations.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0A26578A5E00D01424 /* artboard_animations.riv */; };
 		9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */; };
 		9DBF1CC52684937E0008391A /* v6_file.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9DBF1CC42684937E0008391A /* v6_file.riv */; };
-		9EBE42F02CDD293B00014668 /* layout_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9EBE42EF2CDD293B00014668 /* layout_test.riv */; };
+		9EBE42F22CDD459200014668 /* layout_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9EBE42F12CDD459200014668 /* layout_test.riv */; };
 		C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = C3C07471283BE07300E8EB33 /* hero_editor.riv */; };
 		E554409B2A79DC8100D550DE /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = E554409A2A79DC8100D550DE /* hello_world_text.riv */; };
 		E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5637D79292BD26D000CBC1E /* skills_listener.riv */; };
@@ -89,6 +89,7 @@
 		9D879D0C265BF2A400D01424 /* ui_swipe_left_to_delete.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = ui_swipe_left_to_delete.riv; sourceTree = "<group>"; };
 		9DBF1CC42684937E0008391A /* v6_file.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = v6_file.riv; sourceTree = "<group>"; };
 		9EBE42EF2CDD293B00014668 /* layout_test.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = layout_test.riv; path = Assets/layout_test.riv; sourceTree = "<group>"; };
+		9EBE42F12CDD459200014668 /* layout_test.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = layout_test.riv; path = Assets/layout_test.riv; sourceTree = "<group>"; };
 		B4756AFE35A048338799A25D /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		B67E7AEF25D549FDAA873610 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		C3C07471283BE07300E8EB33 /* hero_editor.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = hero_editor.riv; sourceTree = "<group>"; };
@@ -226,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				9EBE42EF2CDD293B00014668 /* layout_test.riv */,
+				9EBE42F12CDD459200014668 /* layout_test.riv */,
 				9D4FE60A26493B460098BF6A /* Assets */,
 				13B07FAE1A68108700A75B9A /* RiveReactNativeExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -422,6 +424,7 @@
 				9D879D0B26578A5E00D01424 /* artboard_animations.riv in Resources */,
 				F8AA4CA42C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */,
 				E5637D7A292BD27F000CBC1E /* skills_listener.riv in Resources */,
+				9EBE42F22CDD459200014668 /* layout_test.riv in Resources */,
 				04A886F326A990050078530A /* two_bone_ik.riv in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				9DBF1CC52684937E0008391A /* v6_file.riv in Resources */,
@@ -430,7 +433,6 @@
 				9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */,
 				E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */,
 				9D879D0926578A5400D01424 /* loopy.riv in Resources */,
-				9EBE42F02CDD293B00014668 /* layout_test.riv in Resources */,
 				C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */,
 				E59C19102B07F6FE002F0CBA /* nested_menu.riv in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
