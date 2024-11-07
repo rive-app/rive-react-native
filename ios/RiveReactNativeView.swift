@@ -41,6 +41,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     @objc var fit: String?
     
+    @objc var layoutScaleFactor: NSNumber = -1.0 // -1.0 will inform the iOS runtime to determine the correct scale factor automatically
+    
     @objc var alignment: String?
     
     @objc var autoplay: Bool
@@ -99,6 +101,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         if (changedProps.contains("alignment"))  {
             viewModel?.alignment = convertAlignment(alignment)
         }
+        
+        if (changedProps.contains("layoutScaleFactor"))  {
+            viewModel?.layoutScaleFactor = layoutScaleFactor.doubleValue
+        }
     }
     
     private func convertFit(_ fit: String? = nil) -> RiveFit {
@@ -143,6 +149,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                 updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             }
             
+            updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
+            
             createNewView(updatedViewModel: updatedViewModel)
             requiresLocalResourceReconfigure = false
         }
@@ -161,6 +169,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             } else {
                 updatedViewModel = RiveViewModel(webURL: url, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             }
+
+            updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
             
             createNewView(updatedViewModel: updatedViewModel)
         }

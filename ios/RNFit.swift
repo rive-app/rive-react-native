@@ -9,6 +9,7 @@ enum RNFit: String {
     case FitHeight = "fitHeight"
     case None = "none"
     case ScaleDown = "scaleDown"
+    case Layout = "layout"
     
     static func mapToRNFit(value: String) -> RNFit {
         if let rnEnum = RNFit(rawValue: value) {
@@ -34,6 +35,8 @@ enum RNFit: String {
             return RiveFit.noFit
         case .ScaleDown:
             return RiveFit.scaleDown
+        case .Layout:
+            return RiveFit.layout
         }
     }
 }

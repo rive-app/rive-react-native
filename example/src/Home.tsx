@@ -41,6 +41,14 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
+          onPress={() => navigation.navigate('ResponsiveLayout')}
+          style={styles.buttonStyle}
+        >
+          Responsive Layout
+        </Button>
+
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('SimpleControls')}
           style={styles.buttonStyle}
         >

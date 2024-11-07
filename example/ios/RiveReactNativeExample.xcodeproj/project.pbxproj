@@ -34,6 +34,8 @@
 		E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5FC4EA92ABB975100D98158 /* rating.riv */; };
 		F8AA4CA42C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */; };
 		F8AA4CA52C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */; };
+		F8E2789E2CDCD6A200FAA8EF /* layouts_demo.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8E2789D2CDCD6A200FAA8EF /* layouts_demo.riv */; };
+		F8E278A22CDCDAFA00FAA8EF /* layout_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8E278A12CDCDAFA00FAA8EF /* layout_test.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +106,8 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = runtime_nested_inputs.riv; sourceTree = "<group>"; };
+		F8E2789D2CDCD6A200FAA8EF /* layouts_demo.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = layouts_demo.riv; sourceTree = "<group>"; };
+		F8E278A12CDCDAFA00FAA8EF /* layout_test.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = layout_test.riv; path = ../../../../../../rive/rive/packages/runtime_wasm/js/examples/_frameworks/layout_example/assets/layout_test.riv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +254,8 @@
 		9D4FE60A26493B460098BF6A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F8E278A12CDCDAFA00FAA8EF /* layout_test.riv */,
+				F8E2789D2CDCD6A200FAA8EF /* layouts_demo.riv */,
 				C3C07471283BE07300E8EB33 /* hero_editor.riv */,
 				E554409A2A79DC8100D550DE /* hello_world_text.riv */,
 				042FD22626B81BD1004556A3 /* constrained.riv */,
@@ -363,6 +369,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = V7DMK4826J;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -421,9 +428,11 @@
 				9DBF1CC52684937E0008391A /* v6_file.riv in Resources */,
 				9D4FE6122649427F0098BF6A /* bird.riv in Resources */,
 				E554409B2A79DC8100D550DE /* hello_world_text.riv in Resources */,
+				F8E278A22CDCDAFA00FAA8EF /* layout_test.riv in Resources */,
 				9D879D0D265BF2A400D01424 /* ui_swipe_left_to_delete.riv in Resources */,
 				E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */,
 				9D879D0926578A5400D01424 /* loopy.riv in Resources */,
+				F8E2789E2CDCD6A200FAA8EF /* layouts_demo.riv in Resources */,
 				C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */,
 				E59C19102B07F6FE002F0CBA /* nested_menu.riv in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -716,6 +725,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V7DMK4826J;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RiveReactNativeExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -724,7 +734,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.rivereactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = gordon.example.rivereactnative;
 				PRODUCT_NAME = RiveReactNativeExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -739,6 +749,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V7DMK4826J;
 				INFOPLIST_FILE = RiveReactNativeExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -746,7 +757,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.rivereactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = gordon.example.rivereactnative;
 				PRODUCT_NAME = RiveReactNativeExample;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

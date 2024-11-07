@@ -76,6 +76,7 @@ type RiveProps = {
   isUserHandlingErrors: boolean;
   autoplay?: boolean;
   fit: Fit;
+  layoutScaleFactor?: number;
   alignment: Alignment;
   artboardName?: string;
   animationName?: string;
@@ -98,6 +99,7 @@ type Props = {
   onRiveEventReceived?: (event: RiveGeneralEvent | RiveOpenUrlEvent) => void;
   onError?: (rnRiveError: RNRiveError) => void;
   fit?: Fit;
+  layoutScaleFactor?: number;
   style?: ViewStyle;
   testID?: string;
   alignment?: Alignment;
@@ -127,6 +129,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       url,
       alignment = Alignment.Center,
       fit = Fit.Contain,
+      layoutScaleFactor,
       artboardName,
       animationName,
       stateMachineName,
@@ -416,6 +419,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             isUserHandlingErrors={isUserHandlingErrors}
             autoplay={autoplay}
             fit={fit}
+            layoutScaleFactor={layoutScaleFactor}
             url={url}
             style={styles.animation}
             onPlay={onPlayHandler}

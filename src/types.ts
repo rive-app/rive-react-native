@@ -49,6 +49,7 @@ export enum Fit {
   FitHeight = 'fitHeight',
   None = 'none',
   ScaleDown = 'scaleDown',
+  Layout = 'layout',
 }
 
 export enum Alignment {
