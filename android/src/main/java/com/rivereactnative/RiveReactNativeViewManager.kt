@@ -165,19 +165,12 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   @ReactProp(name = "layoutScaleFactor")
   fun setLayoutScaleFactor(view: RiveReactNativeView, layoutScaleFactor: Double) {
-    when {
-        layoutScaleFactor.isNaN() -> {
-            // Treat as `null` or uninitialized
-            view.setLayoutScaleFactor(null)
-        }
-        layoutScaleFactor == -1.0 -> {
-            // iOS handles -1.0 as the value where Rive should handle the density
-            // We force the same for Android on React Native
-            view.setLayoutScaleFactor(null)
-        }
-        else -> {
-            view.setLayoutScaleFactor(layoutScaleFactor.toFloat())
-        }
+    if (!layoutScaleFactor.isNaN() && layoutScaleFactor > 0) {
+        // Only set layoutScaleFactor if it's a valid positive float
+        view.setLayoutScaleFactor(layoutScaleFactor.toFloat())
+    } else {
+        // Handle other cases, e.g., NaN, -1, or other non-float-like values
+        view.setLayoutScaleFactor(null)
     }
   }
 
