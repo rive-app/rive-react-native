@@ -22,6 +22,7 @@ import {
   RiveRendererAndroid,
   RiveRendererIOS,
 } from 'rive-react-native';
+import ResponsiveLayout from './ResponsiveLayout';
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,7 @@ function App() {
           <Stack.Screen name="Simple" component={Simple} />
           <Stack.Screen name="SimpleControls" component={SimpleControls} />
           <Stack.Screen name="Layout" component={Layout} />
+          <Stack.Screen name="ResponsiveLayout" component={ResponsiveLayout} />
           <Stack.Screen name="Http" component={Http} />
           <Stack.Screen name="MeshExample" component={MeshExample} />
           <Stack.Screen name="StateMachine" component={StateMachine} />
