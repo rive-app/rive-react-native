@@ -2,7 +2,6 @@ import * as React from 'react';
 import { SafeAreaView, StyleSheet, View, Button, Text } from 'react-native';
 import Rive, { Fit } from 'rive-react-native';
 
-// const resourceName = 'layouts_demo';
 const resourceName = 'layout_test';
 
 export default function ResponsiveLayout() {
@@ -18,8 +17,10 @@ export default function ResponsiveLayout() {
         autoplay={true}
         style={styles.animation}
         fit={Fit.Layout}
-        layoutScaleFactor={scaleFactor} // If you do not set this, Rive will automatically scale the layout to match the device pixel ratio
+        layoutScaleFactor={scaleFactor} // If you do not set this (or set equal to "-1.0"), Rive will automatically scale the layout to match the device pixel ratio
         resourceName={resourceName}
+        artboardName={'Artboard'}
+        stateMachineName={'State Machine 1'}
       />
       <View style={styles.controls}>
         <Text style={styles.label}>Layout Scale Factor</Text>
