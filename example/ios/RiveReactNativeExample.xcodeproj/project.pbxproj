@@ -35,7 +35,6 @@
 		E5FC4EAA2ABB975100D98158 /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = E5FC4EA92ABB975100D98158 /* rating.riv */; };
 		F8AA4CA42C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */; };
 		F8AA4CA52C0F3FDB00C1A5FF /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8AA4CA32C0F3FDB00C1A5FF /* runtime_nested_inputs.riv */; };
-		F8E2789E2CDCD6A200FAA8EF /* layouts_demo.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8E2789D2CDCD6A200FAA8EF /* layouts_demo.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -255,7 +254,6 @@
 		9D4FE60A26493B460098BF6A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				F8E278A12CDCDAFA00FAA8EF /* layout_test.riv */,
 				F8E2789D2CDCD6A200FAA8EF /* layouts_demo.riv */,
 				C3C07471283BE07300E8EB33 /* hero_editor.riv */,
 				E554409A2A79DC8100D550DE /* hello_world_text.riv */,
@@ -433,7 +431,6 @@
 				E5A17A90299AA0F5008CC433 /* avatars.riv in Resources */,
 				9D879D0926578A5400D01424 /* loopy.riv in Resources */,
 				9EBE42F02CDD293B00014668 /* layout_test.riv in Resources */,
-				F8E2789E2CDCD6A200FAA8EF /* layouts_demo.riv in Resources */,
 				C3C07472283BE07300E8EB33 /* hero_editor.riv in Resources */,
 				E59C19102B07F6FE002F0CBA /* nested_menu.riv in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
