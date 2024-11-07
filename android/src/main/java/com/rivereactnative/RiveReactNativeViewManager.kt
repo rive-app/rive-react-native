@@ -163,6 +163,24 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     view.setFit(RNFit.mapToRNFit(fit))
   }
 
+  @ReactProp(name = "layoutScaleFactor")
+  fun setLayoutScaleFactor(view: RiveReactNativeView, layoutScaleFactor: Double) {
+    when {
+        layoutScaleFactor.isNaN() -> {
+            // Treat as `null` or uninitialized
+            view.setLayoutScaleFactor(null)
+        }
+        layoutScaleFactor == -1.0 -> {
+            // iOS handles -1.0 as the value where Rive should handle the density
+            // We force the same for Android on React Native
+            view.setLayoutScaleFactor(null)
+        }
+        else -> {
+            view.setLayoutScaleFactor(layoutScaleFactor.toFloat())
+        }
+    }
+  }
+
   @ReactProp(name = "alignment")
   fun setAlignment(view: RiveReactNativeView, alignment: String) {
     view.setAlignment(RNAlignment.mapToRNAlignment(alignment))

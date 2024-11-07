@@ -9,7 +9,8 @@ enum class RNFit(private val mValue: String) {
   FitWidth("fitWidth"),
   FitHeight("fitHeight"),
   None("none"),
-  ScaleDown("scaleDown");
+  ScaleDown("scaleDown"),
+  Layout("layout");
 
   override fun toString(): String {
     return mValue
@@ -30,6 +31,7 @@ enum class RNFit(private val mValue: String) {
         FitHeight -> Fit.FIT_HEIGHT
         None -> Fit.NONE
         ScaleDown -> Fit.SCALE_DOWN
+        Layout -> Fit.LAYOUT
       }
     }
   }

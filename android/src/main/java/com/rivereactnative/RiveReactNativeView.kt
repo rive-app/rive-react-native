@@ -71,6 +71,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var stateMachineName: String? = null
   private var artboardName: String? = null
   private var fit: Fit = Fit.CONTAIN
+  private var layoutScaleFactor: Float? = null
   private var alignment: Alignment = Alignment.CENTER
   private var autoplay: Boolean = false;
   private var shouldBeReloaded = true
@@ -337,6 +338,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     val riveFit = RNFit.mapToRiveFit(rnFit)
     this.fit = riveFit
     riveAnimationView.fit = riveFit
+  }
+
+  fun setLayoutScaleFactor(layoutScaleFactor: Float?) {
+    this.layoutScaleFactor = layoutScaleFactor
+    riveAnimationView.layoutScaleFactor = layoutScaleFactor
   }
 
   fun setAlignment(rnAlignment: RNAlignment) {
