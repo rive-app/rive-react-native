@@ -734,7 +734,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gordon.example.rivereactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rivereactnative;
 				PRODUCT_NAME = RiveReactNativeExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -757,7 +757,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gordon.example.rivereactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.rivereactnative;
 				PRODUCT_NAME = RiveReactNativeExample;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
