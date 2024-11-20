@@ -317,6 +317,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+  fun setTextRunValueAtPath(textRunName: String, textValue: String, path: String) {
+    try {
+      riveAnimationView.controller.activeArtboard?.textRun(textRunName, path)?.text = textValue
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
   fun update() {
     reloadIfNeeded()
   }

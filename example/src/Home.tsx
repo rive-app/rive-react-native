@@ -105,6 +105,14 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
+          onPress={() => navigation.navigate('NestedDynamicText')}
+          style={styles.buttonStyle}
+        >
+          Nested Dynamic Text
+        </Button>
+
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('ErrorNotHandled')}
           style={styles.buttonStyle}
         >

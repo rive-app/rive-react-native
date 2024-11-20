@@ -23,6 +23,11 @@ export type RiveRef = {
   touchBegan: (x: number, y: number) => void;
   touchEnded: (x: number, y: number) => void;
   setTextRunValue: (textRunName: string, value: string) => void;
+  setTextRunValueAtPath: (
+    textRunName: string,
+    value: string,
+    path: string
+  ) => void;
 };
 
 export enum ViewManagerMethod {
@@ -39,6 +44,7 @@ export enum ViewManagerMethod {
   touchBegan = 'touchBegan',
   touchEnded = 'touchEnded',
   setTextRunValue = 'setTextRunValue',
+  setTextRunValueAtPath = 'setTextRunValueAtPath',
 }
 
 export enum Fit {
