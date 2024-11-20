@@ -102,6 +102,13 @@ class RiveReactNativeViewManager: RCTViewManager {
         }
     }
 
+    @objc func setTextRunValueAtPath(_ node: NSNumber, textRunName: String, textRunValue: String, path: String) {
+        DispatchQueue.main.async {
+            let view = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
+            try! view.setTextRunValueAtPath(textRunName: textRunName, textRunValue: textRunValue, path: path)
+        }
+    }
+
     @objc static override func requiresMainQueueSetup() -> Bool {
         return false
     }

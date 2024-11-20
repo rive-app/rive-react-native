@@ -14,6 +14,7 @@ import ErrorNotHandled from './ErrorNotHandled';
 import ErrorHandledManually from './ErrorHandledManually';
 import MeshExample from './MeshExample';
 import DynamicText from './DynamicText';
+import NestedDynamicText from './NestedDynamicText';
 import NestedInputs from './NestedInputs';
 import Events from './Events';
 
@@ -65,6 +66,10 @@ function App() {
           <Stack.Screen name="Events" component={Events} />
           <Stack.Screen name="NestedInputs" component={NestedInputs} />
           <Stack.Screen name="DynamicText" component={DynamicText} />
+          <Stack.Screen
+            name="NestedDynamicText"
+            component={NestedDynamicText}
+          />
           <Stack.Screen
             name="MultipleArtboards"
             component={MultipleArtboards}

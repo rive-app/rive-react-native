@@ -133,6 +133,17 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
       }
 
+      "setTextRunValueAtPath" -> {
+        args?.let {
+          val textRunName: String = it.getString(0)
+          val textValue: String = it.getString(1)
+          val path: String = it.getString(2)
+          view.run {
+            this.setTextRunValueAtPath(textRunName, textValue, path)
+          }
+        }
+      }
+
       // Other
 
       else -> { }

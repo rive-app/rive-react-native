@@ -255,7 +255,15 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             handleRiveError(error: error)
         }
     }
-    
+
+    func setTextRunValueAtPath(textRunName: String, textRunValue: String, path: String) throws {
+        do {
+            try viewModel?.setTextRunValue(textRunName, path: path, textValue: textRunValue)
+        } catch let error as NSError {
+            handleRiveError(error: error)
+        }
+    }
+
     // MARK: - StateMachineDelegate
     
     @objc func stateMachine(_ stateMachine: RiveStateMachineInstance, didChangeState stateName: String) {
