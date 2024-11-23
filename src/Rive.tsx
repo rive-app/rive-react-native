@@ -74,6 +74,7 @@ type RiveProps = {
     }>
   ) => void;
   isUserHandlingErrors: boolean;
+  initialAssetsHandled?: { [name: string]: string }; // map of asset name to asset url
   autoplay?: boolean;
   fit: Fit;
   layoutScaleFactor?: number;
@@ -98,6 +99,7 @@ type Props = {
   onStateChanged?: (stateMachineName: string, stateName: string) => void;
   onRiveEventReceived?: (event: RiveGeneralEvent | RiveOpenUrlEvent) => void;
   onError?: (rnRiveError: RNRiveError) => void;
+  initialAssetsHandled?: { [name: string]: string };
   fit?: Fit;
   layoutScaleFactor?: number;
   style?: ViewStyle;
@@ -123,6 +125,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onStateChanged,
       onRiveEventReceived,
       onError,
+      initialAssetsHandled,
       style,
       autoplay = true,
       resourceName,
@@ -433,6 +436,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             artboardName={artboardName}
             animationName={animationName}
             stateMachineName={stateMachineName}
+            initialAssetsHandled={initialAssetsHandled}
           />
         </TouchableWithoutFeedback>
       </View>

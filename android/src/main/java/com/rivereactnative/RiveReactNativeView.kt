@@ -1,5 +1,6 @@
 package com.rivereactnative
 
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -78,6 +79,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
   private var willDispose = false;
+  private var handledAssets: MutableMap<String, String>? = null
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
@@ -372,6 +374,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     } ?: run {
       if (resId != -1) {
         try {
+          if (this.handledAssets != null) {
+            riveAnimationView.setAssetLoader(RNURLAssetLoader(context, this.handledAssets))
+          }
+
           riveAnimationView.setRiveResource(
             resId,
             fit = this.fit,
@@ -401,6 +407,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         }
       } ?: run {
         if (resId != -1) {
+          if (this.handledAssets != null) {
+            riveAnimationView.setAssetLoader(RNURLAssetLoader(context, this.handledAssets))
+          }
           try {
             riveAnimationView.setRiveResource(
               resId,
@@ -475,6 +484,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setIsUserHandlingErrors(isUserHandlingErrors: Boolean) {
     this.isUserHandlingErrors = isUserHandlingErrors
+  }
+
+  fun setHandledAssets(handledAssets: MutableMap<String, String>) {
+    this.handledAssets = handledAssets
+    shouldBeReloaded = true
   }
 
   fun fireState(stateMachineName: String, inputName: String) {
