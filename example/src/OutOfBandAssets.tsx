@@ -13,7 +13,10 @@ export default function StateMachine() {
           stateMachineName="State Machine 2"
           artboardName="Picture 1"
           initialAssetsHandled={{
-            'cat.webp': 'https://www.gstatic.com/webp/gallery/1.webp',
+            'cat.webp': {
+              // assetUrl: 'https://www.gstatic.com/webp/gallery/1.webp',
+              bundledAssetName: 'cat_994454',
+            },
           }}
           resourceName={'cat_wall'}
         />

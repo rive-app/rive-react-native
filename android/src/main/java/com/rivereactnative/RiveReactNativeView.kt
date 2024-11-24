@@ -1,6 +1,5 @@
 package com.rivereactnative
 
-import android.util.Log
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -79,7 +78,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
   private var willDispose = false;
-  private var handledAssets: MutableMap<String, String>? = null
+  private var urlAssets: MutableMap<String, String>? = null
+  private var bundledAssets: MutableMap<String, String>? = null
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"),
@@ -374,8 +374,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     } ?: run {
       if (resId != -1) {
         try {
-          if (this.handledAssets != null) {
-            riveAnimationView.setAssetLoader(RNURLAssetLoader(context, this.handledAssets))
+          if (this.urlAssets != null || this.bundledAssets != null) {
+            riveAnimationView.setAssetLoader(RNAssetLoader(context, this.urlAssets, this.bundledAssets))
           }
 
           riveAnimationView.setRiveResource(
@@ -407,8 +407,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         }
       } ?: run {
         if (resId != -1) {
-          if (this.handledAssets != null) {
-            riveAnimationView.setAssetLoader(RNURLAssetLoader(context, this.handledAssets))
+          if (this.urlAssets != null || this.bundledAssets != null) {
+            riveAnimationView.setAssetLoader(RNAssetLoader(context, this.urlAssets, this.bundledAssets))
           }
           try {
             riveAnimationView.setRiveResource(
@@ -486,8 +486,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     this.isUserHandlingErrors = isUserHandlingErrors
   }
 
-  fun setHandledAssets(handledAssets: MutableMap<String, String>) {
-    this.handledAssets = handledAssets
+  fun setHandledAssets(urlAssets: MutableMap<String, String>, bundledAssets: MutableMap<String, String>) {
+    this.urlAssets = urlAssets
+    this.bundledAssets = bundledAssets
     shouldBeReloaded = true
   }
 

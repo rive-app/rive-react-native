@@ -31,6 +31,16 @@ const { RiveReactNativeRendererModule } = NativeModules;
 export const RiveRenderer =
   RiveReactNativeRendererModule as RiveRendererInterface;
 
+type HandledAssetsConfig = {
+  [key: string]:
+    | {
+        assetUrl: string;
+      }
+    | {
+        bundledAssetName: string;
+      };
+};
+
 type RiveProps = {
   onPlay?: (
     event: NativeSyntheticEvent<{
@@ -74,7 +84,7 @@ type RiveProps = {
     }>
   ) => void;
   isUserHandlingErrors: boolean;
-  initialAssetsHandled?: { [name: string]: string }; // map of asset name to asset url
+  initialAssetsHandled?: HandledAssetsConfig;
   autoplay?: boolean;
   fit: Fit;
   layoutScaleFactor?: number;
@@ -99,7 +109,7 @@ type Props = {
   onStateChanged?: (stateMachineName: string, stateName: string) => void;
   onRiveEventReceived?: (event: RiveGeneralEvent | RiveOpenUrlEvent) => void;
   onError?: (rnRiveError: RNRiveError) => void;
-  initialAssetsHandled?: { [name: string]: string };
+  initialAssetsHandled?: HandledAssetsConfig;
   fit?: Fit;
   layoutScaleFactor?: number;
   style?: ViewStyle;

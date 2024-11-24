@@ -212,17 +212,27 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
   @ReactProp(name = "initialAssetsHandled")
   fun setInitialAssetsHandled(view: RiveReactNativeView, initialAssetsHandled: ReadableMap?) {
-    val assetMap = mutableMapOf<String, String>()
+    val assetUrlMap = mutableMapOf<String, String>()
+    val assetNameMap = mutableMapOf<String, String>()
+
     if (initialAssetsHandled != null) {
       val iterator = initialAssetsHandled.keySetIterator()
       while (iterator.hasNextKey()) {
         val key = iterator.nextKey()
-        val value = initialAssetsHandled.getString(key)
-        if (value != null) {
-          assetMap[key] = value
+        val configMap = initialAssetsHandled.getMap(key)
+
+        val assetUrl = configMap?.getString("assetUrl")
+        if (assetUrl != null) {
+          assetUrlMap[key] = assetUrl
+        }
+
+        val assetName = configMap?.getString("bundledAssetName")
+        if (assetName != null) {
+          assetNameMap[key] = assetName
         }
       }
-      view.setHandledAssets(assetMap)
+
+      view.setHandledAssets(assetUrlMap, assetNameMap)
     }
   }
 }
