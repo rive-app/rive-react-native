@@ -14,8 +14,8 @@ export default function StateMachine() {
           artboardName="Picture 1"
           initialAssetsHandled={{
             'cat.webp': {
-              // assetUrl: 'https://www.gstatic.com/webp/gallery/1.webp',
-              bundledAssetName: 'cat_994454',
+              assetUrl: 'https://www.gstatic.com/webp/gallery/1.webp',
+              // bundledAssetName: 'cat_994454',
             },
           }}
           resourceName={'cat_wall'}
