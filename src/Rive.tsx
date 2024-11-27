@@ -15,6 +15,7 @@ import {
 import {
   RiveRef,
   Direction,
+  HandledAssetsConfig,
   LoopMode,
   RNRiveError,
   ViewManagerMethod,
@@ -30,16 +31,6 @@ const { RiveReactNativeRendererModule } = NativeModules;
 
 export const RiveRenderer =
   RiveReactNativeRendererModule as RiveRendererInterface;
-
-type HandledAssetsConfig = {
-  [key: string]:
-    | {
-        assetUrl: string;
-      }
-    | {
-        bundledAssetName: string;
-      };
-};
 
 type RiveProps = {
   onPlay?: (

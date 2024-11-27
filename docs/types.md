@@ -52,6 +52,20 @@ export enum Direction {
 }
 ```
 
+## HandledAssetsConfig
+
+```ts
+export type HandledAssetsConfig = {
+  [name: string]:
+    | {
+        assetUrl: string;
+      }
+    | {
+        bundledAssetName: string;
+      };
+}
+```
+
 ## RNRiveError
 
 ```ts

@@ -91,6 +91,12 @@ Specifies which stateMachine should be played when `autoplay` is set to `true`.
 default: `undefined`
 type: `string`
 
+### initialAssetsHandled _(optional)_
+
+Specifies a url or bundled asset name for handling out of band assets.
+default: `undefined`
+type: `HandledAssetsConfig`
+
 ### testID _(optional)_
 
 Specifies testID which could be handy in tests.

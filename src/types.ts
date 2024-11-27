@@ -25,6 +25,16 @@ export type RiveRef = {
   setTextRunValue: (textRunName: string, value: string) => void;
 };
 
+export type HandledAssetsConfig = {
+  [name: string]:
+    | {
+        assetUrl: string;
+      }
+    | {
+        bundledAssetName: string;
+      };
+};
+
 export enum ViewManagerMethod {
   play = 'play',
   pause = 'pause',
