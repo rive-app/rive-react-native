@@ -105,6 +105,14 @@ export default function Home({ navigation }) {
 
         <Button
           mode="contained"
+          onPress={() => navigation.navigate('OutOfBandAssets')}
+          style={styles.buttonStyle}
+        >
+          Out of Band Assets
+        </Button>
+
+        <Button
+          mode="contained"
           onPress={() => navigation.navigate('ErrorNotHandled')}
           style={styles.buttonStyle}
         >

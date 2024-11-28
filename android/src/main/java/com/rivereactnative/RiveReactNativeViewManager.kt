@@ -1,6 +1,8 @@
 package com.rivereactnative
 
+import android.util.Log
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
@@ -206,5 +208,31 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   @ReactProp(name = "isUserHandlingErrors")
   fun setIsUserHandlingErrors(view: RiveReactNativeView, isUserHandlingErrors: Boolean) {
     view.setIsUserHandlingErrors(isUserHandlingErrors)
+  }
+
+  @ReactProp(name = "initialAssetsHandled")
+  fun setInitialAssetsHandled(view: RiveReactNativeView, initialAssetsHandled: ReadableMap?) {
+    val assetUrlMap = mutableMapOf<String, String>()
+    val assetNameMap = mutableMapOf<String, String>()
+
+    if (initialAssetsHandled != null) {
+      val iterator = initialAssetsHandled.keySetIterator()
+      while (iterator.hasNextKey()) {
+        val key = iterator.nextKey()
+        val configMap = initialAssetsHandled.getMap(key)
+
+        val assetUrl = configMap?.getString("assetUrl")
+        if (assetUrl != null) {
+          assetUrlMap[key] = assetUrl
+        }
+
+        val assetName = configMap?.getString("bundledAssetName")
+        if (assetName != null) {
+          assetNameMap[key] = assetName
+        }
+      }
+
+      view.setHandledAssets(assetUrlMap, assetNameMap)
+    }
   }
 }
