@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import {
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import Rive, { Fit } from 'rive-react-native';
 
 export default function StateMachine() {
@@ -15,7 +21,8 @@ export default function StateMachine() {
           initialAssetsHandled={{
             'cat.webp': {
               // assetUrl: 'https://www.gstatic.com/webp/gallery/1.webp',
-              bundledAssetName: 'cat_994454.webp',
+              bundledAssetName:
+                Platform.OS === 'ios' ? 'cat_994454.webp' : 'cat_994454',
             },
           }}
           resourceName={'cat_wall'}

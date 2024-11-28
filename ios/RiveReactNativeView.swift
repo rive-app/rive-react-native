@@ -173,6 +173,17 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
         return false
     }
+  
+    private func isFontFile(fileName: String) -> Bool {
+        let fontFileExtensions = ["otf", "ttf"]
+        let lowercasedFileName = fileName.lowercased()
+        for ext in fontFileExtensions {
+          if lowercasedFileName.hasSuffix(".\(ext)") {
+            return true
+          }
+        }
+        return false
+    }
 
     private func splitFileNameAndExtension(fileName: String) -> (name: String, ext: String)? {
         let components = fileName.components(separatedBy: ".")
@@ -241,12 +252,15 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         guard let folderUrl = Bundle.main.url(forResource: splitBundleAssetName?.name, withExtension: splitBundleAssetName?.ext) else {
             fatalError("Could not find the asset \(bundleAssetName)")
        }
-        // TODO: also handle fonts
-       do {
+
+      do {
            let fileData = try Data(contentsOf: folderUrl)
            if self.isImageFile(fileName: bundleAssetName) {
                let renderImage = factory.decodeImage(fileData)
                (asset as! RiveImageAsset).renderImage(renderImage)
+           } else if self.isFontFile(fileName: bundleAssetName) {
+             let renderFont = factory.decodeFont(fileData)
+             (asset as! RiveFontAsset).font(renderFont)
            }
        } catch {
            fatalError("Could not create a Rive render image for \(bundleAssetName)")
@@ -259,8 +273,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             if let data = data {
                 if self.isImageFile(fileName: asset.name()) {
                     let renderImage = factory.decodeImage(data)
-                    debugPrint("IS IMAGE \(renderImage)");
                     (asset as! RiveImageAsset).renderImage(renderImage)
+                } else if self.isFontFile(fileName: asset.name()) {
+                  let renderFont = factory.decodeFont(data)
+                  (asset as! RiveFontAsset).font(renderFont)
                 }
             }
         }

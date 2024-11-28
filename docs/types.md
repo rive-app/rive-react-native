@@ -61,6 +61,8 @@ export type HandledAssetsConfig = {
         assetUrl: string;
       }
     | {
+        // On iOS, this must include the file extension.
+        // On Android, this must exclude the file extension. The asset must be placed in the `android/app/src/main/res/raw` directory
         bundledAssetName: string;
       };
 }
