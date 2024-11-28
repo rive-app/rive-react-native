@@ -17,9 +17,10 @@ export default function NestedDynamicText() {
   const handleInputChange = (e: string) => {
     // Set the TextRun value of the 'name' TextRun
     // The name must exist else an error will be thrown
-    // See: https://help.rive.app/runtimes/text
+    // See: https://rive.app/community/doc/text/docn2E6y1lXo#readupdate-text-runs-at-runtime
     riveRef.current?.setTextRunValue('Run A', e);
     // Set the TextRun value of the 'Run B' TextRun in nested Artboard 2.
+    // See: https://rive.app/community/doc/text/docn2E6y1lXo#readupdate-nested-text-runs-at-runtime
     riveRef.current?.setTextRunValueAtPath('Run B', e, 'Artboard 2');
   };
 
@@ -66,6 +67,6 @@ const styles = StyleSheet.create({
   },
   animation: {
     width: '100%',
-    height: 100,
+    height: 500,
   },
 });

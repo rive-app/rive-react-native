@@ -121,7 +121,7 @@ pod update RiveRuntime
 In the top-level `android` folder, change the dependency version in `build.gradle` to the version you're looking to upgrade to in the dependencies:
 
 ```
-implementation 'app.rive:rive-android:8.2.1'
+implementation 'app.rive:rive-android:x.x.x'
 ```
 
 ### Debugging against local rive-android
