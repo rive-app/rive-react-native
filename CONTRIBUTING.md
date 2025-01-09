@@ -29,6 +29,26 @@ Follow dependency installation instructions from the [React Native docs here](ht
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home`
 ```
 
+### Testing in a new Expo project
+1. In rive-react-native run npm pack which will create rive-react-native-x.x.x.tgz
+2. Create a new expo project and prebuild (formerly eject) it: https://docs.expo.dev/
+3. In Podfile set the minimum platform to 14: platform :ios, podfile_properties['ios.deploymentTarget'] || '14.0'
+4. Add this to your package.json dependencies: `"rive-react-native": "file:../rive-react-native/rive-react-native-8.0.0.tgz"` (adjust the path if needed) and run `npm i`
+5. Add a Rive component index.tsx and run npm run start:
+
+```js
+import Rive, { Alignment, Fit, RiveRef } from 'rive-react-native'
+...
+<Rive
+    url='https://cdn.rive.app/animations/vehicles.riv'
+    fit={Fit.Contain}
+    alignment={Alignment.Center}
+    artboardName={'Truck'}
+    style={{ width: 200, height: 200 }}
+    autoplay={true}
+  />
+```
+
 ### M1 considerations
 
 If you're running on an M1, you may need to run terminal-based commands off [Rosetta](https://www.courier.com/blog/tips-and-tricks-to-setup-your-apple-m1-for-development/) as it may not support new M1 architecture.
@@ -121,7 +141,7 @@ pod update RiveRuntime
 In the top-level `android` folder, change the dependency version in `build.gradle` to the version you're looking to upgrade to in the dependencies:
 
 ```
-implementation 'app.rive:rive-android:8.2.1'
+implementation 'app.rive:rive-android:x.x.x'
 ```
 
 ### Debugging against local rive-android
