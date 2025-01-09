@@ -56,6 +56,13 @@ Check out the `example/` folder to run an example application using the Rive Rea
 - Displaying single or multiple animations / artboards on one component
 - Setting up and maniuplating a state machine via inputs
 - ...and more!
+  
+Steps:
+1. Run yarn bootstrap
+2. Run yarn example start
+
+iOS:
+- You may need to run `pod install` (first time) or `pod update RiveRuntime` (updates to the underlying Rive iOS runtime) in the `example/iOS` folder to get the runtime installed or updated
 
 ## Migration Guides
 
