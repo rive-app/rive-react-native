@@ -55,6 +55,13 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     @objc var artboardName: String?
+
+    @objc var assetsHandled: NSDictionary?
+    {
+        didSet {
+            requiresLocalResourceReconfigure = true;
+        }
+    }
     
     
     @objc var animationName: String?
@@ -79,7 +86,18 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     // MARK: - React Native Helpers
     
     override func removeFromSuperview() {
-        removeReactSubview(riveView) // TODO: Investigate if this is the optimal place to remove, and if this is necessary.
+        cleanupResources()
+        
+        super.removeFromSuperview()
+    }
+    
+    private func cleanupResources() {
+        removeReactSubview(riveView)
+        riveView?.playerDelegate = nil
+        riveView?.stateMachineDelegate = nil
+        riveView = nil;
+        viewModel?.deregisterView();
+        viewModel = nil;
     }
     
     override func layoutSubviews() {
@@ -90,7 +108,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-        if (changedProps.contains("url") || changedProps.contains("resourceName") || changedProps.contains("artboardName") || changedProps.contains("animationName") || changedProps.contains("stateMachineName")) {
+        if (changedProps.contains("url") || changedProps.contains("resourceName") || changedProps.contains("artboardName") || changedProps.contains("animationName") || changedProps.contains("stateMachineName") || changedProps.contains("assetsHandled")) {
             reloadView()
         }
         
@@ -142,11 +160,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             
             let updatedViewModel : RiveViewModel
             if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
             } else if let animName = animationName {
-                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
             } else {
-                updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
+                updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
             }
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
@@ -192,8 +210,149 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         } else {
             configureViewModelFromUrl() // TODO: calling viewModel?.configureModel for a URL ViewModel throws. Requires further investigation. Currently recreating the whole ViewModel for certain prop changes.
         }
+    }
+
+    private func customLoader(asset: RiveFileAsset, data: Data, factory: RiveFactory) -> Bool {
+        guard let assetData = assetsHandled?[asset.uniqueName()] as? NSDictionary else {
+            return false
+        }
         
+        if let source = assetData["source"] as? NSDictionary {
+            loadAsset(source: source, asset: asset, factory: factory)
+            return true
+        }
         
+        return false
+    }
+    
+    private func loadAsset(source: NSDictionary, asset: RiveFileAsset, factory: RiveFactory) {
+        let sourceAssetId = source["sourceAssetId"] as? String
+        let sourceUrl = source["sourceUrl"] as? String
+        let sourceAsset = source["sourceAsset"] as? String
+        
+        if let sourceAssetId = sourceAssetId {
+            handleSourceAssetId(sourceAssetId, asset: asset, factory: factory)
+        } else if let sourceUrl = sourceUrl {
+            handleSourceUrl(sourceUrl, asset: asset, factory: factory)
+        } else if let sourceAsset = sourceAsset {
+            handleSourceAsset(sourceAsset, path: source["path"] as? String, asset: asset, factory: factory)
+        }
+    }
+    
+    private func handleSourceAssetId(_ sourceAssetId: String, asset: RiveFileAsset, factory: RiveFactory) {
+        guard URL(string: sourceAssetId) != nil else {
+            return
+        }
+        
+        downloadUrlAsset(url: sourceAssetId) { [weak self] data in
+            self?.processAssetBytes(data, asset: asset, factory: factory)
+        }
+    }
+    
+    private func handleSourceUrl(_ sourceUrl: String, asset: RiveFileAsset, factory: RiveFactory) {
+        downloadUrlAsset(url: sourceUrl) { [weak self] data in
+            self?.processAssetBytes(data, asset: asset, factory: factory)
+        }
+    }
+    
+    private func handleSourceAsset(_ sourceAsset: String, path: String?, asset: RiveFileAsset, factory: RiveFactory) {
+        loadResourceAsset(sourceAsset: sourceAsset, path: path) {[weak self] data in
+            self?.processAssetBytes(data, asset: asset, factory: factory)
+        }
+    }
+    
+    private func processAssetBytes(_ data: Data, asset: RiveFileAsset, factory: RiveFactory) {
+        DispatchQueue.global(qos: .background).async {
+            switch asset {
+            case let imageAsset as RiveImageAsset:
+                let decodedImage = factory.decodeImage(data)
+                DispatchQueue.main.async {
+                    imageAsset.renderImage(decodedImage)
+                }
+            case let fontAsset as RiveFontAsset:
+                let decodedFont = factory.decodeFont(data)
+                DispatchQueue.main.async {
+                    fontAsset.font(decodedFont)
+                }
+            case let audioAsset as RiveAudioAsset:
+                let decodedAudio = factory.decodeAudio(data)
+                DispatchQueue.main.async {
+                    audioAsset.audio(decodedAudio)
+                }
+            default:
+                break
+            }
+        }
+    }
+    
+    private func downloadUrlAsset(url: String, listener: @escaping (Data) -> Void) {
+        guard isValidUrl(url) else {
+            handleInvalidUrlError(url: url)
+            return
+        }
+        
+        let queue = URLSession.shared
+        guard let requestUrl = URL(string: url) else {
+            handleInvalidUrlError(url: url)
+            return
+        }
+        
+        let request = URLRequest(url: requestUrl)
+        let task = queue.dataTask(with: request) {[weak self] data, response, error in
+            if error != nil {
+                self?.handleInvalidUrlError(url: url)
+            } else if let data = data {
+                listener(data)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    private func isValidUrl(_ url: String) -> Bool {
+        if let url = URL(string: url) {
+            return UIApplication.shared.canOpenURL(url)
+        } else {
+            return false
+        }
+    }
+    
+    private func splitFileNameAndExtension(fileName: String) -> (name: String?, ext: String?)? {
+        let components = fileName.split(separator: ".")
+        guard components.count == 2 else { return nil }
+        return (name: String(components[0]), ext: String(components[1]))
+    }
+    
+    private func loadResourceAsset(sourceAsset: String, path: String?, listener: @escaping (Data) -> Void) {
+        
+        guard let splitSourceAssetName = splitFileNameAndExtension(fileName: sourceAsset),
+              let name = splitSourceAssetName.name,
+              let ext = splitSourceAssetName.ext else {
+            handleRiveError(error: createAssetFileError(sourceAsset))
+            return
+        }
+        
+        guard let folderUrl = Bundle.main.url(forResource: name, withExtension: ext) else {
+            handleRiveError(error: createAssetFileError(sourceAsset))
+            return
+        }
+        
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            do {
+                let fileData = try Data(contentsOf: folderUrl)
+                DispatchQueue.main.async {
+                    listener(fileData)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self?.handleRiveError(error: createAssetFileError(sourceAsset))
+                }
+            }
+        }
+    }
+    
+    private func handleInvalidUrlError(url: String) {
+        handleRiveError(error: createIncorrectRiveURL(url))
     }
     
     // MARK: - Playback Controls
