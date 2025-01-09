@@ -21,10 +21,13 @@ import {
   RiveGeneralEvent,
   RiveOpenUrlEvent,
   RiveRendererInterface,
+  FilesHandledMapping,
+  RiveAssetPropType,
 } from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
+import { parsePossibleSources } from './utils';
 
 const { RiveReactNativeRendererModule } = NativeModules;
 
@@ -79,6 +82,7 @@ type RiveProps = {
   layoutScaleFactor?: number;
   alignment: Alignment;
   artboardName?: string;
+  assetsHandled?: FilesHandledMapping;
   animationName?: string;
   stateMachineName?: string;
   ref: any;
@@ -104,6 +108,10 @@ type Props = {
   testID?: string;
   alignment?: Alignment;
   artboardName?: string;
+  /**
+   * @experimental This is an experimental feature and may change without a major version update (breaking change).
+   */
+  assetsHandled?: FilesHandledMapping;
   animationName?: string;
   stateMachineName?: string;
   autoplay?: boolean;
@@ -131,6 +139,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       fit = Fit.Contain,
       layoutScaleFactor,
       artboardName,
+      assetsHandled: assetsHandled,
       animationName,
       stateMachineName,
       testID,
@@ -416,6 +425,28 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       ]
     );
 
+    function transformFilesHandledMapping(
+      mapping?: FilesHandledMapping
+    ): FilesHandledMapping | undefined {
+      const transformedMapping: FilesHandledMapping = {};
+      if (mapping === undefined) {
+        return undefined;
+      }
+
+      Object.keys(mapping).forEach((key) => {
+        const option = mapping[key];
+        transformedMapping[key] = {
+          ...option,
+          source: parsePossibleSources(option.source as RiveAssetPropType),
+        };
+      });
+
+      return transformedMapping;
+    }
+
+    const convertedAssetHandledSources =
+      transformFilesHandledMapping(assetsHandled);
+
     return (
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
         <View style={styles.children}>{children}</View>
@@ -445,6 +476,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             onError={onErrorHandler}
             alignment={alignment}
             artboardName={artboardName}
+            assetsHandled={convertedAssetHandledSources}
             animationName={animationName}
             stateMachineName={stateMachineName}
           />

@@ -135,3 +135,34 @@ export interface RiveRendererInterface {
     androidRenderer: RiveRendererAndroid
   ): void;
 }
+
+export interface FileAssetSource {
+  sourceUrl?: string;
+  sourceAsset?: string;
+  sourceAssetId?: string;
+  path?: string;
+}
+
+export interface FileHandlerOptions {
+  source: RiveAssetPropType | FileAssetSource;
+}
+
+export type RiveAssetPropType =
+  | RiveAssetRequireSource
+  | RiveAssetUriSource
+  | RiveAssetPackagedSource;
+
+export type RiveAssetRequireSource = number;
+
+export interface RiveAssetUriSource {
+  uri: string;
+}
+
+export interface RiveAssetPackagedSource {
+  fileName: string;
+  path?: string; // only needed for Android assets
+}
+
+export interface FilesHandledMapping {
+  [assetName: string]: FileHandlerOptions;
+}
