@@ -26,9 +26,6 @@ export default function StateMachine() {
             'Inter-594377': {
               source: require('./assets/Inter-594377.ttf'),
               // source: {
-              //   uri: 'https://picsum.photos/id/270/500/500',
-              // },
-              // source: {
               //   fileName: 'Inter-594377.ttf',
               //   path: 'fonts', // only needed for Android assets
               // },
@@ -36,7 +33,7 @@ export default function StateMachine() {
             'referenced-image-2929282': {
               source: require('./assets/referenced-image-2929282.png'),
               // source: {
-              //   uri: 'https://picsum.photos/id/270/500/500', // a random photo from picsum.photos
+              //   uri: 'https://picsum.photos/id/270/500/500',
               // },
               // source: {
               //   fileName: 'referenced-image-2929282.png',
