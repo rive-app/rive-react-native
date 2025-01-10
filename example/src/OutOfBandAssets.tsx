@@ -26,7 +26,7 @@ export default function StateMachine() {
             'Inter-594377': {
               source: require('./assets/Inter-594377.ttf'),
               // source: {
-              //   fileName: 'Inter-594377.ttf',
+              //   fileName: 'Feather.ttf',
               //   path: 'fonts', // only needed for Android assets
               // },
             },
