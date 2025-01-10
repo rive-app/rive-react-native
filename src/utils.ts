@@ -4,7 +4,6 @@ import type { FileAssetSource, RiveAssetPropType } from './types';
 function parsePossibleSources(source: RiveAssetPropType): FileAssetSource {
   if (typeof source === 'number') {
     const resolvedAsset = Image.resolveAssetSource(source);
-    console.log(resolvedAsset);
     if (resolvedAsset && resolvedAsset.uri) {
       return { sourceAssetId: resolvedAsset.uri };
     } else {
