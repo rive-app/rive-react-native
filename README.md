@@ -58,8 +58,8 @@ Check out the `example/` folder to run an example application using the Rive Rea
 - ...and more!
   
 Steps:
-1. Run yarn bootstrap
-2. Run yarn example start
+1. Run `yarn bootstrap`
+2. Run `yarn example start`
 
 iOS:
 - You may need to run `pod install` (first time) or `pod update RiveRuntime` (updates to the underlying Rive iOS runtime) in the `example/iOS` folder to get the runtime installed or updated
