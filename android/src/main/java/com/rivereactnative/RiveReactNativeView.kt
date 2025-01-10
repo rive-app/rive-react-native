@@ -416,7 +416,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       return;
     }
 
-    // Handle release mode (URL instead of asset id)
+    // Handle release mode (asset id)
     // Resource needs to be loaded in release mode
     // https://github.com/facebook/react-native/issues/24963#issuecomment-532168307
     val resourceId = getResourceId(source)
