@@ -324,7 +324,6 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     private func loadResourceAsset(sourceAsset: String, path: String?, listener: @escaping (Data) -> Void) {
-        
         guard let splitSourceAssetName = splitFileNameAndExtension(fileName: sourceAsset),
               let name = splitSourceAssetName.name,
               let ext = splitSourceAssetName.ext else {
