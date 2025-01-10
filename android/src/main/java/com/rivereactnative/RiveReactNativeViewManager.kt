@@ -1,6 +1,7 @@
 package com.rivereactnative
 
 import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
@@ -8,7 +9,8 @@ import com.facebook.react.uimanager.annotations.ReactProp
 
 class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   override fun getExportedCustomDirectEventTypeConstants(): MutableMap<String, Map<String, String>>? {
-    val builder: MapBuilder.Builder<String, Map<String, String>> = MapBuilder.builder<String, Map<String, String>>()
+    val builder: MapBuilder.Builder<String, Map<String, String>> =
+      MapBuilder.builder<String, Map<String, String>>()
     for (event in RiveReactNativeView.Events.values()) {
       builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()))
     }
@@ -35,6 +37,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
 
       }
+
       "pause" -> view.pause()
       "stop" -> view.stop()
       "reset" -> view.reset()
@@ -50,6 +53,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+
       "setBooleanState" -> {
         args?.let {
           val stateMachineName = it.getString(0)
@@ -60,6 +64,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+
       "setNumberState" -> {
         args?.let {
           val stateMachineName = it.getString(0)
@@ -70,6 +75,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+
       "fireStateAtPath" -> {
         args?.let {
           val inputName = it.getString(0)
@@ -79,6 +85,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+
       "setBooleanStateAtPath" -> {
         args?.let {
           val inputName = it.getString(0)
@@ -89,6 +96,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+
       "setNumberStateAtPath" -> {
         args?.let {
           val inputName = it.getString(0)
@@ -111,6 +119,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           }
         }
       }
+
       "touchEnded" -> {
         args?.let {
           val x: Double = it.getDouble(0)
@@ -146,7 +155,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       // Other
 
-      else -> { }
+      else -> {}
     }
   }
 
@@ -177,11 +186,11 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
   @ReactProp(name = "layoutScaleFactor")
   fun setLayoutScaleFactor(view: RiveReactNativeView, layoutScaleFactor: Double) {
     if (!layoutScaleFactor.isNaN() && layoutScaleFactor > 0) {
-        // Only set layoutScaleFactor if it's a valid positive float
-        view.setLayoutScaleFactor(layoutScaleFactor.toFloat())
+      // Only set layoutScaleFactor if it's a valid positive float
+      view.setLayoutScaleFactor(layoutScaleFactor.toFloat())
     } else {
-        // Handle other cases, e.g., NaN, -1, or other non-float-like values
-        view.setLayoutScaleFactor(null)
+      // Handle other cases, e.g., NaN, -1, or other non-float-like values
+      view.setLayoutScaleFactor(null)
     }
   }
 
@@ -210,10 +219,16 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     view.setAnimationName(animationName)
   }
 
+  @ReactProp(name = "assetsHandled")
+  fun setAssetsHandled(view: RiveReactNativeView, source: ReadableMap?) {
+    view.setAssetsHandled(source)
+  }
+
   @ReactProp(name = "stateMachineName")
   fun setStateMachineName(view: RiveReactNativeView, stateMachineName: String) {
     view.setStateMachineName(stateMachineName)
   }
+
   @ReactProp(name = "isUserHandlingErrors")
   fun setIsUserHandlingErrors(view: RiveReactNativeView, isUserHandlingErrors: Boolean) {
     view.setIsUserHandlingErrors(isUserHandlingErrors)
