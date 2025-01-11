@@ -30,13 +30,13 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/
 ```
 
 ### Testing in a new Expo project
-1. In rive-react-native run npm pack which will create rive-react-native-x.x.x.tgz
-2. Create a new expo project and prebuild (formerly eject) it: https://docs.expo.dev/
-3. In Podfile set the minimum platform to 14: platform :ios, podfile_properties['ios.deploymentTarget'] || '14.0'
-4. Add this to your package.json dependencies: `"rive-react-native": "file:../rive-react-native/rive-react-native-8.0.0.tgz"` (adjust the path if needed) and run `npm i`
-5. Add a Rive component index.tsx and run npm run start:
+1. In rive-react-native run `npm pack` which will create `rive-react-native-x.y.z.tgz`
+2. Create a new Expo project and [prebuild](https://docs.expo.dev/workflow/continuous-native-generation/#usage) (formerly eject) it
+3. In the Podfile set the minimum platform to 14: `platform :ios, podfile_properties['ios.deploymentTarget'] || '14.0'`
+4. Add this to your package.json dependencies: `"rive-react-native": "file:../rive-react-native/rive-react-native-x.y.z.tgz"` (adjust the path and version numbers as needed) and run `npm i`
+5. Add a Rive component in index.tsx:
 
-```js
+```jsx
 import Rive, { Alignment, Fit, RiveRef } from 'rive-react-native'
 ...
 <Rive
@@ -48,6 +48,7 @@ import Rive, { Alignment, Fit, RiveRef } from 'rive-react-native'
     autoplay={true}
   />
 ```
+6. Run with `npm run start`
 
 ### M1 considerations
 
