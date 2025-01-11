@@ -30,11 +30,11 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/
 ```
 
 ### Testing in a new Expo project
-1. In rive-react-native run `npm pack` which will create `rive-react-native-x.y.z.tgz`
+1. In `rive-react-native` run `npm pack` which will create `rive-react-native-x.y.z.tgz`
 2. Create a new Expo project and [prebuild](https://docs.expo.dev/workflow/continuous-native-generation/#usage) (formerly eject) it
 3. In the Podfile set the minimum platform to 14: `platform :ios, podfile_properties['ios.deploymentTarget'] || '14.0'`
-4. Add this to your package.json dependencies: `"rive-react-native": "file:../rive-react-native/rive-react-native-x.y.z.tgz"` (adjust the path and version numbers as needed) and run `npm i`
-5. Add a Rive component in index.tsx:
+4. Add this to your `package.json` dependencies: `"rive-react-native": "file:../rive-react-native/rive-react-native-x.y.z.tgz"` (adjust the path and version numbers as needed) and run `npm i`
+5. Add a Rive component in `index.tsx`:
 
 ```jsx
 import Rive, { Alignment, Fit, RiveRef } from 'rive-react-native'
@@ -128,7 +128,7 @@ When an underlying runtime like [rive-ios](https://github.com/rive-app/rive-ios)
 Before running `yarn` at the root level of the project, set the appropriate version of the iOS runtime in `rive-react-native.podspec` at the root of the folder:
 
 ```
-s.dependency "RiveRuntime", "x.x.x"
+s.dependency "RiveRuntime", "x.y.z"
 ```
 
 In the example folder, run the following command to update the example project to retrieve the expected `RiveRuntime` dependency you're upgrading to:
@@ -142,7 +142,7 @@ pod update RiveRuntime
 In the top-level `android` folder, change the dependency version in `build.gradle` to the version you're looking to upgrade to in the dependencies:
 
 ```
-implementation 'app.rive:rive-android:x.x.x'
+implementation 'app.rive:rive-android:x.y.z'
 ```
 
 ### Debugging against local rive-android
