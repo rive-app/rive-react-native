@@ -213,7 +213,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
 
     private func customLoader(asset: RiveFileAsset, data: Data, factory: RiveFactory) -> Bool {
-        guard let assetData = referencedAssets?[asset.uniqueName()] as? NSDictionary else {
+        guard let assetData = referencedAssets?[asset.uniqueName()] as? NSDictionary ?? referencedAssets?[asset.name()] as? NSDictionary else {
             return false
         }
         
