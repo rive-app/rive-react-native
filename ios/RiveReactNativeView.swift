@@ -262,6 +262,9 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     private func processAssetBytes(_ data: Data, asset: RiveFileAsset, factory: RiveFactory) {
+        if (data.isEmpty == true) {
+            return;
+        }
         DispatchQueue.global(qos: .background).async {
             switch asset {
             case let imageAsset as RiveImageAsset:
