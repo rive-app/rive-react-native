@@ -56,7 +56,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     @objc var artboardName: String?
 
-    @objc var assetsHandled: NSDictionary?
+    @objc var referencedAssets: NSDictionary?
     {
         didSet {
             requiresLocalResourceReconfigure = true;
@@ -108,7 +108,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-        if (changedProps.contains("url") || changedProps.contains("resourceName") || changedProps.contains("artboardName") || changedProps.contains("animationName") || changedProps.contains("stateMachineName") || changedProps.contains("assetsHandled")) {
+        if (changedProps.contains("url") || changedProps.contains("resourceName") || changedProps.contains("artboardName") || changedProps.contains("animationName") || changedProps.contains("stateMachineName") || changedProps.contains("referencedAssets")) {
             reloadView()
         }
         
@@ -213,7 +213,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
 
     private func customLoader(asset: RiveFileAsset, data: Data, factory: RiveFactory) -> Bool {
-        guard let assetData = assetsHandled?[asset.uniqueName()] as? NSDictionary else {
+        guard let assetData = referencedAssets?[asset.uniqueName()] as? NSDictionary else {
             return false
         }
         

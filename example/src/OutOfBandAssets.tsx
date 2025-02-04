@@ -11,7 +11,7 @@ export default function StateMachine() {
           fit={Fit.Contain}
           style={styles.box}
           stateMachineName="State Machine 1"
-          // You can use the `assetsHandled` prop to load in external assets from a URI
+          // You can use the `referencedAssets` prop to load in external assets from a URI
           // or bundled asset on the native platform (iOS and Android)
           // or as a source loaded directly from JavaScript.
           //
@@ -22,7 +22,7 @@ export default function StateMachine() {
           //
           // The key of the map is the unique asset identifier (as exported in the Editor),
           // which is a combination of the asset name and its unique identifier.
-          assetsHandled={{
+          referencedAssets={{
             'Inter-594377': {
               source: require('./assets/Inter-594377.ttf'),
               // source: {
