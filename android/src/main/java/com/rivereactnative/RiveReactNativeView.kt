@@ -85,7 +85,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var layoutScaleFactor: Float? = null
   private var alignment: Alignment = Alignment.CENTER
   private var autoplay: Boolean = false
-  private var assetsHandled: ReadableMap? = null
+  private var referencedAssets: ReadableMap? = null
   private var shouldBeReloaded = true
   private var exceptionManager: ExceptionsManagerModule? = null
   private var isUserHandlingErrors = false
@@ -190,7 +190,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private fun clearReferences() {
     riveAnimationView = null
     exceptionManager = null
-    assetsHandled = null
+    referencedAssets = null
   }
 
   fun onPlay(animationName: String, isStateMachine: Boolean = false) {
@@ -476,7 +476,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun reloadIfNeeded() {
     if (shouldBeReloaded) {
-      val assetStore = assetsHandled?.let {
+      val assetStore = referencedAssets?.let {
         RiveReactNativeAssetStore(
           it, loadAssetHandler = ::loadAsset
         )
@@ -549,8 +549,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     shouldBeReloaded = true
   }
 
-  fun setAssetsHandled(assetsHandled: ReadableMap?) {
-    this.assetsHandled = assetsHandled;
+  fun setReferencedAssets(referencedAssets: ReadableMap?) {
+    this.referencedAssets = referencedAssets;
     shouldBeReloaded = true;
   }
 
@@ -777,10 +777,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 typealias LoadAssetHandler = (source: ReadableMap, asset: FileAsset) -> Unit
 
 private class RiveReactNativeAssetStore(
-  private val assetsHandled: ReadableMap, private val loadAssetHandler: LoadAssetHandler
+  private val referencedAssets: ReadableMap, private val loadAssetHandler: LoadAssetHandler
 ) : FileAssetLoader() {
   override fun loadContents(asset: FileAsset, inBandBytes: ByteArray): Boolean {
-    val assetData = assetsHandled.getMap(asset.uniqueFilename.substringBeforeLast("."))
+    val assetData = referencedAssets.getMap(asset.uniqueFilename.substringBeforeLast("."))
 
     val source = assetData?.getMap("source") ?: return false // Do not handle the asset.
 

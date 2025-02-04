@@ -219,9 +219,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     view.setAnimationName(animationName)
   }
 
-  @ReactProp(name = "assetsHandled")
-  fun setAssetsHandled(view: RiveReactNativeView, source: ReadableMap?) {
-    view.setAssetsHandled(source)
+  @ReactProp(name = "referencedAssets")
+  fun setReferencedAssets(view: RiveReactNativeView, source: ReadableMap?) {
+    view.setReferencedAssets(source)
   }
 
   @ReactProp(name = "stateMachineName")
