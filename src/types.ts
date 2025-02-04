@@ -136,12 +136,25 @@ export interface RiveRendererInterface {
   ): void;
 }
 
-export interface FileAssetSource {
-  sourceUrl?: string;
-  sourceAsset?: string;
-  sourceAssetId?: string;
-  path?: string;
-}
+export type FileAssetSource =
+  | {
+      sourceUrl: string;
+      sourceAsset?: never;
+      sourceAssetId?: never;
+      path?: never;
+    }
+  | {
+      sourceAsset: string;
+      sourceUrl?: never;
+      sourceAssetId?: never;
+      path?: never;
+    }
+  | {
+      sourceAssetId: string;
+      path?: string;
+      sourceUrl?: never;
+      sourceAsset?: never;
+    };
 
 export interface FileHandlerOptions {
   source: RiveAssetPropType | FileAssetSource;
