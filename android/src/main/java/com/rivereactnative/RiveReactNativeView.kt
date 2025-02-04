@@ -780,7 +780,10 @@ private class RiveReactNativeAssetStore(
   private val referencedAssets: ReadableMap, private val loadAssetHandler: LoadAssetHandler
 ) : FileAssetLoader() {
   override fun loadContents(asset: FileAsset, inBandBytes: ByteArray): Boolean {
-    val assetData = referencedAssets.getMap(asset.uniqueFilename.substringBeforeLast("."))
+    var assetData = referencedAssets.getMap(asset.uniqueFilename.substringBeforeLast("."))
+    if (assetData == null) {
+      assetData = referencedAssets.getMap(asset.name)
+    }
 
     val source = assetData?.getMap("source") ?: return false // Do not handle the asset.
 

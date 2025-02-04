@@ -11,17 +11,19 @@ export default function StateMachine() {
           fit={Fit.Contain}
           style={styles.box}
           stateMachineName="State Machine 1"
-          // You can use the `referencedAssets` prop to load in external assets from a URI
-          // or bundled asset on the native platform (iOS and Android)
-          // or as a source loaded directly from JavaScript.
+          // The `referencedAssets` prop allows you to load external assets from various sources:
+          // - A URI
+          // - A bundled asset on the native platform (iOS and Android)
+          // - A source loaded directly from JavaScript.
           //
-          // Below demonstrates various ways to load in the same asset
-          // located in different places. Its not needed to store the same
-          // asset in all these locations, but this example does that for
-          // demonstration purposes.
+          // This example demonstrates multiple ways to load the same asset from different locations.
+          // Note: It's not necessary to store the same asset in all these locations; this is for demonstration purposes.
           //
           // The key of the map is the unique asset identifier (as exported in the Editor),
-          // which is a combination of the asset name and its unique identifier.
+          // which combines the asset name and its unique identifier.
+          // You can optionally exclude the unique identifier, for example, instead of 'Inter-594377', you can use 'Inter'.
+          // However, it is recommended to use the full identifier to avoid potential conflicts.
+          // Using just the asset name allows you to avoid knowing the unique identifier and gives you more control over naming.
           referencedAssets={{
             'Inter-594377': {
               source: require('./assets/Inter-594377.ttf'),
