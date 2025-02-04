@@ -319,8 +319,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     private func splitFileNameAndExtension(fileName: String) -> (name: String?, ext: String?)? {
         let components = fileName.split(separator: ".")
+        let name = (fileName as NSString).deletingPathExtension;
+        let fileExtension = (fileName as NSString).pathExtension;
         guard components.count == 2 else { return nil }
-        return (name: String(components[0]), ext: String(components[1]))
+        return (name: name, ext: fileExtension)
     }
     
     private func loadResourceAsset(sourceAsset: String, path: String?, listener: @escaping (Data) -> Void) {
