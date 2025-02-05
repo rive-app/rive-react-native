@@ -30,6 +30,8 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
@@ -92,6 +94,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var willDispose = false
   private var listener: RiveFileController.Listener
   private var eventListener: RiveFileController.RiveEventListener
+  private var assetStore: RiveReactNativeAssetStore? = null
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"), PAUSE("onPause"), STOP("onStop"), LOOP_END("onLoopEnd"), STATE_CHANGED("onStateChanged"), RIVE_EVENT(
@@ -169,6 +172,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   override fun onDetachedFromWindow() {
     if (willDispose) {
+      assetStore?.dispose()
       riveAnimationView?.dispose()
       removeListeners()
       clearReferences()
@@ -188,6 +192,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   private fun clearReferences() {
+    assetStore = null
     riveAnimationView = null
     exceptionManager = null
     referencedAssets = null
@@ -476,7 +481,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun reloadIfNeeded() {
     if (shouldBeReloaded) {
-      val assetStore = referencedAssets?.let {
+      assetStore?.dispose();
+      assetStore = referencedAssets?.let {
         RiveReactNativeAssetStore(
           it, loadAssetHandler = ::loadAsset
         )
@@ -779,18 +785,32 @@ typealias LoadAssetHandler = (source: ReadableMap, asset: FileAsset) -> Unit
 private class RiveReactNativeAssetStore(
   private val referencedAssets: ReadableMap, private val loadAssetHandler: LoadAssetHandler
 ) : FileAssetLoader() {
+
+  val job = SupervisorJob()
+  val scope = CoroutineScope(Dispatchers.IO + job)
+
   override fun loadContents(asset: FileAsset, inBandBytes: ByteArray): Boolean {
     var assetData = referencedAssets.getMap(asset.uniqueFilename.substringBeforeLast("."))
     if (assetData == null) {
       assetData = referencedAssets.getMap(asset.name)
     }
 
-    val source = assetData?.getMap("source") ?: return false // Do not handle the asset.
+    val source = assetData?.getMap("source") ?: return false // Do not handle the asset
 
-    CoroutineScope(Dispatchers.IO).launch {
-      loadAssetHandler(source, asset)
+    scope.launch {
+      try {
+        loadAssetHandler(source, asset)
+      } catch (e: Exception) {
+        // Errors are handled and sent to React Native in `loadAssetHandler`.
+        // This is here as a precaution and to potentially handle other errors in the future.
+      }
     }
     return true // user supplied asset, attempt to load
+  }
+
+  fun dispose() {
+    job.cancel()
+    scope.cancel()
   }
 }
 
