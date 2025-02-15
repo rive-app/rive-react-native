@@ -1,14 +1,17 @@
 import { StyleSheet } from 'react-native';
+import { View } from '@/components/Themed';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import Rive from 'rive-react-native';
 
 export default function TabOneScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <Rive
+        url="https://public.rive.app/community/runtime-files/2195-4346-avatar-pack-use-case.riv"
+        artboardName="Avatar 1"
+        stateMachineName="avatar"
+        style={{ width: 400, height: 400 }}
+      />
     </View>
   );
 }
