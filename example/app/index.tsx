@@ -1,5 +1,4 @@
 import { ScrollView, StyleSheet } from 'react-native';
-import { View } from '@/components/Themed';
 import { Link } from 'expo-router';
 
 import { ReactNode } from 'react';
