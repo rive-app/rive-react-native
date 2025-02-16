@@ -1,10 +1,15 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useColorScheme } from '@/components/useColorScheme';
 
@@ -14,8 +19,8 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  // Ensure that reloading on other pages keeps a back button present.
+  initialRouteName: '/',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -49,11 +54,74 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="index" options={{ title: 'Example App' }} />
+
+          <Stack.Screen
+            name="(examples)/Simple"
+            options={{ title: 'Simple' }}
+          />
+          <Stack.Screen
+            name="(examples)/SimpleControls"
+            options={{ title: 'Simple Controls' }}
+          />
+          <Stack.Screen
+            name="(examples)/Layout"
+            options={{ title: 'Layout' }}
+          />
+          <Stack.Screen
+            name="(examples)/ResponsiveLayout"
+            options={{ title: 'Responsive Layout' }}
+          />
+          <Stack.Screen name="(examples)/Http" options={{ title: 'HTTP' }} />
+          <Stack.Screen
+            name="(examples)/MeshExample"
+            options={{ title: 'Mesh Example' }}
+          />
+          <Stack.Screen
+            name="(examples)/StateMachine"
+            options={{ title: 'State Machine' }}
+          />
+          <Stack.Screen
+            name="(examples)/Events"
+            options={{ title: 'Events' }}
+          />
+          <Stack.Screen
+            name="(examples)/NestedInputs"
+            options={{ title: 'Nested Inputs' }}
+          />
+          <Stack.Screen
+            name="(examples)/DynamicText"
+            options={{ title: 'Dynamic Text' }}
+          />
+          <Stack.Screen
+            name="(examples)/OutOfBandAssets"
+            options={{ title: 'Out Of Band Assets' }}
+          />
+          <Stack.Screen
+            name="(examples)/NestedDynamicText"
+            options={{ title: 'Nested Dynamic Text' }}
+          />
+          <Stack.Screen
+            name="(examples)/MultipleArtboards"
+            options={{ title: 'Multiple Artboards' }}
+          />
+          <Stack.Screen
+            name="(examples)/LoopMode"
+            options={{ title: 'Loop Mode' }}
+          />
+          <Stack.Screen
+            name="(examples)/ErrorNotHandled"
+            options={{ title: 'Error Not Handled' }}
+          />
+          <Stack.Screen
+            name="(examples)/ErrorHandledManually"
+            options={{ title: 'Error Handled Manually' }}
+          />
+        </Stack>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
