@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "example-2",
-    "slug": "example-2",
+    "name": "example",
+    "slug": "example",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,14 +15,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lancesnider.example2"
+      "bundleIdentifier": "com.lancesnider.example"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.lancesnider.example2"
+      "package": "com.lancesnider.example"
     },
     "web": {
       "bundler": "metro",

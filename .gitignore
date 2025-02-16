@@ -39,7 +39,7 @@ android.iml
 # Cocoapods
 #
 example/ios/Pods
-example-2/ios/Pods
+example/ios/Pods
 
 # node.js
 #

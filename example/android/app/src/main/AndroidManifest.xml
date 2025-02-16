@@ -25,7 +25,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.lancesnider.example2"/>
+        <data android:scheme="com.lancesnider.example"/>
       </intent-filter>
     </activity>
   </application>

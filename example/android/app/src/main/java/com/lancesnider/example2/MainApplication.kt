@@ -1,4 +1,4 @@
-package com.lancesnider.example2
+package com.lancesnider.example
 
 import android.app.Application
 import android.content.res.Configuration

@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.lancesnider.example2'
+    namespace 'com.lancesnider.example'
     defaultConfig {
-        applicationId 'com.lancesnider.example2'
+        applicationId 'com.lancesnider.example'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

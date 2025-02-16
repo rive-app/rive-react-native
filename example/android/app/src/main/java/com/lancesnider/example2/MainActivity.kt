@@ -1,4 +1,4 @@
-package com.lancesnider.example2
+package com.lancesnider.example
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build
