@@ -3889,7 +3889,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.5.12":
+"@types/jest@npm:^29.5.12, @types/jest@npm:^29.5.14":
   version: 29.5.14
   resolution: "@types/jest@npm:29.5.14"
   dependencies:
@@ -15277,6 +15277,7 @@ __metadata:
     "@commitlint/config-conventional": "npm:^11.0.0"
     "@react-native-community/eslint-config": "npm:^2.0.0"
     "@release-it/conventional-changelog": "npm:^2.0.0"
+    "@types/jest": "npm:^29.5.14"
     "@types/react": "npm:~18.3.12"
     "@types/react-native": "npm:0.72.2"
     commitlint: "npm:^11.0.0"
