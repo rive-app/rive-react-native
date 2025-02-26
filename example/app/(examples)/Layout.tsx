@@ -5,6 +5,7 @@ import { isEnumKey } from '../../constants/typesPredicates';
 import { Picker } from '@react-native-picker/picker';
 
 const resourceName = 'truck_v7';
+const artboardName = 'New Artboard';
 
 export default function Layout() {
   const [fit, setFit] = React.useState(Fit.Cover);

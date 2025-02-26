@@ -15,7 +15,6 @@
 		96905EF65AED1B983A6B3ABC /* libPods-example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-example.a */; };
 		976170889B6E4764B81A902D /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86649AEE1DE64539BFD4F50D /* noop-file.swift */; };
 		9E3262F82D6EA9D3002A1CFA /* ui_swipe_left_to_delete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262E02D6EA9D3002A1CFA /* ui_swipe_left_to_delete.riv */; };
-		9E3262F92D6EA9D3002A1CFA /* loopy.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262E12D6EA9D3002A1CFA /* loopy.riv */; };
 		9E3262FA2D6EA9D3002A1CFA /* artboard_animations.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262E22D6EA9D3002A1CFA /* artboard_animations.riv */; };
 		9E3262FB2D6EA9D3002A1CFA /* constrained.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262E32D6EA9D3002A1CFA /* constrained.riv */; };
 		9E3262FC2D6EA9D3002A1CFA /* nested_menu.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262E42D6EA9D3002A1CFA /* nested_menu.riv */; };
@@ -31,7 +30,6 @@
 		9E3263062D6EA9D3002A1CFA /* referenced-image-2929282.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262EE2D6EA9D3002A1CFA /* referenced-image-2929282.png */; };
 		9E3263072D6EA9D3002A1CFA /* v6_file.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262EF2D6EA9D3002A1CFA /* v6_file.riv */; };
 		9E3263082D6EA9D3002A1CFA /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F02D6EA9D3002A1CFA /* rating.riv */; };
-		9E3263092D6EA9D3002A1CFA /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F12D6EA9D3002A1CFA /* runtime_nested_inputs.riv */; };
 		9E32630A2D6EA9D3002A1CFA /* Inter-594377.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F22D6EA9D3002A1CFA /* Inter-594377.ttf */; };
 		9E32630B2D6EA9D3002A1CFA /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F32D6EA9D3002A1CFA /* avatars.riv */; };
 		9E32630C2D6EA9D3002A1CFA /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F42D6EA9D3002A1CFA /* hero_editor.riv */; };
@@ -55,7 +53,6 @@
 		7A4D352CD337FB3A3BF06240 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
 		86649AEE1DE64539BFD4F50D /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "example/noop-file.swift"; sourceTree = "<group>"; };
 		9E3262E02D6EA9D3002A1CFA /* ui_swipe_left_to_delete.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = ui_swipe_left_to_delete.riv; path = Assets/ui_swipe_left_to_delete.riv; sourceTree = "<group>"; };
-		9E3262E12D6EA9D3002A1CFA /* loopy.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = loopy.riv; path = Assets/loopy.riv; sourceTree = "<group>"; };
 		9E3262E22D6EA9D3002A1CFA /* artboard_animations.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = artboard_animations.riv; path = Assets/artboard_animations.riv; sourceTree = "<group>"; };
 		9E3262E32D6EA9D3002A1CFA /* constrained.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = constrained.riv; path = Assets/constrained.riv; sourceTree = "<group>"; };
 		9E3262E42D6EA9D3002A1CFA /* nested_menu.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = nested_menu.riv; path = Assets/nested_menu.riv; sourceTree = "<group>"; };
@@ -71,7 +68,6 @@
 		9E3262EE2D6EA9D3002A1CFA /* referenced-image-2929282.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "referenced-image-2929282.png"; path = "Assets/referenced-image-2929282.png"; sourceTree = "<group>"; };
 		9E3262EF2D6EA9D3002A1CFA /* v6_file.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = v6_file.riv; path = Assets/v6_file.riv; sourceTree = "<group>"; };
 		9E3262F02D6EA9D3002A1CFA /* rating.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = rating.riv; path = Assets/rating.riv; sourceTree = "<group>"; };
-		9E3262F12D6EA9D3002A1CFA /* runtime_nested_inputs.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = runtime_nested_inputs.riv; path = Assets/runtime_nested_inputs.riv; sourceTree = "<group>"; };
 		9E3262F22D6EA9D3002A1CFA /* Inter-594377.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-594377.ttf"; path = "Assets/Inter-594377.ttf"; sourceTree = "<group>"; };
 		9E3262F32D6EA9D3002A1CFA /* avatars.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = avatars.riv; path = Assets/avatars.riv; sourceTree = "<group>"; };
 		9E3262F42D6EA9D3002A1CFA /* hero_editor.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hero_editor.riv; path = Assets/hero_editor.riv; sourceTree = "<group>"; };
@@ -143,14 +139,12 @@
 				9E3262F42D6EA9D3002A1CFA /* hero_editor.riv */,
 				9E3262F22D6EA9D3002A1CFA /* Inter-594377.ttf */,
 				9E3262EA2D6EA9D3002A1CFA /* layout_test.riv */,
-				9E3262E12D6EA9D3002A1CFA /* loopy.riv */,
 				9E3262E42D6EA9D3002A1CFA /* nested_menu.riv */,
 				9E3262E72D6EA9D3002A1CFA /* out_of_band.riv */,
 				9E3262E82D6EA9D3002A1CFA /* rainy.riv */,
 				9E3262F02D6EA9D3002A1CFA /* rating.riv */,
 				9E3262E52D6EA9D3002A1CFA /* referenced_audio-2929340.wav */,
 				9E3262EE2D6EA9D3002A1CFA /* referenced-image-2929282.png */,
-				9E3262F12D6EA9D3002A1CFA /* runtime_nested_inputs.riv */,
 				9E3262F72D6EA9D3002A1CFA /* skills_listener.riv */,
 				9E3262E62D6EA9D3002A1CFA /* switch.riv */,
 				9E3262E92D6EA9D3002A1CFA /* truck_v7.riv */,
@@ -273,7 +267,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E3262F82D6EA9D3002A1CFA /* ui_swipe_left_to_delete.riv in Resources */,
-				9E3262F92D6EA9D3002A1CFA /* loopy.riv in Resources */,
 				9E3262FA2D6EA9D3002A1CFA /* artboard_animations.riv in Resources */,
 				9E3262FB2D6EA9D3002A1CFA /* constrained.riv in Resources */,
 				9E3262FC2D6EA9D3002A1CFA /* nested_menu.riv in Resources */,
@@ -289,7 +282,6 @@
 				9E3263062D6EA9D3002A1CFA /* referenced-image-2929282.png in Resources */,
 				9E3263072D6EA9D3002A1CFA /* v6_file.riv in Resources */,
 				9E3263082D6EA9D3002A1CFA /* rating.riv in Resources */,
-				9E3263092D6EA9D3002A1CFA /* runtime_nested_inputs.riv in Resources */,
 				9E32630A2D6EA9D3002A1CFA /* Inter-594377.ttf in Resources */,
 				9E32630B2D6EA9D3002A1CFA /* avatars.riv in Resources */,
 				9E32630C2D6EA9D3002A1CFA /* hero_editor.riv in Resources */,
@@ -558,10 +550,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -616,10 +605,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
