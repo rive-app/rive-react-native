@@ -4,11 +4,6 @@ import { Link } from 'expo-router';
 
 import { ReactNode } from 'react';
 
-interface StyledLinkProps {
-  href: string;
-  children: ReactNode;
-}
-
 export function StyledLink({
   href,
   children,
