@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { useColorScheme } from '@/components/useColorScheme';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -89,10 +89,6 @@ function RootLayoutNav() {
             options={{ title: 'Events' }}
           />
           <Stack.Screen
-            name="(examples)/NestedInputs"
-            options={{ title: 'Nested Inputs' }}
-          />
-          <Stack.Screen
             name="(examples)/DynamicText"
             options={{ title: 'Dynamic Text' }}
           />
@@ -107,10 +103,6 @@ function RootLayoutNav() {
           <Stack.Screen
             name="(examples)/MultipleArtboards"
             options={{ title: 'Multiple Artboards' }}
-          />
-          <Stack.Screen
-            name="(examples)/LoopMode"
-            options={{ title: 'Loop Mode' }}
           />
           <Stack.Screen
             name="(examples)/ErrorNotHandled"

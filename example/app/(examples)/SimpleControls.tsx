@@ -40,7 +40,7 @@ export default function SimpleControls() {
         <Rive
           ref={riveRef}
           style={styles.box}
-          autoplay={false}
+          autoplay={true}
           onPlay={(animationName, isStateMachine) => {
             console.log(
               'onPlay: ',

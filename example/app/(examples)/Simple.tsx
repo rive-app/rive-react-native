@@ -12,7 +12,6 @@ export default function Simple() {
           style={styles.animation}
           artboardName={'Avatar 3'}
           autoplay={true}
-          animationName="idlePreview"
           resourceName={'avatars'}
         />
       </ScrollView>

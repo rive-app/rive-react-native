@@ -52,11 +52,10 @@ Because this runtime library has a dependency on the [Rive Android](https://gith
 Check out the `example/` folder to run an example application using the Rive React Native runtime. It runs on the local build of this library, and showcases a number of ways to use the Rive component and `useRef` hook pattern:
 
 - Setting a Rive file via a URL, or asset in the Android/iOS projects
-- Setting layout and loop mode options
 - Displaying single or multiple animations / artboards on one component
 - Setting up and maniuplating a state machine via inputs
 - ...and more!
-  
+
 Steps:
 1. Run `yarn bootstrap`
 2. Run `yarn example start`
