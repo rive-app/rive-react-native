@@ -12,7 +12,6 @@ export default function MultipleArtboards() {
           style={styles.animation}
           fit={Fit.Contain}
           artboardName={'Avatar 1'}
-          animationName={'idlePreview'}
           resourceName={'avatars'}
         />
 

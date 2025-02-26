@@ -34,13 +34,11 @@ export default function Home() {
         Responsive Layout
       </StyledLink>
       <StyledLink href="/(examples)/SimpleControls">Simple Controls</StyledLink>
-      <StyledLink href="/(examples)/LoopMode">Loop Mode</StyledLink>
       <StyledLink href="/(examples)/MultipleArtboards">
         Multiple Artboards
       </StyledLink>
       <StyledLink href="/(examples)/StateMachine">State Machine</StyledLink>
       <StyledLink href="/(examples)/Events">Events</StyledLink>
-      <StyledLink href="/(examples)/NestedInputs">Nested Inputs</StyledLink>
       <StyledLink href="/(examples)/DynamicText">Dynamic Text</StyledLink>
       <StyledLink href="/(examples)/OutOfBandAssets">
         Out Of Band Assets
