@@ -1,6 +1,6 @@
 {
   "name": "rive-react-native",
-  "version": "8.4.0",
+  "version": "8.5.0-beta.0",
   "workspaces": [
     "example"
   ],
