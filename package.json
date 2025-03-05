@@ -58,8 +58,7 @@
   },
   "homepage": "https://github.com/rive-app/rive-react-native#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "tag": "beta"
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
