@@ -448,11 +448,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       transformFilesHandledMapping(referencedAssets);
 
     return (
-      // @ts-expect-error JSX error ( becuase react-native is a peerDependency)
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
-        {/* @ts-expect-error JSX error */}
         <View style={styles.children}>{children}</View>
-        {/* @ts-expect-error JSX error */}
         <TouchableWithoutFeedback
           onPressIn={(event: GestureResponderEvent) =>
             touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)
@@ -461,7 +458,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)
           }
         >
-          {/* @ts-expect-error JSX error */}
           <RiveViewManager
             ref={riveRef}
             resourceName={resourceName}
