@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, Text } from 'react-native';
 import Rive, { Fit } from 'rive-react-native';
 

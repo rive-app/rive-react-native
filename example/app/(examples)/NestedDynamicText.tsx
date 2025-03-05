@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useRef } from 'react';
 
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
