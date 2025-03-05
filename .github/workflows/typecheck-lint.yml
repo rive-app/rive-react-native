@@ -16,7 +16,7 @@ jobs:
       - name: Enable Corepack and Use Correct Yarn Version
         run: |
           corepack enable
-          corepack prepare yarn@4.6.0 --activate
+          corepack prepare yarn@4.7.0 --activate
 
       # - name: Restore dependencies
       #   id: yarn-cache
