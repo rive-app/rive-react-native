@@ -4,7 +4,6 @@ import app.rive.runtime.kotlin.core.RendererType
 
 enum class RNRiveRendererType(private val rendererTypeName: String) {
   Rive("rive"),
-  Skia("skia"),
   Canvas("canvas");
 
   override fun toString(): String {
@@ -19,7 +18,6 @@ enum class RNRiveRendererType(private val rendererTypeName: String) {
     fun mapToRiveRendererType(rnRendererType: RNRiveRendererType): RendererType {
       return when (rnRendererType) {
         Rive -> RendererType.Rive
-        Skia -> RendererType.Skia
         Canvas -> RendererType.Canvas
       }
     }

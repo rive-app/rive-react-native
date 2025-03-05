@@ -90,7 +90,6 @@ export enum RiveRendererIOS {
 
 export enum RiveRendererAndroid {
   Rive = 'rive',
-  Skia = 'skia',
   Canvas = 'canvas',
 }
 
