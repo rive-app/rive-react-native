@@ -70,6 +70,6 @@ jobs:
       - name: Publish
         run: |
           chmod +x ./scripts/add_build_number.sh
-          yarn release --increment=$(./scripts/add_build_number.sh)
+          yarn release --increment=$(cat version.txt)
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
