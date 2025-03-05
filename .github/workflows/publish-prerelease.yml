@@ -70,6 +70,6 @@ jobs:
       - name: Publish
         run: |
           chmod +x ./scripts/add_build_number.sh
-          yarn release $(./scripts/add_build_number.sh) --preRelease=beta --ci
+          yarn release --increment=$(./scripts/add_build_number.sh) --preRelease=beta --ci
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
