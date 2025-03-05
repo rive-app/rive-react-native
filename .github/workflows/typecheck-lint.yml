@@ -13,6 +13,11 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: Enable Corepack and Use Correct Yarn Version
+        run: |
+          corepack enable
+          corepack prepare yarn@4.6.0 --activate          
+
 
       - name: Restore dependencies
         id: yarn-cache
