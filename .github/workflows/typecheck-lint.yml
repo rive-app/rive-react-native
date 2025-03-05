@@ -16,20 +16,22 @@ jobs:
       - name: Enable Corepack and Use Correct Yarn Version
         run: |
           corepack enable
-          corepack prepare yarn@4.6.0 --activate          
-
+          corepack prepare yarn@4.6.0 --activate
 
       - name: Restore dependencies
         id: yarn-cache
         uses: actions/cache/restore@v4
         with:
           path: |
-            **/node_modules
+            .yarn/cache
             .yarn/install-state.gz
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
           restore-keys: |
             ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
             ${{ runner.os }}-yarn-
+
+      - name: Debug Yarn State (Optional)
+        run: yarn install --check-cache
 
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
@@ -41,9 +43,9 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: |
-            **/node_modules
+            .yarn/cache
             .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }} 
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Run Eslint Checks
         run: yarn lint
