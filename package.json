@@ -86,6 +86,10 @@
   "engines": {
     "node": ">=16"
   },
+  "resolutions": {
+    "@types/react": "^18.2.44",
+    "conventional-changelog-conventionalcommits": "8.0.0"
+  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
