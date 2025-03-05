@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useRef } from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, View } from 'react-native';
 import Rive, { RiveRef } from 'rive-react-native';

@@ -245,7 +245,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
     const play = useCallback<RiveRef[ViewManagerMethod.play]>(
       (
-        animName = '',
+        // eslint-disable-next-line no-shadow
+        animationName = '',
         loop = LoopMode.Auto,
         direction = Direction.Auto,
         isStateMachine = false
@@ -253,7 +254,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
           ViewManagerMethod.play,
-          [animName, loop, direction, isStateMachine]
+          [animationName, loop, direction, isStateMachine]
         );
       },
       []
