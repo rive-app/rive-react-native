@@ -585,11 +585,41 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+  fun getBooleanState(inputName: String) : Boolean? {
+    return try {
+      val smi = riveAnimationView?.controller?.stateMachines?.get(0)
+      val smiInput = smi?.input(inputName)
+      if (smiInput is SMIBoolean) {
+        smiInput.value
+      } else {
+        null
+      }
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+      null;
+    }
+  }
+
   fun setNumberState(stateMachineName: String, inputName: String, value: Float) {
     try {
       riveAnimationView?.setNumberState(stateMachineName, inputName, value)
     } catch (ex: RiveException) {
       handleRiveException(ex)
+    }
+  }
+
+  fun getNumberState(inputName: String) : Float? {
+    return try {
+      val smi = riveAnimationView?.controller?.stateMachines?.get(0)
+      val smiInput = smi?.input(inputName)
+      if (smiInput is SMINumber) {
+        smiInput.value
+      } else {
+        null
+      }
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+      null;
     }
   }
 
@@ -609,11 +639,41 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+  fun getBooleanStateAtPath(inputName: String, path: String) : Boolean? {
+    return try {
+      val artboard = riveAnimationView?.controller?.activeArtboard
+      val smiInput = artboard?.input(inputName, path)
+      if (smiInput is SMIBoolean) {
+        smiInput.value
+      } else {
+        null
+      }
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+      null;
+    }
+  }
+
   fun setNumberStateAtPath(inputName: String, value: Float, path: String) {
     try {
       riveAnimationView?.setNumberStateAtPath(inputName, value, path)
     } catch (ex: RiveException) {
       handleRiveException(ex)
+    }
+  }
+
+  fun getNumberStateAtPath(inputName: String, path: String) : Float? {
+    return try {
+      val artboard = riveAnimationView?.controller?.activeArtboard
+      val smiInput = artboard?.input(inputName, path)
+      if (smiInput is SMINumber) {
+        smiInput.value
+      } else {
+        null
+      }
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+      null;
     }
   }
 
