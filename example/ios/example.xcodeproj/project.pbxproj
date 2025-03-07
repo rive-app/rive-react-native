@@ -36,6 +36,7 @@
 		9E32630D2D6EA9D3002A1CFA /* hello_world_nested.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F52D6EA9D3002A1CFA /* hello_world_nested.riv */; };
 		9E32630E2D6EA9D3002A1CFA /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F62D6EA9D3002A1CFA /* hello_world_text.riv */; };
 		9E32630F2D6EA9D3002A1CFA /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F72D6EA9D3002A1CFA /* skills_listener.riv */; };
+		9EEC77CB2D7B866D006D35DC /* nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 /* End PBXBuildFile section */
@@ -74,6 +75,7 @@
 		9E3262F52D6EA9D3002A1CFA /* hello_world_nested.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello_world_nested.riv; path = Assets/hello_world_nested.riv; sourceTree = "<group>"; };
 		9E3262F62D6EA9D3002A1CFA /* hello_world_text.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello_world_text.riv; path = Assets/hello_world_text.riv; sourceTree = "<group>"; };
 		9E3262F72D6EA9D3002A1CFA /* skills_listener.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = skills_listener.riv; path = Assets/skills_listener.riv; sourceTree = "<group>"; };
+		9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = nested_inputs.riv; path = Assets/nested_inputs.riv; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = example/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		CB4E1E19F8C44B9A8E186E61 /* example-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "example-Bridging-Header.h"; path = "example/example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */,
 				9E3262E22D6EA9D3002A1CFA /* artboard_animations.riv */,
 				9E3262F32D6EA9D3002A1CFA /* avatars.riv */,
 				9E3262EB2D6EA9D3002A1CFA /* bird.riv */,
@@ -276,6 +279,7 @@
 				9E3263002D6EA9D3002A1CFA /* rainy.riv in Resources */,
 				9E3263012D6EA9D3002A1CFA /* truck_v7.riv in Resources */,
 				9E3263022D6EA9D3002A1CFA /* layout_test.riv in Resources */,
+				9EEC77CB2D7B866D006D35DC /* nested_inputs.riv in Resources */,
 				9E3263032D6EA9D3002A1CFA /* bird.riv in Resources */,
 				9E3263042D6EA9D3002A1CFA /* two_bone_ik.riv in Resources */,
 				9E3263052D6EA9D3002A1CFA /* FollowPathCar.riv in Resources */,
@@ -550,10 +554,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -608,10 +609,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
