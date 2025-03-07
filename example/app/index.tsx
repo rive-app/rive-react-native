@@ -41,6 +41,7 @@ export default function Home() {
       <StyledLink href="/(examples)/NestedDynamicText">
         Nested Dynamic Text
       </StyledLink>
+      <StyledLink href="/(examples)/NestedInputs">Nested Inputs</StyledLink>
       <StyledLink href="/(examples)/ErrorNotHandled">
         Error Not Handled
       </StyledLink>

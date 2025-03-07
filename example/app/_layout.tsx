@@ -101,6 +101,10 @@ function RootLayoutNav() {
             options={{ title: 'Nested Dynamic Text' }}
           />
           <Stack.Screen
+            name="(examples)/NestedInputs"
+            options={{ title: 'Nested Inputs' }}
+          />
+          <Stack.Screen
             name="(examples)/MultipleArtboards"
             options={{ title: 'Multiple Artboards' }}
           />
