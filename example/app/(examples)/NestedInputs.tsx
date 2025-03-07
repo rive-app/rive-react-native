@@ -5,21 +5,22 @@ import Rive, { Alignment, Fit, RiveRef } from 'rive-react-native';
 
 export default function NestedInputs() {
   const riveRef = useRef<RiveRef>(null);
-  const myBooleanRef = useRef(true);
-  const myNumberRef = useRef(1);
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         <Button
-          onPress={() => {
+          onPress={async () => {
+            const currentMyBoolean =
+              await riveRef.current?.getBooleanStateAtPath(
+                'myBoolean',
+                'myNestedArtboard'
+              );
             riveRef.current?.setInputStateAtPath(
               'myBoolean',
-              !myBooleanRef.current,
+              !currentMyBoolean,
               'myNestedArtboard'
             );
-
-            myBooleanRef.current = !myBooleanRef.current;
           }}
         >
           Toggle myBoolean
@@ -32,16 +33,18 @@ export default function NestedInputs() {
           Fire myTrigger
         </Button>
         <Button
-          onPress={() => {
-            const newNumber = (myNumberRef.current % 3) + 1;
+          onPress={async () => {
+            const currentNumber = (await riveRef.current?.getNumberStateAtPath(
+              'myNumber',
+              'myNestedArtboard'
+            )) as number;
+            const newNumber = (currentNumber % 3) + 1;
 
             riveRef.current?.setInputStateAtPath(
               'myNumber',
               newNumber,
               'myNestedArtboard'
             );
-
-            myNumberRef.current = newNumber;
           }}
         >
           Add 1 to myNumber
