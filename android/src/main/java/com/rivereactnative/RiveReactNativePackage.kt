@@ -9,7 +9,7 @@ import com.facebook.react.uimanager.ViewManager
 class RiveReactNativePackage : ReactPackage {
   override fun createNativeModules(
     reactContext: ReactApplicationContext
-  ): MutableList<NativeModule> = listOf(RiveReactNativeRendererModule(reactContext)).toMutableList()
+  ): MutableList<NativeModule> = listOf(RiveReactNativeRendererModule(reactContext), RiveReactNativeModule(reactContext)).toMutableList()
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
         return listOf(RiveReactNativeViewManager())

@@ -394,6 +394,24 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         viewModel?.setInput(inputName, value: value)
     }
     
+    func getBooleanState(inputName: String) -> Bool? {
+        return viewModel?.boolInput(named: inputName)?.value();
+    }
+    
+    func getNumberState(inputName: String) -> Float? {
+        return viewModel?.numberInput(named: inputName)?.value();
+    }
+
+    func getBooleanStateAtPath(inputName: String, path: String) -> Bool? {
+        let input = viewModel?.riveModel?.artboard?.getBool(inputName, path: path);
+        return input?.value();
+    }
+    
+    func getNumberStateAtPath(inputName: String, path: String) -> Float? {
+        let input = viewModel?.riveModel?.artboard?.getNumber(inputName, path: path);
+        return input?.value();
+    }
+
     func setBooleanState(stateMachineName: String, inputName: String, value: Bool) {
         viewModel?.setInput(inputName, value: value)
     }

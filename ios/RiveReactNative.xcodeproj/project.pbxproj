@@ -6,6 +6,11 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F87A07662D7B4020000B39D0 /* RiveReactNativeModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87A07652D7B4020000B39D0 /* RiveReactNativeModule.swift */; };
+		F87A07682D7B4092000B39D0 /* RiveReactNativeModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F87A07672D7B4092000B39D0 /* RiveReactNativeModuleBridge.m */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -27,6 +32,8 @@
 		F86B6E412C0DCEE5001AD21C /* RiveReactNativeRendererModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RiveReactNativeRendererModuleBridge.m; sourceTree = "<group>"; };
 		F86B6E422C0DCEFF001AD21C /* RiveReactNativeRendererModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveReactNativeRendererModule.swift; sourceTree = "<group>"; };
 		F86B6E432C0DCF12001AD21C /* RNRiveRendererType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNRiveRendererType.swift; sourceTree = "<group>"; };
+		F87A07652D7B4020000B39D0 /* RiveReactNativeModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveReactNativeModule.swift; sourceTree = "<group>"; };
+		F87A07672D7B4092000B39D0 /* RiveReactNativeModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RiveReactNativeModuleBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +58,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				F87A07672D7B4092000B39D0 /* RiveReactNativeModuleBridge.m */,
+				F87A07652D7B4020000B39D0 /* RiveReactNativeModule.swift */,
 				F86B6E432C0DCF12001AD21C /* RNRiveRendererType.swift */,
 				F86B6E422C0DCEFF001AD21C /* RiveReactNativeRendererModule.swift */,
 				F86B6E412C0DCEE5001AD21C /* RiveReactNativeRendererModuleBridge.m */,
@@ -119,6 +128,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F87A07662D7B4020000B39D0 /* RiveReactNativeModule.swift in Sources */,
+				F87A07682D7B4092000B39D0 /* RiveReactNativeModuleBridge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

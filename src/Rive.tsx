@@ -29,7 +29,7 @@ import { convertErrorFromNativeToRN, XOR } from './helpers';
 import { Alignment, Fit } from './types';
 import { parsePossibleSources } from './utils';
 
-const { RiveReactNativeRendererModule } = NativeModules;
+const { RiveReactNativeRendererModule, RiveReactNativeModule } = NativeModules;
 
 export const RiveRenderer =
   RiveReactNativeRendererModule as RiveRendererInterface;
@@ -245,7 +245,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
     const play = useCallback<RiveRef[ViewManagerMethod.play]>(
       (
-        // eslint-disable-next-line no-shadow
         animationName = '',
         loop = LoopMode.Auto,
         direction = Direction.Auto,
@@ -309,6 +308,84 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             ViewManagerMethod.setNumberState,
             [triggerStateMachineName, inputName, value]
           );
+        }
+      },
+      []
+    );
+
+    const getBooleanState = useCallback<RiveRef['getBooleanState']>(
+      async (inputName): Promise<boolean | null> => {
+        try {
+          const result = await RiveReactNativeModule.getBooleanState(
+            findNodeHandle(riveRef.current),
+            inputName
+          );
+          return result;
+        } catch (error) {
+          console.error(
+            `Error getting boolean state for input: ${inputName}`,
+            error
+          );
+          return null;
+        }
+      },
+      []
+    );
+
+    const getNumberState = useCallback<RiveRef['getNumberState']>(
+      async (inputName): Promise<number | null> => {
+        try {
+          const result = await RiveReactNativeModule.getNumberState(
+            findNodeHandle(riveRef.current),
+            inputName
+          );
+          return result;
+        } catch (error) {
+          console.error(
+            `Error getting number state for input: ${inputName}`,
+            error
+          );
+          return null;
+        }
+      },
+      []
+    );
+
+    const getBooleanStateAtPath = useCallback<RiveRef['getBooleanStateAtPath']>(
+      async (inputName, path): Promise<boolean | null> => {
+        try {
+          const result = await RiveReactNativeModule.getBooleanStateAtPath(
+            findNodeHandle(riveRef.current),
+            inputName,
+            path
+          );
+          return result;
+        } catch (error) {
+          console.error(
+            `Error getting boolean state for input: ${inputName} at path: ${path}`,
+            error
+          );
+          return null;
+        }
+      },
+      []
+    );
+
+    const getNumberStateAtPath = useCallback<RiveRef['getNumberStateAtPath']>(
+      async (inputName, path): Promise<number | null> => {
+        try {
+          const result = await RiveReactNativeModule.getNumberStateAtPath(
+            findNodeHandle(riveRef.current),
+            inputName,
+            path
+          );
+          return result;
+        } catch (error) {
+          console.error(
+            `Error getting number state for input: ${inputName} at path: ${path}`,
+            error
+          );
+          return null;
         }
       },
       []
@@ -397,6 +474,10 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       ref,
       () => ({
         setInputState,
+        getBooleanState,
+        getBooleanStateAtPath,
+        getNumberState,
+        getNumberStateAtPath,
         setInputStateAtPath,
         fireState,
         fireStateAtPath,
@@ -415,6 +496,10 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         stop,
         reset,
         setInputState,
+        getBooleanState,
+        getBooleanStateAtPath,
+        getNumberState,
+        getNumberStateAtPath,
         setInputStateAtPath,
         fireState,
         fireStateAtPath,

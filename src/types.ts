@@ -5,6 +5,16 @@ export type RiveRef = {
     inputName: string,
     value: boolean | number
   ) => void;
+  getBooleanState: (inputName: string) => Promise<boolean | null>;
+  getNumberState: (inputName: string) => Promise<number | null>;
+  getBooleanStateAtPath: (
+    inputName: string,
+    path: string
+  ) => Promise<boolean | null>;
+  getNumberStateAtPath: (
+    inputName: string,
+    path: string
+  ) => Promise<number | null>;
   fireStateAtPath: (inputName: string, path: string) => void;
   setInputStateAtPath: (
     inputName: string,
@@ -37,7 +47,11 @@ export enum ViewManagerMethod {
   reset = 'reset',
   fireState = 'fireState',
   setBooleanState = 'setBooleanState',
+  getBooleanState = 'getBooleanState',
+  getBooleanStateAtPath = 'getBooleanStateAtPath',
   setNumberState = 'setNumberState',
+  getNumberState = 'getNumberState',
+  getNumberStateAtPath = 'getNumberStateAtPath',
   fireStateAtPath = 'fireStateAtPath',
   setBooleanStateAtPath = 'setBooleanStateAtPath',
   setNumberStateAtPath = 'setNumberStateAtPath',
