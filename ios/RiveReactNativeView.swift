@@ -19,7 +19,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     // MARK: RiveRuntime Bindings
     var riveView: RiveView?
     var viewModel: RiveViewModel?
-    
+    var cachedRiveFactory: RiveFactory?
+    var previousReferencedAssets: NSDictionary?
+    var cachedFileAssets: [String: RiveFileAsset] = [:]
+
     @objc var resourceName: String? = nil {
         didSet {
             if (resourceName != nil) {
@@ -56,10 +59,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     @objc var artboardName: String?
 
-    @objc var referencedAssets: NSDictionary?
-    {
+    @objc var referencedAssets: NSDictionary? {
         didSet {
-            requiresLocalResourceReconfigure = true;
+            guard referencedAssets != previousReferencedAssets else { return }
+            updateReferencedAssets(incomingReferencedAssets: referencedAssets)
+            previousReferencedAssets = referencedAssets
         }
     }
     
@@ -92,12 +96,19 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     private func cleanupResources() {
+        cleanupFileAssetCache()
+        previousReferencedAssets = nil
         removeReactSubview(riveView)
         riveView?.playerDelegate = nil
         riveView?.stateMachineDelegate = nil
         riveView = nil;
         viewModel?.deregisterView();
         viewModel = nil;
+    }
+    
+    private func cleanupFileAssetCache() {
+        cachedFileAssets.removeAll()
+        cachedRiveFactory = nil
     }
     
     override func layoutSubviews() {
@@ -154,6 +165,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     private func configureViewModelFromResource() {
+        cleanupFileAssetCache()
+        
         if let name = resourceName {
             url = nil
             resourceFromBundle = true
@@ -211,12 +224,47 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             configureViewModelFromUrl() // TODO: calling viewModel?.configureModel for a URL ViewModel throws. Requires further investigation. Currently recreating the whole ViewModel for certain prop changes.
         }
     }
+    
+    private func updateReferencedAssets(incomingReferencedAssets: NSDictionary?) {
+        if let referencedAssets = incomingReferencedAssets?.copy() as? NSDictionary, let cachedReferencedAssets = previousReferencedAssets?.copy() as? NSDictionary {
+            let referencedKeys = Set(referencedAssets.allKeys as! [String])
+            let cachedKeys = Set(cachedReferencedAssets.allKeys as! [String])
+            // The keys are different, reloading the whole file
+            if referencedKeys != cachedKeys {
+                requiresLocalResourceReconfigure = true
+            } else {
+                var hasChanged = false
+                for (key, value) in referencedAssets {
+                    if let keyString = key as? String,
+                       let cachedValue = cachedReferencedAssets[keyString] as? NSDictionary,
+                       let newValue = value as? NSDictionary,
+                       !cachedValue.isEqual(newValue) {
+                        hasChanged = true
+                        if let source = newValue["source"] as? NSDictionary,
+                           let asset = cachedFileAssets[keyString],
+                           let factory = cachedRiveFactory {
+                            loadAsset(source: source, asset: asset, factory: factory)
+                        }
+                    }
+                }
+                if hasChanged && viewModel?.isPlaying == false {
+                    viewModel?.play() // manually calling play to force an update, ideally want to do a single advance
+                }
+            }
+        }
+    }
 
     private func customLoader(asset: RiveFileAsset, data: Data, factory: RiveFactory) -> Bool {
         guard let assetData = referencedAssets?[asset.uniqueName()] as? NSDictionary ?? referencedAssets?[asset.name()] as? NSDictionary else {
             return false
         }
+        let usedKey = referencedAssets?[asset.uniqueName()] != nil ? asset.uniqueName() : asset.name()
         
+        cachedRiveFactory = factory
+        if cachedFileAssets[usedKey] == nil {
+            cachedFileAssets[usedKey] = asset
+        }
+
         if let source = assetData["source"] as? NSDictionary {
             loadAsset(source: source, asset: asset, factory: factory)
             return true
