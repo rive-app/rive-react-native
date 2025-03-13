@@ -245,7 +245,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             guard let keyString = key as? String,
                 let cachedValue = cachedReferencedAssets[keyString] as? NSDictionary,
                 let newValue = value as? NSDictionary,
-                !cachedValue.isEqual(newValue) else {
+                  !cachedValue.isEqual(to: newValue as! [AnyHashable : Any]) else {
                 continue
             }
 
@@ -258,8 +258,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
 
         if hasChanged && viewModel?.isPlaying == false {
-            riveView?.advance(delta: 0);
-//            viewModel?.play()  manually calling play to force an update, ideally want to do a single advance
+//            riveView?.advance(delta: 0);            
+           viewModel?.play() // manually calling play to force an update, ideally want to do a single advance
         }
     }
 
