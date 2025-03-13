@@ -226,31 +226,40 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     private func updateReferencedAssets(incomingReferencedAssets: NSDictionary?) {
-        if let referencedAssets = incomingReferencedAssets?.copy() as? NSDictionary, let cachedReferencedAssets = previousReferencedAssets?.copy() as? NSDictionary {
-            let referencedKeys = Set(referencedAssets.allKeys as! [String])
-            let cachedKeys = Set(cachedReferencedAssets.allKeys as! [String])
-            // The keys are different, reloading the whole file
-            if referencedKeys != cachedKeys {
-                requiresLocalResourceReconfigure = true
-            } else {
-                var hasChanged = false
-                for (key, value) in referencedAssets {
-                    if let keyString = key as? String,
-                       let cachedValue = cachedReferencedAssets[keyString] as? NSDictionary,
-                       let newValue = value as? NSDictionary,
-                       !cachedValue.isEqual(newValue) {
-                        hasChanged = true
-                        if let source = newValue["source"] as? NSDictionary,
-                           let asset = cachedFileAssets[keyString],
-                           let factory = cachedRiveFactory {
-                            loadAsset(source: source, asset: asset, factory: factory)
-                        }
-                    }
-                }
-                if hasChanged && viewModel?.isPlaying == false {
-                    viewModel?.play() // manually calling play to force an update, ideally want to do a single advance
-                }
+        guard let referencedAssets = incomingReferencedAssets?.copy() as? NSDictionary,
+            let cachedReferencedAssets = previousReferencedAssets?.copy() as? NSDictionary else {
+            return
+        }
+
+        let referencedKeys = Set(referencedAssets.allKeys as! [String])
+        let cachedKeys = Set(cachedReferencedAssets.allKeys as! [String])
+
+        // The keys are different, reloading the whole file
+        if referencedKeys != cachedKeys {
+            requiresLocalResourceReconfigure = true
+            return
+        }
+
+        var hasChanged = false
+        for (key, value) in referencedAssets {
+            guard let keyString = key as? String,
+                let cachedValue = cachedReferencedAssets[keyString] as? NSDictionary,
+                let newValue = value as? NSDictionary,
+                !cachedValue.isEqual(newValue) else {
+                continue
             }
+
+            hasChanged = true
+            if let source = newValue["source"] as? NSDictionary,
+            let asset = cachedFileAssets[keyString],
+            let factory = cachedRiveFactory {
+                loadAsset(source: source, asset: asset, factory: factory)
+            }
+        }
+
+        if hasChanged && viewModel?.isPlaying == false {
+            riveView?.advance(delta: 0);
+//            viewModel?.play()  manually calling play to force an update, ideally want to do a single advance
         }
     }
 
