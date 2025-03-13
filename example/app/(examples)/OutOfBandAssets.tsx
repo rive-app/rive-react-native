@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import Rive, { Fit, RNRiveError } from 'rive-react-native';
 import { Picker } from '@react-native-picker/picker';
 
