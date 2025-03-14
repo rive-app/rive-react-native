@@ -24,6 +24,7 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.ExceptionsManagerModule
 import com.facebook.react.uimanager.ThemedReactContext
@@ -78,6 +79,7 @@ class ReactNativeRiveAnimationView(private val context: ThemedReactContext) :
 @SuppressLint("ViewConstructor")
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
   private var riveAnimationView: ReactNativeRiveAnimationView? = null
+  private var resourceName: String? = null
   private var resId: Int = -1
   private var url: String? = null
   private var animationName: String? = null
@@ -372,6 +374,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setResourceName(resourceName: String?) {
+    if (this.resourceName == resourceName) return
+
+    this.resourceName = resourceName
     resourceName?.let {
       resId = resources.getIdentifier(resourceName, "raw", context.packageName)
       if (resId == 0) {
@@ -386,6 +391,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setFit(rnFit: RNFit) {
     val riveFit = RNFit.mapToRiveFit(rnFit)
+    if (this.fit == riveFit) return;
     this.fit = riveFit
     riveAnimationView?.fit = riveFit
   }
@@ -402,11 +408,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setAutoplay(autoplay: Boolean) {
+    if (this.autoplay == autoplay) return;
     this.autoplay = autoplay
     shouldBeReloaded = true
   }
 
   fun setUrl(url: String?) {
+    if (this.url == url) return
     this.url = url
     shouldBeReloaded = true
   }
@@ -551,16 +559,44 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setAnimationName(animationName: String) {
+    if (this.animationName == animationName) return
     this.animationName = animationName
     shouldBeReloaded = true
   }
 
   fun setReferencedAssets(referencedAssets: ReadableMap?) {
-    this.referencedAssets = referencedAssets;
-    shouldBeReloaded = true;
+    if (this.referencedAssets?.toMap() == referencedAssets?.toMap()) return
+
+    val previousReferencedAssets = this.referencedAssets
+    this.referencedAssets = referencedAssets
+
+    if (previousReferencedAssets == null || referencedAssets == null) {
+      return
+    }
+
+    val previousKeys = previousReferencedAssets.keysList();
+    val newKeys = referencedAssets.keysList()
+
+    if (previousKeys.toSet() != newKeys.toSet()) {
+      shouldBeReloaded = true
+      return
+    }
+
+    for (key in newKeys) {
+      val previousValue = previousReferencedAssets.getMap(key)
+      val newValue = referencedAssets.getMap(key)
+      if (previousValue?.toMap() != newValue?.toMap()) {
+        val source = newValue?.getMap("source")
+        val asset = assetStore?.cachedFileAssets?.get(key)
+        if (source != null && asset != null) {
+          loadAsset(source, asset)
+        }
+      }
+    }
   }
 
   fun setStateMachineName(stateMachineName: String) {
+    if (this.stateMachineName == stateMachineName) return
     this.stateMachineName = stateMachineName
     shouldBeReloaded = true
   }
@@ -838,6 +874,52 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
     return stackTraceReadableArray
   }
+
+  private fun ReadableMap.keysList(): List<String> {
+    val iterator = this.keySetIterator()
+    val keys = mutableListOf<String>()
+
+    while (iterator.hasNextKey()) {
+      keys.add(iterator.nextKey())
+    }
+
+    return keys
+  }
+
+  fun ReadableMap.toMap(): Map<String, Any?> {
+    val result = mutableMapOf<String, Any?>()
+    val iterator = this.keySetIterator()
+
+    while (iterator.hasNextKey()) {
+      val key = iterator.nextKey()
+      when (this.getType(key)) {
+        ReadableType.Null -> result[key] = null
+        ReadableType.Boolean -> result[key] = this.getBoolean(key)
+        ReadableType.Number -> result[key] = this.getDouble(key) // React Native treats all numbers as Double
+        ReadableType.String -> result[key] = this.getString(key)
+        ReadableType.Map -> result[key] = this.getMap(key)?.toMap() // Recursively convert
+        ReadableType.Array -> result[key] = this.getArray(key)?.toList() // Convert ReadableArray
+        else -> throw IllegalArgumentException("Unsupported type for key: $key")
+      }
+    }
+    return result
+  }
+
+  fun ReadableArray.toList(): List<Any?> {
+    val result = mutableListOf<Any?>()
+    for (i in 0 until this.size()) {
+      when (this.getType(i)) {
+        ReadableType.Null -> result.add(null)
+        ReadableType.Boolean -> result.add(this.getBoolean(i))
+        ReadableType.Number -> result.add(this.getDouble(i))
+        ReadableType.String -> result.add(this.getString(i))
+        ReadableType.Map -> result.add(this.getMap(i).toMap())
+        ReadableType.Array -> result.add(this.getArray(i).toList()) // Recursive conversion
+        else -> throw IllegalArgumentException("Unsupported array type at index: $i")
+      }
+    }
+    return result
+  }
 }
 
 typealias LoadAssetHandler = (source: ReadableMap, asset: FileAsset) -> Unit
@@ -848,10 +930,14 @@ private class RiveReactNativeAssetStore(
 
   val job = SupervisorJob()
   val scope = CoroutineScope(Dispatchers.IO + job)
+  var cachedFileAssets: MutableMap<String, FileAsset> = mutableMapOf()
 
   override fun loadContents(asset: FileAsset, inBandBytes: ByteArray): Boolean {
-    var assetData = referencedAssets.getMap(asset.uniqueFilename.substringBeforeLast("."))
+    var usedKey = asset.uniqueFilename.substringBeforeLast(".")
+    var assetData = referencedAssets.getMap(usedKey)
     if (assetData == null) {
+      // Try to find an assets by matching the name only
+      usedKey = asset.name
       assetData = referencedAssets.getMap(asset.name)
     }
 
@@ -865,12 +951,14 @@ private class RiveReactNativeAssetStore(
         // This is here as a precaution and to potentially handle other errors in the future.
       }
     }
+    cachedFileAssets[usedKey] = asset
     return true // user supplied asset, attempt to load
   }
 
   fun dispose() {
     job.cancel()
     scope.cancel()
+    cachedFileAssets.clear()
   }
 }
 
@@ -891,4 +979,3 @@ class RNRiveFileRequest(
     }
   }
 }
-
