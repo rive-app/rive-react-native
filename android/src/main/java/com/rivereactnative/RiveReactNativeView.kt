@@ -571,6 +571,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     this.referencedAssets = referencedAssets
 
     if (previousReferencedAssets == null || referencedAssets == null) {
+      shouldBeReloaded = true
       return
     }
 
@@ -933,11 +934,11 @@ private class RiveReactNativeAssetStore(
   var cachedFileAssets: MutableMap<String, FileAsset> = mutableMapOf()
 
   override fun loadContents(asset: FileAsset, inBandBytes: ByteArray): Boolean {
-    var usedKey = asset.uniqueFilename.substringBeforeLast(".")
-    var assetData = referencedAssets.getMap(usedKey)
+    var key = asset.uniqueFilename.substringBeforeLast(".")
+    var assetData = referencedAssets.getMap(key)
     if (assetData == null) {
       // Try to find an assets by matching the name only
-      usedKey = asset.name
+      key = asset.name
       assetData = referencedAssets.getMap(asset.name)
     }
 
@@ -951,7 +952,7 @@ private class RiveReactNativeAssetStore(
         // This is here as a precaution and to potentially handle other errors in the future.
       }
     }
-    cachedFileAssets[usedKey] = asset
+    cachedFileAssets[key] = asset
     return true // user supplied asset, attempt to load
   }
 
