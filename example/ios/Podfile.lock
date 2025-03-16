@@ -1647,7 +1647,7 @@ PODS:
     - React-logger (= 0.76.7)
     - React-perflogger (= 0.76.7)
     - React-utils (= 0.76.7)
-  - rive-react-native (9.0.0):
+  - rive-react-native (9.1.0):
     - React-Core
     - RiveRuntime (= 6.7.2)
   - RiveRuntime (6.7.2)
@@ -2175,15 +2175,15 @@ SPEC CHECKSUMS:
   React-utils: 9f9a6a31d703b136eb1614d914c10a3c96b1e6dd
   ReactCodegen: 9a99ced51aab02909c7ab5056f33dff7054305bb
   ReactCommon: 04292c6f596181ebf755e7929d96d2148542b0e8
-  rive-react-native: a5ff459775c3832e9f9bc7ede3f4e2be11a02900
+  rive-react-native: 49de99afe87a90fb49b225d1d530ec0141bd27a1
   RiveRuntime: 208ef4af7502e8befee41df6ec0178d9ef6a1f9f
   RNCPicker: d23ebebb0c66864ac3edf260c20f8a4470aa2769
   RNGestureHandler: fc5ce5bf284640d3af6431c3a5c3bc121e98d045
   RNReanimated: 9ee6347ca0aa3cf78cae715455e781728ae142e2
   RNScreens: d022507f2b6d76c73335e9e35aedcf7bb2f791b0
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: 88e46d0f2096eb9762a82c2c45ab23b0880de97d
+  Yoga: 90d80701b27946c4b23461c00a7207f300a6ff71
 
 PODFILE CHECKSUM: 7111cb0109850378b078b31993e62f5f22d4dcde
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2
