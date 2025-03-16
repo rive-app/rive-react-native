@@ -1,33 +1,30 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "rootDir": ".",
-    "paths": {
-      "rive-react-native": ["./src/index"],
-      "@/*": ["./example/*"]
-    },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
-    "lib": ["ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "noEmit": true,
+    "jsx": "react-native",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
-    // "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
-    // "resolvePackageJsonImports": false,
     "skipLibCheck": true,
-    "strict": true,
-    "target": "ESNext"
-    // "verbatimModuleSyntax": true
-    
-    } 
-  }
+    "strict": false,
+    "target": "esnext"
+  },
+  "include": [
+    "src",
+    "babel.config.js",
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+  ]
+}
