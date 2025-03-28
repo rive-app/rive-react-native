@@ -48,6 +48,7 @@ export default function Home() {
       <StyledLink href="/(examples)/ErrorHandledManually">
         Error Handled Manually
       </StyledLink>
+      <StyledLink href="/(examples)/SourceProp">SourceProp</StyledLink>
     </ScrollView>
   );
 }

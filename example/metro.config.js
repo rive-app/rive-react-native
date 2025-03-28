@@ -16,6 +16,8 @@ config.resolver.nodeModulesPaths = [
   path.resolve(monorepoRoot, 'node_modules'),
 ];
 
+config.resolver.assetExts.push('riv');
+
 module.exports = config;
 
 // const path = require('path');
