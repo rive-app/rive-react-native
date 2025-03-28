@@ -1,4 +1,12 @@
-import React, { useCallback, useImperativeHandle, useRef } from 'react';
+import React, {
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from 'react';
+// This import path isn't handled by @types/react-native
+// @ts-ignore
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import {
   requireNativeComponent,
   UIManager,
@@ -116,7 +124,10 @@ type Props = {
   stateMachineName?: string;
   autoplay?: boolean;
   children?: React.ReactNode;
-} & XOR<{ resourceName: string }, { url: string }>;
+} & XOR<
+  XOR<{ resourceName: string }, { url: string }>,
+  { source: number | { uri: string } }
+>;
 
 export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
 
@@ -133,19 +144,59 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       onError,
       style,
       autoplay = true,
-      resourceName,
-      url,
+      resourceName: resourceNameProp,
+      url: urlProp,
       alignment = Alignment.Center,
       fit = Fit.Contain,
       layoutScaleFactor,
       artboardName,
       referencedAssets: referencedAssets,
       animationName,
+      source,
       stateMachineName,
       testID,
     },
     ref
   ) => {
+    const assetID = typeof source === 'number' ? source : null;
+    const sourceURI = typeof source === 'object' ? source.uri : null;
+    const { resourceName, url } = useMemo(() => {
+      if (resourceNameProp) {
+        return { resourceName: resourceNameProp };
+      }
+
+      if (urlProp) {
+        return { url: urlProp };
+      }
+
+      const assetURI = assetID ? resolveAssetSource(assetID)?.uri : sourceURI;
+
+      if (!assetURI) {
+        return {};
+      }
+
+      // handle http address and dev server
+      if (assetURI.match(/https?:\/\//)) {
+        return { url: assetURI };
+      }
+
+      // handle iOS bundled asset
+      if (assetURI.match(/file:\/\//)) {
+        // strip resource name from file path
+        return { resourceName: assetURI.match(/file:\/\/(.*\/)+(.*)\.riv/)[2] };
+      }
+
+      // handle Android bundled asset or resource name uri
+      return {
+        resourceName: assetURI,
+      };
+    }, [assetID, sourceURI, resourceNameProp, urlProp]);
+    if (!resourceName && !url) {
+      throw new Error(
+        'Invalid Rive resource. Please provide a valid resource.'
+      );
+    }
+
     const riveRef = useRef(null);
 
     const isUserHandlingErrors = onError !== undefined;
