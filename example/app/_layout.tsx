@@ -116,6 +116,10 @@ function RootLayoutNav() {
             name="(examples)/ErrorHandledManually"
             options={{ title: 'Error Handled Manually' }}
           />
+          <Stack.Screen
+            name="(examples)/SourceProp"
+            options={{ title: 'SourceProp' }}
+          />
         </Stack>
       </ThemeProvider>
     </GestureHandlerRootView>
