@@ -914,8 +914,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         ReadableType.Boolean -> result.add(this.getBoolean(i))
         ReadableType.Number -> result.add(this.getDouble(i))
         ReadableType.String -> result.add(this.getString(i))
-        ReadableType.Map -> result.add(this.getMap(i).toMap())
-        ReadableType.Array -> result.add(this.getArray(i).toList()) // Recursive conversion
+        ReadableType.Map -> result.add(this.getMap(i)?.toMap())
+        ReadableType.Array -> result.add(this.getArray(i)?.toList()) // Recursive conversion
         else -> throw IllegalArgumentException("Unsupported array type at index: $i")
       }
     }

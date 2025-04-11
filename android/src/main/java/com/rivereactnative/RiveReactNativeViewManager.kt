@@ -25,10 +25,10 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "play" -> {
         args?.let {
-          val animationName = it.getString(0)
-          val loopMode = it.getString(1)
-          val direction = it.getString(2)
-          val isStateMachine = it.getBoolean(3)
+          val animationName = it.getString(0)!!
+          val loopMode = it.getString(1)!!
+          val direction = it.getString(2)!!
+          val isStateMachine = it.getBoolean(3)!!
           view.run {
             val rnLoopMode = RNLoopMode.mapToRNLoopMode(loopMode)
             val rnDirection = RNDirection.mapToRNDirection(direction)
@@ -46,8 +46,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "fireState" -> {
         args?.let {
-          val stateMachineName = it.getString(0)
-          val inputName = it.getString(1)
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
           view.run {
             fireState(stateMachineName, inputName)
           }
@@ -56,9 +56,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setBooleanState" -> {
         args?.let {
-          val stateMachineName = it.getString(0)
-          val inputName = it.getString(1)
-          val value = it.getBoolean(2)
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
+          val value = it.getBoolean(2)!!
           view.run {
             setBooleanState(stateMachineName, inputName, value)
           }
@@ -67,9 +67,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setNumberState" -> {
         args?.let {
-          val stateMachineName = it.getString(0)
-          val inputName = it.getString(1)
-          val value = it.getDouble(2)
+          val stateMachineName = it.getString(0)!!
+          val inputName = it.getString(1)!!
+          val value = it.getDouble(2)!!
           view.run {
             setNumberState(stateMachineName, inputName, value.toFloat())
           }
@@ -78,8 +78,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "fireStateAtPath" -> {
         args?.let {
-          val inputName = it.getString(0)
-          val path = it.getString(1)
+          val inputName = it.getString(0)!!
+          val path = it.getString(1)!!
           view.run {
             fireStateAtPath(inputName, path)
           }
@@ -88,9 +88,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setBooleanStateAtPath" -> {
         args?.let {
-          val inputName = it.getString(0)
-          val value = it.getBoolean(1)
-          val path = it.getString(2)
+          val inputName = it.getString(0)!!
+          val value = it.getBoolean(1)!!
+          val path = it.getString(2)!!
           view.run {
             setBooleanStateAtPath(inputName, value, path)
           }
@@ -99,9 +99,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setNumberStateAtPath" -> {
         args?.let {
-          val inputName = it.getString(0)
-          val value = it.getDouble(1)
-          val path = it.getString(2)
+          val inputName = it.getString(0)!!
+          val value = it.getDouble(1)!!
+          val path = it.getString(2)!!
           view.run {
             setNumberStateAtPath(inputName, value.toFloat(), path)
           }
@@ -112,8 +112,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "touchBegan" -> {
         args?.let {
-          val x: Double = it.getDouble(0)
-          val y: Double = it.getDouble(1)
+          val x: Double = it.getDouble(0)!!
+          val y: Double = it.getDouble(1)!!
           view.run {
             this.touchBegan(x.toFloat(), y.toFloat())
           }
@@ -122,8 +122,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "touchEnded" -> {
         args?.let {
-          val x: Double = it.getDouble(0)
-          val y: Double = it.getDouble(1)
+          val x: Double = it.getDouble(0)!!
+          val y: Double = it.getDouble(1)!!
           view.run {
             this.touchEnded(x.toFloat(), y.toFloat())
           }
@@ -134,8 +134,8 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setTextRunValue" -> {
         args?.let {
-          val textRunName: String = it.getString(0)
-          val textValue: String = it.getString(1)
+          val textRunName: String = it.getString(0)!!
+          val textValue: String = it.getString(1)!!
           view.run {
             this.setTextRunValue(textRunName, textValue)
           }
@@ -144,9 +144,9 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setTextRunValueAtPath" -> {
         args?.let {
-          val textRunName: String = it.getString(0)
-          val textValue: String = it.getString(1)
-          val path: String = it.getString(2)
+          val textRunName: String = it.getString(0)!!
+          val textValue: String = it.getString(1)!!
+          val path: String = it.getString(2)!!
           view.run {
             this.setTextRunValueAtPath(textRunName, textValue, path)
           }
