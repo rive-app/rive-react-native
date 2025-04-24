@@ -603,7 +603,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         if let viewModel = viewModel, let riveView = viewModel.riveView {
             let artboardLocation = riveView.artboardLocation(
                 fromTouchLocation: location,
-                inArtboard: viewModel.riveModel!.artboard!.bounds(),
+                inArtboard: viewModel.riveModel?.artboard?.bounds() ?? CGRect.zero,
                 fit: viewModel.fit,
                 alignment: viewModel.alignment
             )
