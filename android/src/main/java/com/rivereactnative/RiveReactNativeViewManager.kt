@@ -108,6 +108,69 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
       }
 
+      // Data Binding
+      "setBooleanPropertyValue" -> {
+        args?.let {
+          val path = it.getString(0)
+          val value = it.getBoolean(1)
+          view.run {
+            setBooleanPropertyValue(path, value)
+          }
+        }
+      }
+
+      "setStringPropertyValue" -> {
+        args?.let {
+          val path = it.getString(0)
+          val value = it.getString(1)
+          view.run {
+            setStringPropertyValue(path, value)
+          }
+        }
+      }
+
+      "setNumberPropertyValue" -> {
+        args?.let {
+          val path = it.getString(0)
+          val value = it.getDouble(1)
+          view.run {
+            setNumberPropertyValue(path, value.toFloat())
+          }
+        }
+      }
+
+      "setColorPropertyValue" -> {
+        args?.let {
+          val path = it.getString(0)
+          val r = it.getDouble(1)
+          val g = it.getDouble(2)
+          val b = it.getDouble(3)
+          val a = it.getDouble(4)
+          view.run {
+            setColorPropertyValue(path, r.toInt(), g.toInt(), b.toInt(), a.toInt())
+          }
+        }
+      }
+
+      "setEnumPropertyValue" -> {
+        args?.let {
+          val path = it.getString(0)
+          val value = it.getString(1)
+          view.run {
+            setEnumPropertyValue(path, value)
+          }
+        }
+      }
+
+      "fireTriggerProperty" -> {
+        args?.let {
+          val path = it.getString(0)
+          view.run {
+            fireTriggerProperty(path)
+          }
+        }
+      }
+
       // Touch Events
 
       "touchBegan" -> {

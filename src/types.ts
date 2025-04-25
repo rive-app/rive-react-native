@@ -1,3 +1,5 @@
+export type RiveRGBA = { r: number; g: number; b: number; a: number };
+
 export type RiveRef = {
   fireState: (stateMachineName: string, inputName: string) => void;
   setInputState: (
@@ -38,6 +40,12 @@ export type RiveRef = {
     value: string,
     path: string
   ) => void;
+  setBooleanPropertyValue: (path: string, value: boolean) => void;
+  setStringPropertyValue: (path: string, value: string) => void;
+  setNumberPropertyValue: (path: string, value: number) => void;
+  setColorPropertyValue: (path: string, color: RiveRGBA | string) => void;
+  setEnumPropertyValue: (path: string, value: string) => void;
+  fireTriggerProperty: (path: string) => void;
 };
 
 export enum ViewManagerMethod {
@@ -59,6 +67,12 @@ export enum ViewManagerMethod {
   touchEnded = 'touchEnded',
   setTextRunValue = 'setTextRunValue',
   setTextRunValueAtPath = 'setTextRunValueAtPath',
+  setBooleanPropertyValue = 'setBooleanPropertyValue',
+  setStringPropertyValue = 'setStringPropertyValue',
+  setNumberPropertyValue = 'setNumberPropertyValue',
+  setColorPropertyValue = 'setColorPropertyValue',
+  setEnumPropertyValue = 'setEnumPropertyValue',
+  fireTriggerProperty = 'fireTriggerProperty',
 }
 
 export enum Fit {

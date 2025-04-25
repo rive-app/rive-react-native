@@ -64,6 +64,10 @@ function RootLayoutNav() {
             options={{ title: 'Simple' }}
           />
           <Stack.Screen
+            name="(examples)/DataBinding"
+            options={{ title: 'DataBinding' }}
+          />
+          <Stack.Screen
             name="(examples)/SimpleControls"
             options={{ title: 'Simple Controls' }}
           />

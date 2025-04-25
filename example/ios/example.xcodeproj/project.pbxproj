@@ -39,6 +39,7 @@
 		9EEC77CB2D7B866D006D35DC /* nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		F83E26CE2DBBE0860086A423 /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = F83E26CD2DBBE0860086A423 /* rewards.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		CB4E1E19F8C44B9A8E186E61 /* example-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "example-Bridging-Header.h"; path = "example/example-Bridging-Header.h"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F83E26CD2DBBE0860086A423 /* rewards.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = rewards.riv; sourceTree = "<group>"; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-example/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,6 +133,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F83E26CD2DBBE0860086A423 /* rewards.riv */,
 				9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */,
 				9E3262E22D6EA9D3002A1CFA /* artboard_animations.riv */,
 				9E3262F32D6EA9D3002A1CFA /* avatars.riv */,
@@ -279,6 +282,7 @@
 				9E3263002D6EA9D3002A1CFA /* rainy.riv in Resources */,
 				9E3263012D6EA9D3002A1CFA /* truck_v7.riv in Resources */,
 				9E3263022D6EA9D3002A1CFA /* layout_test.riv in Resources */,
+				F83E26CE2DBBE0860086A423 /* rewards.riv in Resources */,
 				9EEC77CB2D7B866D006D35DC /* nested_inputs.riv in Resources */,
 				9E3263032D6EA9D3002A1CFA /* bird.riv in Resources */,
 				9E3263042D6EA9D3002A1CFA /* two_bone_ik.riv in Resources */,
@@ -554,10 +558,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -612,10 +613,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

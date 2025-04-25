@@ -19,10 +19,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     // MARK: RiveRuntime Bindings
     var riveView: RiveView?
     var viewModel: RiveViewModel?
+    var dataBindingViewModelInstance: RiveDataBindingViewModel.Instance?
     var cachedRiveFactory: RiveFactory?
     var previousReferencedAssets: NSDictionary?
     var cachedFileAssets: [String: RiveFileAsset] = [:]
-
+    
     @objc var resourceName: String? = nil {
         didSet {
             if (resourceName != nil) {
@@ -58,7 +59,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     @objc var artboardName: String?
-
+    
     @objc var referencedAssets: NSDictionary? {
         didSet {
             guard referencedAssets != previousReferencedAssets else { return }
@@ -97,6 +98,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     private func cleanupResources() {
         cleanupFileAssetCache()
+        dataBindingViewModelInstance = nil
         previousReferencedAssets = nil
         removeReactSubview(riveView)
         riveView?.playerDelegate = nil
@@ -181,6 +183,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             }
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
+            // In React Native we always autobind to true, until we support a more robust data binding API
+            updatedViewModel.riveModel?.enableAutoBind({instance in
+                self.dataBindingViewModelInstance = instance
+            })
             
             createNewView(updatedViewModel: updatedViewModel)
             requiresLocalResourceReconfigure = false
@@ -200,8 +206,12 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             } else {
                 updatedViewModel = RiveViewModel(webURL: url, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
             }
-
+            
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
+            // In React Native we always autobind to true, until we support a more robust data binding API
+            updatedViewModel.riveModel?.enableAutoBind({instance in
+                self.dataBindingViewModelInstance = instance
+            })
             
             createNewView(updatedViewModel: updatedViewModel)
         }
@@ -227,42 +237,42 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     private func updateReferencedAssets(incomingReferencedAssets: NSDictionary?) {
         guard let referencedAssets = incomingReferencedAssets?.copy() as? NSDictionary,
-            let cachedReferencedAssets = previousReferencedAssets?.copy() as? NSDictionary else {
+              let cachedReferencedAssets = previousReferencedAssets?.copy() as? NSDictionary else {
             return
         }
-
+        
         let referencedKeys = Set(referencedAssets.allKeys as! [String])
         let cachedKeys = Set(cachedReferencedAssets.allKeys as! [String])
-
+        
         // The keys are different, reloading the whole file
         if referencedKeys != cachedKeys {
             requiresLocalResourceReconfigure = true
             return
         }
-
+        
         var hasChanged = false
         for (key, value) in referencedAssets {
             guard let keyString = key as? String,
-                let cachedValue = cachedReferencedAssets[keyString] as? NSDictionary,
-                let newValue = value as? NSDictionary,
+                  let cachedValue = cachedReferencedAssets[keyString] as? NSDictionary,
+                  let newValue = value as? NSDictionary,
                   !cachedValue.isEqual(to: newValue as! [AnyHashable : Any]) else {
                 continue
             }
-
+            
             hasChanged = true
             if let source = newValue["source"] as? NSDictionary,
-            let asset = cachedFileAssets[keyString],
-            let factory = cachedRiveFactory {
+               let asset = cachedFileAssets[keyString],
+               let factory = cachedRiveFactory {
                 loadAsset(source: source, asset: asset, factory: factory)
             }
         }
-
+        
         if hasChanged && viewModel?.isPlaying == false {
-//            riveView?.advance(delta: 0);            
-           viewModel?.play() // manually calling play to force an update, ideally want to do a single advance
+            //            riveView?.advance(delta: 0);
+            viewModel?.play() // manually calling play to force an update, ideally want to do a single advance
         }
     }
-
+    
     private func customLoader(asset: RiveFileAsset, data: Data, factory: RiveFactory) -> Bool {
         guard let assetData = referencedAssets?[asset.uniqueName()] as? NSDictionary ?? referencedAssets?[asset.name()] as? NSDictionary else {
             return false
@@ -273,7 +283,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         if cachedFileAssets[usedKey] == nil {
             cachedFileAssets[usedKey] = asset
         }
-
+        
         if let source = assetData["source"] as? NSDictionary {
             loadAsset(source: source, asset: asset, factory: factory)
             return true
@@ -458,7 +468,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     func getNumberState(inputName: String) -> Float? {
         return viewModel?.numberInput(named: inputName)?.value();
     }
-
+    
     func getBooleanStateAtPath(inputName: String, path: String) -> Bool? {
         let input = viewModel?.riveModel?.artboard?.getBool(inputName, path: path);
         return input?.value();
@@ -468,15 +478,15 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         let input = viewModel?.riveModel?.artboard?.getNumber(inputName, path: path);
         return input?.value();
     }
-
+    
     func setBooleanState(stateMachineName: String, inputName: String, value: Bool) {
         viewModel?.setInput(inputName, value: value)
     }
-
+    
     func fireStateAtPath(inputName: String, path: String) {
         viewModel?.triggerInput(inputName, path: path)
     }
-
+    
     func setNumberStateAtPath(inputName: String, value: Float, path: String) {
         viewModel?.setInput(inputName, value: value, path: path)
     }
@@ -493,7 +503,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             handleRiveError(error: error)
         }
     }
-
+    
     func setTextRunValueAtPath(textRunName: String, textRunValue: String, path: String) throws {
         do {
             try viewModel?.setTextRunValue(textRunName, path: path, textValue: textRunValue)
@@ -501,7 +511,36 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             handleRiveError(error: error)
         }
     }
-
+    
+    // MARK: - Data Binding
+    func setBooleanPropertyValue(path: String, value: Bool) {
+        dataBindingViewModelInstance?.booleanProperty(fromPath: path)?.value = value
+    }
+    
+    func setStringPropertyValue(path: String, value: String) {
+        dataBindingViewModelInstance?.stringProperty(fromPath: path)?.value = value
+    }
+    
+    func setNumberPropertyValue(path: String, value: Float) {
+        dataBindingViewModelInstance?.numberProperty(fromPath: path)?.value = value
+    }
+    
+    func setColorPropertyValue(path: String, r: Int, g: Int, b: Int, a: Int) {
+        debugPrint(r)
+        debugPrint(g)
+        debugPrint(b)
+        debugPrint(a)
+        dataBindingViewModelInstance?.colorProperty(fromPath: path)?.value = UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: CGFloat(a) / 255.0)
+    }
+    
+    func setEnumPropertyValue(path: String, value: String) {
+        dataBindingViewModelInstance?.enumProperty(fromPath: path)?.value = value
+    }
+    
+    func fireTriggerProperty(path: String) {
+        dataBindingViewModelInstance?.triggerProperty(fromPath: path)?.trigger()
+    }
+    
     // MARK: - StateMachineDelegate
     
     @objc func stateMachine(_ stateMachine: RiveStateMachineInstance, didChangeState stateName: String) {
