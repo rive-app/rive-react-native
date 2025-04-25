@@ -3,6 +3,7 @@ package com.rivereactnative
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
 import android.net.Uri
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleObserver
@@ -369,6 +370,61 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+  private fun getViewModelInstance(): ViewModelInstance? {
+    return riveAnimationView?.controller?.activeArtboard?.viewModelInstance;
+  }
+
+  fun setBooleanPropertyValue(path: String, value: Boolean) {
+    try {
+      getViewModelInstance()?.getBooleanProperty(path)?.value = value
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
+  fun setStringPropertyValue(path: String, value: String) {
+    try {
+      getViewModelInstance()?.getStringProperty(path)?.value = value
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
+  fun setNumberPropertyValue(path: String, value: Float) {
+    try {
+      getViewModelInstance()?.getNumberProperty(path)?.value = value
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
+  fun setColorPropertyValue(path: String, r: Int, g: Int, b: Int, a: Int) {
+    try {
+      val color = Color.argb(
+        a, r, g, b
+      )
+      getViewModelInstance()?.getColorProperty(path)?.value = color
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
+  fun setEnumPropertyValue(path: String, value: String) {
+    try {
+      getViewModelInstance()?.getEnumProperty(path)?.value = value
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
+  fun fireTriggerProperty(path: String) {
+    try {
+      getViewModelInstance()?.getTriggerProperty(path)?.trigger()
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    }
+  }
+
   fun update() {
     reloadIfNeeded()
   }
@@ -513,6 +569,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               fit = this.fit,
               alignment = this.alignment,
               autoplay = this.autoplay,
+              autoBind = true, // always autoBind in react native
               stateMachineName = this.stateMachineName,
               animationName = this.animationName,
               artboardName = this.artboardName
@@ -539,6 +596,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           fit = this.fit,
           alignment = this.alignment,
           autoplay = autoplay,
+          autoBind = true, // always autoBind in react native
           stateMachineName = this.stateMachineName,
           animationName = this.animationName,
           artboardName = this.artboardName
@@ -622,7 +680,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  fun getBooleanState(inputName: String) : Boolean? {
+  fun getBooleanState(inputName: String): Boolean? {
     return try {
       val smi = riveAnimationView?.controller?.stateMachines?.get(0)
       val smiInput = smi?.input(inputName)
@@ -645,7 +703,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  fun getNumberState(inputName: String) : Float? {
+  fun getNumberState(inputName: String): Float? {
     return try {
       val smi = riveAnimationView?.controller?.stateMachines?.get(0)
       val smiInput = smi?.input(inputName)
@@ -676,7 +734,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  fun getBooleanStateAtPath(inputName: String, path: String) : Boolean? {
+  fun getBooleanStateAtPath(inputName: String, path: String): Boolean? {
     return try {
       val artboard = riveAnimationView?.controller?.activeArtboard
       val smiInput = artboard?.input(inputName, path)
@@ -699,7 +757,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  fun getNumberStateAtPath(inputName: String, path: String) : Float? {
+  fun getNumberStateAtPath(inputName: String, path: String): Float? {
     return try {
       val artboard = riveAnimationView?.controller?.activeArtboard
       val smiInput = artboard?.input(inputName, path)
@@ -896,7 +954,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       when (this.getType(key)) {
         ReadableType.Null -> result[key] = null
         ReadableType.Boolean -> result[key] = this.getBoolean(key)
-        ReadableType.Number -> result[key] = this.getDouble(key) // React Native treats all numbers as Double
+        ReadableType.Number -> result[key] =
+          this.getDouble(key) // React Native treats all numbers as Double
         ReadableType.String -> result[key] = this.getString(key)
         ReadableType.Map -> result[key] = this.getMap(key)?.toMap() // Recursively convert
         ReadableType.Array -> result[key] = this.getArray(key)?.toList() // Convert ReadableArray

@@ -38,5 +38,11 @@ RCT_EXTERN_METHOD(touchEnded:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(
 RCT_EXTERN_METHOD(touchCancelled:(nonnull NSNumber *)node x:(nonnull NSNumber*)x y:(nonnull NSNumber*)y)
 RCT_EXTERN_METHOD(setTextRunValue:(nonnull NSNumber *)node textRunName:(nonnull NSString)textRunName textRunValue:(nonnull NSString)textRunValue)
 RCT_EXTERN_METHOD(setTextRunValueAtPath:(nonnull NSNumber *)node textRunName:(nonnull NSString)textRunName textRunValue:(nonnull NSString)textRunValue path:(nonnull NSString)path)
+RCT_EXTERN_METHOD(setBooleanPropertyValue:(nonnull NSNumber *)node path:(nonnull NSString)path value:(BOOL)value)
+RCT_EXTERN_METHOD(setStringPropertyValue:(nonnull NSNumber *)node path:(nonnull NSString)path value:(nonnull NSString)value)
+RCT_EXTERN_METHOD(setNumberPropertyValue:(nonnull NSNumber *)node path:(nonnull NSString)path value:(nonnull NSNumber *)value)
+RCT_EXTERN_METHOD(setColorPropertyValue:(nonnull NSNumber *)node path:(nonnull NSString)path r:(nonnull NSNumber *)r g:(nonnull NSNumber *)g b:(nonnull NSNumber *)b a:(nonnull NSNumber *)a)
+RCT_EXTERN_METHOD(setEnumPropertyValue:(nonnull NSNumber *)node path:(nonnull NSString)path value:(nonnull NSString)value)
+RCT_EXTERN_METHOD(fireTriggerProperty:(nonnull NSNumber *)node path:(nonnull NSString)path)
 @end
 

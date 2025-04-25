@@ -1,5 +1,5 @@
 import { Image } from 'react-native';
-import type { FileAssetSource, RiveAssetPropType } from './types';
+import type { FileAssetSource, RiveAssetPropType, RiveRGBA } from './types';
 
 function parsePossibleSources(source: RiveAssetPropType): FileAssetSource {
   if (typeof source === 'number') {
@@ -32,4 +32,35 @@ function parsePossibleSources(source: RiveAssetPropType): FileAssetSource {
   throw new Error('Invalid source provided.');
 }
 
-export { parsePossibleSources };
+function parseColor(color: RiveRGBA | string): RiveRGBA {
+  if (typeof color === 'string') {
+    const hex = color.replace(/^#/, '');
+
+    let r = 0,
+      g = 0,
+      b = 0,
+      a = 255;
+
+    if (hex.length === 6) {
+      // Format: RRGGBB
+      r = parseInt(hex.slice(0, 2), 16);
+      g = parseInt(hex.slice(2, 4), 16);
+      b = parseInt(hex.slice(4, 6), 16);
+    } else if (hex.length === 8) {
+      // Format: RRGGBBAA
+      r = parseInt(hex.slice(0, 2), 16);
+      g = parseInt(hex.slice(2, 4), 16);
+      b = parseInt(hex.slice(4, 6), 16);
+      a = parseInt(hex.slice(6, 8), 16);
+    } else {
+      console.warn(`Invalid hex color: ${color}`);
+    }
+
+    return { r, g, b, a };
+  }
+
+  // Already a RiveRGBA object
+  return color;
+}
+
+export { parsePossibleSources, parseColor };

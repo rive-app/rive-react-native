@@ -31,11 +31,12 @@ import {
   RiveRendererInterface,
   FilesHandledMapping,
   RiveAssetPropType,
+  RiveRGBA,
 } from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
-import { parsePossibleSources } from './utils';
+import { parseColor, parsePossibleSources } from './utils';
 
 const { RiveReactNativeRendererModule, RiveReactNativeModule } = NativeModules;
 
@@ -521,6 +522,70 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       }
     }, []);
 
+    const setBooleanPropertyValue = useCallback<
+      RiveRef['setBooleanPropertyValue']
+    >((path: string, value: boolean) => {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(riveRef.current),
+        ViewManagerMethod.setBooleanPropertyValue,
+        [path, value]
+      );
+    }, []);
+
+    const setStringPropertyValue = useCallback<
+      RiveRef['setStringPropertyValue']
+    >((path: string, value: String) => {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(riveRef.current),
+        ViewManagerMethod.setStringPropertyValue,
+        [path, value]
+      );
+    }, []);
+
+    const setNumberPropertyValue = useCallback<
+      RiveRef['setNumberPropertyValue']
+    >((path: string, value: number) => {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(riveRef.current),
+        ViewManagerMethod.setNumberPropertyValue,
+        [path, value]
+      );
+    }, []);
+
+    const setColorPropertyValue = useCallback<RiveRef['setColorPropertyValue']>(
+      (path: string, color: RiveRGBA | string) => {
+        let parsedColor = parseColor(color);
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          ViewManagerMethod.setColorPropertyValue,
+          [path, parsedColor.r, parsedColor.g, parsedColor.b, parsedColor.a]
+        );
+      },
+      []
+    );
+
+    const setEnumPropertyValue = useCallback<RiveRef['setEnumPropertyValue']>(
+      (path: string, value: string) => {
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          ViewManagerMethod.setEnumPropertyValue,
+          [path, value]
+        );
+      },
+      []
+    );
+
+    const fireTriggerProperty = useCallback<RiveRef['fireTriggerProperty']>(
+      (path: string) => {
+        UIManager.dispatchViewManagerCommand(
+          findNodeHandle(riveRef.current),
+          ViewManagerMethod.fireTriggerProperty,
+          [path]
+        );
+      },
+      []
+    );
+
     useImperativeHandle(
       ref,
       () => ({
@@ -540,6 +605,12 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         touchEnded,
         setTextRunValue,
         setTextRunValueAtPath,
+        setBooleanPropertyValue,
+        setStringPropertyValue,
+        setNumberPropertyValue,
+        setColorPropertyValue,
+        setEnumPropertyValue,
+        fireTriggerProperty,
       }),
       [
         play,
@@ -558,6 +629,12 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         touchEnded,
         setTextRunValue,
         setTextRunValueAtPath,
+        setBooleanPropertyValue,
+        setStringPropertyValue,
+        setNumberPropertyValue,
+        setColorPropertyValue,
+        setEnumPropertyValue,
+        fireTriggerProperty,
       ]
     );
 
