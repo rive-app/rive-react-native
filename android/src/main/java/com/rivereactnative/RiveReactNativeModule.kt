@@ -37,4 +37,14 @@ class RiveReactNativeModule(reactContext: ReactApplicationContext) : ReactContex
   fun getNumberStateAtPath(node: Int, inputName: String, path: String, promise: Promise) {
     handleState(node, promise) { view -> view.getNumberStateAtPath(inputName, path) }
   }
+
+  @ReactMethod
+  fun addListener(type: String?) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
+
+  @ReactMethod
+  fun removeListeners(type: Int?) {
+    // Keep: Required for RN built in Event Emitter Calls.
+  }
 }

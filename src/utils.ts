@@ -1,5 +1,10 @@
 import { Image } from 'react-native';
-import type { FileAssetSource, RiveAssetPropType, RiveRGBA } from './types';
+import type {
+  FileAssetSource,
+  PropertyType,
+  RiveAssetPropType,
+  RiveRGBA,
+} from './types';
 
 function parsePossibleSources(source: RiveAssetPropType): FileAssetSource {
   if (typeof source === 'number') {
@@ -64,3 +69,7 @@ function parseColor(color: RiveRGBA | string): RiveRGBA {
 }
 
 export { parsePossibleSources, parseColor };
+
+export const getPropertyTypeString = (propertyType: PropertyType): string => {
+  return propertyType; // Since PropertyType values are strings
+};
