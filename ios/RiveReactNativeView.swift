@@ -209,8 +209,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
             // In React Native we always autobind to true, until we support a more robust data binding API
-            updatedViewModel.riveModel?.enableAutoBind({instance in
-                self.dataBindingViewModelInstance = instance
+            updatedViewModel.riveModel?.enableAutoBind({ [weak self] instance in
+                self?.dataBindingViewModelInstance = instance
             })
             
             createNewView(updatedViewModel: updatedViewModel)
