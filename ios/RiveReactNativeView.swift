@@ -268,7 +268,6 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
         
         if hasChanged && viewModel?.isPlaying == false {
-            //            riveView?.advance(delta: 0);
             viewModel?.play() // manually calling play to force an update, ideally want to do a single advance
         }
     }
@@ -526,10 +525,6 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     func setColorPropertyValue(path: String, r: Int, g: Int, b: Int, a: Int) {
-        debugPrint(r)
-        debugPrint(g)
-        debugPrint(b)
-        debugPrint(a)
         dataBindingViewModelInstance?.colorProperty(fromPath: path)?.value = UIColor(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: CGFloat(a) / 255.0)
     }
     

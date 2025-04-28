@@ -816,7 +816,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
 
     const setColorPropertyValue = useCallback<RiveRef['setColorPropertyValue']>(
       (path: string, color: RiveRGBA | string) => {
-        let parsedColor = parseColor(color);
+        let parsedColor = typeof color === 'string' ? parseColor(color) : color;
         UIManager.dispatchViewManagerCommand(
           findNodeHandle(riveRef.current),
           ViewManagerMethod.setColorPropertyValue,

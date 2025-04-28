@@ -406,9 +406,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setColorPropertyValue(path: String, r: Int, g: Int, b: Int, a: Int) {
     try {
-      val color = Color.argb(
-        a, r, g, b
-      )
+      val color = Color.argb(a, r, g, b)
       getViewModelInstance()?.getColorProperty(path)?.value = color
     } catch (ex: RiveException) {
       handleRiveException(ex)
@@ -437,12 +435,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     val propertyTypeEnum = RNPropertyType.mapToRNPropertyType(propertyType);
 
     val property = when (propertyTypeEnum) {
-        RNPropertyType.String -> getViewModelInstance()?.getStringProperty(path)
-        RNPropertyType.Boolean -> getViewModelInstance()?.getBooleanProperty(path)
-        RNPropertyType.Number -> getViewModelInstance()?.getNumberProperty(path)
-        RNPropertyType.Color -> getViewModelInstance()?.getColorProperty(path)
-        RNPropertyType.Enum -> getViewModelInstance()?.getEnumProperty(path)
-        RNPropertyType.Trigger -> getViewModelInstance()?.getTriggerProperty(path)
+      RNPropertyType.String -> getViewModelInstance()?.getStringProperty(path)
+      RNPropertyType.Boolean -> getViewModelInstance()?.getBooleanProperty(path)
+      RNPropertyType.Number -> getViewModelInstance()?.getNumberProperty(path)
+      RNPropertyType.Color -> getViewModelInstance()?.getColorProperty(path)
+      RNPropertyType.Enum -> getViewModelInstance()?.getEnumProperty(path)
+      RNPropertyType.Trigger -> getViewModelInstance()?.getTriggerProperty(path)
     } ?: return
 
     // This should not be required, as JavaScript does a check to ensure
@@ -450,12 +448,12 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     propertyListeners[key]?.cancel()
 
     val job = scope.launch {
-        property.valueFlow.collect { value ->
-            sendEvent(key, value)
-        }
+      property.valueFlow.collect { value ->
+        sendEvent(key, value)
+      }
     }
     propertyListeners[key] = job
-}
+  }
 
   private fun sendEvent(eventName: String, value: Any) {
     context
@@ -997,8 +995,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       when (this.getType(key)) {
         ReadableType.Null -> result[key] = null
         ReadableType.Boolean -> result[key] = this.getBoolean(key)
-        ReadableType.Number -> result[key] =
-          this.getDouble(key) // React Native treats all numbers as Double
+        // React Native treats all numbers as Double
+        ReadableType.Number -> result[key] = this.getDouble(key)
         ReadableType.String -> result[key] = this.getString(key)
         ReadableType.Map -> result[key] = this.getMap(key)?.toMap() // Recursively convert
         ReadableType.Array -> result[key] = this.getArray(key)?.toList() // Convert ReadableArray

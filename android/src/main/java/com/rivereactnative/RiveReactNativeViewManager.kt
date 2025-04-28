@@ -48,9 +48,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
-          view.run {
-            fireState(stateMachineName, inputName)
-          }
+          view.fireState(stateMachineName, inputName)
         }
       }
 
@@ -59,9 +57,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
           val value = it.getBoolean(2)!!
-          view.run {
-            setBooleanState(stateMachineName, inputName, value)
-          }
+          view.setBooleanState(stateMachineName, inputName, value)
         }
       }
 
@@ -70,9 +66,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
           val value = it.getDouble(2)!!
-          view.run {
-            setNumberState(stateMachineName, inputName, value.toFloat())
-          }
+          view.setNumberState(stateMachineName, inputName, value.toFloat())
         }
       }
 
@@ -80,9 +74,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val inputName = it.getString(0)!!
           val path = it.getString(1)!!
-          view.run {
-            fireStateAtPath(inputName, path)
-          }
+          view.fireStateAtPath(inputName, path)
         }
       }
 
@@ -91,9 +83,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           val inputName = it.getString(0)!!
           val value = it.getBoolean(1)!!
           val path = it.getString(2)!!
-          view.run {
-            setBooleanStateAtPath(inputName, value, path)
-          }
+          view.setBooleanStateAtPath(inputName, value, path)
         }
       }
 
@@ -102,9 +92,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           val inputName = it.getString(0)!!
           val value = it.getDouble(1)!!
           val path = it.getString(2)!!
-          view.run {
-            setNumberStateAtPath(inputName, value.toFloat(), path)
-          }
+          view.setNumberStateAtPath(inputName, value.toFloat(), path)
         }
       }
 
@@ -113,9 +101,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val path = it.getString(0)
           val value = it.getBoolean(1)
-          view.run {
-            setBooleanPropertyValue(path, value)
-          }
+          view.setBooleanPropertyValue(path, value)
         }
       }
 
@@ -123,9 +109,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val path = it.getString(0)
           val value = it.getString(1)
-          view.run {
-            setStringPropertyValue(path, value)
-          }
+          view.setStringPropertyValue(path, value)
         }
       }
 
@@ -133,9 +117,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val path = it.getString(0)
           val value = it.getDouble(1)
-          view.run {
-            setNumberPropertyValue(path, value.toFloat())
-          }
+          view.setNumberPropertyValue(path, value.toFloat())
         }
       }
 
@@ -146,9 +128,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           val g = it.getDouble(2)
           val b = it.getDouble(3)
           val a = it.getDouble(4)
-          view.run {
-            setColorPropertyValue(path, r.toInt(), g.toInt(), b.toInt(), a.toInt())
-          }
+          view.setColorPropertyValue(path, r.toInt(), g.toInt(), b.toInt(), a.toInt())
         }
       }
 
@@ -156,18 +136,14 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val path = it.getString(0)
           val value = it.getString(1)
-          view.run {
-            setEnumPropertyValue(path, value)
-          }
+          view.setEnumPropertyValue(path, value)
         }
       }
 
       "fireTriggerProperty" -> {
         args?.let {
           val path = it.getString(0)
-          view.run {
-            fireTriggerProperty(path)
-          }
+          view.fireTriggerProperty(path)
         }
       }
 
@@ -175,9 +151,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val path = it.getString(0)
           val propertyType = it.getString(1)
-          view.run {
-            registerPropertyListener(path, propertyType)
-          }
+          view.registerPropertyListener(path, propertyType)
         }
       }
 
@@ -187,9 +161,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val x: Double = it.getDouble(0)!!
           val y: Double = it.getDouble(1)!!
-          view.run {
-            this.touchBegan(x.toFloat(), y.toFloat())
-          }
+          view.touchBegan(x.toFloat(), y.toFloat())
         }
       }
 
@@ -197,9 +169,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val x: Double = it.getDouble(0)!!
           val y: Double = it.getDouble(1)!!
-          view.run {
-            this.touchEnded(x.toFloat(), y.toFloat())
-          }
+          view.touchEnded(x.toFloat(), y.toFloat())
         }
       }
 
@@ -209,9 +179,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         args?.let {
           val textRunName: String = it.getString(0)!!
           val textValue: String = it.getString(1)!!
-          view.run {
-            this.setTextRunValue(textRunName, textValue)
-          }
+          view.setTextRunValue(textRunName, textValue)
         }
       }
 
@@ -220,9 +188,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
           val textRunName: String = it.getString(0)!!
           val textValue: String = it.getString(1)!!
           val path: String = it.getString(2)!!
-          view.run {
-            this.setTextRunValueAtPath(textRunName, textValue, path)
-          }
+          view.setTextRunValueAtPath(textRunName, textValue, path)
         }
       }
 
