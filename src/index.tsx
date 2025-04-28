@@ -1,6 +1,22 @@
 export * from './types';
-import Rive, { RiveRenderer } from './Rive';
+import Rive, {
+  RiveRenderer,
+  useRiveReady,
+  useRiveString,
+  useRiveNumber,
+  useRiveBoolean,
+  useRiveColor,
+  useRiveEnum,
+} from './Rive';
 
-export { RiveRenderer };
+export {
+  RiveRenderer,
+  useRiveReady,
+  useRiveString,
+  useRiveNumber,
+  useRiveBoolean,
+  useRiveColor,
+  useRiveEnum,
+};
 
 export default Rive;

@@ -171,6 +171,16 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
         }
       }
 
+      "registerPropertyListener" -> {
+        args?.let {
+          val path = it.getString(0)
+          val propertyType = it.getString(1)
+          view.run {
+            registerPropertyListener(path, propertyType)
+          }
+        }
+      }
+
       // Touch Events
 
       "touchBegan" -> {

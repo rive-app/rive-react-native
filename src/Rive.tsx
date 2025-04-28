@@ -1,8 +1,10 @@
 import React, {
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
+  useState
 } from 'react';
 // This import path isn't handled by @types/react-native
 // @ts-ignore
@@ -19,6 +21,8 @@ import {
   GestureResponderEvent,
   StyleProp,
   NativeModules,
+  NativeEventEmitter,
+  EmitterSubscription,
 } from 'react-native';
 import {
   RiveRef,
@@ -32,13 +36,271 @@ import {
   FilesHandledMapping,
   RiveAssetPropType,
   RiveRGBA,
+  PropertyType,
 } from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
 
 import { Alignment, Fit } from './types';
-import { parseColor, parsePossibleSources } from './utils';
+import {
+  getPropertyTypeString,
+  parseColor,
+  parsePossibleSources,
+} from './utils';
+
+export type PropertyCallback = (value: any) => void;
+export class RivePropertyValueEmitter {
+  constructor(
+    public emitter: NativeEventEmitter,
+    public riveRef: React.MutableRefObject<any>
+  ) {}
+
+  private nativeSubscriptions: {
+    [key: string]: EmitterSubscription;
+  } = {};
+
+  private callbacks: {
+    [key: string]: PropertyCallback[];
+  } = {};
+
+  addListener<T>(
+    path: string,
+    propertyType: PropertyType,
+    callback: (value: T) => void
+  ) {
+    // "Unique" key for the property listener
+    // The key is a combination of the property type and the path
+    const key = this.generatePropertyKey(path, propertyType);
+
+    // Registering the callback for this key if it doesn't exist
+    // or if the callback is not already registered
+    if (!this.callbacks[key]) {
+      this.callbacks[key] = [callback];
+    } else if (!this.callbacks[key].includes(callback)) {
+      this.callbacks[key].push(callback);
+    }
+
+    // Registering a native listener for this key if the listener
+    // is not already registered
+    if (!this.nativeSubscriptions[key]) {
+      UIManager.dispatchViewManagerCommand(
+        findNodeHandle(this.riveRef.current),
+        'registerPropertyListener', // Name of the native command
+        [path, getPropertyTypeString(propertyType)]
+      );
+      let subscription = this.emitter.addListener(key, (value) => {
+        // Call all the callbacks registered for this key
+        this.callbacks[key]?.forEach((storedCallback) => {
+          storedCallback(value);
+        });
+      });
+      this.nativeSubscriptions[key] = subscription;
+    }
+  }
+  generatePropertyKey(path: string, propertyType: PropertyType): string {
+    return `${getPropertyTypeString(propertyType)}:${path}`;
+  }
+  removeListener<T>(
+    path: string,
+    propertyType: PropertyType,
+    callback: (value: T) => void
+  ) {
+    const key = this.generatePropertyKey(path, propertyType);
+    if (this.callbacks[key]) {
+      // Remove the callback from the list of callbacks
+      this.callbacks[key] = this.callbacks[key].filter(
+        (storedCallback) => storedCallback !== callback
+      );
+      // If there are no more callbacks for this key, remove the native listener
+      if (this.callbacks[key].length === 0) {
+        this.nativeSubscriptions[key]?.remove();
+        delete this.nativeSubscriptions[key];
+        delete this.callbacks[key];
+      }
+    }
+  }
+
+  removeListeners() {
+    // Unregister all native listeners
+    Object.keys(this.nativeSubscriptions).forEach((key) => {
+      this.nativeSubscriptions[key]?.remove();
+      delete this.nativeSubscriptions[key];
+      delete this.callbacks[key];
+    });
+    // Unregister all callbacks
+    Object.keys(this.callbacks).forEach((key) => {
+      this.callbacks[key] = [];
+    });
+    this.nativeSubscriptions = {};
+    this.callbacks = {};
+  }
+}
+
+export function useRiveReady(riveRef: React.RefObject<RiveRef>): boolean {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (riveRef.current) {
+      setReady(true);
+    }
+  }, [riveRef]);
+
+  return ready;
+}
+
+export function useRiveBoolean(
+  riveRef: React.RefObject<RiveRef>,
+  path: string
+): [boolean | undefined, (value: boolean) => void] {
+  return useRivePropertyListener<boolean>(riveRef, path, PropertyType.Boolean);
+}
+
+export function useRiveString(
+  riveRef: React.RefObject<RiveRef>,
+  path: string
+): [string | undefined, (value: string) => void] {
+  return useRivePropertyListener<string>(riveRef, path, PropertyType.String);
+}
+
+export function useRiveNumber(
+  riveRef: React.RefObject<RiveRef>,
+  path: string
+): [number | undefined, (value: number) => void] {
+  return useRivePropertyListener<number>(riveRef, path, PropertyType.Number);
+}
+
+export function useRiveEnum(
+  riveRef: React.RefObject<RiveRef>,
+  path: string
+): [string | undefined, (value: string) => void] {
+  return useRivePropertyListener<string>(riveRef, path, PropertyType.Enum);
+}
+
+export function useRiveColor(
+  riveRef: React.RefObject<RiveRef>,
+  path: string
+): [RiveRGBA | undefined, (value: RiveRGBA) => void] {
+  const [color, setColor] = useState<RiveRGBA | undefined>(undefined);
+
+  // Convert integer to RiveRGBA
+  const intToRgba = useCallback((colorValue: number): RiveRGBA => {
+    const a = (colorValue >> 24) & 0xff;
+    const r = (colorValue >> 16) & 0xff;
+    const g = (colorValue >> 8) & 0xff;
+    const b = colorValue & 0xff;
+    return { r, g, b, a };
+  }, []);
+
+  // Listener callback to update state
+  const listenerCallback = useCallback(
+    (newValue: number) => {
+      setColor(intToRgba(newValue));
+    },
+    [intToRgba]
+  );
+
+  useEffect(() => {
+    const ref = riveRef.current;
+    if (!ref) {
+      return undefined;
+    }
+
+    const listener = ref.internalPropertyListener();
+    if (!listener) {
+      return undefined;
+    }
+
+    listener.addListener<number>(path, PropertyType.Color, listenerCallback);
+
+    return () => {
+      listener.removeListener(path, PropertyType.Color, listenerCallback);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path, listenerCallback]);
+
+  const setColorPropertyValue = useCallback(
+    (newColor: RiveRGBA) => {
+      const ref = riveRef.current;
+      if (!ref) {
+        console.warn('Rive ref is not available to set color property.');
+        return;
+      }
+      ref.setColorPropertyValue(path, newColor);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [path]
+  );
+
+  return [color, setColorPropertyValue];
+}
+
+function useRivePropertyListener<T>(
+  riveRef: React.RefObject<RiveRef>,
+  path: string,
+  propertyType: PropertyType
+): [T | undefined, (value: T) => void] {
+  const [value, setValue] = useState<T | undefined>(undefined);
+
+  // Listener callback to update state
+  const listenerCallback = useCallback((newValue: T) => {
+    setValue(newValue);
+  }, []);
+
+  useEffect(() => {
+    const ref = riveRef.current;
+    if (!ref) {
+      return undefined;
+    }
+
+    const listener = ref.internalPropertyListener();
+    if (!listener) {
+      return undefined;
+    }
+
+    listener.addListener<T>(path, propertyType, listenerCallback);
+
+    return () => {
+      listener.removeListener(path, propertyType, listenerCallback);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path, propertyType, listenerCallback]);
+
+  // Setter function
+  const setPropertyValue = useCallback(
+    (newValue: T) => {
+      const ref = riveRef.current;
+      if (!ref) {
+        console.warn('Rive ref is not available to set property.');
+        return;
+      }
+
+      switch (propertyType) {
+        case PropertyType.Number:
+          ref.setNumberPropertyValue(path, newValue as number);
+          break;
+        case PropertyType.Boolean:
+          ref.setBooleanPropertyValue(path, newValue as boolean);
+          break;
+        case PropertyType.String:
+          ref.setStringPropertyValue(path, newValue as string);
+          break;
+        case PropertyType.Enum:
+          ref.setEnumPropertyValue(path, newValue as string);
+          break;
+        default:
+          console.warn(
+            `Unsupported property type in generic listener: ${propertyType}`
+          );
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [path, propertyType]
+  );
+
+  return [value, setPropertyValue];
+}
 
 const { RiveReactNativeRendererModule, RiveReactNativeModule } = NativeModules;
+const nativeEventEmitter = new NativeEventEmitter(RiveReactNativeModule);
 
 export const RiveRenderer =
   RiveReactNativeRendererModule as RiveRendererInterface;
@@ -586,6 +848,18 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       []
     );
 
+    const internalPropertyListener = useCallback<
+      RiveRef['internalPropertyListener']
+    >(() => {
+      if (!riveRef.current._propertyEmitter) {
+        riveRef.current._propertyEmitter = new RivePropertyValueEmitter(
+          nativeEventEmitter,
+          riveRef
+        );
+      }
+      return riveRef.current._propertyEmitter;
+    }, [riveRef]);
+
     useImperativeHandle(
       ref,
       () => ({
@@ -611,6 +885,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         setColorPropertyValue,
         setEnumPropertyValue,
         fireTriggerProperty,
+        internalPropertyListener,
       }),
       [
         play,
@@ -635,6 +910,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         setColorPropertyValue,
         setEnumPropertyValue,
         fireTriggerProperty,
+        internalPropertyListener,
       ]
     );
 

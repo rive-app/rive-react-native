@@ -27,11 +27,13 @@ import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
 import com.facebook.react.bridge.WritableMap
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.modules.core.ExceptionsManagerModule
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -98,6 +100,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var listener: RiveFileController.Listener
   private var eventListener: RiveFileController.RiveEventListener
   private var assetStore: RiveReactNativeAssetStore? = null
+  private val scope = CoroutineScope(Dispatchers.Default)
+  private val propertyListeners = mutableMapOf<String, Job>()
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"), PAUSE("onPause"), STOP("onStop"), LOOP_END("onLoopEnd"), STATE_CHANGED("onStateChanged"), RIVE_EVENT(
@@ -175,6 +179,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   override fun onDetachedFromWindow() {
     if (willDispose) {
+      scope.cancel()
       assetStore?.dispose()
       riveAnimationView?.dispose()
       removeListeners()
@@ -190,6 +195,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   private fun removeListeners() {
+    clearPropertyListeners()
     riveAnimationView?.unregisterListener(listener)
     riveAnimationView?.removeEventListener(eventListener)
   }
@@ -423,6 +429,43 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     } catch (ex: RiveException) {
       handleRiveException(ex)
     }
+  }
+
+  fun registerPropertyListener(path: String, propertyType: String) {
+    val key = "$propertyType:$path"
+
+    val propertyTypeEnum = RNPropertyType.mapToRNPropertyType(propertyType);
+
+    val property = when (propertyTypeEnum) {
+        RNPropertyType.String -> getViewModelInstance()?.getStringProperty(path)
+        RNPropertyType.Boolean -> getViewModelInstance()?.getBooleanProperty(path)
+        RNPropertyType.Number -> getViewModelInstance()?.getNumberProperty(path)
+        RNPropertyType.Color -> getViewModelInstance()?.getColorProperty(path)
+        RNPropertyType.Enum -> getViewModelInstance()?.getEnumProperty(path)
+        RNPropertyType.Trigger -> getViewModelInstance()?.getTriggerProperty(path)
+    } ?: return
+
+    // This should not be required, as JavaScript does a check to ensure
+    // event emitters are unique. Adding this as a safety.
+    propertyListeners[key]?.cancel()
+
+    val job = scope.launch {
+        property.valueFlow.collect { value ->
+            sendEvent(key, value)
+        }
+    }
+    propertyListeners[key] = job
+}
+
+  private fun sendEvent(eventName: String, value: Any) {
+    context
+      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+      .emit(eventName, value)
+  }
+
+  private fun clearPropertyListeners() {
+    propertyListeners.values.forEach { it.cancel() }
+    propertyListeners.clear()
   }
 
   fun update() {

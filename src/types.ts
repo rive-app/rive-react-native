@@ -1,3 +1,5 @@
+import { RivePropertyValueEmitter } from './Rive';
+
 export type RiveRGBA = { r: number; g: number; b: number; a: number };
 
 export type RiveRef = {
@@ -46,6 +48,7 @@ export type RiveRef = {
   setColorPropertyValue: (path: string, color: RiveRGBA | string) => void;
   setEnumPropertyValue: (path: string, value: string) => void;
   fireTriggerProperty: (path: string) => void;
+  internalPropertyListener: () => RivePropertyValueEmitter;
 };
 
 export enum ViewManagerMethod {
@@ -192,4 +195,13 @@ export interface RiveAssetPackagedSource {
 
 export interface FilesHandledMapping {
   [assetName: string]: FileHandlerOptions;
+}
+
+export enum PropertyType {
+  Number = 'number',
+  String = 'string',
+  Boolean = 'boolean',
+  Color = 'color',
+  Trigger = 'trigger',
+  Enum = 'enum',
 }
