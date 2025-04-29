@@ -50,7 +50,7 @@ export default function DataBinding() {
       a: 255,
     });
     // Or set the color using a hex string
-    // riveRef.current?.setColorPropertyValue('Energy_Bar/Bar_Color', '#0000FFFF');
+    // riveRef.current?.setColor('Energy_Bar/Bar_Color', '#0000FFFF');
   };
 
   return (

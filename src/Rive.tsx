@@ -288,7 +288,7 @@ function useRivePropertyListener<T>(
           break;
         default:
           console.warn(
-            `Unsupported property type in generic listener: ${propertyType}`
+            `Rive unsupported property type in generic listener: ${propertyType}`
           );
       }
     },
