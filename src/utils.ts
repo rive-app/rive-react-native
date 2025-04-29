@@ -40,6 +40,12 @@ function parsePossibleSources(source: RiveAssetPropType): FileAssetSource {
 function parseColor(color: string): RiveRGBA {
   const hex = color.replace(/^#/, '');
 
+  const isValidHex = /^[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/.test(hex);
+  if (!isValidHex) {
+    console.warn(`Rive invalid hex color: ${color}`);
+    return { r: 0, g: 0, b: 0, a: 255 };
+  }
+
   let r = 0,
     g = 0,
     b = 0,
@@ -57,7 +63,7 @@ function parseColor(color: string): RiveRGBA {
     b = parseInt(hex.slice(4, 6), 16);
     a = parseInt(hex.slice(6, 8), 16);
   } else {
-    console.warn(`Invalid hex color: ${color}`);
+    console.warn(`Rive invalid hex color: ${color}`);
   }
 
   return { r, g, b, a };
