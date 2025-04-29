@@ -42,12 +42,12 @@ export type RiveRef = {
     value: string,
     path: string
   ) => void;
-  setBooleanPropertyValue: (path: string, value: boolean) => void;
-  setStringPropertyValue: (path: string, value: string) => void;
-  setNumberPropertyValue: (path: string, value: number) => void;
-  setColorPropertyValue: (path: string, color: RiveRGBA | string) => void;
-  setEnumPropertyValue: (path: string, value: string) => void;
-  fireTriggerProperty: (path: string) => void;
+  setBoolean: (path: string, value: boolean) => void;
+  setString: (path: string, value: string) => void;
+  setNumber: (path: string, value: number) => void;
+  setColor: (path: string, color: RiveRGBA | string) => void;
+  setEnum: (path: string, value: string) => void;
+  trigger: (path: string) => void;
   internalPropertyListener: () => RivePropertyValueEmitter;
 };
 

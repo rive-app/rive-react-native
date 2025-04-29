@@ -39,11 +39,11 @@ export default function DataBinding() {
   // Set values directly
   const updateDataBindingValues = () => {
     // SET NUMBER VALUE
-    riveRef.current?.setNumberPropertyValue('Energy_Bar/Lives', 6);
+    riveRef.current?.setNumber('Energy_Bar/Lives', 6);
     // SET STRING VALUE
-    riveRef.current?.setStringPropertyValue('Button/State_1', 'Direct!');
+    riveRef.current?.setString('Button/State_1', 'Direct!');
     // SET COLOR VALUE
-    riveRef.current?.setColorPropertyValue('Energy_Bar/Bar_Color', {
+    riveRef.current?.setColor('Energy_Bar/Bar_Color', {
       r: 0,
       g: 0,
       b: 255,
