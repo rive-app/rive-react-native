@@ -1,7 +1,6 @@
 export * from './types';
 import Rive, {
   RiveRenderer,
-  useRiveReady,
   useRiveString,
   useRiveNumber,
   useRiveBoolean,
@@ -11,7 +10,6 @@ import Rive, {
 
 export {
   RiveRenderer,
-  useRiveReady,
   useRiveString,
   useRiveNumber,
   useRiveBoolean,

@@ -135,18 +135,6 @@ export class RivePropertyValueEmitter {
   }
 }
 
-export function useRiveReady(riveRef: React.RefObject<RiveRef>): boolean {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    if (riveRef.current) {
-      setReady(true);
-    }
-  }, [riveRef]);
-
-  return ready;
-}
-
 export function useRiveBoolean(
   riveRef: React.RefObject<RiveRef>,
   path: string
@@ -299,8 +287,12 @@ function useRivePropertyListener<T>(
   return [value, setPropertyValue];
 }
 
-const { RiveReactNativeRendererModule, RiveReactNativeModule } = NativeModules;
-const nativeEventEmitter = new NativeEventEmitter(RiveReactNativeModule);
+const {
+  RiveReactNativeRendererModule,
+  RiveReactNativeModule,
+  RiveReactNativeEventModule,
+} = NativeModules;
+const nativeEventEmitter = new NativeEventEmitter(RiveReactNativeEventModule);
 
 export const RiveRenderer =
   RiveReactNativeRendererModule as RiveRendererInterface;
