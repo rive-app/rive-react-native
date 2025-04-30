@@ -432,7 +432,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   fun registerPropertyListener(path: String, propertyType: String) {
     val key = "$propertyType:$path"
 
-    val propertyTypeEnum = RNPropertyType.mapToRNPropertyType(propertyType);
+    val propertyTypeEnum = RNPropertyType.mapToRNPropertyType(propertyType)
 
     val property = when (propertyTypeEnum) {
       RNPropertyType.String -> getViewModelInstance()?.getStringProperty(path)
