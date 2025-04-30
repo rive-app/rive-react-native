@@ -11,26 +11,22 @@ import Rive, {
   RiveRef,
   useRiveColor,
   useRiveNumber,
-  useRiveReady,
   useRiveString,
 } from 'rive-react-native';
 
 export default function DataBinding() {
   const riveRef = React.useRef<RiveRef>(null);
-  const riveIsReady = useRiveReady(riveRef);
 
   let [buttonText, setButtonText] = useRiveString(riveRef, 'Button/State_1');
   let [lives, setLives] = useRiveNumber(riveRef, 'Energy_Bar/Lives');
   let [barColor, setBarColor] = useRiveColor(riveRef, 'Energy_Bar/Bar_Color');
 
   useEffect(() => {
-    if (riveIsReady) {
-      // Set initial values through hooks
-      setButtonText("Let's go!");
-      setLives(7);
-      setBarColor({ r: 0, g: 255, b: 0, a: 255 });
-    }
-  }, [riveIsReady, setButtonText, setLives, setBarColor]);
+    // Set initial values through hooks
+    setButtonText("Let's go!");
+    setLives(7);
+    setBarColor({ r: 0, g: 255, b: 0, a: 255 });
+  }, [setButtonText, setLives, setBarColor]);
 
   console.log('Button Text:', buttonText);
   console.log('Lives:', lives);
