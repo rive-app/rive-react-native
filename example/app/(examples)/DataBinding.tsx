@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,61 +8,67 @@ import {
 } from 'react-native';
 import Rive, {
   Fit,
-  RiveRef,
+  useRive,
   useRiveColor,
   useRiveNumber,
   useRiveString,
 } from 'rive-react-native';
 
 export default function DataBinding() {
-  const riveRef = React.useRef<RiveRef>(null);
+  const [setRiveRef, riveRef] = useRive();
+  const [showRive, setShowRive] = useState(false);
 
   let [buttonText, setButtonText] = useRiveString(riveRef, 'Button/State_1');
   let [lives, setLives] = useRiveNumber(riveRef, 'Energy_Bar/Lives');
   let [barColor, setBarColor] = useRiveColor(riveRef, 'Energy_Bar/Bar_Color');
 
   useEffect(() => {
-    // Set initial values through hooks
-    setButtonText("Let's go!");
-    setLives(7);
-    setBarColor({ r: 0, g: 255, b: 0, a: 255 });
-  }, [setButtonText, setLives, setBarColor]);
+    if (riveRef) {
+      setButtonText('Hello 123!');
+      setLives(3);
+      setBarColor({ r: 0, g: 255, b: 0, a: 255 });
+      // setBarColor('#00FF00FF'); // Example of using hex color
+    }
+  }, [riveRef, setBarColor, setButtonText, setLives]);
+
+  // Used for testing that the Rive instance is mounted
+  // and the properties listeners are being updated correctly
+  useEffect(() => {
+    setTimeout(() => setShowRive(true), 1000); // Delay mounting <Rive />
+  }, []);
 
   console.log('Button Text:', buttonText);
   console.log('Lives:', lives);
   console.log('Bar Color:', barColor);
 
-  // Set values directly
-  const updateDataBindingValues = () => {
-    // SET NUMBER VALUE
-    riveRef.current?.setNumber('Energy_Bar/Lives', 6);
-    // SET STRING VALUE
-    riveRef.current?.setString('Button/State_1', 'Direct!');
-    // SET COLOR VALUE
-    riveRef.current?.setColor('Energy_Bar/Bar_Color', {
-      r: 0,
-      g: 0,
-      b: 255,
-      a: 255,
-    });
-    // Or set the color using a hex string
-    // riveRef.current?.setColor('Energy_Bar/Bar_Color', '#0000FFFF');
-  };
-
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Rive
-          ref={riveRef}
-          fit={Fit.Layout}
-          style={styles.animation}
-          layoutScaleFactor={1}
-          autoplay={true}
-          stateMachineName={'State Machine 1'}
-          resourceName={'rewards'}
-        />
+        {showRive && (
+          <Rive
+            ref={setRiveRef}
+            fit={Fit.Layout}
+            style={styles.animation}
+            layoutScaleFactor={1}
+            autoplay={true}
+            stateMachineName={'State Machine 1'}
+            resourceName={'rewards'}
+          />
+        )}
         <View style={styles.buttonContainer}>
-          <Button title="Update data" onPress={updateDataBindingValues} />
+          <Button
+            title="Update data"
+            onPress={() => {
+              riveRef?.setString('Button/State_1', 'Hello!');
+              riveRef?.setNumber('Energy_Bar/Lives', 3);
+              riveRef?.setColor('Energy_Bar/Bar_Color', {
+                r: 255,
+                g: 0,
+                b: 0,
+                a: 255,
+              });
+            }}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

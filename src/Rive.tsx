@@ -43,6 +43,7 @@ import { convertErrorFromNativeToRN, XOR } from './helpers';
 import { Alignment, Fit } from './types';
 import {
   getPropertyTypeString,
+  intToRiveRGBA,
   parseColor,
   parsePossibleSources,
 } from './utils';
@@ -135,153 +136,138 @@ export class RivePropertyValueEmitter {
   }
 }
 
+export function useRive(): [(node: RiveRef) => void, RiveRef | null] {
+  const [ref, setRef] = useState<RiveRef | null>(null);
+  const setRiveRef = useCallback<(node: RiveRef) => void>(
+    (node) => setRef(node),
+    []
+  );
+  return [setRiveRef, ref];
+}
+
 export function useRiveBoolean(
-  riveRef: React.RefObject<RiveRef>,
+  riveRef: RiveRef | null,
   path: string
 ): [boolean | undefined, (value: boolean) => void] {
   return useRivePropertyListener<boolean>(riveRef, path, PropertyType.Boolean);
 }
 
 export function useRiveString(
-  riveRef: React.RefObject<RiveRef>,
+  riveRef: RiveRef | null,
   path: string
 ): [string | undefined, (value: string) => void] {
   return useRivePropertyListener<string>(riveRef, path, PropertyType.String);
 }
 
 export function useRiveNumber(
-  riveRef: React.RefObject<RiveRef>,
+  riveRef: RiveRef | null,
   path: string
 ): [number | undefined, (value: number) => void] {
   return useRivePropertyListener<number>(riveRef, path, PropertyType.Number);
 }
 
 export function useRiveEnum(
-  riveRef: React.RefObject<RiveRef>,
+  riveRef: RiveRef | null,
   path: string
 ): [string | undefined, (value: string) => void] {
   return useRivePropertyListener<string>(riveRef, path, PropertyType.Enum);
 }
 
 export function useRiveColor(
-  riveRef: React.RefObject<RiveRef>,
+  riveRef: RiveRef | null,
   path: string
-): [RiveRGBA | undefined, (value: RiveRGBA) => void] {
-  const [color, setColor] = useState<RiveRGBA | undefined>(undefined);
-
-  // Convert integer to RiveRGBA
-  const intToRgba = useCallback((colorValue: number): RiveRGBA => {
-    const a = (colorValue >> 24) & 0xff;
-    const r = (colorValue >> 16) & 0xff;
-    const g = (colorValue >> 8) & 0xff;
-    const b = colorValue & 0xff;
-    return { r, g, b, a };
-  }, []);
-
-  // Listener callback to update state
-  const listenerCallback = useCallback(
-    (newValue: number) => {
-      setColor(intToRgba(newValue));
-    },
-    [intToRgba]
-  );
-
-  useEffect(() => {
-    const ref = riveRef.current;
-    if (!ref) {
-      return undefined;
-    }
-
-    const listener = ref.internalPropertyListener();
-    if (!listener) {
-      return undefined;
-    }
-
-    listener.addListener<number>(path, PropertyType.Color, listenerCallback);
-
-    return () => {
-      listener.removeListener(path, PropertyType.Color, listenerCallback);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path, listenerCallback]);
-
-  const setColorPropertyValue = useCallback(
-    (newColor: RiveRGBA) => {
-      const ref = riveRef.current;
-      if (!ref) {
-        console.warn('Rive ref is not available to set color property.');
-        return;
-      }
-      ref.setColor(path, newColor);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [path]
-  );
-
-  return [color, setColorPropertyValue];
+): [RiveRGBA | undefined, (value: RiveRGBA | string) => void] {
+  return useRivePropertyListener<RiveRGBA>(riveRef, path, PropertyType.Color);
 }
 
 function useRivePropertyListener<T>(
-  riveRef: React.RefObject<RiveRef>,
+  riveRef: RiveRef | null,
   path: string,
   propertyType: PropertyType
 ): [T | undefined, (value: T) => void] {
   const [value, setValue] = useState<T | undefined>(undefined);
 
-  // Listener callback to update state
+  // Listener callback to update state for non-color properties
   const listenerCallback = useCallback((newValue: T) => {
     setValue(newValue);
   }, []);
 
+  // Listener callback to update state for color properties
+  const listenerCallbackWithColor = useCallback((newValue: number) => {
+    const rgbaValue = intToRiveRGBA(newValue);
+    setValue(rgbaValue as T);
+  }, []);
+
   useEffect(() => {
-    const ref = riveRef.current;
-    if (!ref) {
-      return undefined;
+    const listener = riveRef?.internalPropertyListener?.();
+    if (!listener) return () => {};
+
+    if (propertyType === PropertyType.Color) {
+      listener.addListener<number>(
+        path,
+        propertyType,
+        listenerCallbackWithColor
+      );
+      return () => {
+        listener.removeListener<number>(
+          path,
+          propertyType,
+          listenerCallbackWithColor
+        );
+      };
+    } else {
+      listener.addListener<T>(path, propertyType, listenerCallback);
+      return () => {
+        listener.removeListener<T>(path, propertyType, listenerCallback);
+      };
     }
-
-    const listener = ref.internalPropertyListener();
-    if (!listener) {
-      return undefined;
-    }
-
-    listener.addListener<T>(path, propertyType, listenerCallback);
-
-    return () => {
-      listener.removeListener(path, propertyType, listenerCallback);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path, propertyType, listenerCallback]);
+  }, [
+    riveRef,
+    path,
+    propertyType,
+    listenerCallback,
+    listenerCallbackWithColor,
+  ]);
 
   // Setter function
   const setPropertyValue = useCallback(
     (newValue: T) => {
-      const ref = riveRef.current;
-      if (!ref) {
-        console.warn('Rive ref is not available to set property.');
+      if (!riveRef) {
+        if (__DEV__) {
+          console.warn(
+            `[Rive] Tried to set property "${path}" before riveRef was available.`
+          );
+        }
         return;
       }
 
       switch (propertyType) {
         case PropertyType.Number:
-          ref.setNumber(path, newValue as number);
+          riveRef.setNumber(path, newValue as number);
           break;
         case PropertyType.Boolean:
-          ref.setBoolean(path, newValue as boolean);
+          riveRef.setBoolean(path, newValue as boolean);
           break;
         case PropertyType.String:
-          ref.setString(path, newValue as string);
+          riveRef.setString(path, newValue as string);
           break;
         case PropertyType.Enum:
-          ref.setEnum(path, newValue as string);
+          riveRef.setEnum(path, newValue as string);
+          break;
+        case PropertyType.Color:
+          const parsedColor =
+            typeof newValue === 'string' ? parseColor(newValue) : newValue;
+          riveRef.setColor(path, parsedColor as RiveRGBA);
           break;
         default:
-          console.warn(
-            `Rive unsupported property type in generic listener: ${propertyType}`
-          );
+          if (__DEV__) {
+            console.warn(
+              `[Rive] Unsupported property type in generic listener: ${propertyType}`
+            );
+          }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [path, propertyType]
+    [riveRef, path, propertyType]
   );
 
   return [value, setPropertyValue];
