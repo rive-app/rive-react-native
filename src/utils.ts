@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 import { Image } from 'react-native';
 import type {
   FileAssetSource,
@@ -58,7 +59,16 @@ function parseColor(color: string): RiveRGBA {
 
   return { r, g, b, a };
 }
-export { parsePossibleSources, parseColor };
+
+function intToRiveRGBA(colorValue: number): RiveRGBA {
+  const a = (colorValue >> 24) & 0xff;
+  const r = (colorValue >> 16) & 0xff;
+  const g = (colorValue >> 8) & 0xff;
+  const b = colorValue & 0xff;
+  return { r, g, b, a };
+}
+
+export { parsePossibleSources, parseColor, intToRiveRGBA };
 
 export const getPropertyTypeString = (propertyType: PropertyType): string =>
   propertyType;
