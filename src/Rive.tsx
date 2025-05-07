@@ -23,6 +23,7 @@ import {
   NativeModules,
   NativeEventEmitter,
   EmitterSubscription,
+  Platform,
 } from 'react-native';
 import {
   RiveRef,
@@ -49,7 +50,7 @@ import {
 } from './utils';
 
 export type PropertyCallback = (value: any) => void;
-export class RivePropertyValueEmitter {
+export class RiveNativeEventEmitter {
   constructor(
     public emitter: NativeEventEmitter,
     public riveRef: React.MutableRefObject<any>
@@ -68,9 +69,16 @@ export class RivePropertyValueEmitter {
     propertyType: PropertyType,
     callback: (value: T) => void
   ) {
+    const reactTag = findNodeHandle(this.riveRef.current);
+    if (!reactTag) {
+      console.warn(
+        '[Rive] RiveRef viewTag is null. Cannot register property listener.'
+      );
+      return;
+    }
     // "Unique" key for the property listener
     // The key is a combination of the property type and the path
-    const key = this.generatePropertyKey(path, propertyType);
+    const key = this.generatePropertyKey(path, propertyType, reactTag);
 
     // Registering the callback for this key if it doesn't exist
     // or if the callback is not already registered
@@ -83,29 +91,40 @@ export class RivePropertyValueEmitter {
     // Registering a native listener for this key if the listener
     // is not already registered
     if (!this.nativeSubscriptions[key]) {
-      UIManager.dispatchViewManagerCommand(
-        findNodeHandle(this.riveRef.current),
-        'registerPropertyListener', // Name of the native command
-        [path, getPropertyTypeString(propertyType)]
-      );
       let subscription = this.emitter.addListener(key, (value) => {
         // Call all the callbacks registered for this key
         this.callbacks[key]?.forEach((storedCallback) => {
           storedCallback(value);
         });
       });
+      UIManager.dispatchViewManagerCommand(
+        reactTag,
+        'registerPropertyListener', // Name of the native command
+        [path, getPropertyTypeString(propertyType)]
+      );
       this.nativeSubscriptions[key] = subscription;
     }
   }
-  generatePropertyKey(path: string, propertyType: PropertyType): string {
-    return `${getPropertyTypeString(propertyType)}:${path}`;
+  generatePropertyKey(
+    path: string,
+    propertyType: PropertyType,
+    reactTag: number
+  ): string {
+    return `${getPropertyTypeString(propertyType)}:${path}:${reactTag}`;
   }
   removeListener<T>(
     path: string,
     propertyType: PropertyType,
     callback: (value: T) => void
   ) {
-    const key = this.generatePropertyKey(path, propertyType);
+    const reactTag = findNodeHandle(this.riveRef.current);
+    if (!reactTag) {
+      console.warn(
+        '[Rive] RiveRef viewTag is null. Cannot unregister property listener.'
+      );
+      return;
+    }
+    const key = this.generatePropertyKey(path, propertyType, reactTag);
     if (this.callbacks[key]) {
       // Remove the callback from the list of callbacks
       this.callbacks[key] = this.callbacks[key].filter(
@@ -138,10 +157,34 @@ export class RivePropertyValueEmitter {
 
 export function useRive(): [(node: RiveRef) => void, RiveRef | null] {
   const [ref, setRef] = useState<RiveRef | null>(null);
-  const setRiveRef = useCallback<(node: RiveRef) => void>(
-    (node) => setRef(node),
-    []
-  );
+
+  const setRiveRef = useCallback<(node: RiveRef) => void>((node) => {
+    if (!node || !node.internalNativeEmitter) {
+      return;
+    }
+    let viewTag = node.viewTag();
+    if (viewTag === null) {
+      console.warn('[Rive] RiveRef viewTag is null.');
+      return;
+    }
+
+    const nativeEmitter = node.internalNativeEmitter();
+    if (!nativeEmitter) {
+      console.warn('[Rive] Native event emitter is not initialized.');
+      return;
+    }
+
+    // A listener that is called when the native view is loaded and Rive
+    // is ready to be used.
+    const subscription = nativeEmitter.emitter.addListener(
+      `RiveReactNativeLoaded:${viewTag}`,
+      () => {
+        setRef(node);
+        subscription.remove(); // Remove the listener after the event is reported
+      }
+    );
+  }, []);
+
   return [setRiveRef, ref];
 }
 
@@ -199,7 +242,7 @@ function useRivePropertyListener<T>(
   }, []);
 
   useEffect(() => {
-    const listener = riveRef?.internalPropertyListener?.();
+    const listener = riveRef?.internalNativeEmitter?.();
     if (!listener) return () => {};
 
     if (propertyType === PropertyType.Color) {
@@ -278,7 +321,10 @@ const {
   RiveReactNativeModule,
   RiveReactNativeEventModule,
 } = NativeModules;
-const nativeEventEmitter = new NativeEventEmitter(RiveReactNativeEventModule);
+const nativeEventEmitter =
+  Platform.OS === 'android'
+    ? new NativeEventEmitter() // Not needed for Android
+    : new NativeEventEmitter(RiveReactNativeEventModule);
 
 export const RiveRenderer =
   RiveReactNativeRendererModule as RiveRendererInterface;
@@ -826,16 +872,20 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       );
     }, []);
 
-    const internalPropertyListener = useCallback<
-      RiveRef['internalPropertyListener']
+    const internalNativeEmitter = useCallback<
+      RiveRef['internalNativeEmitter']
     >(() => {
       if (!riveRef.current._propertyEmitter) {
-        riveRef.current._propertyEmitter = new RivePropertyValueEmitter(
+        riveRef.current._propertyEmitter = new RiveNativeEventEmitter(
           nativeEventEmitter,
           riveRef
         );
       }
       return riveRef.current._propertyEmitter;
+    }, [riveRef]);
+
+    const viewTag = useCallback<RiveRef['viewTag']>(() => {
+      return findNodeHandle(riveRef.current);
     }, [riveRef]);
 
     useImperativeHandle(
@@ -863,7 +913,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         setColor,
         setEnum,
         trigger,
-        internalPropertyListener,
+        internalNativeEmitter,
+        viewTag,
       }),
       [
         play,
@@ -888,7 +939,8 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         setColor,
         setEnum,
         trigger,
-        internalPropertyListener,
+        internalNativeEmitter,
+        viewTag,
       ]
     );
 
