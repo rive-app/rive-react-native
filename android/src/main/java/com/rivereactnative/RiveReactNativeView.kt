@@ -66,7 +66,7 @@ class ReactNativeRiveAnimationView(private val context: ThemedReactContext) :
   RiveAnimationView(context) {
 
   fun dispose() {
-    (lifecycleObserver as ReactNativeRiveViewLifecycleObserver).dispose();
+    (lifecycleObserver as ReactNativeRiveViewLifecycleObserver).dispose()
   }
 
   @SuppressLint("VisibleForTests")
@@ -101,7 +101,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var eventListener: RiveFileController.RiveEventListener
   private var assetStore: RiveReactNativeAssetStore? = null
   private val scope = CoroutineScope(Dispatchers.Default)
-  private val propertyListeners = mutableMapOf<String, Job>()
+  private var dataBindingConfig: DataBindingConfig? = null
+  private val propertyListeners = mutableMapOf<String, PropertyListener>()
 
   enum class Events(private val mName: String) {
     PLAY("onPlay"), PAUSE("onPause"), STOP("onStop"), LOOP_END("onLoopEnd"), STATE_CHANGED("onStateChanged"), RIVE_EVENT(
@@ -362,7 +363,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setTextRunValue(textRunName: String, textValue: String) {
     try {
-      riveAnimationView?.controller?.activeArtboard?.textRun(textRunName)?.text = textValue;
+      riveAnimationView?.controller?.activeArtboard?.textRun(textRunName)?.text = textValue
     } catch (ex: RiveException) {
       handleRiveException(ex)
     }
@@ -377,7 +378,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   private fun getViewModelInstance(): ViewModelInstance? {
-    return riveAnimationView?.controller?.activeArtboard?.viewModelInstance;
+    return riveAnimationView?.controller?.activeArtboard?.viewModelInstance
   }
 
   fun setBooleanPropertyValue(path: String, value: Boolean) {
@@ -429,40 +430,110 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+  private fun removePropertyListener(key: String) {
+    propertyListeners[key]?.job?.cancel()
+    propertyListeners.remove(key)
+  }
+
   fun registerPropertyListener(path: String, propertyType: String) {
-    val key = "$propertyType:$path"
+    val key = "$propertyType:$path:$id"
+    // Make sure to remove current listeners, as the same listener may have been registered but
+    // on a new view model instance.
+    // We play it safe and always remove the listener and re-add it
+    removePropertyListener(key)
 
     val propertyTypeEnum = RNPropertyType.mapToRNPropertyType(propertyType)
 
-    val property = when (propertyTypeEnum) {
-      RNPropertyType.String -> getViewModelInstance()?.getStringProperty(path)
-      RNPropertyType.Boolean -> getViewModelInstance()?.getBooleanProperty(path)
-      RNPropertyType.Number -> getViewModelInstance()?.getNumberProperty(path)
-      RNPropertyType.Color -> getViewModelInstance()?.getColorProperty(path)
-      RNPropertyType.Enum -> getViewModelInstance()?.getEnumProperty(path)
-      RNPropertyType.Trigger -> getViewModelInstance()?.getTriggerProperty(path)
-    } ?: return
-
-    // This should not be required, as JavaScript does a check to ensure
-    // event emitters are unique. Adding this as a safety.
-    propertyListeners[key]?.cancel()
-
-    val job = scope.launch {
-      property.valueFlow.collect { value ->
-        sendEvent(key, value)
+    try {
+      val property = when (propertyTypeEnum) {
+        RNPropertyType.String -> getViewModelInstance()?.getStringProperty(path)
+        RNPropertyType.Boolean -> getViewModelInstance()?.getBooleanProperty(path)
+        RNPropertyType.Number -> getViewModelInstance()?.getNumberProperty(path)
+        RNPropertyType.Color -> getViewModelInstance()?.getColorProperty(path)
+        RNPropertyType.Enum -> getViewModelInstance()?.getEnumProperty(path)
+        RNPropertyType.Trigger -> getViewModelInstance()?.getTriggerProperty(path)
+      } ?: return
+      val job = scope.launch {
+        property.valueFlow.collect { value ->
+          sendEvent(key, value)
+        }
       }
+      propertyListeners[key] = PropertyListener(path, propertyType, job)
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    } catch (ex: Exception) {
+      showRNRiveError("Unexpected error during data binding configuration", ex)
     }
-    propertyListeners[key] = job
   }
 
-  private fun sendEvent(eventName: String, value: Any) {
+  private val loadedTag: String
+    get() = "RiveReactNativeLoaded:${this.id}"
+
+  private fun sendRiveLoadedEvent() {
+    sendEvent(loadedTag, null)
+  }
+
+  private fun sendEvent(eventName: String, value: Any?) {
     context
       .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
       .emit(eventName, value)
   }
 
+  private fun configureDataBinding() {
+    try {
+      val file = riveAnimationView?.controller?.file ?: return
+      val artboard = riveAnimationView?.controller?.activeArtboard ?: return
+      val viewModel = file.defaultViewModelForArtboard(artboard)
+
+      fun bindInstance(instance: ViewModelInstance) {
+        riveAnimationView?.controller?.stateMachines?.first()?.viewModelInstance = instance
+        riveAnimationView?.controller?.activeArtboard?.viewModelInstance = instance
+      }
+
+      when (val config = dataBindingConfig) {
+        is DataBindingConfig.AutoBind -> {
+          // Auto binding is done within the view creation
+          // The whole view needs to be reloaded
+          shouldBeReloaded = true
+        }
+        
+        is DataBindingConfig.Index -> {
+          bindInstance(viewModel.createInstanceFromIndex(config.index))
+        }
+
+        is DataBindingConfig.Name -> {
+          bindInstance(viewModel.createInstanceFromName(config.name))
+        }
+
+        is DataBindingConfig.Empty -> {
+          bindInstance(viewModel.createBlankInstance())
+        }
+
+        null -> {}
+      }
+
+      // Re-add the listeners, as calling registerPropertyListener from JS may have been done
+      // at a different time than this configuration, and we need to add the listeners to the
+      // current bound instance
+      propertyListeners.toList().forEach { (_, listener) ->
+        registerPropertyListener(listener.path, listener.propertyType)
+      }
+    } catch (ex: RiveException) {
+      handleRiveException(ex)
+    } catch (ex: Exception) {
+      showRNRiveError("Unexpected error during data binding configuration", ex)
+    }
+  }
+
+  // If the user set autoBind to true
+  private val shouldAutoBind: Boolean
+    get() {
+      val dbConfig = dataBindingConfig
+      return dbConfig is DataBindingConfig.AutoBind && dbConfig.autoBind
+    }
+
   private fun clearPropertyListeners() {
-    propertyListeners.values.forEach { it.cancel() }
+    propertyListeners.values.forEach { it.job.cancel() }
     propertyListeners.clear()
   }
 
@@ -488,7 +559,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun setFit(rnFit: RNFit) {
     val riveFit = RNFit.mapToRiveFit(rnFit)
-    if (this.fit == riveFit) return;
+    if (this.fit == riveFit) return
     this.fit = riveFit
     riveAnimationView?.fit = riveFit
   }
@@ -505,7 +576,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun setAutoplay(autoplay: Boolean) {
-    if (this.autoplay == autoplay) return;
+    if (this.autoplay == autoplay) return
     this.autoplay = autoplay
     shouldBeReloaded = true
   }
@@ -523,7 +594,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     // Handle dev mode (URL instead of asset id)
     if (scheme != null) {
       handleSourceUrl(source, asset)
-      return;
+      return
     }
 
     // Handle release mode (asset id)
@@ -586,14 +657,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun reloadIfNeeded() {
     if (shouldBeReloaded) {
-      assetStore?.dispose();
+      assetStore?.dispose()
       assetStore = referencedAssets?.let {
         RiveReactNativeAssetStore(
           it, loadAssetHandler = ::loadAsset
         )
       }
       if (assetStore != null) {
-        riveAnimationView?.setAssetLoader(assetStore);
+        riveAnimationView?.setAssetLoader(assetStore)
       }
 
       url?.let {
@@ -610,11 +681,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               fit = this.fit,
               alignment = this.alignment,
               autoplay = this.autoplay,
-              autoBind = true, // always autoBind in react native
+              autoBind = shouldAutoBind,
               stateMachineName = this.stateMachineName,
               animationName = this.animationName,
               artboardName = this.artboardName
             )
+            configureDataBinding()
+            sendRiveLoadedEvent()
             url = null
           } catch (ex: RiveException) {
             handleRiveException(ex)
@@ -637,11 +710,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           fit = this.fit,
           alignment = this.alignment,
           autoplay = autoplay,
-          autoBind = true, // always autoBind in react native
+          autoBind = shouldAutoBind,
           stateMachineName = this.stateMachineName,
           animationName = this.animationName,
           artboardName = this.artboardName
         )
+        configureDataBinding()
+        sendRiveLoadedEvent()
       } catch (ex: RiveException) {
         handleRiveException(ex)
       }
@@ -674,7 +749,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       return
     }
 
-    val previousKeys = previousReferencedAssets.keysList();
+    val previousKeys = previousReferencedAssets.keysList()
     val newKeys = referencedAssets.keysList()
 
     if (previousKeys.toSet() != newKeys.toSet()) {
@@ -691,6 +766,42 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         if (source != null && asset != null) {
           loadAsset(source, asset)
         }
+      }
+    }
+  }
+
+  fun setDataBinding(dataBinding: ReadableMap?) {
+    dataBinding?.let {
+      val type = it.getString("type") ?: return
+      val value = it.getDynamic("value")
+      val newConfig = when (type) {
+        "autobind" -> {
+          if (value.type == ReadableType.Boolean) {
+            val booleanValue = value.asBoolean()
+            DataBindingConfig.AutoBind(booleanValue)
+          } else null
+        }
+
+        "index" -> {
+          if (value.type == ReadableType.Number) { // React Native numbers are treated as Double
+            val numberValue = value.asInt()
+            DataBindingConfig.Index(numberValue)
+          } else null
+        }
+
+        "name" -> {
+          if (value.type == ReadableType.String) {
+            val stringValue = value.asString()
+            DataBindingConfig.Name(stringValue)
+          } else null
+        }
+
+        "empty" -> DataBindingConfig.Empty
+        else -> null
+      }
+      if (newConfig != dataBindingConfig) {
+        dataBindingConfig = newConfig
+        configureDataBinding()
       }
     }
   }
@@ -732,7 +843,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
-      null;
+      null
     }
   }
 
@@ -755,7 +866,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
-      null;
+      null
     }
   }
 
@@ -786,7 +897,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
-      null;
+      null
     }
   }
 
@@ -809,7 +920,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
-      null;
+      null
     }
   }
 
@@ -942,7 +1053,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
     return 0
   }
-
 
   private fun sendErrorToRN(error: RNRiveError) {
     val reactContext = context as ReactContext
@@ -1080,3 +1190,16 @@ class RNRiveFileRequest(
     }
   }
 }
+
+sealed class DataBindingConfig {
+  data class AutoBind(val autoBind: Boolean) : DataBindingConfig()
+  data class Index(val index: Int) : DataBindingConfig()
+  data class Name(val name: String) : DataBindingConfig()
+  data object Empty : DataBindingConfig()
+}
+
+data class PropertyListener(
+  val path: String,
+  val propertyType: String,
+  val job: Job
+)

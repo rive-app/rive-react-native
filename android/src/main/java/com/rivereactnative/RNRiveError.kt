@@ -11,7 +11,8 @@ enum class RNRiveError(private val mValue: String) {
   IncorrectArtboardName("IncorrectArtboardName"),
   IncorrectStateMachineName("IncorrectStateMachineName"),
   IncorrectStateMachineInput("IncorrectStateMachineInput"),
-  TextRunNotFoundError("TextRunNotFoundError");
+  TextRunNotFoundError("TextRunNotFoundError"),
+  DataBindingError("DataBindingError");
 
   var message: String = "Default message"
 
@@ -56,6 +57,11 @@ enum class RNRiveError(private val mValue: String) {
           val err = TextRunNotFoundError
           err.message = ex.message!!
           return err
+        }
+        is ViewModelException -> {
+          val err = DataBindingError
+          err.message = ex.message!!
+          return err;
         }
         else -> null
       }

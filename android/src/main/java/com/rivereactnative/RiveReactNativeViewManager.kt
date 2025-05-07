@@ -263,6 +263,11 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     view.setReferencedAssets(source)
   }
 
+  @ReactProp(name = "dataBinding")
+  fun setDataBinding(view: RiveReactNativeView, source: ReadableMap?) {
+    view.setDataBinding(source)
+  }
+
   @ReactProp(name = "stateMachineName")
   fun setStateMachineName(view: RiveReactNativeView, stateMachineName: String) {
     view.setStateMachineName(stateMachineName)
