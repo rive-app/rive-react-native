@@ -12,6 +12,8 @@ import Rive, {
   BindByName,
   BindEmpty,
   Fit,
+  RNRiveError,
+  RNRiveErrorType,
   useRive,
   useRiveColor,
   useRiveNumber,
@@ -61,12 +63,25 @@ export default function DataBinding() {
             // dataBinding={BindEmpty()}
             stateMachineName={'State Machine 1'}
             resourceName={'rewards'}
+            onError={(riveError: RNRiveError) => {
+              switch (riveError.type) {
+                case RNRiveErrorType.DataBindingError: {
+                  console.error(`${riveError.message}`);
+                  return;
+                }
+                default:
+                  console.error('Unhandled error');
+                  return;
+              }
+            }}
           />
         )}
         <View style={styles.buttonContainer}>
           <Button
             title="Update data"
             onPress={() => {
+              // Update the properties using the direct setters. If you don't
+              // want to use the hooks and observe the changes
               riveRef?.setString('Button/State_1', 'Hello!');
               riveRef?.setNumber('Energy_Bar/Lives', 3);
               riveRef?.setColor('Energy_Bar/Bar_Color', {

@@ -135,6 +135,7 @@ export enum RNRiveErrorType {
   IncorrectStateMachineName = 'IncorrectStateMachineName',
   IncorrectStateMachineInput = 'IncorrectStateMachineInput',
   TextRunNotFoundError = 'TextRunNotFoundError',
+  DataBindingError = 'DataBindingError',
 }
 
 export type RNRiveError = {
