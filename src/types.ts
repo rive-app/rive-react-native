@@ -206,3 +206,23 @@ export enum PropertyType {
   Trigger = 'trigger',
   Enum = 'enum',
 }
+
+export type DataBindBy =
+  | { type: 'autobind'; value: boolean }
+  | { type: 'index'; value: number }
+  | { type: 'name'; value: string }
+  | { type: 'empty' };
+
+export const AutoBind = (value: boolean): DataBindBy => ({
+  type: 'autobind',
+  value,
+});
+export const BindByIndex = (value: number): DataBindBy => ({
+  type: 'index',
+  value,
+});
+export const BindByName = (value: string): DataBindBy => ({
+  type: 'name',
+  value,
+});
+export const BindEmpty = (): DataBindBy => ({ type: 'empty' });

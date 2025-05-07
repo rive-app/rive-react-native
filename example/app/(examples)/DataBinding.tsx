@@ -7,6 +7,10 @@ import {
   View,
 } from 'react-native';
 import Rive, {
+  AutoBind,
+  BindByIndex,
+  BindByName,
+  BindEmpty,
   Fit,
   useRive,
   useRiveColor,
@@ -51,6 +55,10 @@ export default function DataBinding() {
             style={styles.animation}
             layoutScaleFactor={1}
             autoplay={true}
+            dataBinding={AutoBind(true)}
+            // dataBinding={BindByIndex(0)}
+            // dataBinding={BindByName('SomeName')}
+            // dataBinding={BindEmpty()}
             stateMachineName={'State Machine 1'}
             resourceName={'rewards'}
           />

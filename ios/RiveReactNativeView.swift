@@ -8,6 +8,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         return self.bridge?.module(for: RiveReactNativeEventModule.self) as? RiveReactNativeEventModule
     }
     private var propertyListeners: [(key: String, property: RiveDataBindingViewModel.Instance.Property, listener: UUID)] = []
+    private var dataBindingConfig: DataBindingConfig?
     
     // MARK: RiveReactNativeView Properties
     private var resourceFromBundle = true
@@ -75,6 +76,32 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
     }
     
+    @objc var dataBinding: [String: Any]? {
+        didSet {
+            guard let type = dataBinding?["type"] as? String else { return }
+            dataBindingConfig = {
+                switch type {
+                case "autobind":
+                    if let val = dataBinding?["value"] as? Bool {
+                        return .autoBind(val)
+                    }
+                case "index":
+                    if let val = dataBinding?["value"] as? NSNumber {
+                        return .index(val.intValue)
+                    }
+                case "name":
+                    if let val = dataBinding?["value"] as? String {
+                        return .name(val)
+                    }
+                case "empty":
+                    return .empty
+                default:
+                    break
+                }
+                return nil
+            }()
+        }
+    }
     
     @objc var animationName: String?
     
@@ -154,6 +181,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         if (changedProps.contains("layoutScaleFactor"))  {
             viewModel?.layoutScaleFactor = layoutScaleFactor.doubleValue
         }
+        
+        if (changedProps.contains("dataBinding")) {
+            viewModel.map { configureDataBinding(viewModel: $0) }
+        }
     }
     
     private func convertFit(_ fit: String? = nil) -> RiveFit {
@@ -178,6 +209,36 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             return rnPropertyType;
         }
         return nil;
+    }
+    
+    private func configureDataBinding(viewModel: RiveViewModel) {
+        guard let artboard = viewModel.riveModel?.artboard,
+            let dataBindingViewModel = viewModel.riveModel?.riveFile.defaultViewModel(for: artboard) else { return }
+        
+        func bindInstance(_ instance: RiveDataBindingViewModel.Instance?) {
+            guard let instance = instance else { return }
+            viewModel.riveModel?.stateMachine?.bind(viewModelInstance: instance)
+            self.dataBindingViewModelInstance = instance
+        }
+        
+        switch dataBindingConfig {
+        case .autoBind(let autoBind):
+            if autoBind {
+                viewModel.riveModel?.enableAutoBind { [weak self] instance in
+                    self?.dataBindingViewModelInstance = instance
+                }
+            } else {
+                viewModel.riveModel?.disableAutoBind()
+            }
+        case .index(let index):
+            bindInstance(dataBindingViewModel.createInstance(fromIndex: UInt(index)))
+        case .name(let name):
+            bindInstance(dataBindingViewModel.createInstance(fromName: name))
+        case .empty:
+            bindInstance(dataBindingViewModel.createInstance())
+        case nil:
+            break
+        }
     }
     
     private func createNewView(updatedViewModel : RiveViewModel){
@@ -206,7 +267,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     // Send the "RiveReactNativeLoaded" event
     private func sendRiveLoadedEvent() {
         guard let loadedTag = generateLoadedTag(),
-            eventEmitter?.isListenerActive(loadedTag) == true else { return }
+              eventEmitter?.isListenerActive(loadedTag) == true else { return }
         eventEmitter?.sendEvent(withName: loadedTag, body: nil)
     }
     
@@ -227,10 +288,6 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             }
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
-            // In React Native we always autobind to true, until we support a more robust data binding API
-            updatedViewModel.riveModel?.enableAutoBind({ [weak self] instance in
-                self?.dataBindingViewModelInstance = instance
-            })
             
             createNewView(updatedViewModel: updatedViewModel)
             requiresLocalResourceReconfigure = false
@@ -252,10 +309,6 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             }
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
-            // In React Native we always autobind to true, until we support a more robust data binding API
-            updatedViewModel.riveModel?.enableAutoBind({ [weak self] instance in
-                self?.dataBindingViewModelInstance = instance
-            })
             
             createNewView(updatedViewModel: updatedViewModel)
         }
@@ -786,4 +839,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             RCTLogError(error.localizedDescription)
         }
     }
+}
+
+enum DataBindingConfig {
+    case autoBind(Bool)
+    case index(Int)
+    case name(String)
+    case empty
 }

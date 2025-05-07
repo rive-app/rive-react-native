@@ -38,6 +38,8 @@ import {
   RiveAssetPropType,
   RiveRGBA,
   PropertyType,
+  DataBindBy,
+  AutoBind,
 } from './types';
 import { convertErrorFromNativeToRN, XOR } from './helpers';
 
@@ -378,6 +380,7 @@ type RiveProps = {
   alignment: Alignment;
   artboardName?: string;
   referencedAssets?: FilesHandledMapping;
+  dataBinding?: DataBindBy;
   animationName?: string;
   stateMachineName?: string;
   ref: any;
@@ -407,6 +410,7 @@ type Props = {
    * @experimental This is an experimental feature and may change without a major version update (breaking change).
    */
   referencedAssets?: FilesHandledMapping;
+  dataBinding?: DataBindBy;
   animationName?: string;
   stateMachineName?: string;
   autoplay?: boolean;
@@ -438,6 +442,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       layoutScaleFactor,
       artboardName,
       referencedAssets: referencedAssets,
+      dataBinding = AutoBind(false),
       animationName,
       source,
       stateMachineName,
@@ -996,6 +1001,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             alignment={alignment}
             artboardName={artboardName}
             referencedAssets={convertedAssetHandledSources}
+            dataBinding={dataBinding}
             animationName={animationName}
             stateMachineName={stateMachineName}
           />
