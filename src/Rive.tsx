@@ -69,9 +69,10 @@ export class RiveNativeEventEmitter {
   addListener<T>(
     path: string,
     propertyType: PropertyType,
+    reactTag: number | null,
     callback: (value: T) => void
   ) {
-    const reactTag = findNodeHandle(this.riveRef.current);
+    // const reactTag = findNodeHandle(this.riveRef.current);
     if (!reactTag) {
       console.warn(
         '[Rive] RiveRef viewTag is null. Cannot register property listener.'
@@ -117,9 +118,9 @@ export class RiveNativeEventEmitter {
   removeListener<T>(
     path: string,
     propertyType: PropertyType,
+    reactTag: number | null,
     callback: (value: T) => void
   ) {
-    const reactTag = findNodeHandle(this.riveRef.current);
     if (!reactTag) {
       console.warn(
         '[Rive] RiveRef viewTag is null. Cannot unregister property listener.'
@@ -139,21 +140,6 @@ export class RiveNativeEventEmitter {
         delete this.callbacks[key];
       }
     }
-  }
-
-  removeListeners() {
-    // Unregister all native listeners
-    Object.keys(this.nativeSubscriptions).forEach((key) => {
-      this.nativeSubscriptions[key]?.remove();
-      delete this.nativeSubscriptions[key];
-      delete this.callbacks[key];
-    });
-    // Unregister all callbacks
-    Object.keys(this.callbacks).forEach((key) => {
-      this.callbacks[key] = [];
-    });
-    this.nativeSubscriptions = {};
-    this.callbacks = {};
   }
 }
 
@@ -246,24 +232,31 @@ function useRivePropertyListener<T>(
   useEffect(() => {
     const listener = riveRef?.internalNativeEmitter?.();
     if (!listener) return () => {};
-
+    const reactTag = findNodeHandle(riveRef.viewTag());
     if (propertyType === PropertyType.Color) {
       listener.addListener<number>(
         path,
         propertyType,
+        reactTag,
         listenerCallbackWithColor
       );
       return () => {
         listener.removeListener<number>(
           path,
           propertyType,
+          reactTag,
           listenerCallbackWithColor
         );
       };
     } else {
-      listener.addListener<T>(path, propertyType, listenerCallback);
+      listener.addListener<T>(path, propertyType, reactTag, listenerCallback);
       return () => {
-        listener.removeListener<T>(path, propertyType, listenerCallback);
+        listener.removeListener<T>(
+          path,
+          propertyType,
+          reactTag,
+          listenerCallback
+        );
       };
     }
   }, [
