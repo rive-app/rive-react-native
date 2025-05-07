@@ -44,5 +44,6 @@ RCT_EXTERN_METHOD(setNumberPropertyValue:(nonnull NSNumber *)node path:(nonnull 
 RCT_EXTERN_METHOD(setColorPropertyValue:(nonnull NSNumber *)node path:(nonnull NSString)path r:(nonnull NSNumber *)r g:(nonnull NSNumber *)g b:(nonnull NSNumber *)b a:(nonnull NSNumber *)a)
 RCT_EXTERN_METHOD(setEnumPropertyValue:(nonnull NSNumber *)node path:(nonnull NSString)path value:(nonnull NSString)value)
 RCT_EXTERN_METHOD(fireTriggerProperty:(nonnull NSNumber *)node path:(nonnull NSString)path)
+RCT_EXTERN_METHOD(registerPropertyListener:(nonnull NSNumber *)node path:(nonnull NSString)path propertyType:(nonnull NSString)propertyType)
 @end
 

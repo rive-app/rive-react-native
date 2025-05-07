@@ -2,6 +2,13 @@ import UIKit
 import RiveRuntime
 
 class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate {
+    // MARK: DataBinding Event Properties
+    weak var bridge: RCTBridge?
+    private var eventEmitter: RiveReactNativeEventModule? {
+        return self.bridge?.module(for: RiveReactNativeEventModule.self) as? RiveReactNativeEventModule
+    }
+    private var propertyListeners: [(key: String, property: RiveDataBindingViewModel.Instance.Property, listener: UUID)] = []
+    
     // MARK: RiveReactNativeView Properties
     private var resourceFromBundle = true
     private var requiresLocalResourceReconfigure = false
@@ -97,8 +104,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     private func cleanupResources() {
+        cleanupDataBinding()
         cleanupFileAssetCache()
-        dataBindingViewModelInstance = nil
         previousReferencedAssets = nil
         removeReactSubview(riveView)
         riveView?.playerDelegate = nil
@@ -106,6 +113,17 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         riveView = nil;
         viewModel?.deregisterView();
         viewModel = nil;
+    }
+    
+    private func cleanupDataBinding() {
+        if let loadedTag = generateLoadedTag() {
+            eventEmitter?.removeListener(byName: loadedTag)
+        }
+        propertyListeners.forEach {(key: String, property: RiveDataBindingViewModel.Instance.Property, listener: UUID) in
+            property.removeListener(listener)
+            eventEmitter?.removeListener(byName: key)
+        }
+        dataBindingViewModelInstance = nil
     }
     
     private func cleanupFileAssetCache() {
@@ -154,6 +172,14 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         return RiveAlignment.center
     }
     
+    private func safePropertyType(_ propertyType: String? = nil) -> RNPropertyType? {
+        if let safePropertyType = propertyType {
+            let rnPropertyType = RNPropertyType.mapToRNPropertyType(value: safePropertyType)
+            return rnPropertyType;
+        }
+        return nil;
+    }
+    
     private func createNewView(updatedViewModel : RiveViewModel){
         riveView?.playerDelegate = nil
         riveView?.stateMachineDelegate = nil
@@ -164,6 +190,24 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         addSubview(riveView!)
         riveView?.playerDelegate = self
         riveView?.stateMachineDelegate = self
+        
+        sendRiveLoadedEvent()
+    }
+    
+    // Helper function to generate the loaded evet tag that is sent to JS
+    // Part of the `useRive()` hook.
+    private func generateLoadedTag() -> String? {
+        guard let reactTag = self.reactTag else {
+            return nil;
+        }
+        return "RiveReactNativeLoaded:\(reactTag)"
+    }
+    
+    // Send the "RiveReactNativeLoaded" event
+    private func sendRiveLoadedEvent() {
+        guard let loadedTag = generateLoadedTag(),
+            eventEmitter?.isListenerActive(loadedTag) == true else { return }
+        eventEmitter?.sendEvent(withName: loadedTag, body: nil)
     }
     
     private func configureViewModelFromResource() {
@@ -184,8 +228,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
             // In React Native we always autobind to true, until we support a more robust data binding API
-            updatedViewModel.riveModel?.enableAutoBind({instance in
-                self.dataBindingViewModelInstance = instance
+            updatedViewModel.riveModel?.enableAutoBind({ [weak self] instance in
+                self?.dataBindingViewModelInstance = instance
             })
             
             createNewView(updatedViewModel: updatedViewModel)
@@ -534,6 +578,84 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     func fireTriggerProperty(path: String) {
         dataBindingViewModelInstance?.triggerProperty(fromPath: path)?.trigger()
+    }
+    
+    private func storeProperty(key: String, property: RiveDataBindingViewModel.Instance.Property?, listener: UUID?) {
+        if let property = property, let listener = listener {
+            propertyListeners.append((key: key, property: property, listener: listener))
+        }
+    }
+    
+    func registerPropertyListener(path: String, propertyType: String) {
+        guard let reactTag = self.reactTag else { return }
+        let key = "\(propertyType):\(path):\(reactTag)"
+        let propertyTypeEnum = safePropertyType(propertyType)
+        switch propertyTypeEnum {
+        case .String:
+            let stringProperty = dataBindingViewModelInstance?.stringProperty(fromPath: path)
+            if let initialValue = stringProperty?.value {
+                eventEmitter?.sendEvent(withName: key, body: initialValue)
+            }
+            let listener = stringProperty?.addListener { [weak self] newValue in
+                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
+            }
+            storeProperty(key: key, property: stringProperty, listener: listener)
+        case .Boolean:
+            let booleanProperty = dataBindingViewModelInstance?.booleanProperty(fromPath: path)
+            if let initialValue = booleanProperty?.value {
+                eventEmitter?.sendEvent(withName: key, body: initialValue)
+            }
+            let listener = booleanProperty?.addListener { [weak self] newValue in
+                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
+            }
+            storeProperty(key: key, property: booleanProperty, listener: listener)
+        case .Number:
+            let numberProperty = dataBindingViewModelInstance?.numberProperty(fromPath: path)
+            if let initialValue = numberProperty?.value {
+                eventEmitter?.sendEvent(withName: key, body: initialValue)
+            }
+            let listener = numberProperty?.addListener { [weak self] newValue in
+                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
+            }
+            storeProperty(key: key, property: numberProperty, listener: listener)
+        case .Color:
+            let colorProperty = dataBindingViewModelInstance?.colorProperty(fromPath: path)
+            if let initialValue = colorProperty?.value {
+                eventEmitter?.sendEvent(withName: key, body: colorToHexInt(initialValue))
+            }
+            let listener = colorProperty?.addListener { [weak self] newValue in
+                self?.eventEmitter?.sendEvent(withName: key, body: self?.colorToHexInt(newValue))
+            }
+            storeProperty(key: key, property: colorProperty, listener: listener)
+        case .Enum:
+            let enumProperty = dataBindingViewModelInstance?.enumProperty(fromPath: path)
+            if let initialValue = enumProperty?.value {
+                eventEmitter?.sendEvent(withName: key, body: initialValue)
+            }
+            let listener = enumProperty?.addListener { [weak self] newValue in
+                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
+            }
+            storeProperty(key: key, property: enumProperty, listener: listener)
+        case .Trigger: break
+        case .none: break
+        }
+    }
+    
+    func colorToHexInt(_ color: UIColor) -> Int {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        let r = UInt32(red * 255)
+        let g = UInt32(green * 255)
+        let b = UInt32(blue * 255)
+        let a = UInt32(alpha * 255)
+        
+        let hex = (a << 24) | (r << 16) | (g << 8) | b
+        return Int(hex)
     }
     
     // MARK: - StateMachineDelegate

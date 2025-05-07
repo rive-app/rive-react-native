@@ -5,8 +5,10 @@ import RiveRuntime
 class RiveReactNativeViewManager: RCTViewManager {
     
     override func view() -> UIView! {
-        return RiveReactNativeView()
-    }
+            let view = RiveReactNativeView()
+            view.bridge = self.bridge
+            return view
+        }
     
     @objc func play(_ node: NSNumber, animationName: String, loop: String, direction: String, isStateMachine: Bool) {
         DispatchQueue.main.async {
@@ -148,6 +150,16 @@ class RiveReactNativeViewManager: RCTViewManager {
         DispatchQueue.main.async {
             let component = self.bridge.uiManager.view(forReactTag: node) as! RiveReactNativeView
             component.fireTriggerProperty(path: path)
+        }
+    }
+    
+    @objc func registerPropertyListener(_ node: NSNumber, path: String, propertyType: String) {
+        DispatchQueue.main.async {
+            guard let component = self.bridge.uiManager.view(forReactTag: node) as? RiveReactNativeView? else {
+              RCTLogError("Could not cast view to RiveReactNativeView")
+              return
+            }
+            component?.registerPropertyListener(path: path, propertyType: propertyType)
         }
     }
     

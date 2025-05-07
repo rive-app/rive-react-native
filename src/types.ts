@@ -1,4 +1,4 @@
-import { RivePropertyValueEmitter } from './Rive';
+import { RiveNativeEventEmitter } from './Rive';
 
 export type RiveRGBA = { r: number; g: number; b: number; a: number };
 
@@ -48,7 +48,8 @@ export type RiveRef = {
   setColor: (path: string, color: RiveRGBA | string) => void;
   setEnum: (path: string, value: string) => void;
   trigger: (path: string) => void;
-  internalPropertyListener: () => RivePropertyValueEmitter;
+  internalNativeEmitter: () => RiveNativeEventEmitter;
+  viewTag: () => number | null;
 };
 
 export enum ViewManagerMethod {
