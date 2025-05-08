@@ -4,7 +4,7 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState
+  useState,
 } from 'react';
 // This import path isn't handled by @types/react-native
 // @ts-ignore
