@@ -25,6 +25,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "play" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val animationName = it.getString(0)!!
           val loopMode = it.getString(1)!!
           val direction = it.getString(2)!!
@@ -46,6 +47,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "fireState" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
           view.fireState(stateMachineName, inputName)
@@ -54,6 +56,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setBooleanState" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
           val value = it.getBoolean(2)!!
@@ -63,6 +66,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setNumberState" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val stateMachineName = it.getString(0)!!
           val inputName = it.getString(1)!!
           val value = it.getDouble(2)!!
@@ -72,6 +76,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "fireStateAtPath" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val inputName = it.getString(0)!!
           val path = it.getString(1)!!
           view.fireStateAtPath(inputName, path)
@@ -80,6 +85,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setBooleanStateAtPath" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val inputName = it.getString(0)!!
           val value = it.getBoolean(1)!!
           val path = it.getString(2)!!
@@ -89,6 +95,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setNumberStateAtPath" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val inputName = it.getString(0)!!
           val value = it.getDouble(1)!!
           val path = it.getString(2)!!
@@ -99,58 +106,65 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
       // Data Binding
       "setBooleanPropertyValue" -> {
         args?.let {
-          val path = it.getString(0)
-          val value = it.getBoolean(1)
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
+          val path = it.getString(0)!!
+          val value = it.getBoolean(1)!!
           view.setBooleanPropertyValue(path, value)
         }
       }
 
       "setStringPropertyValue" -> {
         args?.let {
-          val path = it.getString(0)
-          val value = it.getString(1)
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
+          val path = it.getString(0)!!
+          val value = it.getString(1)!!
           view.setStringPropertyValue(path, value)
         }
       }
 
       "setNumberPropertyValue" -> {
         args?.let {
-          val path = it.getString(0)
-          val value = it.getDouble(1)
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
+          val path = it.getString(0)!!
+          val value = it.getDouble(1)!!
           view.setNumberPropertyValue(path, value.toFloat())
         }
       }
 
       "setColorPropertyValue" -> {
         args?.let {
-          val path = it.getString(0)
-          val r = it.getDouble(1)
-          val g = it.getDouble(2)
-          val b = it.getDouble(3)
-          val a = it.getDouble(4)
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
+          val path = it.getString(0)!!
+          val r = it.getDouble(1)!!
+          val g = it.getDouble(2)!!
+          val b = it.getDouble(3)!!
+          val a = it.getDouble(4)!!
           view.setColorPropertyValue(path, r.toInt(), g.toInt(), b.toInt(), a.toInt())
         }
       }
 
       "setEnumPropertyValue" -> {
         args?.let {
-          val path = it.getString(0)
-          val value = it.getString(1)
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
+          val path = it.getString(0)!!
+          val value = it.getString(1)!!
           view.setEnumPropertyValue(path, value)
         }
       }
 
       "fireTriggerProperty" -> {
         args?.let {
-          val path = it.getString(0)
-          view.fireTriggerProperty(path)
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
+          val path = it.getString(0)!!
+          view.fireTriggerProperty(path)!!
         }
       }
 
       "registerPropertyListener" -> {
         args?.let {
-          val path = it.getString(0)
-          val propertyType = it.getString(1)
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
+          val path = it.getString(0)!!
+          val propertyType = it.getString(1)!!
           view.registerPropertyListener(path, propertyType)
         }
       }
@@ -159,6 +173,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "touchBegan" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val x: Double = it.getDouble(0)!!
           val y: Double = it.getDouble(1)!!
           view.touchBegan(x.toFloat(), y.toFloat())
@@ -167,6 +182,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "touchEnded" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val x: Double = it.getDouble(0)!!
           val y: Double = it.getDouble(1)!!
           view.touchEnded(x.toFloat(), y.toFloat())
@@ -177,6 +193,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setTextRunValue" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val textRunName: String = it.getString(0)!!
           val textValue: String = it.getString(1)!!
           view.setTextRunValue(textRunName, textValue)
@@ -185,6 +202,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
 
       "setTextRunValueAtPath" -> {
         args?.let {
+          // Don't remove the !! - some versions of Android/Kotlin/Android-Studio may return null
           val textRunName: String = it.getString(0)!!
           val textValue: String = it.getString(1)!!
           val path: String = it.getString(2)!!
