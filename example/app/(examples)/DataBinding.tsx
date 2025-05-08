@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import Rive, {
   AutoBind,
-  BindByIndex,
-  BindByName,
-  BindEmpty,
+  // BindByIndex,
+  // BindByName,
+  // BindEmpty,
   Fit,
   RNRiveError,
   RNRiveErrorType,
