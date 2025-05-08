@@ -32,25 +32,35 @@ export default function DataBinding() {
   let [lives, setLives] = useRiveNumber(riveRef, 'Energy_Bar/Lives');
   let [barColor, setBarColor] = useRiveColor(riveRef, 'Energy_Bar/Bar_Color');
   let [price, setPrice] = useRiveNumber(riveRef, 'Price_Value');
-  let [coinValue, setCoinValue] = useRiveNumber(riveRef, 'Coin/Item_Value');
-
-  // MODAL CONTROLS
-  const navigation = useNavigation();
-  const [isOpen, setIsOpen] = useState(false);
-  const [livesInput, setLivesInput] = useState('');
-  const [priceInput, setPriceInput] = useState('');
-  const [previewColor, setPreviewColor] = useState({ r: 0, g: 255, b: 0, a: 255 });
-  const [sliderValues, setSliderValues] = useState({ r: 0, g: 255, b: 0, a: 255 });
-  const [textInput, setTextInput] = useState('');
-  
-  // INITIAL VALUES SET
-  const initialValuesSet = useRef(false);
+  let [coinValue] = useRiveNumber(riveRef, 'Coin/Item_Value');
 
   useEffect(() => {
     if (coinValue !== undefined) {
       console.log('coinValue changed:', coinValue);
     }
   }, [coinValue]);
+
+  // MODAL CONTROLS
+  const navigation = useNavigation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [livesInput, setLivesInput] = useState('');
+  const [priceInput, setPriceInput] = useState('');
+  const [previewColor, setPreviewColor] = useState({
+    r: 0,
+    g: 255,
+    b: 0,
+    a: 255,
+  });
+  const [sliderValues, setSliderValues] = useState({
+    r: 0,
+    g: 255,
+    b: 0,
+    a: 255,
+  });
+  const [textInput, setTextInput] = useState('');
+
+  // INITIAL VALUES SET
+  const initialValuesSet = useRef(false);
 
   useEffect(() => {
     if (!initialValuesSet.current && buttonText && lives && barColor && price) {
@@ -65,6 +75,7 @@ export default function DataBinding() {
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => (
         <Button
           mode="text"
@@ -121,26 +132,32 @@ export default function DataBinding() {
     }
   };
 
-  const handleSliderChange = useCallback((component: 'r' | 'g' | 'b' | 'a', value: number) => {
-    const newColor = {
-      ...previewColor,
-      [component]: value,
-    };
-    setPreviewColor(newColor);
-    riveRef?.setColor('Energy_Bar/Bar_Color', newColor);
-  }, [previewColor, riveRef]);
+  const handleSliderChange = useCallback(
+    (component: 'r' | 'g' | 'b' | 'a', value: number) => {
+      const newColor = {
+        ...previewColor,
+        [component]: value,
+      };
+      setPreviewColor(newColor);
+      setBarColor(newColor);
+    },
+    [previewColor, setBarColor]
+  );
 
-  const handleSliderComplete = useCallback((component: 'r' | 'g' | 'b' | 'a', value: number) => {
-    const newColor = {
-      ...previewColor,
-      [component]: value,
-    };
-    setPreviewColor(newColor);
-    setSliderValues(prev => ({
-      ...prev,
-      [component]: value
-    }));
-  }, [previewColor]);
+  const handleSliderComplete = useCallback(
+    (component: 'r' | 'g' | 'b' | 'a', value: number) => {
+      const newColor = {
+        ...previewColor,
+        [component]: value,
+      };
+      setPreviewColor(newColor);
+      setSliderValues((prev) => ({
+        ...prev,
+        [component]: value,
+      }));
+    },
+    [previewColor]
+  );
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
@@ -223,11 +240,20 @@ export default function DataBinding() {
 
               <Text style={styles.label}>Bar Color</Text>
               <View style={styles.colorPickerContainer}>
-                <View style={[styles.colorPreview, { backgroundColor: `rgba(${previewColor.r}, ${previewColor.g}, ${previewColor.b}, ${previewColor.a / 255})` }]} />
+                <View
+                  style={[
+                    styles.colorPreview,
+                    {
+                      backgroundColor: `rgba(${previewColor.r}, ${previewColor.g}, ${previewColor.b}, ${previewColor.a / 255})`,
+                    },
+                  ]}
+                />
                 <Text style={styles.colorValue}>
-                  RGBA: {Math.round(previewColor.r)}, {Math.round(previewColor.g)}, {Math.round(previewColor.b)}, {Math.round(previewColor.a / 255 * 100)}%
+                  RGBA: {Math.round(previewColor.r)},{' '}
+                  {Math.round(previewColor.g)}, {Math.round(previewColor.b)},{' '}
+                  {Math.round((previewColor.a / 255) * 100)}%
                 </Text>
-                
+
                 <View style={styles.sliderContainer}>
                   <Text style={styles.sliderLabel}>Red</Text>
                   <Slider
@@ -236,7 +262,9 @@ export default function DataBinding() {
                     maximumValue={255}
                     value={sliderValues.r}
                     onValueChange={(value) => handleSliderChange('r', value)}
-                    onSlidingComplete={(value) => handleSliderComplete('r', value)}
+                    onSlidingComplete={(value) =>
+                      handleSliderComplete('r', value)
+                    }
                     minimumTrackTintColor="#FF0000"
                     maximumTrackTintColor="#FF0000"
                   />
@@ -250,7 +278,9 @@ export default function DataBinding() {
                     maximumValue={255}
                     value={sliderValues.g}
                     onValueChange={(value) => handleSliderChange('g', value)}
-                    onSlidingComplete={(value) => handleSliderComplete('g', value)}
+                    onSlidingComplete={(value) =>
+                      handleSliderComplete('g', value)
+                    }
                     minimumTrackTintColor="#00FF00"
                     maximumTrackTintColor="#00FF00"
                   />
@@ -264,7 +294,9 @@ export default function DataBinding() {
                     maximumValue={255}
                     value={sliderValues.b}
                     onValueChange={(value) => handleSliderChange('b', value)}
-                    onSlidingComplete={(value) => handleSliderComplete('b', value)}
+                    onSlidingComplete={(value) =>
+                      handleSliderComplete('b', value)
+                    }
                     minimumTrackTintColor="#0000FF"
                     maximumTrackTintColor="#0000FF"
                   />
@@ -278,7 +310,9 @@ export default function DataBinding() {
                     maximumValue={255}
                     value={sliderValues.a}
                     onValueChange={(value) => handleSliderChange('a', value)}
-                    onSlidingComplete={(value) => handleSliderComplete('a', value)}
+                    onSlidingComplete={(value) =>
+                      handleSliderComplete('a', value)
+                    }
                     minimumTrackTintColor="#808080"
                     maximumTrackTintColor="#808080"
                   />
