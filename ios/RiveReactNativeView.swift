@@ -697,7 +697,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     initialValue: prop.value,
                     createListener: { [weak self] in
                         prop.addListener { newValue in
-                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                            self?.eventEmitter?.sendEvent(withName: key, body: newValue)
                         }
                     }
                 )
@@ -709,7 +709,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     initialValue: prop.value,
                     createListener: { [weak self] in
                         prop.addListener { newValue in
-                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                            self?.eventEmitter?.sendEvent(withName: key, body: newValue)
                         }
                     }
                 )
@@ -721,7 +721,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     initialValue: prop.value,
                     createListener: { [weak self] in
                         prop.addListener { newValue in
-                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                            self?.eventEmitter?.sendEvent(withName: key, body: newValue)
                         }
                     }
                 )
@@ -733,7 +733,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     initialValue: prop.value.toHexInt(),
                     createListener: { [weak self] in
                         prop.addListener { newValue in
-                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value.toHexInt())
+                            self?.eventEmitter?.sendEvent(withName: key, body: newValue.toHexInt())
                         }
                     }
                 )
@@ -745,7 +745,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     initialValue: prop.value,
                     createListener: { [weak self] in
                         prop.addListener { newValue in
-                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                            self?.eventEmitter?.sendEvent(withName: key, body: newValue)
                         }
                     }
                 )
@@ -755,7 +755,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             }
         }()
         
-        guard let reg = registration else {
+        guard let registration else {
             var error = RNRiveError.DataBindingError;
             error.message = "\(propertyType) property not found at path: \(path)"
             onRNRiveError(error)
@@ -763,13 +763,13 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
         
         // Send initial value
-        eventEmitter?.sendEvent(withName: key, body: reg.initialValue)
+        eventEmitter?.sendEvent(withName: key, body: registration.initialValue)
         
         // Create and store listener
-        if let listener = reg.createListener() {
+        if let listener = registration.createListener() {
             let propertyListener = PropertyListener(
                 dataBindingInstance: dataBindingInstance,
-                property: reg.property,
+                property: registration.property,
                 listener: listener,
                 path: path,
                 propertyType: propertyType
