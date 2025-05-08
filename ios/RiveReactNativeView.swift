@@ -217,7 +217,26 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
               let dataBindingViewModel = viewModel.riveModel?.riveFile.defaultViewModel(for: artboard) else { return }
         
         func bindInstance(_ instance: RiveDataBindingViewModel.Instance?) {
-            guard let instance = instance else { return }
+            guard let instance = instance else {
+                var error = RNRiveError.DataBindingError
+                let configDescription: String = {
+                    switch dataBindingConfig {
+                    case .autoBind(let value):
+                        return "autoBind(\(value))"
+                    case .index(let value):
+                        return "index(\(value))"
+                    case .name(let value):
+                        return "name(\(value))"
+                    case .empty:
+                        return "empty"
+                    case .none:
+                        return "none"
+                    }
+                }()
+                error.message = "Failed to create data binding instance with config: \(configDescription)"
+                onRNRiveError(error)
+                return
+            }
             viewModel.riveModel?.stateMachine?.bind(viewModelInstance: instance)
             self.dataBindingViewModelInstance = instance
             
@@ -736,7 +755,12 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             }
         }()
         
-        guard let reg = registration else { return }
+        guard let reg = registration else {
+            var error = RNRiveError.DataBindingError;
+            error.message = "\(propertyType) property not found at path: \(path)"
+            onRNRiveError(error)
+            return
+        }
         
         // Send initial value
         eventEmitter?.sendEvent(withName: key, body: reg.initialValue)
