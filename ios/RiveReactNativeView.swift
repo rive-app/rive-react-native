@@ -7,7 +7,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     private var eventEmitter: RiveReactNativeEventModule? {
         return self.bridge?.module(for: RiveReactNativeEventModule.self) as? RiveReactNativeEventModule
     }
-    private var propertyListeners: [(key: String, property: RiveDataBindingViewModel.Instance.Property, listener: UUID)] = []
+    private var propertyListeners: [String: PropertyListener] = [:]
     private var dataBindingConfig: DataBindingConfig?
     
     // MARK: RiveReactNativeView Properties
@@ -146,10 +146,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         if let loadedTag = generateLoadedTag() {
             eventEmitter?.removeListener(byName: loadedTag)
         }
-        propertyListeners.forEach {(key: String, property: RiveDataBindingViewModel.Instance.Property, listener: UUID) in
-            property.removeListener(listener)
+        propertyListeners.forEach { (key, value) in
+            value.property.removeListener(value.listener)
             eventEmitter?.removeListener(byName: key)
         }
+        propertyListeners.removeAll()
         dataBindingViewModelInstance = nil
     }
     
@@ -213,12 +214,22 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     private func configureDataBinding(viewModel: RiveViewModel) {
         guard let artboard = viewModel.riveModel?.artboard,
-            let dataBindingViewModel = viewModel.riveModel?.riveFile.defaultViewModel(for: artboard) else { return }
+              let dataBindingViewModel = viewModel.riveModel?.riveFile.defaultViewModel(for: artboard) else { return }
         
         func bindInstance(_ instance: RiveDataBindingViewModel.Instance?) {
             guard let instance = instance else { return }
             viewModel.riveModel?.stateMachine?.bind(viewModelInstance: instance)
             self.dataBindingViewModelInstance = instance
+            
+            // As we can't control whether `configureDataBinding` is called
+            // before/after/between `registerPropertyListener` (if it is called again) we
+            // re-add the current registered listeners if the instance is not the same
+            // to ensure they are attached to the current active dataBindingViewModelInstance
+            propertyListeners.forEach { (_, value) in
+                if (value.dataBindingInstance != self.dataBindingViewModelInstance) {
+                    registerPropertyListener(path: value.path, propertyType: value.propertyType)
+                }
+            }
         }
         
         switch dataBindingConfig {
@@ -230,12 +241,16 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             } else {
                 viewModel.riveModel?.disableAutoBind()
             }
+            break
         case .index(let index):
             bindInstance(dataBindingViewModel.createInstance(fromIndex: UInt(index)))
+            break
         case .name(let name):
             bindInstance(dataBindingViewModel.createInstance(fromName: name))
+            break
         case .empty:
             bindInstance(dataBindingViewModel.createInstance())
+            break
         case nil:
             break
         }
@@ -633,82 +648,110 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         dataBindingViewModelInstance?.triggerProperty(fromPath: path)?.trigger()
     }
     
-    private func storeProperty(key: String, property: RiveDataBindingViewModel.Instance.Property?, listener: UUID?) {
-        if let property = property, let listener = listener {
-            propertyListeners.append((key: key, property: property, listener: listener))
+    private func storeProperty(key: String, propertyListener: PropertyListener) {
+        if let existingListener = propertyListeners[key]?.listener, let existingProperty = propertyListeners[key]?.property {
+            existingProperty.removeListener(existingListener)
         }
+        propertyListeners[key] = propertyListener
+    }
+    
+    private struct PropertyRegistration {
+        let property: RiveDataBindingViewModel.Instance.Property
+        let initialValue: Any
+        let createListener: () -> UUID?
     }
     
     func registerPropertyListener(path: String, propertyType: String) {
-        guard let reactTag = self.reactTag else { return }
+        guard let reactTag = self.reactTag,
+              let dataBindingInstance = dataBindingViewModelInstance,
+              let propertyTypeEnum = safePropertyType(propertyType) else { return }
+        
         let key = "\(propertyType):\(path):\(reactTag)"
-        let propertyTypeEnum = safePropertyType(propertyType)
-        switch propertyTypeEnum {
-        case .String:
-            let stringProperty = dataBindingViewModelInstance?.stringProperty(fromPath: path)
-            if let initialValue = stringProperty?.value {
-                eventEmitter?.sendEvent(withName: key, body: initialValue)
+        
+        // Get registration info based on property type
+        let registration: PropertyRegistration? = {
+            switch propertyTypeEnum {
+            case .String:
+                guard let prop = dataBindingInstance.stringProperty(fromPath: path) else { return nil }
+                return PropertyRegistration(
+                    property: prop,
+                    initialValue: prop.value,
+                    createListener: { [weak self] in
+                        prop.addListener { newValue in
+                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                        }
+                    }
+                )
+                
+            case .Boolean:
+                guard let prop = dataBindingInstance.booleanProperty(fromPath: path) else { return nil }
+                return PropertyRegistration(
+                    property: prop,
+                    initialValue: prop.value,
+                    createListener: { [weak self] in
+                        prop.addListener { newValue in
+                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                        }
+                    }
+                )
+                
+            case .Number:
+                guard let prop = dataBindingInstance.numberProperty(fromPath: path) else { return nil }
+                return PropertyRegistration(
+                    property: prop,
+                    initialValue: prop.value,
+                    createListener: { [weak self] in
+                        prop.addListener { newValue in
+                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                        }
+                    }
+                )
+                
+            case .Color:
+                guard let prop = dataBindingInstance.colorProperty(fromPath: path) else { return nil }
+                return PropertyRegistration(
+                    property: prop,
+                    initialValue: prop.value.toHexInt(),
+                    createListener: { [weak self] in
+                        prop.addListener { newValue in
+                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value.toHexInt())
+                        }
+                    }
+                )
+                
+            case .Enum:
+                guard let prop = dataBindingInstance.enumProperty(fromPath: path) else { return nil }
+                return PropertyRegistration(
+                    property: prop,
+                    initialValue: prop.value,
+                    createListener: { [weak self] in
+                        prop.addListener { newValue in
+                            self?.eventEmitter?.sendEvent(withName: key, body: prop.value)
+                        }
+                    }
+                )
+                
+            case .Trigger:
+                return nil
             }
-            let listener = stringProperty?.addListener { [weak self] newValue in
-                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
-            }
-            storeProperty(key: key, property: stringProperty, listener: listener)
-        case .Boolean:
-            let booleanProperty = dataBindingViewModelInstance?.booleanProperty(fromPath: path)
-            if let initialValue = booleanProperty?.value {
-                eventEmitter?.sendEvent(withName: key, body: initialValue)
-            }
-            let listener = booleanProperty?.addListener { [weak self] newValue in
-                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
-            }
-            storeProperty(key: key, property: booleanProperty, listener: listener)
-        case .Number:
-            let numberProperty = dataBindingViewModelInstance?.numberProperty(fromPath: path)
-            if let initialValue = numberProperty?.value {
-                eventEmitter?.sendEvent(withName: key, body: initialValue)
-            }
-            let listener = numberProperty?.addListener { [weak self] newValue in
-                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
-            }
-            storeProperty(key: key, property: numberProperty, listener: listener)
-        case .Color:
-            let colorProperty = dataBindingViewModelInstance?.colorProperty(fromPath: path)
-            if let initialValue = colorProperty?.value {
-                eventEmitter?.sendEvent(withName: key, body: colorToHexInt(initialValue))
-            }
-            let listener = colorProperty?.addListener { [weak self] newValue in
-                self?.eventEmitter?.sendEvent(withName: key, body: self?.colorToHexInt(newValue))
-            }
-            storeProperty(key: key, property: colorProperty, listener: listener)
-        case .Enum:
-            let enumProperty = dataBindingViewModelInstance?.enumProperty(fromPath: path)
-            if let initialValue = enumProperty?.value {
-                eventEmitter?.sendEvent(withName: key, body: initialValue)
-            }
-            let listener = enumProperty?.addListener { [weak self] newValue in
-                self?.eventEmitter?.sendEvent(withName: key, body: newValue)
-            }
-            storeProperty(key: key, property: enumProperty, listener: listener)
-        case .Trigger: break
-        case .none: break
+        }()
+        
+        guard let reg = registration else { return }
+        
+        // Send initial value
+        eventEmitter?.sendEvent(withName: key, body: reg.initialValue)
+        
+        // Create and store listener
+        if let listener = reg.createListener() {
+            let propertyListener = PropertyListener(
+                dataBindingInstance: dataBindingInstance,
+                property: reg.property,
+                listener: listener,
+                path: path,
+                propertyType: propertyType
+            )
+            storeProperty(key: key, propertyListener: propertyListener)
         }
-    }
-    
-    func colorToHexInt(_ color: UIColor) -> Int {
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        
-        let r = UInt32(red * 255)
-        let g = UInt32(green * 255)
-        let b = UInt32(blue * 255)
-        let a = UInt32(alpha * 255)
-        
-        let hex = (a << 24) | (r << 16) | (g << 8) | b
-        return Int(hex)
     }
     
     // MARK: - StateMachineDelegate
@@ -839,11 +882,37 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             RCTLogError(error.localizedDescription)
         }
     }
+    
+    private enum DataBindingConfig {
+        case autoBind(Bool)
+        case index(Int)
+        case name(String)
+        case empty
+    }
+    
+    private struct PropertyListener {
+        let dataBindingInstance: RiveDataBindingViewModel.Instance
+        let property: RiveDataBindingViewModel.Instance.Property
+        let listener: UUID
+        let path: String
+        let propertyType: String
+    }
 }
 
-enum DataBindingConfig {
-    case autoBind(Bool)
-    case index(Int)
-    case name(String)
-    case empty
+extension UIColor {
+    func toHexInt() -> Int {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        let r = UInt32(red * 255)
+        let g = UInt32(green * 255)
+        let b = UInt32(blue * 255)
+        let a = UInt32(alpha * 255)
+        
+        return Int((a << 24) | (r << 16) | (g << 8) | b)
+    }
 }
