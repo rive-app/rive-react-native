@@ -854,8 +854,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     @objc open func touchBegan(_ location: CGPoint) {
         handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
+            guard let riveView = viewModel?.riveView else { return }
+            guard let artboard = viewModel?.riveModel?.artboard else { return }
             if (riveView.stateMachineDelegate?.touchBegan != nil) {
                 riveView.stateMachineDelegate?.touchBegan?(onArtboard: artboard, atLocation: abLocation)
             }
@@ -864,33 +864,34 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     @objc open func touchMoved(_ location: CGPoint) {
         handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
+            guard let riveView = viewModel?.riveView else { return }
+            guard let artboard = viewModel?.riveModel?.artboard else { return }
             riveView.stateMachineDelegate?.touchMoved?(onArtboard: artboard, atLocation: abLocation)
         }
     }
     
     @objc open func touchEnded(_ location: CGPoint) {
         handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
+            guard let riveView = viewModel?.riveView else { return }
+            guard let artboard = viewModel?.riveModel?.artboard else { return }
             riveView.stateMachineDelegate?.touchEnded?(onArtboard: artboard, atLocation: abLocation)
         }
     }
     
     @objc open func touchCancelled(_ location: CGPoint) {
         handleTouch(location: location) { machine, abLocation in
-            guard let riveView = viewModel?.riveView else { fatalError("No RiveView") }
-            guard let artboard = viewModel?.riveModel?.artboard else { fatalError("Malformed RiveModel") }
+            guard let riveView = viewModel?.riveView else { return }
+            guard let artboard = viewModel?.riveModel?.artboard else { return }
             riveView.stateMachineDelegate?.touchCancelled?(onArtboard: artboard, atLocation: abLocation)
         }
     }
     
     private func handleTouch(location: CGPoint, action: (RiveStateMachineInstance, CGPoint)->Void) {
+        guard let bounds = viewModel?.riveModel?.artboard?.bounds() else { return }
         if let viewModel = viewModel, let riveView = viewModel.riveView {
             let artboardLocation = riveView.artboardLocation(
                 fromTouchLocation: location,
-                inArtboard: viewModel.riveModel?.artboard?.bounds() ?? CGRect.zero,
+                inArtboard: bounds,
                 fit: viewModel.fit,
                 alignment: viewModel.alignment
             )
