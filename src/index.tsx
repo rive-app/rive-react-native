@@ -7,6 +7,7 @@ import Rive, {
   useRiveBoolean,
   useRiveColor,
   useRiveEnum,
+  useRiveTrigger,
 } from './Rive';
 
 export {
@@ -17,6 +18,7 @@ export {
   useRiveBoolean,
   useRiveColor,
   useRiveEnum,
+  useRiveTrigger,
 };
 
 export default Rive;

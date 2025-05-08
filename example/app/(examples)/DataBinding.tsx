@@ -20,6 +20,7 @@ import Rive, {
   useRiveColor,
   useRiveNumber,
   useRiveString,
+  useRiveTrigger,
 } from 'rive-react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -33,6 +34,10 @@ export default function DataBinding() {
   let [barColor, setBarColor] = useRiveColor(riveRef, 'Energy_Bar/Bar_Color');
   let [price, setPrice] = useRiveNumber(riveRef, 'Price_Value');
   let [coinValue] = useRiveNumber(riveRef, 'Coin/Item_Value');
+
+  useRiveTrigger(riveRef, 'Button/Pressed', () => {
+    console.log('Button pressed');
+  });
 
   useEffect(() => {
     if (coinValue !== undefined) {

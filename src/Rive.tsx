@@ -211,6 +211,54 @@ export function useRiveColor(
   return useRivePropertyListener<RiveRGBA>(riveRef, path, PropertyType.Color);
 }
 
+export function useRiveTrigger(
+  riveRef: RiveRef | null,
+  path: string,
+  onTrigger?: () => void
+): (() => void) | undefined {
+  const triggerCallback = useCallback(() => {
+    onTrigger?.();
+  }, [onTrigger]);
+
+  useEffect(() => {
+    const listener = riveRef?.internalNativeEmitter?.();
+    if (!listener) return () => {};
+    const reactTag = findNodeHandle(riveRef.viewTag());
+    if (!reactTag) return () => {};
+
+    listener.addListener<void>(
+      path,
+      PropertyType.Trigger,
+      reactTag,
+      triggerCallback
+    );
+
+    return () => {
+      listener.removeListener<void>(
+        path,
+        PropertyType.Trigger,
+        reactTag,
+        triggerCallback
+      );
+    };
+  }, [riveRef, path, triggerCallback]);
+
+  // Function to fire the trigger
+  const trigger = useCallback(() => {
+    if (!riveRef) {
+      if (__DEV__) {
+        console.warn(
+          `[Rive] Tried to trigger "${path}" before riveRef was available.`
+        );
+      }
+      return;
+    }
+    riveRef.trigger(path);
+  }, [riveRef, path]);
+
+  return riveRef ? trigger : undefined;
+}
+
 function useRivePropertyListener<T>(
   riveRef: RiveRef | null,
   path: string,

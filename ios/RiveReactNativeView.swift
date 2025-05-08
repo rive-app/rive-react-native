@@ -676,7 +676,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     private struct PropertyRegistration {
         let property: RiveDataBindingViewModel.Instance.Property
-        let initialValue: Any
+        let initialValue: Any?
         let createListener: () -> UUID?
     }
     
@@ -751,7 +751,16 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                 )
                 
             case .Trigger:
-                return nil
+                guard let prop = dataBindingInstance.triggerProperty(fromPath: path) else { return nil }
+                return PropertyRegistration(
+                    property: prop,
+                    initialValue: nil,
+                    createListener: { [weak self] in
+                        prop.addListener {
+                            self?.eventEmitter?.sendEvent(withName: key, body: nil)
+                        }
+                    }
+                )
             }
         }()
         
@@ -763,7 +772,9 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
         
         // Send initial value
-        eventEmitter?.sendEvent(withName: key, body: registration.initialValue)
+        if let initialValue = registration.initialValue {
+            eventEmitter?.sendEvent(withName: key, body: initialValue)
+        }
         
         // Create and store listener
         if let listener = registration.createListener() {

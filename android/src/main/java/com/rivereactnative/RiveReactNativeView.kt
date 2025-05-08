@@ -36,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
@@ -453,10 +454,20 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         RNPropertyType.Color -> viewModelInstance.getColorProperty(path)
         RNPropertyType.Enum -> viewModelInstance.getEnumProperty(path)
         RNPropertyType.Trigger -> viewModelInstance.getTriggerProperty(path)
-      } ?: return
+      }
       val job = scope.launch {
-        property.valueFlow.collect { value ->
-          sendEvent(key, value)
+        when (propertyTypeEnum) {
+          RNPropertyType.Trigger -> {
+            // We drop the first value as a trigger has no initial value
+            property.valueFlow.drop(1).collect { _ ->
+              sendEvent(key, null)
+            }
+          }
+          else -> {
+            property.valueFlow.collect { value ->
+              sendEvent(key, value)
+            }
+          }
         }
       }
       propertyListeners[key] = PropertyListener(viewModelInstance, path, propertyType, job)
