@@ -15,11 +15,11 @@ enum RNPropertyType: String {
     case Trigger = "trigger"
     case Enum = "enum"
     
-    static func mapToRNPropertyType(value: String) -> RNPropertyType {
+    static func mapToRNPropertyType(value: String) -> RNPropertyType? {
         if let rnEnum = RNPropertyType(rawValue: value) {
             return rnEnum
         } else {
-            fatalError("Unsupported property type: \(value)")
+            return nil
         }
     }
 }
