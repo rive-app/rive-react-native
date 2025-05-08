@@ -445,20 +445,21 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     val propertyTypeEnum = RNPropertyType.mapToRNPropertyType(propertyType)
 
     try {
+      val viewModelInstance = getViewModelInstance() ?: return
       val property = when (propertyTypeEnum) {
-        RNPropertyType.String -> getViewModelInstance()?.getStringProperty(path)
-        RNPropertyType.Boolean -> getViewModelInstance()?.getBooleanProperty(path)
-        RNPropertyType.Number -> getViewModelInstance()?.getNumberProperty(path)
-        RNPropertyType.Color -> getViewModelInstance()?.getColorProperty(path)
-        RNPropertyType.Enum -> getViewModelInstance()?.getEnumProperty(path)
-        RNPropertyType.Trigger -> getViewModelInstance()?.getTriggerProperty(path)
+        RNPropertyType.String -> viewModelInstance.getStringProperty(path)
+        RNPropertyType.Boolean -> viewModelInstance.getBooleanProperty(path)
+        RNPropertyType.Number -> viewModelInstance.getNumberProperty(path)
+        RNPropertyType.Color -> viewModelInstance.getColorProperty(path)
+        RNPropertyType.Enum -> viewModelInstance.getEnumProperty(path)
+        RNPropertyType.Trigger -> viewModelInstance.getTriggerProperty(path)
       } ?: return
       val job = scope.launch {
         property.valueFlow.collect { value ->
           sendEvent(key, value)
         }
       }
-      propertyListeners[key] = PropertyListener(path, propertyType, job)
+      propertyListeners[key] = PropertyListener(viewModelInstance, path, propertyType, job)
     } catch (ex: RiveException) {
       handleRiveException(ex)
     } catch (ex: Exception) {
@@ -488,6 +489,15 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       fun bindInstance(instance: ViewModelInstance) {
         riveAnimationView?.controller?.stateMachines?.first()?.viewModelInstance = instance
         riveAnimationView?.controller?.activeArtboard?.viewModelInstance = instance
+
+        // Re-register the listener if the listener wasn't added on this view model instance.
+        // As calling registerPropertyListener from JS may have been done before/after/during
+        // this configuration.
+        propertyListeners.toList().forEach { (_, listener) ->
+          if (listener.instance != instance) {
+            registerPropertyListener(listener.path, listener.propertyType)
+          }
+        }
       }
 
       when (val config = dataBindingConfig) {
@@ -496,7 +506,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
           // The whole view needs to be reloaded
           shouldBeReloaded = true
         }
-        
+
         is DataBindingConfig.Index -> {
           bindInstance(viewModel.createInstanceFromIndex(config.index))
         }
@@ -510,13 +520,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         }
 
         null -> {}
-      }
-
-      // Re-add the listeners, as calling registerPropertyListener from JS may have been done
-      // at a different time than this configuration, and we need to add the listeners to the
-      // current bound instance
-      propertyListeners.toList().forEach { (_, listener) ->
-        registerPropertyListener(listener.path, listener.propertyType)
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
@@ -1199,6 +1202,7 @@ sealed class DataBindingConfig {
 }
 
 data class PropertyListener(
+  val instance: ViewModelInstance,
   val path: String,
   val propertyType: String,
   val job: Job
