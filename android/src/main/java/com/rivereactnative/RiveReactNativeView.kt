@@ -355,11 +355,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun touchBegan(x: Float, y: Float) {
-    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
+    // riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
   }
 
   fun touchEnded(x: Float, y: Float) {
-    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_UP, x, y)
+    // riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_UP, x, y)
   }
 
   fun setTextRunValue(textRunName: String, textValue: String) {

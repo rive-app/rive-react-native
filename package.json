@@ -1,5 +1,5 @@
 {
-  "name": "rive-react-native",
+  "name": "discify-bio-rive-react-native",
   "version": "9.3.0",
   "workspaces": [
     "example"
