@@ -6313,6 +6313,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"discify-bio-rive-react-native@workspace:., discify-bio-rive-react-native@workspace:^":
+  version: 0.0.0-use.local
+  resolution: "discify-bio-rive-react-native@workspace:."
+  dependencies:
+    "@commitlint/config-conventional": "npm:^19.5.0"
+    "@react-native/eslint-config": "npm:^0.73.1"
+    "@release-it/conventional-changelog": "npm:^9.0.2"
+    "@types/jest": "npm:^29.5.14"
+    "@types/react": "npm:~18.3.12"
+    "@types/react-native": "npm:0.72.2"
+    commitlint: "npm:^17.0.2"
+    eslint: "npm:^8.51.0"
+    eslint-config-prettier: "npm:^9.0.0"
+    eslint-plugin-prettier: "npm:^5.0.1"
+    husky: "npm:^4.2.5"
+    jest: "npm:^29.7.0"
+    metro-react-native-babel-preset: "npm:^0.73.10"
+    pod-install: "npm:^0.1.0"
+    prettier: "npm:^3.0.3"
+    react-native-builder-bob: "npm:^0.20.4"
+    release-it: "npm:^17.10.0"
+    typescript: "npm:^5.2.2"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  languageName: unknown
+  linkType: soft
+
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -7039,6 +7067,7 @@ __metadata:
     "@react-navigation/native": "npm:^7.0.14"
     "@types/jest": "npm:^29.5.12"
     "@types/react": "npm:~18.3.12"
+    discify-bio-rive-react-native: "workspace:^"
     expo: "npm:~52.0.35"
     expo-blur: "npm:~14.0.3"
     expo-constants: "npm:~17.0.6"
@@ -7061,7 +7090,6 @@ __metadata:
     react-native-safe-area-context: "npm:4.12.0"
     react-native-screens: "npm:~4.4.0"
     react-native-webview: "npm:13.12.5"
-    rive-react-native: "workspace:^"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -13261,34 +13289,6 @@ __metadata:
   checksum: 10c0/f1e646f8c567795f2916aef7aadf685b543da6b9a53e482bb04b07472c7eef2b476045ba1e29f401c301c66b630b22b815ab31fdd60c5e1ae6566ff523debf45
   languageName: node
   linkType: hard
-
-"rive-react-native@workspace:., rive-react-native@workspace:^":
-  version: 0.0.0-use.local
-  resolution: "rive-react-native@workspace:."
-  dependencies:
-    "@commitlint/config-conventional": "npm:^19.5.0"
-    "@react-native/eslint-config": "npm:^0.73.1"
-    "@release-it/conventional-changelog": "npm:^9.0.2"
-    "@types/jest": "npm:^29.5.14"
-    "@types/react": "npm:~18.3.12"
-    "@types/react-native": "npm:0.72.2"
-    commitlint: "npm:^17.0.2"
-    eslint: "npm:^8.51.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    eslint-plugin-prettier: "npm:^5.0.1"
-    husky: "npm:^4.2.5"
-    jest: "npm:^29.7.0"
-    metro-react-native-babel-preset: "npm:^0.73.10"
-    pod-install: "npm:^0.1.0"
-    prettier: "npm:^3.0.3"
-    react-native-builder-bob: "npm:^0.20.4"
-    release-it: "npm:^17.10.0"
-    typescript: "npm:^5.2.2"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  languageName: unknown
-  linkType: soft
 
 "run-applescript@npm:^7.0.0":
   version: 7.0.0

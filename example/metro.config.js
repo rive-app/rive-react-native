@@ -25,7 +25,7 @@ module.exports = config;
 // module.exports = {
 //   resolver: {
 //     extraNodeModules: {
-//       'rive-react-native': path.resolve(__dirname, '..'),
+//       'discify-bio-rive-react-native': path.resolve(__dirname, '..'),
 //     },
 //   },
 //   watchFolders: [path.resolve(__dirname, '..')],
