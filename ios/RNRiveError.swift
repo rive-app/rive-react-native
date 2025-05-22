@@ -1,3 +1,10 @@
+enum RiveErrorCode: Int {
+    case malformedFile = 100
+    case fileNotFound = 800
+    case assetFileError = 801
+    case incorrectRiveURL = 900
+}
+
 struct BaseRNRiveError {
     let type: String;
     var message: String = "Default Message"
@@ -15,10 +22,16 @@ struct RNRiveError {
     static let IncorrectStateMachineInput = BaseRNRiveError(type: "IncorrectStateMachineInput")
     static let TextRunNotFoundError = BaseRNRiveError(type: "TextRunNotFoundError")
     static let DataBindingError = BaseRNRiveError(type: "DataBindingError")
-    
-    
+
+
     static func mapToRNRiveError(riveError: NSError) -> BaseRNRiveError? {
-        let riveErrorName = riveError.userInfo["name"] as! String
+        guard let riveErrorName = riveError.userInfo["name"] as? String else {
+            // If we can't get the error name, return a generic error with the description
+            var genericError = BaseRNRiveError(type: "UnknownError")
+            genericError.message = riveError.localizedDescription
+            return genericError
+        }
+
         var resultError: BaseRNRiveError? = nil
         switch riveErrorName {
         case "UnsupportedVersion":
@@ -50,7 +63,7 @@ struct RNRiveError {
             break;
         case "DataBindingError":
             resultError = RNRiveError.DataBindingError
-            break;    
+            break;
         default:
             return nil
         }
@@ -61,7 +74,7 @@ struct RNRiveError {
 
 
 func createFileNotFoundError() -> NSError {
-    return NSError(domain: RiveErrorDomain, code: 800, userInfo: [NSLocalizedDescriptionKey: "File not found", "name": "FileNotFound"])
+    return NSError(domain: RiveErrorDomain, code: RiveErrorCode.fileNotFound.rawValue, userInfo: [NSLocalizedDescriptionKey: "File not found", "name": "FileNotFound"])
 }
 
 func createMalformedFileError() -> NSError {
@@ -69,9 +82,9 @@ func createMalformedFileError() -> NSError {
 }
 
 func createAssetFileError(_ assetName: String) -> NSError {
-    return NSError(domain: RiveErrorDomain, code: 801, userInfo: [NSLocalizedDescriptionKey: "Could not load Rive asset: \(assetName)", "name": "FileNotFound"])
+    return NSError(domain: RiveErrorDomain, code: RiveErrorCode.assetFileError.rawValue, userInfo: [NSLocalizedDescriptionKey: "Could not load Rive asset: \(assetName)", "name": "FileNotFound"])
 }
 
 func createIncorrectRiveURL(_ url: String) -> NSError {
-    return NSError(domain: RiveErrorDomain, code: 900, userInfo: [NSLocalizedDescriptionKey: "Unable to download Rive file from: \(url)", "name": "IncorrectRiveFileURL"])
+    return NSError(domain: RiveErrorDomain, code: RiveErrorCode.incorrectRiveURL.rawValue, userInfo: [NSLocalizedDescriptionKey: "Unable to download Rive file from: \(url)", "name": "IncorrectRiveFileURL"])
 }
