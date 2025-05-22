@@ -16,7 +16,8 @@ enum RNRiveRendererType: String {
         if let rnEnum = RNRiveRendererType(rawValue: value) {
             return rnEnum
         } else {
-            fatalError("Unsupported renderer type: \(value)")
+            RCTLogWarn("Unsupported renderer type: \(value), defaulting to Rive")
+            return .Rive
         }
     }
 

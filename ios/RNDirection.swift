@@ -2,15 +2,17 @@ enum RNDirection: String {
     case Backwards = "backwards"
     case Auto = "auto"
     case Forwards = "forwards"
-    
+
     static func mapToRNDirection(value: String) -> RNDirection {
         if let rnEnum = RNDirection(rawValue: value) {
             return rnEnum
         } else {
-            fatalError("Unsupported direction type: \(value)")
+            // Return a default value instead of crashing
+            RCTLogWarn("Unsupported direction type: \(value), defaulting to Auto")
+            return .Auto
         }
     }
-    
+
     static func mapToRiveDirection(rnDirection: RNDirection) -> RiveDirection {
         switch rnDirection {
         case .Backwards:

@@ -3,16 +3,18 @@ enum RNLoopMode: String {
     case Loop = "loop"
     case PingPong = "pingPong"
     case Auto = "auto"
-    
+
     static func mapToRNLoopMode(value: String) -> RNLoopMode {
         if let rnEnum = RNLoopMode(rawValue: value) {
             return rnEnum
         } else {
-            fatalError("Unsupported loop mode type: \(value)")
+            // Return a default value instead of crashing
+            RCTLogWarn("Unsupported loop mode type: \(value), defaulting to Auto")
+            return .Auto
         }
     }
-    
-    
+
+
     static func mapToRNLoopMode(value: Int) -> RNLoopMode {
         if let riveEnum = RiveRuntime.RiveLoop(rawValue: value) {
             switch (riveEnum) {
@@ -27,13 +29,15 @@ enum RNLoopMode: String {
             default:
                 return .Auto
             }
-            
-            
+
+
         } else {
-            fatalError("Unsupported loop mode type: \(value)")
+            // Return a default value instead of crashing
+            RCTLogWarn("Unsupported loop mode type: \(value), defaulting to Auto")
+            return .Auto
         }
     }
-    
+
     static func mapToRiveLoop(rnLoopMode: RNLoopMode) ->  RiveLoop {
         switch rnLoopMode {
         case .OneShot:
