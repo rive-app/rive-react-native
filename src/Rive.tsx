@@ -509,14 +509,20 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       }
 
       // handle http address and dev server
-      if (assetURI.match(/https?:\/\//)) {
+      if (assetURI.match(/^https?:\/\//)) {
         return { url: assetURI };
       }
 
       // handle iOS bundled asset
-      if (assetURI.match(/file:\/\//)) {
-        // strip resource name from file path
-        return { resourceName: assetURI.match(/file:\/\/(.*\/)+(.*)\.riv/)[2] };
+      if (assetURI.match(/^file:\/\//)) {
+        // strip resource name for assets embedded in the app at build time
+        const strippedName = assetURI.match(/.*\.app\/(.*)\.riv/)?.[1];
+        if (strippedName) {
+          return { resourceName: strippedName };
+        }
+
+        // fallback to url for downloaded assets (e.g. EAS Updates)
+        return { url: assetURI };
       }
 
       // handle Android bundled asset or resource name uri
