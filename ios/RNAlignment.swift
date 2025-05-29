@@ -11,15 +11,17 @@ enum RNAlignment: String {
     case BottomLeft = "bottomLeft"
     case BottomCenter = "bottomCenter"
     case BottomRight = "bottomRight"
-    
+
     static func mapToRNAlignment(value: String) -> RNAlignment {
         if let rnEnum = RNAlignment(rawValue: value) {
             return rnEnum
         } else {
-            fatalError("Unsupported alignment type: \(value)")
+            // Return a default value instead of crashing
+            RCTLogWarn("Unsupported alignment type: \(value), defaulting to Center")
+            return .Center
         }
     }
-    
+
     static func mapToRiveAlignment(rnAlignment: RNAlignment) ->  RiveAlignment {
         switch rnAlignment {
         case .TopLeft:

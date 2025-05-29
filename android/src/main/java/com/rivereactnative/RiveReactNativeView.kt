@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.net.Uri
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -82,6 +83,7 @@ class ReactNativeRiveAnimationView(private val context: ThemedReactContext) :
 
 @SuppressLint("ViewConstructor")
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
+  private val TAG = "RiveReactNativeView"
   private var riveAnimationView: ReactNativeRiveAnimationView? = null
   private var resourceName: String? = null
   private var resId: Int = -1
@@ -124,7 +126,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         if (animation is LinearAnimationInstance) {
           onLoopEnd(animation.name, RNLoopMode.mapToRNLoopMode(animation.loop))
         } else {
-          throw IllegalArgumentException("Only animation can be passed as an argument")
+          Log.e(TAG, "notifyLoop: Expected LinearAnimationInstance but got ${animation.javaClass.simpleName}")
         }
       }
 
@@ -322,15 +324,18 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun pause() {
     try {
-      if (riveAnimationView?.playingAnimations?.isNotEmpty() == true) {
-        riveAnimationView!!.pause(riveAnimationView!!.playingAnimations.first().name)
-      } else if (riveAnimationView?.playingStateMachines?.isNotEmpty() == true) {
-        riveAnimationView!!.pause(riveAnimationView!!.playingStateMachines.first().name, true)
+      val view = riveAnimationView ?: return
+      if (view.playingAnimations.isNotEmpty()) {
+        view.pause(view.playingAnimations.first().name)
+      } else if (view.playingStateMachines.isNotEmpty()) {
+        view.pause(view.playingStateMachines.first().name, true)
       } else {
-        riveAnimationView?.pause()
+        view.pause()
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
+    } catch (ex: Exception) {
+      Log.e(TAG, "Error in pause: ${ex.message}")
     }
   }
 
@@ -355,11 +360,19 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun touchBegan(x: Float, y: Float) {
-    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
+    try {
+      riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
+    } catch (ex: Exception) {
+      Log.e(TAG, "Error in touchBegan: ${ex.message}")
+    }
   }
 
   fun touchEnded(x: Float, y: Float) {
-    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_UP, x, y)
+    try {
+      riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_UP, x, y)
+    } catch (ex: Exception) {
+      Log.e(TAG, "Error in touchEnded: ${ex.message}")
+    }
   }
 
   fun setTextRunValue(textRunName: String, textValue: String) {
@@ -498,16 +511,23 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       val viewModel = file.defaultViewModelForArtboard(artboard)
 
       fun bindInstance(instance: ViewModelInstance) {
-        riveAnimationView?.controller?.stateMachines?.first()?.viewModelInstance = instance
-        riveAnimationView?.controller?.activeArtboard?.viewModelInstance = instance
-
-        // Re-register the listener if the listener wasn't added on this view model instance.
-        // As calling registerPropertyListener from JS may have been done before/after/during
-        // this configuration.
-        propertyListeners.toList().forEach { (_, listener) ->
-          if (listener.instance != instance) {
-            registerPropertyListener(listener.path, listener.propertyType)
+        try {
+          val stateMachines = riveAnimationView?.controller?.stateMachines
+          if (stateMachines != null && stateMachines.isNotEmpty()) {
+            stateMachines.first().viewModelInstance = instance
           }
+          riveAnimationView?.controller?.activeArtboard?.viewModelInstance = instance
+
+          // Re-register the listener if the listener wasn't added on this view model instance.
+          // As calling registerPropertyListener from JS may have been done before/after/during
+          // this configuration.
+          propertyListeners.toList().forEach { (_, listener) ->
+            if (listener.instance != instance) {
+              registerPropertyListener(listener.path, listener.propertyType)
+            }
+          }
+        } catch (ex: Exception) {
+          Log.e(TAG, "Error in bindInstance: ${ex.message}")
         }
       }
 
@@ -848,8 +868,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun getBooleanState(inputName: String): Boolean? {
     return try {
-      val smi = riveAnimationView?.controller?.stateMachines?.get(0)
-      val smiInput = smi?.input(inputName)
+      val stateMachines = riveAnimationView?.controller?.stateMachines
+      if (stateMachines == null || stateMachines.isEmpty()) {
+        Log.e(TAG, "getBooleanState: No state machines available")
+        return null
+      }
+      val smi = stateMachines[0]
+      val smiInput = smi.input(inputName)
       if (smiInput is SMIBoolean) {
         smiInput.value
       } else {
@@ -857,6 +882,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
+      null
+    } catch (ex: Exception) {
+      Log.e(TAG, "Error in getBooleanState: ${ex.message}")
       null
     }
   }
@@ -871,8 +899,13 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun getNumberState(inputName: String): Float? {
     return try {
-      val smi = riveAnimationView?.controller?.stateMachines?.get(0)
-      val smiInput = smi?.input(inputName)
+      val stateMachines = riveAnimationView?.controller?.stateMachines
+      if (stateMachines == null || stateMachines.isEmpty()) {
+        Log.e(TAG, "getNumberState: No state machines available")
+        return null
+      }
+      val smi = stateMachines[0]
+      val smiInput = smi.input(inputName)
       if (smiInput is SMINumber) {
         smiInput.value
       } else {
@@ -880,6 +913,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
+      null
+    } catch (ex: Exception) {
+      Log.e(TAG, "Error in getNumberState: ${ex.message}")
       null
     }
   }
@@ -902,8 +938,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun getBooleanStateAtPath(inputName: String, path: String): Boolean? {
     return try {
-      val artboard = riveAnimationView?.controller?.activeArtboard
-      val smiInput = artboard?.input(inputName, path)
+      val artboard = riveAnimationView?.controller?.activeArtboard ?: run {
+        Log.e(TAG, "getBooleanStateAtPath: No active artboard available")
+        return null
+      }
+      val smiInput = artboard.input(inputName, path)
       if (smiInput is SMIBoolean) {
         smiInput.value
       } else {
@@ -911,6 +950,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
+      null
+    } catch (ex: Exception) {
+      Log.e(TAG, "Error in getBooleanStateAtPath: ${ex.message}")
       null
     }
   }
@@ -925,8 +967,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun getNumberStateAtPath(inputName: String, path: String): Float? {
     return try {
-      val artboard = riveAnimationView?.controller?.activeArtboard
-      val smiInput = artboard?.input(inputName, path)
+      val artboard = riveAnimationView?.controller?.activeArtboard ?: run {
+        Log.e(TAG, "getNumberStateAtPath: No active artboard available")
+        return null
+      }
+      val smiInput = artboard.input(inputName, path)
       if (smiInput is SMINumber) {
         smiInput.value
       } else {
@@ -934,6 +979,9 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       }
     } catch (ex: RiveException) {
       handleRiveException(ex)
+      null
+    } catch (ex: Exception) {
+      Log.e(TAG, "Error in getNumberStateAtPath: ${ex.message}")
       null
     }
   }
@@ -950,12 +998,14 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   private fun handleFileNotFound() {
+    val errorMessage = "File resource not found. You must provide correct url or resourceName!"
     if (isUserHandlingErrors) {
       val rnRiveError = RNRiveError.FileNotFound
-      rnRiveError.message = "File resource not found. You must provide correct url or resourceName!"
+      rnRiveError.message = errorMessage
       sendErrorToRN(rnRiveError)
     } else {
-      throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
+      Log.e(TAG, errorMessage)
+      showRNRiveError(errorMessage, null)
     }
   }
 
