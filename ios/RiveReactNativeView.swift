@@ -13,6 +13,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     // MARK: RiveReactNativeView Properties
     private var resourceFromBundle = true
     private var requiresLocalResourceReconfigure = false
+    private var dataBindingConfigState: DataBindingConfigState = .none
     
     // MARK: React Callbacks
     @objc var onPlay: RCTDirectEventBlock?
@@ -184,7 +185,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
         
         if (changedProps.contains("dataBinding")) {
-            viewModel.map { configureDataBinding(viewModel: $0) }
+          if let viewModel = viewModel {
+            configureDataBinding(viewModel: viewModel, dataBindingConfig: dataBindingConfig)
+          } else {
+            dataBindingConfigState = .pending(dataBindingConfig)
+          }
         }
     }
     
@@ -212,7 +217,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         return nil;
     }
     
-    private func configureDataBinding(viewModel: RiveViewModel) {
+  private func configureDataBinding(viewModel: RiveViewModel, dataBindingConfig: DataBindingConfig?) {
+        dataBindingConfigState = .configured
         guard let artboard = viewModel.riveModel?.artboard,
               let dataBindingViewModel = viewModel.riveModel?.riveFile.defaultViewModel(for: artboard) else { return }
         
@@ -230,7 +236,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     case .empty:
                         return "empty"
                     case .none:
-                        return "none"
+                        return "none"    
                     }
                 }()
                 error.message = "Failed to create data binding instance with config: \(configDescription)"
@@ -271,6 +277,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             bindInstance(dataBindingViewModel.createInstance())
             break
         case nil:
+            self.dataBindingViewModelInstance = nil
             break
         }
     }
@@ -280,12 +287,16 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         riveView?.stateMachineDelegate = nil
         removeReactSubview(riveView)
         
+        // We weren't able to configure data binding before
+        if case .pending(let config) = dataBindingConfigState {
+          configureDataBinding(viewModel: updatedViewModel, dataBindingConfig: config)
+        }
         viewModel = updatedViewModel
-        riveView = viewModel!.createRiveView();
+        riveView = viewModel!.createRiveView()
         addSubview(riveView!)
         riveView?.playerDelegate = self
         riveView?.stateMachineDelegate = self
-        
+
         sendRiveLoadedEvent()
     }
     
@@ -329,23 +340,43 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     private func configureViewModelFromUrl() {
-        if let url = url {
-            resourceName = nil
-            resourceFromBundle = false
-            
-            let updatedViewModel : RiveViewModel
-            if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(webURL: url, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
-            } else if let animName = animationName {
-                updatedViewModel = RiveViewModel(webURL: url, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
-            } else {
-                updatedViewModel = RiveViewModel(webURL: url, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName)
-            }
-            
-            updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
-            
-            createNewView(updatedViewModel: updatedViewModel)
+      guard let url = url else {
+        handleRiveError(error: createIncorrectRiveURL(url ?? ""))
+        return
+      }
+      resourceName = nil
+      resourceFromBundle = false
+      downloadUrlAsset(url: url) { [weak self] data in
+        guard let self = self else { return }
+        guard !data.isEmpty else {
+          handleRiveError(error: createIncorrectRiveURL(url))
+          return
         }
+        do {
+          let riveFile = try RiveFile(data: data, loadCdn: true, customAssetLoader: customLoader)
+          let riveModel = RiveModel(riveFile: riveFile)
+          let fit = self.convertFit(self.fit)
+          let alignment = self.convertAlignment(self.alignment)
+          let autoPlay = self.autoplay
+          let artboardName = self.artboardName
+          let updatedViewModel: RiveViewModel
+          if let smName = self.stateMachineName {
+            updatedViewModel = RiveViewModel(riveModel, stateMachineName: smName, fit: fit, alignment: alignment, autoPlay: autoPlay, artboardName: artboardName)
+          } else if let animName = self.animationName {
+            updatedViewModel = RiveViewModel(riveModel, animationName: animName, fit: fit, alignment: alignment, autoPlay: autoPlay, artboardName: artboardName)
+          } else {
+            updatedViewModel = RiveViewModel(riveModel, fit: fit, alignment: alignment, autoPlay: autoPlay, artboardName: artboardName)
+          }
+          updatedViewModel.layoutScaleFactor = self.layoutScaleFactor.doubleValue
+          
+          DispatchQueue.main.async {
+              self.createNewView(updatedViewModel: updatedViewModel)
+          }
+        } catch {
+          self.handleRiveError(error: error as NSError)
+        }
+      }
+      
     }
     
     private func reloadView() {
@@ -924,6 +955,12 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         case index(Int)
         case name(String)
         case empty
+    }
+
+    private enum DataBindingConfigState {
+        case pending(DataBindingConfig?)
+        case configured
+        case none
     }
     
     private struct PropertyListener {
