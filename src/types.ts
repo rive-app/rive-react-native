@@ -172,6 +172,7 @@ export interface FileAssetSource {
   sourceUrl?: string;
   sourceAsset?: string;
   sourceAssetId?: string;
+  sourceResource?: string;
   path?: string;
 }
 
@@ -182,7 +183,8 @@ export interface FileHandlerOptions {
 export type RiveAssetPropType =
   | RiveAssetRequireSource
   | RiveAssetUriSource
-  | RiveAssetPackagedSource;
+  | RiveAssetPackagedSource
+  | RiveAssetResourceSource;
 
 export type RiveAssetRequireSource = number;
 
@@ -193,6 +195,10 @@ export interface RiveAssetUriSource {
 export interface RiveAssetPackagedSource {
   fileName: string;
   path?: string; // only needed for Android assets
+}
+
+export interface RiveAssetResourceSource {
+  resource: string;
 }
 
 export interface FilesHandledMapping {
