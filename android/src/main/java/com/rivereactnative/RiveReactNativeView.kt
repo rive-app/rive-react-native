@@ -657,15 +657,24 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
+  private fun handleResourceDrawable(resourceName: String, asset: FileAsset) {
+    val resourceId = context.resources.getIdentifier(resourceName, "drawable", context.packageName)
+    val inputStream = context.resources.openRawResource(resourceId)
+    val assetBytes = inputStream.use { it.readBytes() }
+    processAssetBytes(assetBytes, asset)
+  }
+
   private fun loadAsset(source: ReadableMap, asset: FileAsset) {
     val sourceAssetId = source.getString("sourceAssetId")
     val sourceUrl = source.getString("sourceUrl")
     val sourceAsset = source.getString("sourceAsset")
+    val sourceResource = source.getString("sourceResource")
 
     when {
       sourceAssetId != null -> handleSourceAssetId(sourceAssetId, asset)
       sourceUrl != null -> handleSourceUrl(sourceUrl, asset)
       sourceAsset != null -> handleSourceAsset(sourceAsset, source.getString("path"), asset)
+      sourceResource != null -> handleResourceDrawable(sourceResource, asset)
     }
   }
 

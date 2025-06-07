@@ -22,6 +22,11 @@ function parsePossibleSources(source: RiveAssetPropType): FileAssetSource {
     return { sourceUrl: uri };
   }
 
+  const resource = (source as any).resource;
+  if (typeof source === 'object' && resource) {
+    return { sourceResource: resource };
+  }
+
   const asset = (source as any).fileName;
   const path = (source as any).path;
 
