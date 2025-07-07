@@ -805,8 +805,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
         "name" -> {
           if (value.type == ReadableType.String) {
-            val stringValue = value.asString()
-            DataBindingConfig.Name(stringValue)
+            value.asString()?.let { DataBindingConfig.Name(it) }
           } else null
         }
 
