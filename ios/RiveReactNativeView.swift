@@ -352,6 +352,13 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
           handleRiveError(error: createIncorrectRiveURL(url))
           return
         }
+        
+        // Validate that we have valid Rive content before attempting to create RiveFile
+        if !isValidRiveContent(data) {
+          handleRiveError(error: createMalformedFileError())
+          return
+        }
+        
         do {
           let riveFile = try RiveFile(data: data, loadCdn: true, customAssetLoader: customLoader)
           let riveModel = RiveModel(riveFile: riveFile)
@@ -377,6 +384,38 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
       }
       
+    }
+    
+    /**
+     * Validates if the downloaded content is a valid Rive file by checking file signatures
+     */
+    private func isValidRiveContent(_ data: Data) -> Bool {
+        guard data.count >= 4 else { return false }
+        
+        // Check for Rive file signature (RIVE magic number)
+        let header = data.prefix(4)
+        
+        // Check for "RIVE" header (0x52495645)
+        if header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x56 && header[3] == 0x45 {
+            return true
+        }
+        
+        // Additional validation - check for common non-Rive content patterns
+        if let headerString = String(data: header, encoding: .utf8) {
+            // Check if it's HTML (error pages)
+            if headerString.hasPrefix("<!DO") || headerString.hasPrefix("<htm") {
+                return false
+            }
+            
+            // Check if it's JSON (API error responses)
+            if headerString.hasPrefix("{") || headerString.hasPrefix("[") {
+                return false
+            }
+        }
+        
+        // If we can't definitively identify it as non-Rive, let the Rive runtime validate it
+        // This allows for different Rive file formats/versions
+        return true
     }
     
     private func reloadView() {
@@ -522,18 +561,66 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             return
         }
         
-        let queue = URLSession.shared
-        guard let requestUrl = URL(string: url) else {
+        // Properly encode the URL to handle spaces and special characters
+        guard let encodedUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let requestUrl = URL(string: encodedUrlString) else {
             handleInvalidUrlError(url: url)
             return
         }
         
-        let request = URLRequest(url: requestUrl)
-        let task = queue.dataTask(with: request) {[weak self] data, response, error in
-            if error != nil {
-                self?.handleInvalidUrlError(url: url)
+        let session = URLSession.shared
+        var request = URLRequest(url: requestUrl)
+        request.timeoutInterval = 15.0 // 15 second timeout
+        
+        let task = session.dataTask(with: request) {[weak self] data, response, error in
+            guard let self = self else { return }
+            
+            if let error = error {
+                let errorMessage: String
+                if let urlError = error as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        errorMessage = "Timeout downloading from: \(url)"
+                    case .notConnectedToInternet:
+                        errorMessage = "No internet connection for: \(url)"
+                    case .cannotFindHost:
+                        errorMessage = "Cannot find host for: \(url)"
+                    case .fileDoesNotExist:
+                        errorMessage = "File not found at: \(url)"
+                    default:
+                        errorMessage = "Network error downloading from: \(url)"
+                    }
+                } else {
+                    errorMessage = "Unknown error downloading from: \(url)"
+                }
+                
+                let customError = createIncorrectRiveURL(errorMessage)
+                self.handleRiveError(error: customError)
             } else if let data = data {
-                listener(data)
+                // Check HTTP response status
+                if let httpResponse = response as? HTTPURLResponse {
+                    switch httpResponse.statusCode {
+                    case 200...299:
+                        listener(data)
+                    case 404:
+                        let error = createIncorrectRiveURL("File not found (404) at: \(url)")
+                        self.handleRiveError(error: error)
+                    case 403:
+                        let error = createIncorrectRiveURL("Access forbidden (403) for: \(url)")
+                        self.handleRiveError(error: error)
+                    case 500...599:
+                        let error = createIncorrectRiveURL("Server error (\(httpResponse.statusCode)) for: \(url)")
+                        self.handleRiveError(error: error)
+                    default:
+                        let error = createIncorrectRiveURL("HTTP error (\(httpResponse.statusCode)) for: \(url)")
+                        self.handleRiveError(error: error)
+                    }
+                } else {
+                    listener(data)
+                }
+            } else {
+                let error = createIncorrectRiveURL("No data received from: \(url)")
+                self.handleRiveError(error: error)
             }
         }
         
