@@ -545,7 +545,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     fontAsset.font(decodedFont)
                 }
             case let audioAsset as RiveAudioAsset:
-                let decodedAudio = factory.decodeAudio(data)
+                guard let decodedAudio = factory.decodeAudio(data) else { return }
                 DispatchQueue.main.async {
                     audioAsset.audio(decodedAudio)
                 }
