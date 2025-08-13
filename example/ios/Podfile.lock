@@ -1692,8 +1692,8 @@ PODS:
     - React-utils (= 0.76.7)
   - rive-react-native (9.3.4):
     - React-Core
-    - RiveRuntime (= 6.11.0)
-  - RiveRuntime (6.11.0)
+    - RiveRuntime (= 6.11.1)
+  - RiveRuntime (6.11.1)
   - RNCPicker (2.11.0):
     - DoubleConversion
     - glog
