@@ -14,7 +14,7 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     for (event in RiveReactNativeView.Events.values()) {
       builder.put(event.toString(), MapBuilder.of("registrationName", event.toString()))
     }
-    return builder.build()
+    return builder.build().toMutableMap()
   }
 
   override fun getName() = "RiveReactNativeView"
