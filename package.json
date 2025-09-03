@@ -1,6 +1,6 @@
 {
-  "name": "rive-react-native",
-  "version": "9.5.0",
+  "name": "@exodus/rive-react-native",
+  "version": "9.5.0-exodus.0",
   "workspaces": [
     "example"
   ],
