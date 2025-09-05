@@ -5,9 +5,12 @@ jobs:
   publish:
     name: Install and publish
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write # allows this workflow to commit to the repo
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -19,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 'lts/*'
 
       - name: Enable Corepack and Use Correct Yarn Version
         run: |
@@ -72,4 +75,4 @@ jobs:
           chmod +x ./scripts/add_build_number.sh
           yarn release --increment=$(cat version.txt)
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
