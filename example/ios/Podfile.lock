@@ -1692,8 +1692,8 @@ PODS:
     - React-utils (= 0.76.7)
   - rive-react-native (9.5.0):
     - React-Core
-    - RiveRuntime (= 6.11.1)
-  - RiveRuntime (6.11.1)
+    - RiveRuntime (= 6.11.4)
+  - RiveRuntime (6.11.4)
   - RNCPicker (2.11.0):
     - DoubleConversion
     - glog
@@ -2222,8 +2222,8 @@ SPEC CHECKSUMS:
   React-utils: 0342746d2cf989cf5e0d1b84c98cfa152edbdf3f
   ReactCodegen: e1c019dc68733dd2c5d3b263b4a6dc72002c0045
   ReactCommon: 81e0744ee33adfd6d586141b927024f488bc49ea
-  rive-react-native: 9e05a263d7d5325c710128d234dc48820b3b4323
-  RiveRuntime: 3a34dd73b2d486558f3077af408b3b2734653f3f
+  rive-react-native: ea22bf6c9dd9dfa715f40df38ac2b517b2a074a4
+  RiveRuntime: 5b8f8a9adacbe7fd0654713f7b2335146c757606
   RNCPicker: c657bd58a82b164a957812f82a0b4bab4245de2e
   RNGestureHandler: 16ef3dc2d7ecb09f240f25df5255953c4098819b
   RNReanimated: a2692304a6568bc656c04c8ffea812887d37436e
