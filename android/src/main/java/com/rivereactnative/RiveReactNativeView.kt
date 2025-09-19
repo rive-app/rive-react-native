@@ -14,13 +14,6 @@ import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.core.*
 import app.rive.runtime.kotlin.core.errors.*
 import app.rive.runtime.kotlin.renderers.PointerEvents
-import com.android.volley.NetworkResponse
-import com.android.volley.ParseError
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.HttpHeaderParser
-import com.android.volley.toolbox.Volley
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
@@ -40,9 +33,6 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
-import java.io.UnsupportedEncodingException
-import java.net.MalformedURLException
-import java.net.URL
 
 
 class ReactNativeRiveViewLifecycleObserver(dependencies: MutableList<RefCount>) :
@@ -85,7 +75,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private var riveAnimationView: ReactNativeRiveAnimationView? = null
   private var resourceName: String? = null
   private var resId: Int = -1
-  private var url: String? = null
   private var animationName: String? = null
   private var stateMachineName: String? = null
   private var artboardName: String? = null
@@ -289,11 +278,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       putMap("properties", convertHashMapToWritableMap(event.properties))
     }
 
-    if (event is RiveOpenURLEvent) {
-      eventProperties.putString("url", event.url)
-      eventProperties.putString("target", event.target)
-    }
-
     topLevelDict.putMap(
       "riveEvent", eventProperties
     )
@@ -343,14 +327,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun reset() {
-    url?.let {
-      if (resId == -1) {
-        riveAnimationView?.artboardRenderer?.reset()
-      }
-    } ?: run {
-      if (resId != -1) {
-        riveAnimationView?.reset()
-      }
+    if (resId != -1) {
+      riveAnimationView?.reset()
+    } else {
+      riveAnimationView?.artboardRenderer?.reset()
     }
   }
 
@@ -595,22 +575,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     shouldBeReloaded = true
   }
 
-  fun setUrl(url: String?) {
-    if (this.url == url) return
-    this.url = url
-    shouldBeReloaded = true
-  }
-
 
   private fun handleSourceAssetId(source: String, asset: FileAsset) {
-    val scheme = runCatching { Uri.parse(source).scheme }.getOrNull()
-
-    // Handle dev mode (URL instead of asset id)
-    if (scheme != null) {
-      handleSourceUrl(source, asset)
-      return
-    }
-
     // Handle release mode (asset id)
     // Resource needs to be loaded in release mode
     // https://github.com/facebook/react-native/issues/24963#issuecomment-532168307
@@ -645,10 +611,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  private fun handleSourceUrl(source: String, asset: FileAsset) {
-    downloadUrlAsset(source) { bytes -> processAssetBytes(bytes, asset) }
-  }
-
   private fun handleSourceAsset(fileName: String, path: String?, asset: FileAsset) {
     val fullPath = if (path == null) fileName else constructFilePath(fileName, path)
     val assetBytes = readAssetBytes(context, fullPath)
@@ -659,12 +621,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun loadAsset(source: ReadableMap, asset: FileAsset) {
     val sourceAssetId = source.getString("sourceAssetId")
-    val sourceUrl = source.getString("sourceUrl")
     val sourceAsset = source.getString("sourceAsset")
 
     when {
       sourceAssetId != null -> handleSourceAssetId(sourceAssetId, asset)
-      sourceUrl != null -> handleSourceUrl(sourceUrl, asset)
       sourceAsset != null -> handleSourceAsset(sourceAsset, source.getString("path"), asset)
     }
   }
@@ -681,13 +641,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         riveAnimationView?.setAssetLoader(assetStore)
       }
 
-      url?.let {
-        if (resId == -1) {
-          setUrlRiveResource(it)
-        } else {
-          throw IllegalStateException("You cannot pass both resourceName and url at the same time")
-        }
-      } ?: run {
         if (resId != -1) {
           try {
             riveAnimationView?.setRiveResource(
@@ -702,7 +655,6 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             )
             configureDataBinding()
             sendRiveLoadedEvent()
-            url = null
           } catch (ex: RiveException) {
             handleRiveException(ex)
           }
@@ -710,30 +662,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         } else {
           handleFileNotFound()
         }
-      }
       shouldBeReloaded = false
-    }
-  }
-
-
-  private fun setUrlRiveResource(url: String, autoplay: Boolean = this.autoplay) {
-    downloadUrlAsset(url) { bytes ->
-      try {
-        riveAnimationView?.setRiveBytes(
-          bytes,
-          fit = this.fit,
-          alignment = this.alignment,
-          autoplay = autoplay,
-          autoBind = shouldAutoBind,
-          stateMachineName = this.stateMachineName,
-          animationName = this.animationName,
-          artboardName = this.artboardName
-        )
-        configureDataBinding()
-        sendRiveLoadedEvent()
-      } catch (ex: RiveException) {
-        handleRiveException(ex)
-      }
     }
   }
 
@@ -952,10 +881,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   private fun handleFileNotFound() {
     if (isUserHandlingErrors) {
       val rnRiveError = RNRiveError.FileNotFound
-      rnRiveError.message = "File resource not found. You must provide correct url or resourceName!"
+      rnRiveError.message = "File resource not found. You must provide a valid resourceName!"
       sendErrorToRN(rnRiveError)
     } else {
-      throw IllegalStateException("File resource not found. You must provide correct url or resourceName!")
+      throw IllegalStateException("File resource not found. You must provide a valid resourceName!")
     }
   }
 
@@ -987,67 +916,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     }
   }
 
-  private fun downloadUrlAsset(url: String, listener: Response.Listener<ByteArray>) {
-    if (!isValidUrl(url)) {
-      handleInvalidUrlError(url)
-      return
-    }
-
-    val queue = Volley.newRequestQueue(context)
-
-    val stringRequest = RNRiveFileRequest(
-      url, listener
-    ) { error -> handleURLAssetError(url, error, isUserHandlingErrors) }
-
-    queue.add(stringRequest)
-  }
-
   private fun processAssetBytes(bytes: ByteArray, asset: FileAsset) {
     when (asset) {
       is ImageAsset -> asset.image = RiveRenderImage.make(bytes)
       is FontAsset -> asset.font = RiveFont.make(bytes)
       is AudioAsset -> asset.audio = RiveAudio.make(bytes)
-    }
-  }
-
-  private fun handleURLAssetError(
-    source: String, error: VolleyError, isUserHandlingErrors: Boolean
-  ) {
-    if (error.networkResponse?.statusCode == 404) {
-      if (isUserHandlingErrors) {
-        val rnRiveError = RNRiveError.IncorrectRiveFileUrl
-        rnRiveError.message = "Bad URL: $source"
-        sendErrorToRN(rnRiveError)
-      } else {
-        showRNRiveError("Bad URL: $source", error)
-      }
-    } else {
-      if (isUserHandlingErrors) {
-        val rnRiveError = RNRiveError.IncorrectRiveFileUrl
-        rnRiveError.message = "Unable to download the Rive asset file from: $source"
-        sendErrorToRN(rnRiveError)
-      } else {
-        showRNRiveError("Unable to download Rive asset file $source", error)
-      }
-    }
-  }
-
-  private fun handleInvalidUrlError(source: String) {
-    if (isUserHandlingErrors) {
-      val rnRiveError = RNRiveError.IncorrectRiveFileUrl
-      rnRiveError.message = "Invalid URL: $source"
-      sendErrorToRN(rnRiveError)
-    } else {
-      showRNRiveError("Invalid URL: $source", null)
-    }
-  }
-
-  private fun isValidUrl(url: String): Boolean {
-    return try {
-      URL(url)
-      true
-    } catch (e: MalformedURLException) {
-      false
     }
   }
 
@@ -1186,24 +1059,6 @@ private class RiveReactNativeAssetStore(
     job.cancel()
     scope.cancel()
     cachedFileAssets.clear()
-  }
-}
-
-class RNRiveFileRequest(
-  url: String,
-  private val listener: Response.Listener<ByteArray>,
-  errorListener: Response.ErrorListener
-) : Request<ByteArray>(Method.GET, url, errorListener) {
-
-  override fun deliverResponse(response: ByteArray) = listener.onResponse(response)
-
-  override fun parseNetworkResponse(response: NetworkResponse?): Response<ByteArray> {
-    return try {
-      val bytes = response?.data ?: ByteArray(0)
-      Response.success(bytes, HttpHeaderParser.parseCacheHeaders(response))
-    } catch (e: UnsupportedEncodingException) {
-      Response.error(ParseError(e))
-    }
   }
 }
 
