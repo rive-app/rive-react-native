@@ -372,6 +372,11 @@ const nativeEventEmitter =
 export const RiveRenderer =
   RiveReactNativeRendererModule as RiveRendererInterface;
 
+type DeprecatedUrl = {
+  /** @deprecated `url` is disabled in hardened runtime. */
+  url: string;
+};
+
 type RiveProps = {
   onPlay?: (
     event: NativeSyntheticEvent<{
@@ -426,6 +431,7 @@ type RiveProps = {
   stateMachineName?: string;
   ref: any;
   resourceName?: string;
+  /** @deprecated `url` is disabled in hardened runtime. */
   url?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
@@ -456,10 +462,7 @@ type Props = {
   stateMachineName?: string;
   autoplay?: boolean;
   children?: React.ReactNode;
-} & XOR<
-  XOR<{ resourceName: string }, { url: string }>,
-  { source: number | { uri: string } }
->;
+} & XOR<XOR<{ resourceName: string }, DeprecatedUrl>, { source: number }>;
 
 export const RiveViewManager = requireNativeComponent<RiveProps>(VIEW_NAME);
 
@@ -492,45 +495,78 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     ref
   ) => {
     const assetID = typeof source === 'number' ? source : null;
-    const sourceURI = typeof source === 'object' ? source.uri : null;
-    const { resourceName, url } = useMemo(() => {
+
+    const { resourceName } = useMemo(() => {
+      // Direct resourceName takes priority
       if (resourceNameProp) {
         return { resourceName: resourceNameProp };
       }
 
+      // Explicit url prop is disallowed
       if (urlProp) {
-        return { url: urlProp };
-      }
-
-      const assetURI = assetID ? resolveAssetSource(assetID)?.uri : sourceURI;
-
-      if (!assetURI) {
+        if (__DEV__) {
+          console.warn(
+            "[Rive] The `url` prop is disabled in hardened runtime. Use `require('./file.riv')` or `resourceName`."
+          );
+        }
         return {};
       }
 
-      // handle http address and dev server
-      if (assetURI.match(/^https?:\/\//)) {
-        return { url: assetURI };
-      }
+      // Handle Metro-bundled require('./file.riv')
+      const assetURI = assetID ? resolveAssetSource(assetID)?.uri : null;
 
-      // handle iOS bundled asset
-      if (assetURI.match(/^file:\/\//)) {
-        // strip resource name for assets embedded in the app at build time
-        const strippedName = assetURI.match(/.*\.app\/(.*)\.riv/)?.[1];
-        if (strippedName) {
-          return { resourceName: strippedName };
+      if (!assetURI) {
+        if (__DEV__) {
+          console.warn(
+            '[Rive] Invalid source: resolveAssetSource returned no URI. ' +
+              'Did you pass `require("./file.riv")` or a valid `resourceName`?'
+          );
         }
-
-        // fallback to url for downloaded assets (e.g. EAS Updates)
-        return { url: assetURI };
+        return {};
       }
 
-      // handle Android bundled asset or resource name uri
-      return {
-        resourceName: assetURI,
-      };
-    }, [assetID, sourceURI, resourceNameProp, urlProp]);
-    if (!resourceName && !url) {
+      // Block network fetches
+      if (assetURI.match(/^https?:\/\//)) {
+        if (__DEV__) {
+          console.warn(
+            `[Rive] Remote sources are blocked in hardened runtime: ${assetURI}`
+          );
+        }
+        return {};
+      }
+
+      // iOS: Metro places .riv under .app/assets
+      if (Platform.OS === 'ios' && assetURI.match(/^file:\/\//)) {
+        if (assetURI.includes('.app/assets/')) {
+          // handle iOS bundled asset
+          const strippedName = assetURI.match(/.*\.app\/(.*)\.riv/)?.[1];
+          if (strippedName) {
+            return { resourceName: strippedName };
+          }
+        }
+        if (__DEV__) {
+          console.warn(
+            '[Rive] File URI blocked (not from app bundle):',
+            assetURI
+          );
+        }
+        return {};
+      }
+
+      // Android: Metro emits asset:/ URIs
+      if (Platform.OS === 'android' && assetURI.startsWith('asset:/')) {
+        const strippedName = assetURI
+          .replace(/^asset:\//, '')
+          .replace(/\.riv$/, '');
+        return { resourceName: strippedName };
+      }
+
+      if (__DEV__) {
+        console.warn('[Rive] Unsupported asset URI blocked:', assetURI);
+      }
+      return {};
+    }, [assetID, resourceNameProp, urlProp]);
+    if (!resourceName) {
       throw new Error(
         'Invalid Rive resource. Please provide a valid resource.'
       );
@@ -1036,7 +1072,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             autoplay={autoplay}
             fit={fit}
             layoutScaleFactor={layoutScaleFactor}
-            url={url}
             style={styles.animation}
             onPlay={onPlayHandler}
             onPause={onPauseHandler}
