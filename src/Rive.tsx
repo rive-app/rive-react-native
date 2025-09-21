@@ -52,6 +52,20 @@ import {
 } from './utils';
 
 export type PropertyCallback = (value: any) => void;
+
+const isHttpUrl = (uri: string | null | undefined): boolean => {
+  if (!uri) return false;
+  return uri.startsWith('http://') || uri.startsWith('https://');
+};
+
+const isMetroDevUrl = (uri: string | null | undefined): boolean => {
+  if (!uri) return false;
+  return (
+    uri.startsWith('http://localhost:8081') ||
+    uri.startsWith('http://10.0.2.2:8081')
+  );
+};
+
 export class RiveNativeEventEmitter {
   constructor(
     public emitter: NativeEventEmitter,
@@ -431,7 +445,6 @@ type RiveProps = {
   stateMachineName?: string;
   ref: any;
   resourceName?: string;
-  /** @deprecated `url` is disabled in hardened runtime. */
   url?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
@@ -495,14 +508,11 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     ref
   ) => {
     const assetID = typeof source === 'number' ? source : null;
-
-    const { resourceName } = useMemo(() => {
-      // Direct resourceName takes priority
+    const { resourceName, url } = useMemo(() => {
       if (resourceNameProp) {
         return { resourceName: resourceNameProp };
       }
 
-      // Explicit url prop is disallowed
       if (urlProp) {
         if (__DEV__) {
           console.warn(
@@ -512,7 +522,6 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         return {};
       }
 
-      // Handle Metro-bundled require('./file.riv')
       const assetURI = assetID ? resolveAssetSource(assetID)?.uri : null;
 
       if (!assetURI) {
@@ -525,48 +534,40 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         return {};
       }
 
-      // Block network fetches
-      if (assetURI.match(/^https?:\/\//)) {
+      // handle dev server
+      if (__DEV__ && isMetroDevUrl(assetURI)) {
+        return { url: assetURI };
+      }
+
+      // Block any other HTTP/HTTPS
+      if (isHttpUrl(assetURI)) {
         if (__DEV__) {
           console.warn(
-            `[Rive] Remote sources are blocked in hardened runtime: ${assetURI}`
+            '[Rive] Remote sources are blocked in hardened runtime. ' +
+              'Only Metro localhost is allowed in dev.'
           );
         }
         return {};
       }
 
-      // iOS: Metro places .riv under .app/assets
-      if (Platform.OS === 'ios' && assetURI.match(/^file:\/\//)) {
-        if (assetURI.includes('.app/assets/')) {
-          // handle iOS bundled asset
-          const strippedName = assetURI.match(/.*\.app\/(.*)\.riv/)?.[1];
-          if (strippedName) {
-            return { resourceName: strippedName };
-          }
+      // handle iOS bundled asset
+      if (assetURI.match(/^file:\/\//)) {
+        // strip resource name for assets embedded in the app at build time
+        const strippedName = assetURI.match(/.*\.app\/(.*)\.riv/)?.[1];
+        if (strippedName) {
+          return { resourceName: strippedName };
         }
-        if (__DEV__) {
-          console.warn(
-            '[Rive] File URI blocked (not from app bundle):',
-            assetURI
-          );
-        }
-        return {};
+
+        // fallback to url for downloaded assets (e.g. EAS Updates)
+        return { url: assetURI };
       }
 
-      // Android: Metro emits asset:/ URIs
-      if (Platform.OS === 'android' && assetURI.startsWith('asset:/')) {
-        const strippedName = assetURI
-          .replace(/^asset:\//, '')
-          .replace(/\.riv$/, '');
-        return { resourceName: strippedName };
-      }
-
-      if (__DEV__) {
-        console.warn('[Rive] Unsupported asset URI blocked:', assetURI);
-      }
-      return {};
+      // handle Android bundled asset or resource name uri
+      return {
+        resourceName: assetURI,
+      };
     }, [assetID, resourceNameProp, urlProp]);
-    if (!resourceName) {
+    if (!resourceName && !url) {
       throw new Error(
         'Invalid Rive resource. Please provide a valid resource.'
       );
@@ -1072,6 +1073,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
             autoplay={autoplay}
             fit={fit}
             layoutScaleFactor={layoutScaleFactor}
+            url={url}
             style={styles.animation}
             onPlay={onPlayHandler}
             onPause={onPauseHandler}

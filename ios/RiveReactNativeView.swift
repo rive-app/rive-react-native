@@ -36,8 +36,18 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     @objc var resourceName: String? = nil {
         didSet {
             if (resourceName != nil) {
+                url = nil
                 resourceFromBundle = true;
                 requiresLocalResourceReconfigure = true;
+            }
+        }
+    }
+    
+    @objc var url: String? = nil {
+        didSet {
+            if (url != nil) {
+                resourceName = nil
+                resourceFromBundle = false
             }
         }
     }
@@ -158,7 +168,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     }
     
     override func didSetProps(_ changedProps: [String]!) {
-        if (changedProps.contains("resourceName") || changedProps.contains("artboardName") || changedProps.contains("animationName") || changedProps.contains("stateMachineName") || changedProps.contains("referencedAssets")) {
+        if (changedProps.contains("url") || changedProps.contains("resourceName") || changedProps.contains("artboardName") || changedProps.contains("animationName") || changedProps.contains("stateMachineName") || changedProps.contains("referencedAssets")) {
             reloadView()
         }
         
@@ -310,6 +320,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         cleanupFileAssetCache()
         
         if let name = resourceName {
+            url = nil
             resourceFromBundle = true
             
             let updatedViewModel : RiveViewModel
@@ -328,6 +339,46 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
     }
     
+    private func configureViewModelFromUrl() {
+      guard let url = url else {
+        handleRiveError(error: createIncorrectRiveURL(url ?? ""))
+        return
+      }
+      resourceName = nil
+      resourceFromBundle = false
+      downloadUrlAsset(url: url) { [weak self] data in
+        guard let self = self else { return }
+        guard !data.isEmpty else {
+          handleRiveError(error: createIncorrectRiveURL(url))
+          return
+        }
+        do {
+          let riveFile = try RiveFile(data: data, loadCdn: true, customAssetLoader: customLoader)
+          let riveModel = RiveModel(riveFile: riveFile)
+          let fit = self.convertFit(self.fit)
+          let alignment = self.convertAlignment(self.alignment)
+          let autoPlay = self.autoplay
+          let artboardName = self.artboardName
+          let updatedViewModel: RiveViewModel
+          if let smName = self.stateMachineName {
+            updatedViewModel = RiveViewModel(riveModel, stateMachineName: smName, fit: fit, alignment: alignment, autoPlay: autoPlay, artboardName: artboardName)
+          } else if let animName = self.animationName {
+            updatedViewModel = RiveViewModel(riveModel, animationName: animName, fit: fit, alignment: alignment, autoPlay: autoPlay, artboardName: artboardName)
+          } else {
+            updatedViewModel = RiveViewModel(riveModel, fit: fit, alignment: alignment, autoPlay: autoPlay, artboardName: artboardName)
+          }
+          updatedViewModel.layoutScaleFactor = self.layoutScaleFactor.doubleValue
+          
+          DispatchQueue.main.async {
+              self.createNewView(updatedViewModel: updatedViewModel)
+          }
+        } catch {
+          self.handleRiveError(error: error as NSError)
+        }
+      }
+      
+    }
+    
     private func reloadView() {
         if resourceFromBundle {
             if requiresLocalResourceReconfigure {
@@ -341,6 +392,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                 handleRiveError(error: error)
             }
             
+        } else {
+            configureViewModelFromUrl() // TODO: calling viewModel?.configureModel for a URL ViewModel throws. Requires further investigation. Currently recreating the whole ViewModel for certain prop changes.
         }
     }
     
@@ -405,8 +458,28 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         let sourceUrl = source["sourceUrl"] as? String
         let sourceAsset = source["sourceAsset"] as? String
         
-        if let sourceAsset = sourceAsset {
+        if let sourceAssetId = sourceAssetId {
+            handleSourceAssetId(sourceAssetId, asset: asset, factory: factory)
+        } else if let sourceUrl = sourceUrl {
+            handleSourceUrl(sourceUrl, asset: asset, factory: factory)
+        } else if let sourceAsset = sourceAsset {
             handleSourceAsset(sourceAsset, path: source["path"] as? String, asset: asset, factory: factory)
+        }
+    }
+    
+    private func handleSourceAssetId(_ sourceAssetId: String, asset: RiveFileAsset, factory: RiveFactory) {
+        guard URL(string: sourceAssetId) != nil else {
+            return
+        }
+        
+        downloadUrlAsset(url: sourceAssetId) { [weak self] data in
+            self?.processAssetBytes(data, asset: asset, factory: factory)
+        }
+    }
+    
+    private func handleSourceUrl(_ sourceUrl: String, asset: RiveFileAsset, factory: RiveFactory) {
+        downloadUrlAsset(url: sourceUrl) { [weak self] data in
+            self?.processAssetBytes(data, asset: asset, factory: factory)
         }
     }
     
@@ -443,6 +516,38 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
     }
     
+    private func downloadUrlAsset(url: String, listener: @escaping (Data) -> Void) {
+        guard isValidUrl(url) else {
+            handleInvalidUrlError(url: url)
+            return
+        }
+        
+        let queue = URLSession.shared
+        guard let requestUrl = URL(string: url) else {
+            handleInvalidUrlError(url: url)
+            return
+        }
+        
+        let request = URLRequest(url: requestUrl)
+        let task = queue.dataTask(with: request) {[weak self] data, response, error in
+            if error != nil {
+                self?.handleInvalidUrlError(url: url)
+            } else if let data = data {
+                listener(data)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    private func isValidUrl(_ url: String) -> Bool {
+        if let url = URL(string: url) {
+            return UIApplication.shared.canOpenURL(url)
+        } else {
+            return false
+        }
+    }
+    
     private func splitFileNameAndExtension(fileName: String) -> (name: String?, ext: String?)? {
         let components = fileName.split(separator: ".")
         let name = (fileName as NSString).deletingPathExtension;
@@ -476,6 +581,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                 }
             }
         }
+    }
+    
+    private func handleInvalidUrlError(url: String) {
+        handleRiveError(error: createIncorrectRiveURL(url))
     }
     
     // MARK: - Playback Controls
@@ -729,6 +838,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             "delay": riveEvent.delay(),
             "properties": riveEvent.properties(),
         ] as [String : Any]
+        if let openUrlEvent = riveEvent as? RiveOpenUrlEvent {
+            eventDict["url"] = openUrlEvent.url()
+            eventDict["target"] = openUrlEvent.target()
+        }
         onRiveEventReceived?(["riveEvent": eventDict])
     }
     
