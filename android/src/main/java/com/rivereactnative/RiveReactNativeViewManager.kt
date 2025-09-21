@@ -256,6 +256,10 @@ class RiveReactNativeViewManager : SimpleViewManager<RiveReactNativeView>() {
     view.setAlignment(RNAlignment.mapToRNAlignment(alignment))
   }
 
+  @ReactProp(name = "url")
+  fun setUrl(view: RiveReactNativeView, url: String?) {
+    view.setUrl(url)
+  }
 
   @ReactProp(name = "autoplay")
   fun setAutoplay(view: RiveReactNativeView, autoplay: Boolean) {

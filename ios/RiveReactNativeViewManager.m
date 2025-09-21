@@ -4,6 +4,7 @@
 @interface RCT_EXTERN_MODULE(RiveReactNativeViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(resourceName, NSString)
+RCT_EXPORT_VIEW_PROPERTY(url, NSString)
 RCT_EXPORT_VIEW_PROPERTY(fit, NSString)
 RCT_EXPORT_VIEW_PROPERTY(layoutScaleFactor, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(alignment, NSString)
