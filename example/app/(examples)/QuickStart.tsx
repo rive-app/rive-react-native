@@ -42,7 +42,8 @@ export default function QuickStart() {
   const handleTakeDamage = () => {
     if (health && setHealth) {
       setHealth(health - 7);
-      // In case the State Machine pauses due to inactivity
+      // If all state machines have settled, you might need to wake the state machine back up.
+      // This can happen when all animations have finished playing.
       riveRef?.play();
     }
   };
