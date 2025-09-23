@@ -1,5 +1,7 @@
 /*
-  Resource:
+  Rive React Native Quick Start
+
+  Resources:
 
   - Getting Started with Rive + React Native: https://rive.app/docs/runtimes/react-native/react-native
   - Data Binding: https://rive.app/docs/runtimes/data-binding
