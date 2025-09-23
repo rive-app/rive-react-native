@@ -21,6 +21,7 @@ export function StyledLink({
 export default function Home() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <StyledLink href="/(examples)/QuickStart">Quick Start</StyledLink>
       <StyledLink href="/(examples)/Simple">Simple</StyledLink>
       <StyledLink href="/(examples)/DataBinding">Data Binding</StyledLink>
       <StyledLink href="/(examples)/Http">HTTP</StyledLink>
