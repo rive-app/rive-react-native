@@ -10,15 +10,17 @@ enum RNFit: String {
     case None = "none"
     case ScaleDown = "scaleDown"
     case Layout = "layout"
-    
+
     static func mapToRNFit(value: String) -> RNFit {
         if let rnEnum = RNFit(rawValue: value) {
             return rnEnum
         } else {
-            fatalError("Unsupported fit type: \(value)")
+            // Return a default value instead of crashing
+            RCTLogWarn("Unsupported fit type: \(value), defaulting to Contain")
+            return .Contain
         }
     }
-    
+
     static func mapToRiveFit(rnFit: RNFit) -> RiveFit {
         switch rnFit {
         case .Contain:
