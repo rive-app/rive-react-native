@@ -19,6 +19,7 @@ This library is a wrapper around the iOS/Android runtime, providing a component 
 - 🏃 [Migration Guides](#migration-guides)
 - 👨‍💻 [Contributing](#contributing)
 - :question: [Issues](#issues)
+- :wrench: [Native SDK Version Customization](#native-sdk-version-customization)
 
 ## Rive Overview
 
@@ -77,3 +78,90 @@ We love contributions! Check out our [contributing docs](./CONTRIBUTING.md) to g
 ## Issues
 
 Have an issue with using the runtime, or want to suggest a feature/API to help make your development life better? Log an issue in our [issues](https://github.com/rive-app/rive-react-native/issues) tab! You can also browse older issues and discussion threads there to see solutions that may have worked for common problems.
+
+## Native SDK Version Customization
+
+> **⚠️ Advanced Configuration**
+> This section is for advanced users who need to use specific versions of the Rive native SDKs. In most cases, you should use the default versions that come with the library. Only customize these versions if you have a specific requirement and understand the potential compatibility implications.
+>
+> **Important:** If you customize the native SDK versions and later update `rive-react-native` to a newer version, you should revisit your custom version settings. The custom versions you specified may not be compatible with the updated `rive-react-native` version. Always check the default versions in the new release and test thoroughly.
+
+### Default Behavior
+
+By default, `rive-react-native` uses the native SDK versions specified in `package.json`:
+
+```json
+"runtimeVersions": {
+  "ios": "6.12.0",
+  "android": "10.4.5"
+}
+```
+
+These versions are tested and known to work well with this version of `rive-react-native`.
+
+### Customizing Versions
+
+You can override these default versions using platform-specific configuration files:
+
+#### iOS (Vanilla React Native)
+
+Create or edit `ios/Podfile.properties.json`:
+
+```json
+{
+  "RiveRuntimeIOSVersion": "6.13.0"
+}
+```
+
+Then run:
+```bash
+cd ios && pod install
+```
+
+#### Android (Vanilla React Native)
+
+Add to `android/gradle.properties`:
+
+```properties
+Rive_RiveRuntimeAndroidVersion=10.5.0
+```
+
+#### Expo Projects
+
+For Expo projects, use config plugins in your `app.config.ts`:
+
+```typescript
+import { ExpoConfig, ConfigContext } from 'expo/config';
+import { withPodfileProperties } from '@expo/config-plugins';
+import { withGradleProperties } from '@expo/config-plugins';
+
+export default ({ config }: ConfigContext): ExpoConfig => ({
+  ...config,
+  plugins: [
+    [
+      withPodfileProperties,
+      {
+        RiveRuntimeIOSVersion: '6.13.0',
+      },
+    ],
+    [
+      withGradleProperties,
+      {
+        Rive_RiveRuntimeAndroidVersion: '10.5.0',
+      },
+    ],
+  ],
+});
+```
+
+### Version Resolution Priority
+
+The library resolves versions in the following order:
+
+**iOS:**
+1. `ios/Podfile.properties.json` → `RiveRuntimeIOSVersion`
+2. `package.json` → `runtimeVersions.ios` (default)
+
+**Android:**
+1. `android/gradle.properties` → `Rive_RiveRuntimeAndroidVersion`
+2. `package.json` → `runtimeVersions.android` (default)
