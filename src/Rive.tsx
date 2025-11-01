@@ -429,6 +429,7 @@ type RiveProps = {
   url?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
+  isDisableTouch?: boolean;
 };
 
 const VIEW_NAME = 'RiveReactNativeView';
@@ -445,6 +446,7 @@ type Props = {
   layoutScaleFactor?: number;
   style?: ViewStyle;
   testID?: string;
+  isDisableTouch?: boolean;
   alignment?: Alignment;
   artboardName?: string;
   /**
@@ -488,6 +490,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
       source,
       stateMachineName,
       testID,
++     isDisableTouch,
     },
     ref
   ) => {
@@ -1028,6 +1031,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
           onPressOut={(event: GestureResponderEvent) =>
             touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)
           }
+          disabled={isDisableTouch}
         >
           <RiveViewManager
             ref={riveRef}
