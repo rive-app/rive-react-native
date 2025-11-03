@@ -331,6 +331,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             } else {
                 updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
             }
+            warnForUnusedAssets()
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
             
@@ -451,6 +452,26 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
         
         return false
+    }
+
+    private func warnForUnusedAssets() {
+        guard let referencedAssets = referencedAssets else { return }
+
+        let providedKeys = Set(referencedAssets.allKeys.compactMap { $0 as? String })
+        let referencedInFileKeys = Set(cachedFileAssets.keys)
+        let unusedKeys = providedKeys.subtracting(referencedInFileKeys)
+        if !unusedKeys.isEmpty {
+            let keysString = unusedKeys.joined(separator: ",")
+            let message = "referencesAsset provided keys: \(keysString) but it was not referenced in the rive file"
+            if isUserHandlingErrors {
+                var error = RNRiveError.UnusedReferencedAssetError
+                error.message = message
+                onRNRiveError(error)
+            } else {
+              RCTLogWarn(message)
+              
+            }
+        }
     }
     
     private func loadAsset(source: NSDictionary, asset: RiveFileAsset, factory: RiveFactory) {

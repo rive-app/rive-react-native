@@ -700,6 +700,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               animationName = this.animationName,
               artboardName = this.artboardName
             )
+            warnForUnusedAssets()
             configureDataBinding()
             sendRiveLoadedEvent()
             url = null
@@ -1074,6 +1075,28 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("message", error.message)
     reactContext.getJSModule(RCTEventEmitter::class.java)
       .receiveEvent(id, Events.ERROR.toString(), data)
+  }
+
+  private fun warnForUnusedAssets() {
+    val referencedAssetsMap = referencedAssets ?: return
+    val assetStoreCache = assetStore?.cachedFileAssets ?: return
+
+    val providedKeys = referencedAssetsMap.keysList().toSet()
+    val referencedInFileKeys = assetStoreCache.keys.toSet()
+    val unusedKeys = providedKeys - referencedInFileKeys
+
+    if (unusedKeys.isNotEmpty()) {
+      val keysString = unusedKeys.joinToString(",")
+      val message = "referencedAssets provided keys: $keysString but they were not referenced in the rive file"
+
+      if (isUserHandlingErrors) {
+        val rnRiveError = RNRiveError.UnusedReferencedAssetError
+        rnRiveError.message = message
+        sendErrorToRN(rnRiveError)
+      } else {
+        android.util.Log.w("RiveReactNative", message)
+      }
+    }
   }
 
   private fun showRNRiveError(message: String, error: Throwable?) {

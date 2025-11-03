@@ -15,6 +15,7 @@ struct RNRiveError {
     static let IncorrectStateMachineInput = BaseRNRiveError(type: "IncorrectStateMachineInput")
     static let TextRunNotFoundError = BaseRNRiveError(type: "TextRunNotFoundError")
     static let DataBindingError = BaseRNRiveError(type: "DataBindingError")
+    static let UnusedReferencedAssetError = BaseRNRiveError(type: "UnusedReferencedAssetError")
     
     
     static func mapToRNRiveError(riveError: NSError) -> BaseRNRiveError? {
