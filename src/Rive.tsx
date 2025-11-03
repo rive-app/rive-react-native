@@ -628,6 +628,11 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         const rnRiveError = convertErrorFromNativeToRN({ type, message });
         if (rnRiveError !== null) {
           onError?.(rnRiveError);
+        } else {
+          console.warn(
+            '[Rive] Unknown error type received from native: ',
+            type
+          );
         }
       },
       [onError]
