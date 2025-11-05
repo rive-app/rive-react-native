@@ -587,7 +587,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     
     private func isValidUrl(_ url: String) -> Bool {
         if let url = URL(string: url) {
-            return url.isFileURL || UIApplication.shared.canOpenURL(url)
+            return url.isFileURL || (url.scheme == "http" || url.scheme == "https")
         } else {
             return false
         }
@@ -613,19 +613,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             handleRiveError(error: createAssetFileError(sourceAsset))
             return
         }
-        
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            do {
-                let fileData = try Data(contentsOf: folderUrl)
-                DispatchQueue.main.async {
-                    listener(fileData)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self?.handleRiveError(error: createAssetFileError(sourceAsset))
-                }
-            }
-        }
+
+        loadFileUrlAsset(url: folderUrl, listener: listener)
     }
     
     private func handleInvalidUrlError(url: String) {
