@@ -17,7 +17,7 @@ class RiveReactNativeViewManager: RCTViewManager {
                 return
             }
 
-            guard let view = bridge.uiMan ager.view(forReactTag: node) else {
+            guard let view = bridge.uiManager.view(forReactTag: node) else {
                 RCTSwiftLog.error("Could not find view with tag: \(node)", file: file, line:line)
                 return
             }
