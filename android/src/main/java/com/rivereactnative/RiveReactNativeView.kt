@@ -38,10 +38,12 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
+import java.net.URI
 import java.net.URL
 
 
@@ -1252,18 +1254,26 @@ interface ResourceLoader {
 
 // Standard Volley HTTP implementation
 class VolleyHttpLoader(private val context: ThemedReactContext) : ResourceLoader {
+  companion object {
+    @Volatile
+    private var requestQueue: com.android.volley.RequestQueue? = null
+
+    @Synchronized
+    private fun getRequestQueue(context: ThemedReactContext): com.android.volley.RequestQueue {
+      if (requestQueue == null) {
+        requestQueue = Volley.newRequestQueue(context.applicationContext)
+      }
+      return requestQueue!!
+    }
+  }
+
   override fun loadResource(
     url: String,
     listener: Response.Listener<ByteArray>,
     errorListener: Response.ErrorListener
   ) {
-    // Use your existing RNRiveFileRequest for HTTP
-    val queue = Volley.newRequestQueue(context)
-
-    val request = RNRiveFileRequest(
-      url, listener, errorListener
-    )
-
+    val queue = getRequestQueue(context)
+    val request = RNRiveFileRequest(url, listener, errorListener)
     queue.add(request)
   }
 }
@@ -1275,17 +1285,37 @@ class FileSystemLoader : ResourceLoader {
     listener: Response.Listener<ByteArray>,
     errorListener: Response.ErrorListener
   ) {
-    try {
-      // Extract file path from file:// URL
-      val filePath = url.substring(7) // Remove "file://"
-      val file = java.io.File(filePath)
+    CoroutineScope(Dispatchers.IO).launch {
+      try {
+        val uri = URI(url)
+        if (uri.scheme != "file") {
+          throw IllegalArgumentException("Expected file:// URL, got: $url")
+        }
 
-      // Read file directly
-      val data = file.readBytes()
-      listener.onResponse(data)
-    } catch (e: Exception) {
-      // Pretend the error came from Volley, which is how http URLs are loaded
-      errorListener.onErrorResponse(VolleyError(e))
+        val file = java.io.File(uri.path)
+
+        if (!file.exists()) {
+          throw java.io.FileNotFoundException("File not found: ${uri.path}")
+        }
+        if (!file.canRead()) {
+          throw IOException("Permission denied: ${uri.path}")
+        }
+
+        val data = file.readBytes()
+        withContext(Dispatchers.Main) {
+          listener.onResponse(data)
+        }
+      } catch (e: java.io.FileNotFoundException) {
+        val volleyError = VolleyError(e)
+        volleyError.networkResponse = NetworkResponse(404, null, false, 0, emptyList())
+        withContext(Dispatchers.Main) {
+          errorListener.onErrorResponse(volleyError)
+        }
+      } catch (e: Exception) {
+        withContext(Dispatchers.Main) {
+          errorListener.onErrorResponse(VolleyError(e))
+        }
+      }
     }
   }
 }
