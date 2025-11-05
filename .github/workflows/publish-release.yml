@@ -75,4 +75,4 @@ jobs:
           chmod +x ./scripts/add_build_number.sh
           yarn release --increment=$(cat version.txt)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
