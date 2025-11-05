@@ -38,10 +38,13 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
+import java.net.URI
+import java.net.URISyntaxException
 import java.net.URL
 
 
@@ -993,12 +996,52 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       return
     }
 
-    val loader = ResourceLoaderFactory.getLoader(url, context)
-    loader.loadResource(
-      url,
-      listener,
-      { error -> handleURLAssetError(url, error, isUserHandlingErrors) }
-    )
+    try {
+      val uri = URI(url)
+      when (uri.scheme) {
+        "file" -> loadFileUrlAsset(uri, listener)
+        else -> loadRemoteUrlAsset(url, listener)
+      }
+    } catch (e: URISyntaxException) {
+      handleInvalidUrlError(url)
+    }
+  }
+
+  private fun loadFileUrlAsset(uri: URI, listener: Response.Listener<ByteArray>) {
+    CoroutineScope(Dispatchers.IO).launch {
+      try {
+        val file = java.io.File(uri.path)
+
+        if (!file.exists()) {
+          throw java.io.FileNotFoundException("File not found: ${uri.path}")
+        }
+        if (!file.canRead()) {
+          throw IOException("Permission denied: ${uri.path}")
+        }
+
+        val data = file.readBytes()
+        withContext(Dispatchers.Main) {
+          listener.onResponse(data)
+        }
+      } catch (e: Exception) {
+        val volleyError = if (e is java.io.FileNotFoundException) {
+          VolleyError(NetworkResponse(404, null, false, 0, emptyList()))
+        } else {
+          VolleyError(e)
+        }
+        withContext(Dispatchers.Main) {
+          handleURLAssetError(uri.toString(), volleyError, isUserHandlingErrors)
+        }
+      }
+    }
+  }
+
+  private fun loadRemoteUrlAsset(url: String, listener: Response.Listener<ByteArray>) {
+    val queue = Volley.newRequestQueue(context)
+    val request = RNRiveFileRequest(url, listener) { error ->
+      handleURLAssetError(url, error, isUserHandlingErrors)
+    }
+    queue.add(request)
   }
 
   private fun processAssetBytes(bytes: ByteArray, asset: FileAsset) {
@@ -1241,61 +1284,3 @@ data class PropertyListener(
   val propertyType: String,
   val job: Job
 )
-
-interface ResourceLoader {
-  fun loadResource(
-    url: String,
-    listener: Response.Listener<ByteArray>,
-    errorListener: Response.ErrorListener
-  )
-}
-
-// Standard Volley HTTP implementation
-class VolleyHttpLoader(private val context: ThemedReactContext) : ResourceLoader {
-  override fun loadResource(
-    url: String,
-    listener: Response.Listener<ByteArray>,
-    errorListener: Response.ErrorListener
-  ) {
-    // Use your existing RNRiveFileRequest for HTTP
-    val queue = Volley.newRequestQueue(context)
-
-    val request = RNRiveFileRequest(
-      url, listener, errorListener
-    )
-
-    queue.add(request)
-  }
-}
-
-// Direct file system implementation
-class FileSystemLoader : ResourceLoader {
-  override fun loadResource(
-    url: String,
-    listener: Response.Listener<ByteArray>,
-    errorListener: Response.ErrorListener
-  ) {
-    try {
-      // Extract file path from file:// URL
-      val filePath = url.substring(7) // Remove "file://"
-      val file = java.io.File(filePath)
-
-      // Read file directly
-      val data = file.readBytes()
-      listener.onResponse(data)
-    } catch (e: Exception) {
-      // Pretend the error came from Volley, which is how http URLs are loaded
-      errorListener.onErrorResponse(VolleyError(e))
-    }
-  }
-}
-
-// Factory class that returns the appropriate loader
-object ResourceLoaderFactory {
-  fun getLoader(url: String, context: ThemedReactContext): ResourceLoader {
-    return when {
-      url.startsWith("file://") -> FileSystemLoader()
-      else -> VolleyHttpLoader(context)
-    }
-  }
-}
