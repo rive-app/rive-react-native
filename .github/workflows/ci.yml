@@ -11,90 +11,17 @@ on:
       - checks_requested
 
 jobs:
-  lint:
+  lint-and-typecheck:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-
-      - name: Enable Corepack and Use Correct Yarn Version
-        run: |
-          corepack enable
-          corepack prepare yarn@4.7.0 --activate
-
-      - name: Restore dependencies
-        id: yarn-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-      - name: Cache dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }}
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
 
       - name: Lint files
         run: yarn lint
-
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-
-      - name: Enable Corepack and Use Correct Yarn Version
-        run: |
-          corepack enable
-          corepack prepare yarn@4.7.0 --activate
-
-      - name: Restore dependencies
-        id: yarn-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-      - name: Cache dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }}
 
       - name: Typecheck files
         run: yarn typescript
@@ -105,40 +32,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-
-      - name: Enable Corepack and Use Correct Yarn Version
-        run: |
-          corepack enable
-          corepack prepare yarn@4.7.0 --activate
-
-      - name: Restore dependencies
-        id: yarn-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-      - name: Cache dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }}
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
 
       - name: Run unit tests
         run: yarn test --maxWorkers=2
@@ -149,40 +44,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-
-      - name: Enable Corepack and Use Correct Yarn Version
-        run: |
-          corepack enable
-          corepack prepare yarn@4.7.0 --activate
-
-      - name: Restore dependencies
-        id: yarn-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-      - name: Cache dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }}
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
 
       - name: Build package
         run: yarn prepare
@@ -193,40 +56,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-
-      - name: Enable Corepack and Use Correct Yarn Version
-        run: |
-          corepack enable
-          corepack prepare yarn@4.7.0 --activate
-
-      - name: Restore dependencies
-        id: yarn-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-      - name: Cache dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }}
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
 
       - name: Install JDK
         uses: actions/setup-java@v4
@@ -257,40 +88,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-
-      - name: Enable Corepack and Use Correct Yarn Version
-        run: |
-          corepack enable
-          corepack prepare yarn@4.7.0 --activate
-
-      - name: Restore dependencies
-        id: yarn-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install --immutable
-
-      - name: Cache dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }}
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
 
       - name: Restore CocoaPods cache
         id: cocoapods-cache
