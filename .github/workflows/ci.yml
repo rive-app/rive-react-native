@@ -97,8 +97,10 @@ jobs:
         with:
           path: |
             example/ios/Pods
-          key: ${{ runner.os }}-cocoapods-${{ hashFiles('example/ios/Podfile.lock') }}
+            example/ios/build/generated
+          key: ${{ runner.os }}-cocoapods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('example/ios/Podfile.lock') }}
           restore-keys: |
+            ${{ runner.os }}-cocoapods-${{ hashFiles('yarn.lock') }}-
             ${{ runner.os }}-cocoapods-
 
       - name: Install CocoaPods
@@ -112,6 +114,7 @@ jobs:
         with:
           path: |
             example/ios/Pods
+            example/ios/build/generated
           key: ${{ steps.cocoapods-cache.outputs.cache-primary-key }}
 
       - name: Build example for iOS
