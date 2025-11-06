@@ -17,8 +17,6 @@ import {
   NativeSyntheticEvent,
   StyleSheet,
   View,
-  TouchableWithoutFeedback,
-  GestureResponderEvent,
   StyleProp,
   NativeModules,
   NativeEventEmitter,
@@ -1026,38 +1024,29 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
     return (
       <View style={[styles.container, style]} ref={ref as any} testID={testID}>
         <View style={styles.children}>{children}</View>
-        <TouchableWithoutFeedback
-          onPressIn={(event: GestureResponderEvent) =>
-            touchBegan(event.nativeEvent.locationX, event.nativeEvent.locationY)
-          }
-          onPressOut={(event: GestureResponderEvent) =>
-            touchEnded(event.nativeEvent.locationX, event.nativeEvent.locationY)
-          }
-        >
-          <RiveViewManager
-            ref={riveRef}
-            resourceName={resourceName}
-            isUserHandlingErrors={isUserHandlingErrors}
-            autoplay={autoplay}
-            fit={fit}
-            layoutScaleFactor={layoutScaleFactor}
-            url={url}
-            style={styles.animation}
-            onPlay={onPlayHandler}
-            onPause={onPauseHandler}
-            onStop={onStopHandler}
-            onLoopEnd={onLoopEndHandler}
-            onStateChanged={onStateChangedHandler}
-            onRiveEventReceived={onRiveEventReceivedHandler}
-            onError={onErrorHandler}
-            alignment={alignment}
-            artboardName={artboardName}
-            referencedAssets={convertedAssetHandledSources}
-            dataBinding={dataBinding}
-            animationName={animationName}
-            stateMachineName={stateMachineName}
-          />
-        </TouchableWithoutFeedback>
+        <RiveViewManager
+          ref={riveRef}
+          resourceName={resourceName}
+          isUserHandlingErrors={isUserHandlingErrors}
+          autoplay={autoplay}
+          fit={fit}
+          layoutScaleFactor={layoutScaleFactor}
+          url={url}
+          style={styles.animation}
+          onPlay={onPlayHandler}
+          onPause={onPauseHandler}
+          onStop={onStopHandler}
+          onLoopEnd={onLoopEndHandler}
+          onStateChanged={onStateChangedHandler}
+          onRiveEventReceived={onRiveEventReceivedHandler}
+          onError={onErrorHandler}
+          alignment={alignment}
+          artboardName={artboardName}
+          referencedAssets={convertedAssetHandledSources}
+          dataBinding={dataBinding}
+          animationName={animationName}
+          stateMachineName={stateMachineName}
+        />
       </View>
     );
   }
