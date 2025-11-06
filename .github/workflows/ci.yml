@@ -104,7 +104,6 @@ jobs:
             ${{ runner.os }}-cocoapods-
 
       - name: Install CocoaPods
-        if: steps.cocoapods-cache.outputs.cache-hit != 'true'
         working-directory: example/ios
         run: pod install
 
