@@ -34,6 +34,14 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      [
+        "expo-asset",
+        {
+          "assets": ["./assets/rive"]
+        }
       ]
     ],
     "experiments": {
