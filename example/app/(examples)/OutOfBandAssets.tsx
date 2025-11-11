@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 
 export default function StateMachine() {
   const [uri, setUri] = React.useState('https://picsum.photos/id/372/500/500');
+  console.log('URI:', uri);
 
   return (
     <SafeAreaView style={styles.safeAreaViewContainer}>
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     width: '100%',
+    color: 'black',
   },
   pickerWrapper: {
     borderWidth: 1,

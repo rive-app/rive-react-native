@@ -3291,7 +3291,7 @@ PODS:
     - React-Core
     - RiveRuntime (= 6.12.1)
   - RiveRuntime (6.12.1)
-  - RNCPicker (2.11.1):
+  - RNCPicker (2.11.4):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -4262,7 +4262,7 @@ PODFILE CHECKSUM: 7111cb0109850378b078b31993e62f5f22d4dcde
   ReactNativeDependencies: 71ce9c28beb282aa720ea7b46980fff9669f428a
   rive-react-native: e1c9d61df082c98fb0e79f715b3d0e94a85b7366
   RiveRuntime: a98b3a310942195c6f8810306bfbaa0ac15674b1
-  RNCPicker: f97c908b7774248c1093ec3831ca70d338627bf7
+  RNCPicker: e0149590451d5eae242cf686014a6f6d808f93c7
   RNGestureHandler: 6a488ce85c88e82d8610db1108daf04e9b2d5162
   RNReanimated: 00771d2ba7c810124852092eb29c0d1edf50cc58
   RNScreens: dd61bc3a3e6f6901ad833efa411917d44827cf51

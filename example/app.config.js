@@ -1,26 +1,3 @@
-const { withAndroidStyles } = require('@expo/config-plugins');
-
-const withLightTheme = (config) => {
-  return withAndroidStyles(config, (modConfig) => {
-    const styles = modConfig.modResults;
-
-    if (!styles?.resources?.style) {
-      return modConfig;
-    }
-
-    const appThemeIndex = styles.resources.style.findIndex(
-      (style) => style.$?.name === 'AppTheme'
-    );
-
-    if (appThemeIndex !== -1) {
-      styles.resources.style[appThemeIndex].$.parent =
-        'Theme.AppCompat.Light.NoActionBar';
-    }
-
-    return modConfig;
-  });
-};
-
 module.exports = {
   expo: {
     name: 'example',
@@ -66,7 +43,6 @@ module.exports = {
           assets: ['./assets/rive'],
         },
       ],
-      withLightTheme,
     ],
     experiments: {
       typedRoutes: true,

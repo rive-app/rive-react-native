@@ -57,7 +57,7 @@ export default function NestedInputs() {
           artboardName="Main"
           stateMachineName="State Machine 1"
           autoplay={true}
-          resourceName="nested_inputs"
+          resourceName="runtime_nested_inputs"
         />
       </ScrollView>
     </SafeAreaView>

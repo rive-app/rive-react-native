@@ -7,73 +7,75 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0894D0DDE1B64E6D97AF9A1F /* follow_path_car.riv in Resources */ = {isa = PBXBuildFile; fileRef = 909983FE7455410DBC2619AE /* follow_path_car.riv */; };
+		0B9CE5EA60CC4BA7B32BE17A /* truck_v7.riv in Resources */ = {isa = PBXBuildFile; fileRef = 42D447D1CDBE4A5CBB9820CF /* truck_v7.riv */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		204A78FC8AC447F7A2D3E2E8 /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = AD8055AD9922407CBCBB1E81 /* rating.riv */; };
-		27DAB203196A47BD853FCDAE /* out_of_band.riv in Resources */ = {isa = PBXBuildFile; fileRef = 0897B528E7AE4E5BBF4E6201 /* out_of_band.riv */; };
-		2B69943E64F748D8B8F8F0AE /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = 1E0C7042C0CC4293A667C9CE /* avatars.riv */; };
-		31421807E992CF410AC05D42 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC17020B10F33A46A86F354 /* ExpoModulesProvider.swift */; };
-		3BE0CCD115C22F82AEBBF30E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BB3054F5F2650D57A3C386F0 /* PrivacyInfo.xcprivacy */; };
+		2EFDD5BA279F4B0892129BEF /* out_of_band.riv in Resources */ = {isa = PBXBuildFile; fileRef = B88B882F1C124AE39640F29C /* out_of_band.riv */; };
+		31B77B01708E468A856269DE /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = EA3D080482DD426091FA287E /* runtime_nested_inputs.riv */; };
+		3544243E201747128FB0C837 /* v6_file.riv in Resources */ = {isa = PBXBuildFile; fileRef = 2C9758FAFFA443C0A0ECF8E3 /* v6_file.riv */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		460BB39669984549A1ED6A6F /* nested_menu.riv in Resources */ = {isa = PBXBuildFile; fileRef = D8F8AFEED8F149C48F66CA4B /* nested_menu.riv */; };
-		495C12032639406B9AA09B9E /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = EA8733CFC647438A929D804C /* hero_editor.riv */; };
-		607873FF0D734FCC841E4E74 /* ui_swipe_left_to_delete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9969AF5EC0D24301BD734083 /* ui_swipe_left_to_delete.riv */; };
-		61813624E73D4EC5BA4517B1 /* hello_world_nested.riv in Resources */ = {isa = PBXBuildFile; fileRef = 56D55B563DA44445B5DCFBF2 /* hello_world_nested.riv */; };
-		6346229FE37D42F584F6249C /* v6_file.riv in Resources */ = {isa = PBXBuildFile; fileRef = 98498B93DD37407F85D46065 /* v6_file.riv */; };
-		65DFAD285D07482FBEF0D6C7 /* runtime_nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = CA90D4C11D854E0A97723B16 /* runtime_nested_inputs.riv */; };
-		731E311590CB4EC7A084B19D /* rive_switch.riv in Resources */ = {isa = PBXBuildFile; fileRef = 192280511AA54DAC909A3B2B /* rive_switch.riv */; };
-		7B578ACCF175449F8985D2F6 /* truck_v7.riv in Resources */ = {isa = PBXBuildFile; fileRef = C5C15901909F49D0A779C48F /* truck_v7.riv */; };
-		8882EBC21F3443ADAA675CF9 /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = C475FA354DF7415495D35A78 /* hello_world_text.riv */; };
-		9F97B2D6A31D422DA39E36AC /* layout_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = 06D7E980B1FC47C3892E4436 /* layout_test.riv */; };
-		A1F8241463824A0D954E1B88 /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = 169ECB4F96A549EF9892A514 /* skills_listener.riv */; };
-		B3771F4450C34288B610F64F /* rainy.riv in Resources */ = {isa = PBXBuildFile; fileRef = F941851029EE4A1E92E2CDFF /* rainy.riv */; };
-		B7F438EBD3E647A4B5499BE8 /* two_bone_ik.riv in Resources */ = {isa = PBXBuildFile; fileRef = 2E922FF8F0F14B7AA8FD9BFE /* two_bone_ik.riv */; };
+		49427CB8155F4639AF8B312C /* rating.riv in Resources */ = {isa = PBXBuildFile; fileRef = BDFB3FBEA1A04EACA0BCC4DD /* rating.riv */; };
+		5329FF258FF94784948572EB /* avatars.riv in Resources */ = {isa = PBXBuildFile; fileRef = 17B6B4D36AD54EA0AE14C24F /* avatars.riv */; };
+		5917B1F403054EEF8F067160 /* quick_start.riv in Resources */ = {isa = PBXBuildFile; fileRef = 6BDB0666CDC74DBE91AEC39A /* quick_start.riv */; };
+		67D8BC49BECF480098B394D3 /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = F8BCC4399844431888BC8A09 /* skills_listener.riv */; };
+		6BDA940AC1DE45979D0BBFA1 /* nested_menu.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4A5C600A4ABC403189074FF8 /* nested_menu.riv */; };
+		704FAAB35B2D420F9AD9442A /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = 0BEE9435440849ABAD6558C9 /* hello_world_text.riv */; };
+		7611DDD4FFD147A7896127FA /* rive_switch.riv in Resources */ = {isa = PBXBuildFile; fileRef = 6DD1353AB320469A9DD9D3C1 /* rive_switch.riv */; };
+		8FE6D77EDF95D54C50A76D7D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9B2154043D471CB6302538E1 /* PrivacyInfo.xcprivacy */; };
+		9A02ED9FBE354252BE63A9BD /* rewards.riv in Resources */ = {isa = PBXBuildFile; fileRef = 3950B4994C394FE1B193A4F5 /* rewards.riv */; };
+		A0D9AB69213716C3A1348AEB /* libPods-example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9C68C702AF90F43FC6DDFD7 /* libPods-example.a */; };
+		A191A73F8CFE49EAA46861D6 /* layout_test.riv in Resources */ = {isa = PBXBuildFile; fileRef = FA2931D4B7134D519A238AB1 /* layout_test.riv */; };
+		A6301804F990471CB8F97351 /* rainy.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4E2E02052883412091BEF7F3 /* rainy.riv */; };
+		A9C60527D4BF4D7B9F9A7B46 /* loopy.riv in Resources */ = {isa = PBXBuildFile; fileRef = C74997FF978D4D0DB71E7D6F /* loopy.riv */; };
+		AC711A32ED204C89A5563D29 /* ui_swipe_left_to_delete.riv in Resources */ = {isa = PBXBuildFile; fileRef = 510B026FD6A54A1FB0C82699 /* ui_swipe_left_to_delete.riv */; };
+		BADCDA81119C4183B83D3B78 /* constrained.riv in Resources */ = {isa = PBXBuildFile; fileRef = A23F8E2130EA4C8698170778 /* constrained.riv */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		D7269D4AA81C40E9B10E6E41 /* constrained.riv in Resources */ = {isa = PBXBuildFile; fileRef = 4F84E601988448538AB2BC50 /* constrained.riv */; };
-		D9403AC63C454197A457CF27 /* bird.riv in Resources */ = {isa = PBXBuildFile; fileRef = 3AB4FD081E8B49D8A2DB846E /* bird.riv */; };
-		DB15C69B13D24A3481C305A5 /* artboard_animations.riv in Resources */ = {isa = PBXBuildFile; fileRef = 499AC19F83C34430B3C524B7 /* artboard_animations.riv */; };
-		EB5DF2FD22A440FFAAC79BEE /* loopy.riv in Resources */ = {isa = PBXBuildFile; fileRef = 7AA30E55BDD7426CBA4EEF94 /* loopy.riv */; };
+		BC2543A2EA1F4A1E91A24951 /* hero_editor.riv in Resources */ = {isa = PBXBuildFile; fileRef = 6CD5DAB865304EC5AC1C6F2A /* hero_editor.riv */; };
+		C3BF9C6AD0D54585910A025E /* bird.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9DD8B81D1CDB44B8B5E74750 /* bird.riv */; };
+		DD2508C107DC4B66AA35E3D0 /* follow_path_car.riv in Resources */ = {isa = PBXBuildFile; fileRef = 55D2915D379348F1BEEBE7BC /* follow_path_car.riv */; };
+		E21BE810AD1F48C7B7BA1B03 /* two_bone_ik.riv in Resources */ = {isa = PBXBuildFile; fileRef = 5963C8282B53442081AD0EE3 /* two_bone_ik.riv */; };
+		E893B71197940B788259D3C3 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF59F95A24EEAD44B09988C4 /* ExpoModulesProvider.swift */; };
+		F0D0244B33C043848E4B02A9 /* artboard_animations.riv in Resources */ = {isa = PBXBuildFile; fileRef = FAD56F6107124F3680A87F03 /* artboard_animations.riv */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		FD0C0391B41B466DBEF88136 /* quick_start.riv in Resources */ = {isa = PBXBuildFile; fileRef = 79F321988E7B44ADBF0E131A /* quick_start.riv */; };
-		FF92DC1E1E3D750854E26490 /* libPods-example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65921364519A5FE83EA854F3 /* libPods-example.a */; };
+		F4845F27F4184764971F6A26 /* hello_world_nested.riv in Resources */ = {isa = PBXBuildFile; fileRef = 17CCAA96897B4C7B92764C56 /* hello_world_nested.riv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		06D7E980B1FC47C3892E4436 /* layout_test.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = layout_test.riv; path = ../assets/rive/layout_test.riv; sourceTree = "<group>"; };
-		0897B528E7AE4E5BBF4E6201 /* out_of_band.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = out_of_band.riv; path = ../assets/rive/out_of_band.riv; sourceTree = "<group>"; };
+		0BEE9435440849ABAD6558C9 /* hello_world_text.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = hello_world_text.riv; path = ../assets/rive/hello_world_text.riv; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = example/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = example/Info.plist; sourceTree = "<group>"; };
-		169ECB4F96A549EF9892A514 /* skills_listener.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = skills_listener.riv; path = ../assets/rive/skills_listener.riv; sourceTree = "<group>"; };
-		192280511AA54DAC909A3B2B /* rive_switch.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = rive_switch.riv; path = ../assets/rive/rive_switch.riv; sourceTree = "<group>"; };
-		1E0C7042C0CC4293A667C9CE /* avatars.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = avatars.riv; path = ../assets/rive/avatars.riv; sourceTree = "<group>"; };
-		2E922FF8F0F14B7AA8FD9BFE /* two_bone_ik.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = two_bone_ik.riv; path = ../assets/rive/two_bone_ik.riv; sourceTree = "<group>"; };
-		3AB4FD081E8B49D8A2DB846E /* bird.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = bird.riv; path = ../assets/rive/bird.riv; sourceTree = "<group>"; };
-		499AC19F83C34430B3C524B7 /* artboard_animations.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = artboard_animations.riv; path = ../assets/rive/artboard_animations.riv; sourceTree = "<group>"; };
-		4F84E601988448538AB2BC50 /* constrained.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = constrained.riv; path = ../assets/rive/constrained.riv; sourceTree = "<group>"; };
-		56C46B53E4F674721BCD7176 /* Pods-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.debug.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.debug.xcconfig"; sourceTree = "<group>"; };
-		56D55B563DA44445B5DCFBF2 /* hello_world_nested.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = hello_world_nested.riv; path = ../assets/rive/hello_world_nested.riv; sourceTree = "<group>"; };
-		65921364519A5FE83EA854F3 /* libPods-example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6BC17020B10F33A46A86F354 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-example/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		79F321988E7B44ADBF0E131A /* quick_start.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = quick_start.riv; path = ../assets/rive/quick_start.riv; sourceTree = "<group>"; };
-		7AA30E55BDD7426CBA4EEF94 /* loopy.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = loopy.riv; path = ../assets/rive/loopy.riv; sourceTree = "<group>"; };
-		909983FE7455410DBC2619AE /* follow_path_car.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = follow_path_car.riv; path = ../assets/rive/follow_path_car.riv; sourceTree = "<group>"; };
-		98498B93DD37407F85D46065 /* v6_file.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = v6_file.riv; path = ../assets/rive/v6_file.riv; sourceTree = "<group>"; };
-		9969AF5EC0D24301BD734083 /* ui_swipe_left_to_delete.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = ui_swipe_left_to_delete.riv; path = ../assets/rive/ui_swipe_left_to_delete.riv; sourceTree = "<group>"; };
+		17B6B4D36AD54EA0AE14C24F /* avatars.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = avatars.riv; path = ../assets/rive/avatars.riv; sourceTree = "<group>"; };
+		17CCAA96897B4C7B92764C56 /* hello_world_nested.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = hello_world_nested.riv; path = ../assets/rive/hello_world_nested.riv; sourceTree = "<group>"; };
+		2C9758FAFFA443C0A0ECF8E3 /* v6_file.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = v6_file.riv; path = ../assets/rive/v6_file.riv; sourceTree = "<group>"; };
+		3950B4994C394FE1B193A4F5 /* rewards.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = rewards.riv; path = ../assets/rive/rewards.riv; sourceTree = "<group>"; };
+		42D447D1CDBE4A5CBB9820CF /* truck_v7.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = truck_v7.riv; path = ../assets/rive/truck_v7.riv; sourceTree = "<group>"; };
+		4A5C600A4ABC403189074FF8 /* nested_menu.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = nested_menu.riv; path = ../assets/rive/nested_menu.riv; sourceTree = "<group>"; };
+		4E2E02052883412091BEF7F3 /* rainy.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = rainy.riv; path = ../assets/rive/rainy.riv; sourceTree = "<group>"; };
+		510B026FD6A54A1FB0C82699 /* ui_swipe_left_to_delete.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = ui_swipe_left_to_delete.riv; path = ../assets/rive/ui_swipe_left_to_delete.riv; sourceTree = "<group>"; };
+		55D2915D379348F1BEEBE7BC /* follow_path_car.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = follow_path_car.riv; path = ../assets/rive/follow_path_car.riv; sourceTree = "<group>"; };
+		57E28B1C43CA863542BC3E78 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
+		5963C8282B53442081AD0EE3 /* two_bone_ik.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = two_bone_ik.riv; path = ../assets/rive/two_bone_ik.riv; sourceTree = "<group>"; };
+		6BDB0666CDC74DBE91AEC39A /* quick_start.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = quick_start.riv; path = ../assets/rive/quick_start.riv; sourceTree = "<group>"; };
+		6CD5DAB865304EC5AC1C6F2A /* hero_editor.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = hero_editor.riv; path = ../assets/rive/hero_editor.riv; sourceTree = "<group>"; };
+		6DD1353AB320469A9DD9D3C1 /* rive_switch.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = rive_switch.riv; path = ../assets/rive/rive_switch.riv; sourceTree = "<group>"; };
+		75EDD25A4179E588272CAB39 /* Pods-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.debug.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.debug.xcconfig"; sourceTree = "<group>"; };
+		9B2154043D471CB6302538E1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = example/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		9DD8B81D1CDB44B8B5E74750 /* bird.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = bird.riv; path = ../assets/rive/bird.riv; sourceTree = "<group>"; };
+		A23F8E2130EA4C8698170778 /* constrained.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = constrained.riv; path = ../assets/rive/constrained.riv; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = example/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AD8055AD9922407CBCBB1E81 /* rating.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = rating.riv; path = ../assets/rive/rating.riv; sourceTree = "<group>"; };
+		B88B882F1C124AE39640F29C /* out_of_band.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = out_of_band.riv; path = ../assets/rive/out_of_band.riv; sourceTree = "<group>"; };
+		B9C68C702AF90F43FC6DDFD7 /* libPods-example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		BB3054F5F2650D57A3C386F0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = example/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		C475FA354DF7415495D35A78 /* hello_world_text.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = hello_world_text.riv; path = ../assets/rive/hello_world_text.riv; sourceTree = "<group>"; };
-		C5C15901909F49D0A779C48F /* truck_v7.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = truck_v7.riv; path = ../assets/rive/truck_v7.riv; sourceTree = "<group>"; };
-		CA90D4C11D854E0A97723B16 /* runtime_nested_inputs.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = runtime_nested_inputs.riv; path = ../assets/rive/runtime_nested_inputs.riv; sourceTree = "<group>"; };
-		CE7B82EF194946D3324559A2 /* Pods-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-example.release.xcconfig"; path = "Target Support Files/Pods-example/Pods-example.release.xcconfig"; sourceTree = "<group>"; };
-		D8F8AFEED8F149C48F66CA4B /* nested_menu.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = nested_menu.riv; path = ../assets/rive/nested_menu.riv; sourceTree = "<group>"; };
-		EA8733CFC647438A929D804C /* hero_editor.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = hero_editor.riv; path = ../assets/rive/hero_editor.riv; sourceTree = "<group>"; };
+		BDFB3FBEA1A04EACA0BCC4DD /* rating.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = rating.riv; path = ../assets/rive/rating.riv; sourceTree = "<group>"; };
+		C74997FF978D4D0DB71E7D6F /* loopy.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = loopy.riv; path = ../assets/rive/loopy.riv; sourceTree = "<group>"; };
+		CF59F95A24EEAD44B09988C4 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-example/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		EA3D080482DD426091FA287E /* runtime_nested_inputs.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = runtime_nested_inputs.riv; path = ../assets/rive/runtime_nested_inputs.riv; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = example/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "example-Bridging-Header.h"; path = "example/example-Bridging-Header.h"; sourceTree = "<group>"; };
-		F941851029EE4A1E92E2CDFF /* rainy.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = rainy.riv; path = ../assets/rive/rainy.riv; sourceTree = "<group>"; };
+		F8BCC4399844431888BC8A09 /* skills_listener.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = skills_listener.riv; path = ../assets/rive/skills_listener.riv; sourceTree = "<group>"; };
+		FA2931D4B7134D519A238AB1 /* layout_test.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = layout_test.riv; path = ../assets/rive/layout_test.riv; sourceTree = "<group>"; };
+		FAD56F6107124F3680A87F03 /* artboard_animations.riv */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = artboard_animations.riv; path = ../assets/rive/artboard_animations.riv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,13 +83,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF92DC1E1E3D750854E26490 /* libPods-example.a in Frameworks */,
+				A0D9AB69213716C3A1348AEB /* libPods-example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D6C4E151AC52B8A3E563659 /* example */ = {
+			isa = PBXGroup;
+			children = (
+				CF59F95A24EEAD44B09988C4 /* ExpoModulesProvider.swift */,
+			);
+			name = example;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* example */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,74 +107,26 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				BB3054F5F2650D57A3C386F0 /* PrivacyInfo.xcprivacy */,
+				9B2154043D471CB6302538E1 /* PrivacyInfo.xcprivacy */,
 			);
 			name = example;
-			sourceTree = "<group>";
-		};
-		2499262A8241ACF0C0012BFC /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				44EAFFF1DE6BCBE7A2F77312 /* example */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		2950965EC2056F6ADF332EED /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				56C46B53E4F674721BCD7176 /* Pods-example.debug.xcconfig */,
-				CE7B82EF194946D3324559A2 /* Pods-example.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				65921364519A5FE83EA854F3 /* libPods-example.a */,
+				B9C68C702AF90F43FC6DDFD7 /* libPods-example.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		44EAFFF1DE6BCBE7A2F77312 /* example */ = {
+		321AB24AF72388E740B92064 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				6BC17020B10F33A46A86F354 /* ExpoModulesProvider.swift */,
+				0D6C4E151AC52B8A3E563659 /* example */,
 			);
-			name = example;
-			sourceTree = "<group>";
-		};
-		4724E55159DD4190A2C5A5BF /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				499AC19F83C34430B3C524B7 /* artboard_animations.riv */,
-				1E0C7042C0CC4293A667C9CE /* avatars.riv */,
-				3AB4FD081E8B49D8A2DB846E /* bird.riv */,
-				4F84E601988448538AB2BC50 /* constrained.riv */,
-				909983FE7455410DBC2619AE /* follow_path_car.riv */,
-				56D55B563DA44445B5DCFBF2 /* hello_world_nested.riv */,
-				C475FA354DF7415495D35A78 /* hello_world_text.riv */,
-				EA8733CFC647438A929D804C /* hero_editor.riv */,
-				06D7E980B1FC47C3892E4436 /* layout_test.riv */,
-				7AA30E55BDD7426CBA4EEF94 /* loopy.riv */,
-				D8F8AFEED8F149C48F66CA4B /* nested_menu.riv */,
-				0897B528E7AE4E5BBF4E6201 /* out_of_band.riv */,
-				79F321988E7B44ADBF0E131A /* quick_start.riv */,
-				F941851029EE4A1E92E2CDFF /* rainy.riv */,
-				AD8055AD9922407CBCBB1E81 /* rating.riv */,
-				192280511AA54DAC909A3B2B /* rive_switch.riv */,
-				CA90D4C11D854E0A97723B16 /* runtime_nested_inputs.riv */,
-				169ECB4F96A549EF9892A514 /* skills_listener.riv */,
-				C5C15901909F49D0A779C48F /* truck_v7.riv */,
-				2E922FF8F0F14B7AA8FD9BFE /* two_bone_ik.riv */,
-				9969AF5EC0D24301BD734083 /* ui_swipe_left_to_delete.riv */,
-				98498B93DD37407F85D46065 /* v6_file.riv */,
-			);
-			name = Resources;
-			path = "";
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -181,9 +143,9 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				4724E55159DD4190A2C5A5BF /* Resources */,
-				2950965EC2056F6ADF332EED /* Pods */,
-				2499262A8241ACF0C0012BFC /* ExpoModulesProviders */,
+				9D743CDF15A14AEAB8C3F0FE /* Resources */,
+				F5FF92806BDB75CA2FFD6935 /* Pods */,
+				321AB24AF72388E740B92064 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -198,6 +160,37 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9D743CDF15A14AEAB8C3F0FE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FAD56F6107124F3680A87F03 /* artboard_animations.riv */,
+				17B6B4D36AD54EA0AE14C24F /* avatars.riv */,
+				9DD8B81D1CDB44B8B5E74750 /* bird.riv */,
+				A23F8E2130EA4C8698170778 /* constrained.riv */,
+				55D2915D379348F1BEEBE7BC /* follow_path_car.riv */,
+				17CCAA96897B4C7B92764C56 /* hello_world_nested.riv */,
+				0BEE9435440849ABAD6558C9 /* hello_world_text.riv */,
+				6CD5DAB865304EC5AC1C6F2A /* hero_editor.riv */,
+				FA2931D4B7134D519A238AB1 /* layout_test.riv */,
+				C74997FF978D4D0DB71E7D6F /* loopy.riv */,
+				4A5C600A4ABC403189074FF8 /* nested_menu.riv */,
+				B88B882F1C124AE39640F29C /* out_of_band.riv */,
+				6BDB0666CDC74DBE91AEC39A /* quick_start.riv */,
+				4E2E02052883412091BEF7F3 /* rainy.riv */,
+				BDFB3FBEA1A04EACA0BCC4DD /* rating.riv */,
+				3950B4994C394FE1B193A4F5 /* rewards.riv */,
+				6DD1353AB320469A9DD9D3C1 /* rive_switch.riv */,
+				EA3D080482DD426091FA287E /* runtime_nested_inputs.riv */,
+				F8BCC4399844431888BC8A09 /* skills_listener.riv */,
+				42D447D1CDBE4A5CBB9820CF /* truck_v7.riv */,
+				5963C8282B53442081AD0EE3 /* two_bone_ik.riv */,
+				510B026FD6A54A1FB0C82699 /* ui_swipe_left_to_delete.riv */,
+				2C9758FAFFA443C0A0ECF8E3 /* v6_file.riv */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,6 +198,16 @@
 			);
 			name = Supporting;
 			path = example/Supporting;
+			sourceTree = "<group>";
+		};
+		F5FF92806BDB75CA2FFD6935 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				75EDD25A4179E588272CAB39 /* Pods-example.debug.xcconfig */,
+				57E28B1C43CA863542BC3E78 /* Pods-example.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,13 +218,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "example" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				8C3B298A8591AD74BEDB9354 /* [Expo] Configure project */,
+				63E7348AF4C432D7AE63DD95 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				B37C3A1E699BC5C5C52EB691 /* [CP] Embed Pods Frameworks */,
+				57BECFA8952E159C94EB7EDD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -271,29 +274,30 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				DB15C69B13D24A3481C305A5 /* artboard_animations.riv in Resources */,
-				2B69943E64F748D8B8F8F0AE /* avatars.riv in Resources */,
-				D9403AC63C454197A457CF27 /* bird.riv in Resources */,
-				D7269D4AA81C40E9B10E6E41 /* constrained.riv in Resources */,
-				0894D0DDE1B64E6D97AF9A1F /* follow_path_car.riv in Resources */,
-				61813624E73D4EC5BA4517B1 /* hello_world_nested.riv in Resources */,
-				8882EBC21F3443ADAA675CF9 /* hello_world_text.riv in Resources */,
-				495C12032639406B9AA09B9E /* hero_editor.riv in Resources */,
-				9F97B2D6A31D422DA39E36AC /* layout_test.riv in Resources */,
-				EB5DF2FD22A440FFAAC79BEE /* loopy.riv in Resources */,
-				460BB39669984549A1ED6A6F /* nested_menu.riv in Resources */,
-				27DAB203196A47BD853FCDAE /* out_of_band.riv in Resources */,
-				FD0C0391B41B466DBEF88136 /* quick_start.riv in Resources */,
-				B3771F4450C34288B610F64F /* rainy.riv in Resources */,
-				204A78FC8AC447F7A2D3E2E8 /* rating.riv in Resources */,
-				731E311590CB4EC7A084B19D /* rive_switch.riv in Resources */,
-				65DFAD285D07482FBEF0D6C7 /* runtime_nested_inputs.riv in Resources */,
-				A1F8241463824A0D954E1B88 /* skills_listener.riv in Resources */,
-				7B578ACCF175449F8985D2F6 /* truck_v7.riv in Resources */,
-				B7F438EBD3E647A4B5499BE8 /* two_bone_ik.riv in Resources */,
-				607873FF0D734FCC841E4E74 /* ui_swipe_left_to_delete.riv in Resources */,
-				6346229FE37D42F584F6249C /* v6_file.riv in Resources */,
-				3BE0CCD115C22F82AEBBF30E /* PrivacyInfo.xcprivacy in Resources */,
+				F0D0244B33C043848E4B02A9 /* artboard_animations.riv in Resources */,
+				5329FF258FF94784948572EB /* avatars.riv in Resources */,
+				C3BF9C6AD0D54585910A025E /* bird.riv in Resources */,
+				BADCDA81119C4183B83D3B78 /* constrained.riv in Resources */,
+				DD2508C107DC4B66AA35E3D0 /* follow_path_car.riv in Resources */,
+				F4845F27F4184764971F6A26 /* hello_world_nested.riv in Resources */,
+				704FAAB35B2D420F9AD9442A /* hello_world_text.riv in Resources */,
+				BC2543A2EA1F4A1E91A24951 /* hero_editor.riv in Resources */,
+				A191A73F8CFE49EAA46861D6 /* layout_test.riv in Resources */,
+				A9C60527D4BF4D7B9F9A7B46 /* loopy.riv in Resources */,
+				6BDA940AC1DE45979D0BBFA1 /* nested_menu.riv in Resources */,
+				2EFDD5BA279F4B0892129BEF /* out_of_band.riv in Resources */,
+				5917B1F403054EEF8F067160 /* quick_start.riv in Resources */,
+				A6301804F990471CB8F97351 /* rainy.riv in Resources */,
+				49427CB8155F4639AF8B312C /* rating.riv in Resources */,
+				9A02ED9FBE354252BE63A9BD /* rewards.riv in Resources */,
+				7611DDD4FFD147A7896127FA /* rive_switch.riv in Resources */,
+				31B77B01708E468A856269DE /* runtime_nested_inputs.riv in Resources */,
+				67D8BC49BECF480098B394D3 /* skills_listener.riv in Resources */,
+				0B9CE5EA60CC4BA7B32BE17A /* truck_v7.riv in Resources */,
+				E21BE810AD1F48C7B7BA1B03 /* two_bone_ik.riv in Resources */,
+				AC711A32ED204C89A5563D29 /* ui_swipe_left_to_delete.riv in Resources */,
+				3544243E201747128FB0C837 /* v6_file.riv in Resources */,
+				8FE6D77EDF95D54C50A76D7D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +342,54 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		57BECFA8952E159C94EB7EDD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-example/Pods-example-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/RiveRuntime/RiveRuntime.framework/RiveRuntime",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RiveRuntime.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-example/Pods-example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		63E7348AF4C432D7AE63DD95 /* [Expo] Configure project */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/example/example.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-example/expo-configure-project.sh",
+			);
+			name = "[Expo] Configure project";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Pods/Target Support Files/Pods-example/ExpoModulesProvider.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-example/expo-configure-project.sh\"\n";
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -407,54 +459,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-example/Pods-example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8C3B298A8591AD74BEDB9354 /* [Expo] Configure project */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/.xcode.env",
-				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/example/example.entitlements",
-				"$(SRCROOT)/Pods/Target Support Files/Pods-example/expo-configure-project.sh",
-			);
-			name = "[Expo] Configure project";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Pods/Target Support Files/Pods-example/ExpoModulesProvider.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-example/expo-configure-project.sh\"\n";
-		};
-		B37C3A1E699BC5C5C52EB691 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-example/Pods-example-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/RiveRuntime/RiveRuntime.framework/RiveRuntime",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/React.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactNativeDependencies.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RiveRuntime.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-example/Pods-example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -463,7 +467,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				31421807E992CF410AC05D42 /* ExpoModulesProvider.swift in Sources */,
+				E893B71197940B788259D3C3 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,7 +476,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 56C46B53E4F674721BCD7176 /* Pods-example.debug.xcconfig */;
+			baseConfigurationReference = 75EDD25A4179E588272CAB39 /* Pods-example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -497,7 +501,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.example;
-				PRODUCT_NAME = "example";
+				PRODUCT_NAME = example;
 				SWIFT_OBJC_BRIDGING_HEADER = "example/example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -508,7 +512,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CE7B82EF194946D3324559A2 /* Pods-example.release.xcconfig */;
+			baseConfigurationReference = 57E28B1C43CA863542BC3E78 /* Pods-example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -528,7 +532,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.example;
-				PRODUCT_NAME = "example";
+				PRODUCT_NAME = example;
 				SWIFT_OBJC_BRIDGING_HEADER = "example/example-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
