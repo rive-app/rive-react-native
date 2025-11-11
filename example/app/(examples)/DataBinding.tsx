@@ -343,8 +343,6 @@ const styles = StyleSheet.create({
   animation: {
     width: '100%',
     height: 300,
-    borderColor: 'black',
-    borderWidth: 1,
   },
   headerButton: {
     marginRight: 8,
