@@ -56,10 +56,13 @@ jobs:
             echo ""
             echo "═══════════════════════════════════════════════════════════"
             echo "Diff:"
-            git --no-pager diff example/android example/ios -- \
-              ':!example/ios/Podfile.lock' \
-              ':!example/ios/*.xcworkspace' \
-              ':!example/ios/example/PrivacyInfo.xcprivacy'
+            # Only show diff for files that actually changed (from $CHANGES)
+            # This handles cases where android/ios folders may not exist
+            echo "$CHANGES" | while read status file; do
+              if [ -n "$file" ]; then
+                git --no-pager diff HEAD -- "$file" || true
+              fi
+            done
             exit 1
           else
             echo "✅ Success: Native folders match expo prebuild output"
