@@ -78,6 +78,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Generate native folders
+        working-directory: example
+        run: npx expo prebuild --no-install
+
       - name: Build example for Android
         working-directory: example/android
         run: ./gradlew assembleDebug --no-daemon
@@ -90,6 +94,10 @@ jobs:
 
       - name: Setup Node.js and Dependencies
         uses: ./.github/actions/setup-node-deps
+
+      - name: Generate native folders
+        working-directory: example
+        run: npx expo prebuild --no-install
 
       - name: Restore CocoaPods cache
         id: cocoapods-cache
