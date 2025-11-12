@@ -101,7 +101,15 @@ jobs:
           key: ${{ runner.os }}-cocoapods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('example/ios/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-cocoapods-${{ hashFiles('yarn.lock') }}-
-            ${{ runner.os }}-cocoapods-
+
+      - name: Clean cached Pods if restored from partial match
+        if: steps.cocoapods-cache.outputs.cache-hit != 'true' && steps.cocoapods-cache.outputs.cache-matched-key != ''
+        working-directory: example/ios
+        run: |
+          if [ -d "Pods" ]; then
+            echo "Partial cache match detected - clearing Pods to avoid version mismatches"
+            rm -rf Pods
+          fi
 
       - name: Install CocoaPods
         working-directory: example/ios
