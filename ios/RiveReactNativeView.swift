@@ -236,7 +236,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
                     case .empty:
                         return "empty"
                     case .none:
-                        return "none"    
+                        return "none"
                     }
                 }()
                 error.message = "Failed to create data binding instance with config: \(configDescription)"
@@ -331,6 +331,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             } else {
                 updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
             }
+            warnForUnusedAssets()
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
             
@@ -346,7 +347,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
       }
       resourceName = nil
       resourceFromBundle = false
-      downloadUrlAsset(url: url) { [weak self] data in
+      loadUrlAsset(url: url) { [weak self] data in
         guard let self = self else { return }
         guard !data.isEmpty else {
           handleRiveError(error: createIncorrectRiveURL(url))
@@ -491,6 +492,26 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         
         return false
     }
+
+    private func warnForUnusedAssets() {
+        guard let referencedAssets = referencedAssets else { return }
+
+        let providedKeys = Set(referencedAssets.allKeys.compactMap { $0 as? String })
+        let referencedInFileKeys = Set(cachedFileAssets.keys)
+        let unusedKeys = providedKeys.subtracting(referencedInFileKeys)
+        if !unusedKeys.isEmpty {
+            let keysString = unusedKeys.joined(separator: ",")
+            let message = "referencesAsset provided keys: \(keysString) but it was not referenced in the rive file"
+            if isUserHandlingErrors {
+                var error = RNRiveError.UnusedReferencedAssetError
+                error.message = message
+                onRNRiveError(error)
+            } else {
+              RCTLogWarn(message)
+              
+            }
+        }
+    }
     
     private func loadAsset(source: NSDictionary, asset: RiveFileAsset, factory: RiveFactory) {
         let sourceAssetId = source["sourceAssetId"] as? String
@@ -511,13 +532,13 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             return
         }
         
-        downloadUrlAsset(url: sourceAssetId) { [weak self] data in
+        loadUrlAsset(url: sourceAssetId) { [weak self] data in
             self?.processAssetBytes(data, asset: asset, factory: factory)
         }
     }
     
     private func handleSourceUrl(_ sourceUrl: String, asset: RiveFileAsset, factory: RiveFactory) {
-        downloadUrlAsset(url: sourceUrl) { [weak self] data in
+        loadUrlAsset(url: sourceUrl) { [weak self] data in
             self?.processAssetBytes(data, asset: asset, factory: factory)
         }
     }
@@ -555,47 +576,45 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
     }
     
-    private func downloadUrlAsset(url: String, listener: @escaping (Data) -> Void) {
+    private func loadUrlAsset(url: String, listener: @escaping (Data) -> Void) {
         guard isValidUrl(url) else {
             handleInvalidUrlError(url: url)
             return
         }
         
-        // Properly encode the URL to handle spaces and special characters
-        guard let encodedUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let requestUrl = URL(string: encodedUrlString) else {
+        guard let assetUrl = URL(string: url) else {
             handleInvalidUrlError(url: url)
             return
         }
         
-        let session = URLSession.shared
-        var request = URLRequest(url: requestUrl)
-        request.timeoutInterval = 15.0 // 15 second timeout
-        
-        let task = session.dataTask(with: request) {[weak self] data, response, error in
-            guard let self = self else { return }
-            
-            if let error = error {
-                let errorMessage: String
-                if let urlError = error as? URLError {
-                    switch urlError.code {
-                    case .timedOut:
-                        errorMessage = "Timeout downloading from: \(url)"
-                    case .notConnectedToInternet:
-                        errorMessage = "No internet connection for: \(url)"
-                    case .cannotFindHost:
-                        errorMessage = "Cannot find host for: \(url)"
-                    case .fileDoesNotExist:
-                        errorMessage = "File not found at: \(url)"
-                    default:
-                        errorMessage = "Network error downloading from: \(url)"
-                    }
-                } else {
-                    errorMessage = "Unknown error downloading from: \(url)"
+        if assetUrl.isFileURL {
+            loadFileUrlAsset(url: assetUrl, listener: listener)
+        } else {
+            loadRemoteUrlAsset(url: assetUrl, listener: listener)
+        }
+    }
+
+    private func loadFileUrlAsset(url: URL, listener: @escaping (Data) -> Void) {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            do {
+                let fileData = try Data(contentsOf: url)
+                DispatchQueue.main.async {
+                    listener(fileData)
                 }
-                
-                let customError = createIncorrectRiveURL(errorMessage)
-                self.handleRiveError(error: customError)
+            } catch {
+                DispatchQueue.main.async {
+                    self?.handleInvalidUrlError(url: url.absoluteString)
+                }
+            }
+        }
+    }
+
+    private func loadRemoteUrlAsset(url: URL, listener: @escaping (Data) -> Void) {
+        let queue = URLSession.shared
+        let request = URLRequest(url: url)
+        let task = queue.dataTask(with: request) {[weak self] data, response, error in
+            if error != nil {
+                self?.handleInvalidUrlError(url: url.absoluteString)
             } else if let data = data {
                 // Check HTTP response status
                 if let httpResponse = response as? HTTPURLResponse {
@@ -626,10 +645,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         
         task.resume()
     }
+
     
     private func isValidUrl(_ url: String) -> Bool {
         if let url = URL(string: url) {
-            return UIApplication.shared.canOpenURL(url)
+            return url.isFileURL || (url.scheme == "http" || url.scheme == "https")
         } else {
             return false
         }
@@ -655,19 +675,8 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             handleRiveError(error: createAssetFileError(sourceAsset))
             return
         }
-        
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            do {
-                let fileData = try Data(contentsOf: folderUrl)
-                DispatchQueue.main.async {
-                    listener(fileData)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self?.handleRiveError(error: createAssetFileError(sourceAsset))
-                }
-            }
-        }
+
+        loadFileUrlAsset(url: folderUrl, listener: listener)
     }
     
     private func handleInvalidUrlError(url: String) {

@@ -59,7 +59,10 @@ function RootLayoutNav() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="index" options={{ title: 'Example App' }} />
-
+          <Stack.Screen
+            name="(examples)/QuickStart"
+            options={{ title: 'Quick Start' }}
+          />
           <Stack.Screen
             name="(examples)/Simple"
             options={{ title: 'Simple' }}

@@ -1,0 +1,128 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  merge_group:
+    types:
+      - checks_requested
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
+
+      - name: Lint files
+        run: yarn lint
+
+      - name: Typecheck files
+        run: yarn typescript
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
+
+      - name: Run unit tests
+        run: yarn test --maxWorkers=2
+
+  build-library:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
+
+      - name: Build package
+        run: yarn prepare
+
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
+
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('example/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build example for Android
+        working-directory: example/android
+        run: ./gradlew assembleDebug --no-daemon
+
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js and Dependencies
+        uses: ./.github/actions/setup-node-deps
+
+      - name: Restore CocoaPods cache
+        id: cocoapods-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            example/ios/Pods
+            example/ios/build/generated
+          key: ${{ runner.os }}-cocoapods-${{ hashFiles('yarn.lock') }}-${{ hashFiles('example/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cocoapods-${{ hashFiles('yarn.lock') }}-
+            ${{ runner.os }}-cocoapods-
+
+      - name: Install CocoaPods
+        working-directory: example/ios
+        run: pod install
+
+      - name: Cache CocoaPods
+        if: steps.cocoapods-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            example/ios/Pods
+            example/ios/build/generated
+          key: ${{ steps.cocoapods-cache.outputs.cache-primary-key }}
+
+      - name: Build example for iOS
+        working-directory: example/ios
+        run: |
+          xcodebuild -workspace example.xcworkspace \
+            -scheme example \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            COMPILER_INDEX_STORE_ENABLE=NO

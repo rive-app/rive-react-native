@@ -12,7 +12,8 @@ enum class RNRiveError(private val mValue: String) {
   IncorrectStateMachineName("IncorrectStateMachineName"),
   IncorrectStateMachineInput("IncorrectStateMachineInput"),
   TextRunNotFoundError("TextRunNotFoundError"),
-  DataBindingError("DataBindingError");
+  DataBindingError("DataBindingError"),
+  UnusedReferencedAssetError("UnusedReferencedAssetError");
 
   var message: String = "Default message"
 

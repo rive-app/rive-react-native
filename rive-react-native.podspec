@@ -2,6 +2,21 @@ require "json"
 
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
+# Resolve Rive iOS SDK version
+podfile_properties_path = File.join(__dir__, "ios", "Podfile.properties.json")
+if File.exist?(podfile_properties_path)
+  podfile_properties = JSON.parse(File.read(podfile_properties_path))
+  rive_ios_version = podfile_properties["RiveRuntimeIOSVersion"]
+end
+
+rive_ios_version ||= package["runtimeVersions"]["ios"]
+
+if rive_ios_version.nil?
+  raise "Could not determine Rive iOS SDK version. Please add 'runtimeVersions.ios' to package.json"
+end
+
+Pod::UI.puts "rive-react-native: Using Rive iOS SDK #{rive_ios_version}"
+
 Pod::Spec.new do |s|
   s.name         = "rive-react-native"
   s.version      = package["version"]
@@ -18,5 +33,5 @@ Pod::Spec.new do |s|
   s.swift_version = "5.0"
 
   s.dependency "React-Core"
-  s.dependency "RiveRuntime", "6.11.0"
+  s.dependency "RiveRuntime", rive_ios_version
 end

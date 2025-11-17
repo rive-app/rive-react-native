@@ -36,6 +36,7 @@
 		9E32630D2D6EA9D3002A1CFA /* hello_world_nested.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F52D6EA9D3002A1CFA /* hello_world_nested.riv */; };
 		9E32630E2D6EA9D3002A1CFA /* hello_world_text.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F62D6EA9D3002A1CFA /* hello_world_text.riv */; };
 		9E32630F2D6EA9D3002A1CFA /* skills_listener.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9E3262F72D6EA9D3002A1CFA /* skills_listener.riv */; };
+		9EA5BDEA2E835D7F003D242D /* quick_start.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9EA5BDE92E835D7F003D242D /* quick_start.riv */; };
 		9EEC77CB2D7B866D006D35DC /* nested_inputs.riv in Resources */ = {isa = PBXBuildFile; fileRef = 9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
@@ -76,6 +77,7 @@
 		9E3262F52D6EA9D3002A1CFA /* hello_world_nested.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello_world_nested.riv; path = Assets/hello_world_nested.riv; sourceTree = "<group>"; };
 		9E3262F62D6EA9D3002A1CFA /* hello_world_text.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = hello_world_text.riv; path = Assets/hello_world_text.riv; sourceTree = "<group>"; };
 		9E3262F72D6EA9D3002A1CFA /* skills_listener.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = skills_listener.riv; path = Assets/skills_listener.riv; sourceTree = "<group>"; };
+		9EA5BDE92E835D7F003D242D /* quick_start.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = quick_start.riv; path = Assets/quick_start.riv; sourceTree = "<group>"; };
 		9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */ = {isa = PBXFileReference; lastKnownFileType = file; name = nested_inputs.riv; path = Assets/nested_inputs.riv; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = example/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9EA5BDE92E835D7F003D242D /* quick_start.riv */,
 				F83E26CD2DBBE0860086A423 /* rewards.riv */,
 				9EEC77CA2D7B866D006D35DC /* nested_inputs.riv */,
 				9E3262E22D6EA9D3002A1CFA /* artboard_animations.riv */,
@@ -277,6 +280,7 @@
 				9E3262FB2D6EA9D3002A1CFA /* constrained.riv in Resources */,
 				9E3262FC2D6EA9D3002A1CFA /* nested_menu.riv in Resources */,
 				9E3262FD2D6EA9D3002A1CFA /* referenced_audio-2929340.wav in Resources */,
+				9EA5BDEA2E835D7F003D242D /* quick_start.riv in Resources */,
 				9E3262FE2D6EA9D3002A1CFA /* switch.riv in Resources */,
 				9E3262FF2D6EA9D3002A1CFA /* out_of_band.riv in Resources */,
 				9E3263002D6EA9D3002A1CFA /* rainy.riv in Resources */,

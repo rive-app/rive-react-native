@@ -39,10 +39,13 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
+import java.net.URI
+import java.net.URISyntaxException
 import java.net.URL
 
 
@@ -356,11 +359,11 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
   fun touchBegan(x: Float, y: Float) {
-    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_DOWN, x, y)
+    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_DOWN, 0, x, y)
   }
 
   fun touchEnded(x: Float, y: Float) {
-    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_UP, x, y)
+    riveAnimationView?.controller?.pointerEvent(PointerEvents.POINTER_UP, 0, x, y)
   }
 
   fun setTextRunValue(textRunName: String, textValue: String) {
@@ -701,6 +704,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
               animationName = this.animationName,
               artboardName = this.artboardName
             )
+            warnForUnusedAssets()
             configureDataBinding()
             sendRiveLoadedEvent()
             url = null
@@ -866,8 +870,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
         "name" -> {
           if (value.type == ReadableType.String) {
-            val stringValue = value.asString()
-            DataBindingConfig.Name(stringValue)
+            value.asString()?.let { DataBindingConfig.Name(it) }
           } else null
         }
 
@@ -1054,47 +1057,52 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       return
     }
 
-    // Properly encode the URL to handle spaces and special characters
-    val encodedUrl = try {
-      val uri = Uri.parse(url)
-      uri.toString() // This will properly encode the URL
-    } catch (e: Exception) {
+    try {
+      val uri = URI(url)
+      when (uri.scheme) {
+        "file" -> loadFileUrlAsset(uri, listener)
+        else -> loadRemoteUrlAsset(url, listener)
+      }
+    } catch (e: URISyntaxException) {
       handleInvalidUrlError(url)
-      return
     }
+  }
 
+  private fun loadFileUrlAsset(uri: URI, listener: Response.Listener<ByteArray>) {
+    CoroutineScope(Dispatchers.IO).launch {
+      try {
+        val file = java.io.File(uri.path)
+
+        if (!file.exists()) {
+          throw java.io.FileNotFoundException("File not found: ${uri.path}")
+        }
+        if (!file.canRead()) {
+          throw IOException("Permission denied: ${uri.path}")
+        }
+
+        val data = file.readBytes()
+        withContext(Dispatchers.Main) {
+          listener.onResponse(data)
+        }
+      } catch (e: Exception) {
+        val volleyError = if (e is java.io.FileNotFoundException) {
+          VolleyError(NetworkResponse(404, null, false, 0, emptyList()))
+        } else {
+          VolleyError(e)
+        }
+        withContext(Dispatchers.Main) {
+          handleURLAssetError(uri.toString(), volleyError, isUserHandlingErrors)
+        }
+      }
+    }
+  }
+
+  private fun loadRemoteUrlAsset(url: String, listener: Response.Listener<ByteArray>) {
     val queue = Volley.newRequestQueue(context)
-
-    val stringRequest = RNRiveFileRequest(
-      encodedUrl, listener
-    ) { error -> 
-      // Enhanced error handling for better debugging
-      val errorMessage = when {
-        error.networkResponse?.statusCode == 404 -> "File not found (404) at: $url"
-        error.networkResponse?.statusCode == 403 -> "Access forbidden (403) for: $url"
-        error.networkResponse?.statusCode == 500 -> "Server error (500) for: $url"
-        error.cause is java.net.SocketTimeoutException -> "Timeout downloading from: $url"
-        error.cause is java.net.UnknownHostException -> "Cannot resolve host for: $url"
-        else -> "Unable to download the Rive asset file from: $url"
-      }
-      
-      if (isUserHandlingErrors) {
-        val rnRiveError = RNRiveError.IncorrectRiveFileUrl
-        rnRiveError.message = errorMessage
-        sendErrorToRN(rnRiveError)
-      } else {
-        showRNRiveError(errorMessage, error)
-      }
+    val request = RNRiveFileRequest(url, listener) { error ->
+      handleURLAssetError(url, error, isUserHandlingErrors)
     }
-
-    // Add timeout to prevent hanging requests
-    stringRequest.retryPolicy = DefaultRetryPolicy(
-      15000, // 15 second timeout
-      1, // no retries
-      DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-    )
-
-    queue.add(stringRequest)
+    queue.add(request)
   }
 
   private fun processAssetBytes(bytes: ByteArray, asset: FileAsset) {
@@ -1170,6 +1178,28 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("message", error.message)
     reactContext.getJSModule(RCTEventEmitter::class.java)
       .receiveEvent(id, Events.ERROR.toString(), data)
+  }
+
+  private fun warnForUnusedAssets() {
+    val referencedAssetsMap = referencedAssets ?: return
+    val assetStoreCache = assetStore?.cachedFileAssets ?: return
+
+    val providedKeys = referencedAssetsMap.keysList().toSet()
+    val referencedInFileKeys = assetStoreCache.keys.toSet()
+    val unusedKeys = providedKeys - referencedInFileKeys
+
+    if (unusedKeys.isNotEmpty()) {
+      val keysString = unusedKeys.joinToString(",")
+      val message = "referencedAssets provided keys: $keysString but they were not referenced in the rive file"
+
+      if (isUserHandlingErrors) {
+        val rnRiveError = RNRiveError.UnusedReferencedAssetError
+        rnRiveError.message = message
+        sendErrorToRN(rnRiveError)
+      } else {
+        android.util.Log.w("RiveReactNative", message)
+      }
+    }
   }
 
   private fun showRNRiveError(message: String, error: Throwable?) {
