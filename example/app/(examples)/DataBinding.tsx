@@ -23,7 +23,7 @@ import Rive, {
   useRiveTrigger,
 } from 'rive-react-native';
 import { Button } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';
 import Slider from '@react-native-community/slider';
 
 export default function DataBinding() {
@@ -186,7 +186,7 @@ export default function DataBinding() {
                 return;
               }
               default:
-                console.error('Unhandled error');
+                console.error('Unhandled error', riveError);
                 return;
             }
           }}

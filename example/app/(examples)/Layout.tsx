@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   picker: {
     flex: 1,
     width: '100%',
+    color: 'black',
   },
   pickerWrapper: {
     borderWidth: 1,
