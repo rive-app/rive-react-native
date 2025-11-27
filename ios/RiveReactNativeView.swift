@@ -30,6 +30,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     var viewModel: RiveViewModel?
     var dataBindingViewModelInstance: RiveDataBindingViewModel.Instance?
     var cachedRiveFactory: RiveFactory?
+    var cachedRiveFile: RiveFile?
     var previousReferencedAssets: NSDictionary?
     var cachedFileAssets: [String: RiveFileAsset] = [:]
     
@@ -158,6 +159,10 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     private func cleanupFileAssetCache() {
         cachedFileAssets.removeAll()
         cachedRiveFactory = nil
+        // Note: We intentionally don't clear cachedRiveFile here to prevent a race condition
+        // where async asset loaders (both custom and CDN) may still be using the factory
+        // tied to the RiveFile. The cachedRiveFile will be replaced on next load or
+        // released when this view is deallocated.
     }
     
     override func layoutSubviews() {
@@ -331,6 +336,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             } else {
                 updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
             }
+            cachedRiveFile = updatedViewModel.riveModel?.riveFile
             warnForUnusedAssets()
             
             updatedViewModel.layoutScaleFactor = layoutScaleFactor.doubleValue
@@ -355,6 +361,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
         do {
           let riveFile = try RiveFile(data: data, loadCdn: true, customAssetLoader: customLoader)
+          self.cachedRiveFile = riveFile
           let riveModel = RiveModel(riveFile: riveFile)
           let fit = self.convertFit(self.fit)
           let alignment = self.convertAlignment(self.alignment)
@@ -514,25 +521,28 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         if (data.isEmpty == true) {
             return;
         }
+        let riveFileRef = cachedRiveFile
         DispatchQueue.global(qos: .background).async {
-            switch asset {
-            case let imageAsset as RiveImageAsset:
-                let decodedImage = factory.decodeImage(data)
-                DispatchQueue.main.async {
-                    imageAsset.renderImage(decodedImage)
+            withExtendedLifetime(riveFileRef) {
+                switch asset {
+                case let imageAsset as RiveImageAsset:
+                    let decodedImage = factory.decodeImage(data)
+                    DispatchQueue.main.async {
+                        imageAsset.renderImage(decodedImage)
+                    }
+                case let fontAsset as RiveFontAsset:
+                    let decodedFont = factory.decodeFont(data)
+                    DispatchQueue.main.async {
+                        fontAsset.font(decodedFont)
+                    }
+                case let audioAsset as RiveAudioAsset:
+                    guard let decodedAudio = factory.decodeAudio(data) else { return }
+                    DispatchQueue.main.async {
+                        audioAsset.audio(decodedAudio)
+                    }
+                default:
+                    break
                 }
-            case let fontAsset as RiveFontAsset:
-                let decodedFont = factory.decodeFont(data)
-                DispatchQueue.main.async {
-                    fontAsset.font(decodedFont)
-                }
-            case let audioAsset as RiveAudioAsset:
-                guard let decodedAudio = factory.decodeAudio(data) else { return }
-                DispatchQueue.main.async {
-                    audioAsset.audio(decodedAudio)
-                }
-            default:
-                break
             }
         }
     }
