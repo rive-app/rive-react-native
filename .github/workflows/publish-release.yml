@@ -13,6 +13,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          token: ${{ secrets.PAT_GITHUB }}
 
       - name: Git config
         run: |
@@ -74,5 +75,3 @@ jobs:
         run: |
           chmod +x ./scripts/add_build_number.sh
           yarn release --increment=$(cat version.txt)
-        env:
-          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
