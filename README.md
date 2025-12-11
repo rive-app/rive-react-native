@@ -4,7 +4,7 @@
 
 # Rive React Native
 
-![Rive hero image](https://rive-app.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fff44ed5f-1eea-4154-81ef-84547e61c3fd%2Frive_notion.png?table=block&id=f198cab2-c0bc-4ce8-970c-42220379bcf3&spaceId=9c949665-9ad9-445f-b9c4-5ee204f8b60c&width=2000&userId=&cache=v2)
+![Rive hero image](https://cdn.rive.app/rive_logo_dark_bg.png)
 
 > **🚀 New Runtime Available!**
 >
@@ -12,14 +12,14 @@
 >
 > **Try it now:**
 >
-> - [GitHub(]https://github.com/rive-app/rive-nitro-react-native)
+> - [GitHub](https://github.com/rive-app/rive-nitro-react-native)
 > - [NPM](https://www.npmjs.com/package/@rive-app/react-native)
 >
 > We're actively gathering feedback to improve the new runtime. Please share your thoughts and report any issues you
 >
 > **Migration Timeline:**
 >
-> - **Short term:** Complete the new runtime and unblock production usage
+> - **Short term:** Complete the new runtime, see [Feature Support](https://github.com/rive-app/rive-nitro-react-native?tab=readme-ov-file#feature-support) and [Roadmap](https://github.com/rive-app/rive-nitro-react-native?tab=readme-ov-file#roadmap)
 > - **Medium term:** Address major concerns in this legacy package while supporting migration
 > - **Long term:** Full migration to the new package
 
