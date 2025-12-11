@@ -6,21 +6,22 @@
 
 ![Rive hero image](https://rive-app.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fff44ed5f-1eea-4154-81ef-84547e61c3fd%2Frive_notion.png?table=block&id=f198cab2-c0bc-4ce8-970c-42220379bcf3&spaceId=9c949665-9ad9-445f-b9c4-5ee204f8b60c&width=2000&userId=&cache=v2)
 
-> **🚀 New Runtime Available for Testing!**
+> **🚀 New Runtime Available!**
 >
-> We're excited to announce that the new Rive React Native runtime is now public and ready for testing. Built with Nitro for improved performance and better React Native integration, this next-generation runtime leverages the new React Native architecture and will eventually be distributed on NPM under the name `@rive-app/react-native`.
+> The new Rive React Native runtime is now available. Built with Nitro for improved performance and better React Native integration.
 >
-> **Try it now:** https://github.com/rive-app/rive-nitro-react-native
+> **Try it now:**
 >
-> **Current Status:** The new package is in development preview. While it's functional and actively maintained, the API may change in future releases. We recommend testing thoroughly before using in production applications.
+> - [GitHub(]https://github.com/rive-app/rive-nitro-react-native)
+> - [NPM](https://www.npmjs.com/package/@rive-app/react-native)
+>
+> We're actively gathering feedback to improve the new runtime. Please share your thoughts and report any issues you
 >
 > **Migration Timeline:**
 >
 > - **Short term:** Complete the new runtime and unblock production usage
 > - **Medium term:** Address major concerns in this legacy package while supporting migration
 > - **Long term:** Full migration to the new package
->
-> We're actively gathering feedback to improve the new runtime. Please share your thoughts and report any issues you encounter!
 
 A React Native runtime library for [Rive](https://rive.app).
 
