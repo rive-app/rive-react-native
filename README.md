@@ -15,7 +15,7 @@
 > - [GitHub](https://github.com/rive-app/rive-nitro-react-native)
 > - [NPM](https://www.npmjs.com/package/@rive-app/react-native)
 >
-> We're actively gathering feedback to improve the new runtime. Please share your thoughts and report any issues you
+> We're actively gathering feedback to improve the new runtime. Please share your thoughts and report any issues you encounter.
 >
 > **Migration Timeline:**
 >
