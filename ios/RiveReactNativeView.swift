@@ -359,6 +359,13 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
           handleRiveError(error: createIncorrectRiveURL(url))
           return
         }
+        
+        // Validate that we have valid Rive content before attempting to create RiveFile
+        if !isValidRiveContent(data) {
+          handleRiveError(error: createMalformedFileError())
+          return
+        }
+        
         do {
           let riveFile = try RiveFile(data: data, loadCdn: true, customAssetLoader: customLoader)
           self.cachedRiveFile = riveFile
@@ -385,6 +392,38 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
         }
       }
       
+    }
+    
+    /**
+     * Validates if the downloaded content is a valid Rive file by checking file signatures
+     */
+    private func isValidRiveContent(_ data: Data) -> Bool {
+        guard data.count >= 4 else { return false }
+        
+        // Check for Rive file signature (RIVE magic number)
+        let header = data.prefix(4)
+        
+        // Check for "RIVE" header (0x52495645)
+        if header[0] == 0x52 && header[1] == 0x49 && header[2] == 0x56 && header[3] == 0x45 {
+            return true
+        }
+        
+        // Additional validation - check for common non-Rive content patterns
+        if let headerString = String(data: header, encoding: .utf8) {
+            // Check if it's HTML (error pages)
+            if headerString.hasPrefix("<!DO") || headerString.hasPrefix("<htm") {
+                return false
+            }
+            
+            // Check if it's JSON (API error responses)
+            if headerString.hasPrefix("{") || headerString.hasPrefix("[") {
+                return false
+            }
+        }
+        
+        // If we can't definitively identify it as non-Rive, let the Rive runtime validate it
+        // This allows for different Rive file formats/versions
+        return true
     }
     
     private func reloadView() {
@@ -587,7 +626,30 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             if error != nil {
                 self?.handleInvalidUrlError(url: url.absoluteString)
             } else if let data = data {
-                listener(data)
+                // Check HTTP response status
+                if let httpResponse = response as? HTTPURLResponse {
+                    switch httpResponse.statusCode {
+                    case 200...299:
+                        listener(data)
+                    case 404:
+                        let error = createIncorrectRiveURL("File not found (404) at: \(url)")
+                        self.handleRiveError(error: error)
+                    case 403:
+                        let error = createIncorrectRiveURL("Access forbidden (403) for: \(url)")
+                        self.handleRiveError(error: error)
+                    case 500...599:
+                        let error = createIncorrectRiveURL("Server error (\(httpResponse.statusCode)) for: \(url)")
+                        self.handleRiveError(error: error)
+                    default:
+                        let error = createIncorrectRiveURL("HTTP error (\(httpResponse.statusCode)) for: \(url)")
+                        self.handleRiveError(error: error)
+                    }
+                } else {
+                    listener(data)
+                }
+            } else {
+                let error = createIncorrectRiveURL("No data received from: \(url)")
+                self.handleRiveError(error: error)
             }
         }
         
