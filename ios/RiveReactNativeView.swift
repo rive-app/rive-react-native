@@ -33,7 +33,13 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
     var cachedRiveFile: RiveFile?
     var previousReferencedAssets: NSDictionary?
     var cachedFileAssets: [String: RiveFileAsset] = [:]
-    
+
+    private var weakCustomLoader: ((RiveFileAsset, Data, RiveFactory) -> Bool) {
+        return { [weak self] asset, data, factory in
+            self?.customLoader(asset: asset, data: data, factory: factory) ?? false
+        }
+    }
+
     @objc var resourceName: String? = nil {
         didSet {
             if (resourceName != nil) {
@@ -330,11 +336,11 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
             
             let updatedViewModel : RiveViewModel
             if let smName = stateMachineName {
-                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
+                updatedViewModel = RiveViewModel(fileName: name, stateMachineName: smName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: weakCustomLoader)
             } else if let animName = animationName {
-                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
+                updatedViewModel = RiveViewModel(fileName: name, animationName: animName, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: weakCustomLoader)
             } else {
-                updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: customLoader)
+                updatedViewModel = RiveViewModel(fileName: name, fit: convertFit(fit), alignment: convertAlignment(alignment), autoPlay: autoplay, artboardName: artboardName, customLoader: weakCustomLoader)
             }
             cachedRiveFile = updatedViewModel.riveModel?.riveFile
             warnForUnusedAssets()
@@ -360,7 +366,7 @@ class RiveReactNativeView: RCTView, RivePlayerDelegate, RiveStateMachineDelegate
           return
         }
         do {
-          let riveFile = try RiveFile(data: data, loadCdn: true, customAssetLoader: customLoader)
+          let riveFile = try RiveFile(data: data, loadCdn: true, customAssetLoader: weakCustomLoader)
           self.cachedRiveFile = riveFile
           let riveModel = RiveModel(riveFile: riveFile)
           let fit = self.convertFit(self.fit)
