@@ -23,6 +23,7 @@ export default function Home() {
     <ScrollView contentContainerStyle={styles.container}>
       <StyledLink href="/(examples)/QuickStart">Quick Start</StyledLink>
       <StyledLink href="/(examples)/Simple">Simple</StyledLink>
+      <StyledLink href="/(examples)/DemoScripting">Demo Scripting</StyledLink>
       <StyledLink href="/(examples)/DataBinding">Data Binding</StyledLink>
       <StyledLink href="/(examples)/Http">HTTP</StyledLink>
       <StyledLink href="/(examples)/MeshExample">Mesh Example</StyledLink>
