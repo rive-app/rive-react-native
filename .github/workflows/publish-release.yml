@@ -6,7 +6,7 @@ jobs:
     name: Install and publish
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
+      id-token: write # Required for OIDC
       contents: write # allows this workflow to commit to the repo
     steps:
       - name: Checkout
@@ -24,6 +24,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Enable Corepack and Use Correct Yarn Version
         run: |
@@ -67,9 +68,6 @@ jobs:
 
       - name: Build lib
         run: yarn prepare
-
-      - name: Authenticate with registry
-        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_AUTOMATION_TOKEN }}
 
       - name: Publish
         run: |
