@@ -158,6 +158,5 @@ dependencies {
   implementation 'androidx.appcompat:appcompat:1.6.1'
   implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
   implementation "app.rive:rive-android:${riveAndroidVersion}"
-  implementation "androidx.startup:startup-runtime:1.1.1"
   implementation 'com.android.volley:volley:1.2.0'
 }
