@@ -8,6 +8,11 @@ import app.rive.runtime.kotlin.core.Rive
 class RiveReactNativeRendererModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   override fun getName() = "RiveReactNativeRendererModule"
 
+  override fun initialize() {
+    super.initialize()
+    Rive.init(reactApplicationContext)
+  }
+
   @ReactMethod fun defaultRenderer(iosRenderer: String, androidRenderer: String) {
     val rnRendererType = RNRiveRendererType.mapToRNRiveRendererType(androidRenderer);
     val rendererType = RNRiveRendererType.mapToRiveRendererType(rnRendererType);
