@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.8.1](https://github.com/rive-app/rive-react-native/compare/v9.8.0...v9.8.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* bump native runtimes (iOS 6.15.2, Android 11.2.0) ([2ea5056](https://github.com/rive-app/rive-react-native/commit/2ea50560cc15c8372362ef5a5f162e54d179dddc))
+
 ## [9.8.0](https://github.com/rive-app/rive-react-native/compare/v9.7.1...v9.8.0) (2026-01-16)
 
 
