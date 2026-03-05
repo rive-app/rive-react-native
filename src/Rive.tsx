@@ -58,14 +58,6 @@ const isHttpUrl = (uri: string | null | undefined): boolean => {
   return uri.startsWith('http://') || uri.startsWith('https://');
 };
 
-const isMetroDevUrl = (uri: string | null | undefined): boolean => {
-  if (!uri) return false;
-  return (
-    uri.startsWith('http://localhost:8081') ||
-    uri.startsWith('http://10.0.2.2:8081')
-  );
-};
-
 export class RiveNativeEventEmitter {
   constructor(
     public emitter: NativeEventEmitter,
@@ -534,8 +526,9 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         return {};
       }
 
-      // handle dev server
-      if (__DEV__ && isMetroDevUrl(assetURI)) {
+      // In dev, require('./file.riv') resolves to a Metro URL.
+      // On physical iOS devices this is usually your machine LAN IP, not localhost.
+      if (__DEV__ && assetID && isHttpUrl(assetURI)) {
         return { url: assetURI };
       }
 
@@ -544,7 +537,7 @@ const RiveContainer = React.forwardRef<RiveRef, Props>(
         if (__DEV__) {
           console.warn(
             '[Rive] Remote sources are blocked in hardened runtime. ' +
-              'Only Metro localhost is allowed in dev.'
+              'Use `require("./file.riv")` or `resourceName`.'
           );
         }
         return {};
