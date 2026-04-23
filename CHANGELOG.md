@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.8.3](https://github.com/rive-app/rive-react-native/compare/v9.8.2...v9.8.3) (2026-04-23)
+
+
+### Bug Fixes
+
+* **Android:** bump runtime to 11.4.1 to fix ARMv7 TLS relocation crash ([b10cf33](https://github.com/rive-app/rive-react-native/commit/b10cf33a682a116f0911be2914cbaf474da43930))
+
 ## [9.8.2](https://github.com/rive-app/rive-react-native/compare/v9.8.1...v9.8.2) (2026-04-17)
 
 
