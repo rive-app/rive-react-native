@@ -2,8 +2,8 @@
   "name": "rive-react-native",
   "version": "9.8.3",
   "runtimeVersions": {
-    "ios": "6.18.2",
-    "android": "11.4.1"
+    "ios": "6.21.0",
+    "android": "11.7.1"
   },
   "workspaces": [
     "example"
