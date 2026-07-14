@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.8.4](https://github.com/rive-app/rive-react-native/compare/v9.8.3...v9.8.4) (2026-07-14)
+
+
+### Bug Fixes
+
+* update Podfile.lock for RiveRuntime 6.21.0 ([22e19f3](https://github.com/rive-app/rive-react-native/commit/22e19f36e3f79dd7d5d85d7d8529e671cbe5ea68))
+
 ## [9.8.3](https://github.com/rive-app/rive-react-native/compare/v9.8.2...v9.8.3) (2026-04-23)
 
 
