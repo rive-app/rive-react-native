@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.8.5](https://github.com/rive-app/rive-react-native/compare/v9.8.4...v9.8.5) (2026-07-16)
+
+
+### Bug Fixes
+
+* pin npm to v11 as latest compatible version for our node runner ([588fd87](https://github.com/rive-app/rive-react-native/commit/588fd873bd9ba3c05b06863552eecfa46954997a))
+
 ## [9.8.4](https://github.com/rive-app/rive-react-native/compare/v9.8.3...v9.8.4) (2026-07-14)
 
 
