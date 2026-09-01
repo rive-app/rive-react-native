@@ -111,8 +111,8 @@ By default, `rive-react-native` uses the native SDK versions specified in `packa
 
 ```json
 "runtimeVersions": {
-  "ios": "6.23.1",
-  "android": "11.9.1"
+  "ios": "6.24.0",
+  "android": "11.10.0"
 }
 ```
 
@@ -128,7 +128,7 @@ Create or edit `ios/Podfile.properties.json`:
 
 ```json
 {
-  "RiveRuntimeIOSVersion": "6.23.1"
+  "RiveRuntimeIOSVersion": "6.24.0"
 }
 ```
 
@@ -143,7 +143,7 @@ cd ios && pod install
 Add to `android/gradle.properties`:
 
 ```properties
-Rive_RiveRuntimeAndroidVersion=11.9.1
+Rive_RiveRuntimeAndroidVersion=11.10.0
 ```
 
 #### Expo Projects
@@ -161,13 +161,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       withPodfileProperties,
       {
-        RiveRuntimeIOSVersion: '6.23.1',
+        RiveRuntimeIOSVersion: '6.24.0',
       },
     ],
     [
       withGradleProperties,
       {
-        Rive_RiveRuntimeAndroidVersion: '11.9.1',
+        Rive_RiveRuntimeAndroidVersion: '11.10.0',
       },
     ],
   ],
