@@ -66,7 +66,7 @@ func createFileNotFoundError() -> NSError {
 }
 
 func createMalformedFileError() -> NSError {
-    return NSError(domain: RiveErrorDomain, code: RiveErrorCode.malformedFile.rawValue, userInfo: [NSLocalizedDescriptionKey: "Malformed Rive File", "name": "Malformed"])
+    return NSError(domain: RiveErrorDomain, code: RiveErrorCode.malformedFile.rawValue, userInfo: [NSLocalizedDescriptionKey: "Malformed Rive File - downloaded content is not a valid .riv file", "name": "Malformed"])
 }
 
 func createAssetFileError(_ assetName: String) -> NSError {
