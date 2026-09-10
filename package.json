@@ -1,6 +1,6 @@
 {
   "name": "rive-react-native",
-  "version": "9.8.5",
+  "version": "9.8.6",
   "runtimeVersions": {
     "ios": "6.24.0",
     "android": "11.10.0"
