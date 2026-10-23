@@ -26,6 +26,7 @@ import com.facebook.react.bridge.ReactContext
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.ReadableType
+import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.modules.core.ExceptionsManagerModule
@@ -219,8 +220,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("animationName", animationName)
     data.putBoolean("isStateMachine", isStateMachine)
 
-    reactContext.getJSModule(RCTEventEmitter::class.java)
-      .receiveEvent(id, Events.PLAY.toString(), data)
+    UiThreadUtil.runOnUiThread {
+      reactContext.getJSModule(RCTEventEmitter::class.java)
+        .receiveEvent(id, Events.PLAY.toString(), data)
+    }
   }
 
   fun onPause(animationName: String, isStateMachine: Boolean = false) {
@@ -230,8 +233,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("animationName", animationName)
     data.putBoolean("isStateMachine", isStateMachine)
 
-    reactContext.getJSModule(RCTEventEmitter::class.java)
-      .receiveEvent(id, Events.PAUSE.toString(), data)
+    UiThreadUtil.runOnUiThread {
+      reactContext.getJSModule(RCTEventEmitter::class.java)
+        .receiveEvent(id, Events.PAUSE.toString(), data)
+    }
   }
 
   fun onStop(animationName: String, isStateMachine: Boolean = false) {
@@ -241,8 +246,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("animationName", animationName)
     data.putBoolean("isStateMachine", isStateMachine)
 
-    reactContext.getJSModule(RCTEventEmitter::class.java)
-      .receiveEvent(id, Events.STOP.toString(), data)
+    UiThreadUtil.runOnUiThread {
+      reactContext.getJSModule(RCTEventEmitter::class.java)
+        .receiveEvent(id, Events.STOP.toString(), data)
+    }
   }
 
   fun onLoopEnd(animationName: String, loopMode: RNLoopMode) {
@@ -252,8 +259,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("animationName", animationName)
     data.putString("loopMode", loopMode.toString())
 
-    reactContext.getJSModule(RCTEventEmitter::class.java)
-      .receiveEvent(id, Events.LOOP_END.toString(), data)
+    UiThreadUtil.runOnUiThread {
+      reactContext.getJSModule(RCTEventEmitter::class.java)
+        .receiveEvent(id, Events.LOOP_END.toString(), data)
+    }
   }
 
   fun onStateChanged(stateMachineName: String, stateName: String) {
@@ -262,8 +271,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     data.putString("stateMachineName", stateMachineName)
     data.putString("stateName", stateName)
 
-    reactContext.getJSModule(RCTEventEmitter::class.java)
-      .receiveEvent(id, Events.STATE_CHANGED.toString(), data)
+    UiThreadUtil.runOnUiThread {
+      reactContext.getJSModule(RCTEventEmitter::class.java)
+        .receiveEvent(id, Events.STATE_CHANGED.toString(), data)
+    }
   }
 
   private fun convertHashMapToWritableMap(hashMap: HashMap<String, Any>): WritableMap {
@@ -301,8 +312,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
       "riveEvent", eventProperties
     )
 
-    reactContext.getJSModule(RCTEventEmitter::class.java)
-      .receiveEvent(id, Events.RIVE_EVENT.toString(), topLevelDict)
+    UiThreadUtil.runOnUiThread {
+      reactContext.getJSModule(RCTEventEmitter::class.java)
+        .receiveEvent(id, Events.RIVE_EVENT.toString(), topLevelDict)
+    }
   }
 
   fun play(
@@ -1115,8 +1128,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
     val data = Arguments.createMap()
     data.putString("type", error.toString())
     data.putString("message", error.message)
-    reactContext.getJSModule(RCTEventEmitter::class.java)
-      .receiveEvent(id, Events.ERROR.toString(), data)
+    UiThreadUtil.runOnUiThread {
+      reactContext.getJSModule(RCTEventEmitter::class.java)
+        .receiveEvent(id, Events.ERROR.toString(), data)
+    }
   }
 
   private fun warnForUnusedAssets() {
