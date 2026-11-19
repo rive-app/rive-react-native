@@ -14,6 +14,7 @@ import app.rive.runtime.kotlin.controllers.RiveFileController
 import app.rive.runtime.kotlin.core.*
 import app.rive.runtime.kotlin.core.errors.*
 import app.rive.runtime.kotlin.renderers.PointerEvents
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.NetworkResponse
 import com.android.volley.ParseError
 import com.android.volley.Request
@@ -720,9 +721,33 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
   }
 
 
-  private fun setUrlRiveResource(url: String, autoplay: Boolean = this.autoplay) {
+  private fun setUrlRiveResource(url: String) {
     downloadUrlAsset(url) { bytes ->
       try {
+        // Validate that we have valid content before attempting to create Rive file
+        if (bytes.isEmpty()) {
+          if (isUserHandlingErrors) {
+            val rnRiveError = RNRiveError.IncorrectRiveFileUrl
+            rnRiveError.message = "Downloaded file is empty from: $url"
+            sendErrorToRN(rnRiveError)
+          } else {
+            showRNRiveError("Downloaded file is empty from: $url", null)
+          }
+          return@downloadUrlAsset
+        }
+
+        // Basic validation - check if the content starts with the Rive file signature
+        if (!isValidRiveContent(bytes)) {
+          if (isUserHandlingErrors) {
+            val rnRiveError = RNRiveError.MalformedFile
+            rnRiveError.message = "Downloaded content is not a valid Rive file from: $url"
+            sendErrorToRN(rnRiveError)
+          } else {
+            showRNRiveError("Downloaded content is not a valid Rive file from: $url", null)
+          }
+          return@downloadUrlAsset
+        }
+
         riveAnimationView?.setRiveBytes(
           bytes,
           fit = this.fit,
@@ -739,6 +764,42 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         handleRiveException(ex)
       }
     }
+  }
+
+  /**
+   * Validates if the downloaded content is a valid Rive file by checking file signatures
+   */
+  private fun isValidRiveContent(bytes: ByteArray): Boolean {
+    if (bytes.size < 4) return false
+    
+    // Check for Rive file signature (RIVE magic number)
+    // Rive files start with specific byte patterns
+    val header = bytes.take(4).toByteArray()
+    
+    // Check for "RIVE" header (0x52495645)
+    if (header[0] == 0x52.toByte() && 
+        header[1] == 0x49.toByte() && 
+        header[2] == 0x56.toByte() && 
+        header[3] == 0x45.toByte()) {
+      return true
+    }
+    
+    // Additional validation - check for common non-Rive content patterns
+    val headerString = String(header, Charsets.UTF_8)
+    
+    // Check if it's HTML (error pages)
+    if (headerString.startsWith("<!DO") || headerString.startsWith("<htm")) {
+      return false
+    }
+    
+    // Check if it's JSON (API error responses)
+    if (headerString.startsWith("{") || headerString.startsWith("[")) {
+      return false
+    }
+    
+    // If we can't definitively identify it as non-Rive, let the Rive runtime validate it
+    // This allows for different Rive file formats/versions
+    return true
   }
 
   fun setArtboardName(artboardName: String) {
