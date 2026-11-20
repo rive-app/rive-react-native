@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.net.Uri
+import android.util.Log
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -82,6 +83,9 @@ class ReactNativeRiveAnimationView(private val context: ThemedReactContext) :
     )
   }
 }
+
+private const val LOG_TAG = "RiveReactNativeView"
+private val RIVE_MAGIC = "RIVE".toByteArray(Charsets.US_ASCII)
 
 @SuppressLint("ViewConstructor")
 class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout(context) {
@@ -708,6 +712,7 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
             sendRiveLoadedEvent()
             url = null
           } catch (ex: RiveException) {
+            discardRetainedResource()
             handleRiveException(ex)
           }
 
@@ -722,6 +727,10 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   private fun setUrlRiveResource(url: String, autoplay: Boolean = this.autoplay) {
     downloadUrlAsset(url) { bytes ->
+      if (!isRiveFile(bytes)) {
+        handleUnreadableUrlAsset(bytes.size)
+        return@downloadUrlAsset
+      }
       try {
         riveAnimationView?.setRiveBytes(
           bytes,
@@ -736,8 +745,33 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
         configureDataBinding()
         sendRiveLoadedEvent()
       } catch (ex: RiveException) {
+        discardRetainedResource()
         handleRiveException(ex)
       }
+    }
+  }
+
+  // rive-android stores the bytes in rendererAttributes.resource before importing them and
+  // RiveAnimationView.onAttachedToWindow re-imports that resource without a try/catch, so a
+  // load error that was already reported to JS becomes a fatal MalformedFileException on the
+  // next Fabric (re)attach unless the failed resource is dropped.
+  private fun discardRetainedResource() {
+    riveAnimationView?.rendererAttributes?.resource = null
+  }
+
+  private fun isRiveFile(bytes: ByteArray): Boolean {
+    return bytes.size >= RIVE_MAGIC.size && bytes.copyOfRange(0, RIVE_MAGIC.size).contentEquals(RIVE_MAGIC)
+  }
+
+  private fun handleUnreadableUrlAsset(byteCount: Int) {
+    val message = "Downloaded Rive asset is not a Rive file ($byteCount bytes)"
+    Log.w(LOG_TAG, message)
+    if (isUserHandlingErrors) {
+      val rnRiveError = RNRiveError.MalformedFile
+      rnRiveError.message = message
+      sendErrorToRN(rnRiveError)
+    } else {
+      showRNRiveError(message, null)
     }
   }
 
