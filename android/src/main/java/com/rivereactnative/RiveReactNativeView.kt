@@ -325,13 +325,8 @@ class RiveReactNativeView(private val context: ThemedReactContext) : FrameLayout
 
   fun pause() {
     try {
-      if (riveAnimationView?.playingAnimations?.isNotEmpty() == true) {
-        riveAnimationView!!.pause(riveAnimationView!!.playingAnimations.first().name)
-      } else if (riveAnimationView?.playingStateMachines?.isNotEmpty() == true) {
-        riveAnimationView!!.pause(riveAnimationView!!.playingStateMachines.first().name, true)
-      } else {
-        riveAnimationView?.pause()
-      }
+      // Unnamed play() can start both animations and state machines.
+      riveAnimationView?.pause()
     } catch (ex: RiveException) {
       handleRiveException(ex)
     }
